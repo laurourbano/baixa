@@ -23,7 +23,7 @@ margin: 0 auto;
 	float: left;
 	margin: 2px;
 	width: 19%;
-	height: 200px;
+	height: 180px;
 	background-color: rgba(41, 41, 41, 0.322);
 }
 .section-baixa div button{
@@ -33,15 +33,15 @@ margin: 0 auto;
 }
 .section-baixa div:nth-of-type(13) {
 	width: 19%;
-	height: 150px;
+	height: 180px;
 }
 .section-baixa div:nth-of-type(14) {
 	width: 19%;
-	height: 200px;
+	height: 180px;
 }
 .section-baixa div:nth-of-type(15) {
 	width: 19%;
-	height: 200px;
+	height: 180px;
 }
 @media screen and (max-width: 1050px) {
 	main {
@@ -57,7 +57,7 @@ margin: 0 auto;
 		padding: 0;
 		border:none;
 		box-sizing: border-box;
-		width: 33%;
+		width: 33.3%;
 	}
 
 }
