@@ -10,11 +10,10 @@ main {
 	box-sizing: border-box;
 }
 .section-baixa {
-display: table;
+display: flex;
+flex-wrap: wrap;
 box-sizing: border-box;
 margin: 0 auto;
-width: 99vw;
-height: 85vh;
 }
 .section-baixa div{
 	box-sizing: border-box;
@@ -22,8 +21,8 @@ height: 85vh;
 	position: relative;
 	float: left;
 	margin: 5px;
-	width: 15.7%;
-	height: 170px;
+	width: 20%;
+	height: 200px;
 	background-color: rgba(41, 41, 41, 0.322);
 }
 .section-baixa div button{
@@ -32,16 +31,16 @@ height: 85vh;
 	left: 3px;
 }
 .section-baixa div:nth-of-type(13) {
-	width: 32%;
+	width: 20%;
 	height: 150px;
 }
 .section-baixa div:nth-of-type(14) {
-	width: 32%;
-	height: 150px;
+	width: 20%;
+	height: 200px;
 }
 .section-baixa div:nth-of-type(15) {
-	width: 32%;
-	height: 150px;
+	width: 20%;
+	height: 200px;
 }
 @media screen and (max-width: 1050px) {
 	main {
