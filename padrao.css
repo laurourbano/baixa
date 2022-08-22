@@ -169,6 +169,21 @@ p {
 	border: none;
 }
 
+.tipoBotao {
+	font-weight: 500;
+	background-color: #555;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 5px;
+	color: #79b9bb;
+	width: 95%;
+	height: 40px;
+	text-align: center;
+	font-size: 10px;
+	border-radius: 10px;
+	border: 1px solid black;
+}
 .botao:hover {
 	background-color: rgba(87, 152, 182, 0.8);
 	border: 2px solid rgb(27, 26, 26);
