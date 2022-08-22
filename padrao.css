@@ -156,6 +156,9 @@ p {
 
 .botao {
 	background-color: #164d6d;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	margin: 2px;
 	color: #bfc5c5;
 	width: 95%;
