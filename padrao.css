@@ -130,6 +130,9 @@ h3 {
 }
 
 textarea {
+	position: absolute;
+	left: 3px;
+	bottom: 50px;
 	background-color: rgb(62, 62, 85);
 	margin: 5px;
 	font-size: 10px;
