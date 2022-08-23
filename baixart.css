@@ -23,26 +23,15 @@ margin: 0 auto;
 	float: left;
 	margin: 2px;
 	width: 19%;
-	height: 180px;
+	height: 160px;
 	background-color: rgba(41, 41, 41, 0.322);
 }
-.section-baixa div button{
+.section-baixa div .botao{
 	position: absolute;
 	bottom: 3px;
 	left: 3px;
 }
-.section-baixa div:nth-of-type(13) {
-	width: 19%;
-	height: 180px;
-}
-.section-baixa div:nth-of-type(14) {
-	width: 19%;
-	height: 180px;
-}
-.section-baixa div:nth-of-type(15) {
-	width: 19%;
-	height: 180px;
-}
+
 @media screen and (max-width: 1050px) {
 	main {
 		display: block;
