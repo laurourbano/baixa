@@ -1,0 +1,18 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #191919;
+    color: #a9a1f9;
+    font-family: sans-serif;
+    font-weight: 500;
+}
+body {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+}
