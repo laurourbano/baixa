@@ -2,6 +2,10 @@ main {
 	display: block;
 	margin: 0 auto;
 }
+strong {
+	font-weight: bold;
+	font-size: 18px;
+}
 .navegacao {
 	display: flex;
 	background-color: #444;
@@ -23,7 +27,7 @@ main {
 	float: left;
 	margin: 2px;
 	width: 19%;
-	height: 160px;
+	height: 170px;
 	background-color: rgba(41, 41, 41, 0.322);
 }
 .section-baixa div .botao{
