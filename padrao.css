@@ -8,12 +8,12 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: sans-serif;
+	font-family: 'Calibri';
 }
 
 body {
 	background-color: rgb(68, 66, 66);
-	color: #bfc5c5;
+	color: #79b9bb;
 	margin: 0;
 	transition: all 0.5s linear;
 	justify-content: center;
@@ -33,7 +33,7 @@ div .nav-menu {
 	background-color: #a1a1a1;
 	border: none;
 	border-radius: 5px;
-	color: #e5e8e8;
+	color: #79b9bb;
 	cursor: pointer;
 	height: 40px;
 	justify-content: center;
@@ -72,7 +72,7 @@ nav div div h3 {
 
 nav div div a {
 	text-decoration: none;
-	color: white;
+	color: #79b9bb;
 	padding-right: 10px;
 	padding-left: 10px;
 	align-items: center;
@@ -106,10 +106,13 @@ main div {
 }
 
 .titulo-principal {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background-color: #747474;
-	color: #000401;
+	color: #79b9bb;
 	width: 100%;
-	height: 20px;
+	height: 30px;
 }
 
 .section-baixa {
@@ -125,7 +128,7 @@ main div {
 h3 {
 	padding: 0px;
 	margin-right: 10px;
-	font-size: 16px;
+	font-size: 18px;
 	text-align: center;
 }
 
@@ -135,17 +138,17 @@ textarea {
 	bottom: 50px;
 	background-color: rgb(62, 62, 85);
 	margin: 5px;
-	font-size: 10px;
+	font-size: 12px;
 	padding: 5px;
 	border-radius: 8px;
 	width: 95%;
 	height: 60px;
-	color: #bfc5c5;
+	color: #79b9bb;
 	cursor: not-allowed;
 }
 
 p {
-	font-size: 12px;
+	font-size: 15px;
 	margin: 5px;
 }
 
@@ -154,7 +157,7 @@ p {
 	position: absolute;
 	bottom: 20px;
 	right: 10px;
-	font-size: 1.1em;
+	font-size: 2em;
 }
 
 .botao {
@@ -163,11 +166,11 @@ p {
 	justify-content: center;
 	align-items: center;
 	margin: 2px;
-	color: #bfc5c5;
+	color: #79b9bb;
 	width: 95%;
 	height: 40px;
 	text-align: center;
-	font-size: 10px;
+	font-size: 14px;
 	border-radius: 10px;
 	border: none;
 }
@@ -179,11 +182,10 @@ p {
 	justify-content: center;
 	align-items: center;
 	margin: 5px;
-	color: #79b9bb;
 	width: 95%;
 	height: 40px;
 	text-align: center;
-	font-size: 10px;
+	font-size: 12px;
 	border-radius: 10px;
 	border: 1px solid black;
 }
@@ -208,14 +210,14 @@ p {
 
 #mode-selector {
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 12px;
 	font-weight: bold;
 	margin: 0 auto;
 	height: 40px;
 	width: 100px;
 	border: none;
 	background-color: #555;
-	color: #fff;
+	color: #79b9bb;
 	transition: all 0.5s linear;
 	cursor: pointer;
 }

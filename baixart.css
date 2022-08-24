@@ -5,7 +5,6 @@ main {
 .navegacao {
 	display: flex;
 	background-color: #444;
-
 	justify-content: space-around;
 	box-sizing: border-box;
 }
@@ -16,8 +15,6 @@ main {
 	box-sizing: border-box;
 	margin: 0 auto;
 	position: relative;
-
-
 }
 .section-baixa div{
 	box-sizing: border-box;
