@@ -5,15 +5,17 @@ let dia = new Date().getDate();
 let mes = new Date().getMonth() + 1;
   if(mes<10){mes='0'+mes};
 let ano = new Date().getFullYear();
-let dataAtual = ano+"_"+mes+"_"+dia;
+let diaAnterior = dia - 1;
+let dataAtual = ano+"_"+mes+"_"+diaAnterior;
 data.innerHTML += dataAtual;
 
 let dataFormatada = document.querySelector(".dataFormatada");
-let dataNova = (dia)+"/"+(+mes)+"/"+ano;
+let dataNova = dia+"/"+mes+"/"+ano;
 dataFormatada.innerHTML += dataNova;
 
+let diaIndeferir = dia - 2;
 let dataIndeferimento = document.querySelector(".dataIndeferimento");
-let dataAtual1 = (dia)+"/"+mes+"/"+ano;
+let dataAtual1 = diaIndeferir+"/"+mes+"/"+ano;
 dataIndeferimento.innerHTML = (`INDEFERIDO REQUERIMENTO DE BAIXA.
 DOCUMENTOS SOLICITADOS PARA CORREÇÃO DO PROCEDIMENTO DE BAIXA DE RT NÃO FORAM ENVIADOS NO PRAZO DE 01 
 (UM) DIA ÚTIL DA RESPOSTA DO CRF-PR.
