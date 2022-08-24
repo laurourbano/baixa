@@ -7,6 +7,11 @@
     font-family: sans-serif;
     font-weight: 500;
 }
+.centraliza {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 body {
     position: relative;
     width: 100vw;

@@ -1,7 +1,9 @@
 
 let data = document.querySelector(".data");
-let dia = new Date().getDate(); if(dia<10){dia='0'+dia};
-let mes = new Date().getMonth() + 1; if(mes<10){mes='0'+mes};
+let dia = new Date().getDate();
+  if(dia<10){dia='0'+dia};
+let mes = new Date().getMonth() + 1;
+  if(mes<10){mes='0'+mes};
 let ano = new Date().getFullYear();
 let dataAtual = ano+"_"+mes+"_"+dia;
 data.innerHTML += dataAtual;
