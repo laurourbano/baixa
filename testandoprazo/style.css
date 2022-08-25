@@ -8,16 +8,12 @@
     font-weight: 500;
 }
 .centraliza {
+    width: 60%;
+    margin: 0 auto;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-evenly;
 }
 body {
-    position: relative;
     width: 100vw;
     height: 100vh;
-}
-footer {
-    position: absolute;
-    bottom: 0;
 }
