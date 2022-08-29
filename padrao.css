@@ -243,8 +243,8 @@ p {
 }
 
 footer {
-	background-color: #8d9797;
-	color: #000401;
+	background-color: #444;
+	color: #999;
 	width: 100%;
 	padding: 0;
 	position: fixed;
@@ -254,7 +254,7 @@ footer {
 }
 
 footer.light-mode {
-	background-color: #4e545c;
+	background-color: #999;
 	color: #e5e8e8;
 	transition: all 0.5s linear;
 }
