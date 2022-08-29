@@ -3,3 +3,21 @@
     margin: 0;
     box-sizing: border-box;
 }
+ul li {
+    font-size: 16px;
+}
+body {
+    width: 100%;
+    height: 100%;
+}
+.section-manual {
+    display: block;
+}
+footer{ 
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+p {
+    font-size: 20px;
+}
