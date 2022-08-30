@@ -25,6 +25,8 @@
     <main>
         <section class="section-manual">
             <div class="limita-secao">
+                <h3 class="dataFormatada"></h3>
+
                 <h1>CONFERÊNCIA DE BAIXA DE RT WEB:</h1>
             </div>
             <div class="limita-secao">
@@ -172,7 +174,10 @@ PRESTADAS, E QUE NO PRAZO MÁXIMO DE 30 (TRINTA) DIAS DEVERÁ APRESENTAR OS DOCU
 
                 <p><strong>Parecer</strong>:</p>
 
-                <textarea class="area-texto-manual area dataIndeferimento" id="texto7" type="text" readonly></textarea>                <button class="botao">Copiar</button>
+                <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong> Encaminhamento: <strong>32</strong></p>
+
+                <textarea class="area-texto-manual area dataIndeferimento" id="texto7" type="text" readonly></textarea>
+                <button class="botao" ref="#texto7">Copiar</button>
 
                 <p>Fazer download dos arquivos e do protocolo e migrar para o GED. (No GED renomear Indeferimento de
                     Baixa de RT web + data protocolo formato AAAA_MM_DD)</p>
@@ -210,6 +215,24 @@ autuações e multas na constatação da ausência do(a) referido(a) farmacêuti
                 <button class="botao">Copiar</button>
 
             </div>
+            <div class="lado-a-lado">
+                <div>
+                    <p>Prazos</p>
+                <input type="date" name="data" id="data">
+                <p class="prazo"> </p>
+                <p class="sessenta"> </p>
+                <p class="noventa"> </p>
+                <p class="centoevinte"> </p>
+                <p class="centoesessenta"> </p>
+            </div>
+            <div>
+                <p>Renomear</p>
+                <textarea class="area data area-texto-manual" type="text" readonly>Baixa de RT Web_</textarea>
+                <button class="botao">Copiar</button>
+            </div>
+            </div>
+
+        
         </section>
     </main>
     <footer>

@@ -46,6 +46,16 @@ ul li {
     width: 95%; 
     min-height: 100px;
 }
+.lado-a-lado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 80%;
+}
+.lado-a-lado div {
+    width: 100%;
+}
 footer{ 
     display: block;
     justify-content: center;

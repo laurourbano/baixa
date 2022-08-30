@@ -4,8 +4,7 @@ window.onload = function() {
   copyTextareaBtn.forEach(function(btn, idx) {
     btn.addEventListener("click", function() {
       copyTextarea[idx].select();
-      var msg = document.execCommand('copy')
-      ? 'funcionou' : 'deu erro';
+      var msg = document.execCommand('copy')?'funcionou':'deu erro';
       console.log('executando para copiar texto ' + msg);
     });
   });
