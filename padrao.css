@@ -134,7 +134,7 @@ h3 {
 	text-align: center;
 }
 
-textarea {
+.area {
 	position: absolute;
 	left: 2px;
 	bottom: 50px;
@@ -144,7 +144,7 @@ textarea {
 	padding: 5px;
 	border-radius: 8px;
 	width: 95%;
-	height: 60px;
+	height: fit-content;
 	color: #aaa;
 	cursor: not-allowed;
 }
