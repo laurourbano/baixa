@@ -157,10 +157,10 @@ p {
 
 .dataFormatada {
 	display: flex;
-	position: absolute;
-	bottom: 20px;
+	position: fixed;
+	top: 5px;
 	right: 10px;
-	font-size: 2em;
+	font-size: 1.5em;
 }
 
 .botao {
