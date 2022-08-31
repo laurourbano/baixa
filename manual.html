@@ -29,7 +29,7 @@
             <aside class="navegacao">
                 <a href="#ocorrencia">ocorrencias</a>
                 <a href="#correto">correto</a>
-                <a href="#prazo">acima do prazo</a>
+                <a href="#30prazo">acima do prazo</a>
                 <a href="#semcomplemento">sem complemento</a>
                 <a href="#desistencia">desistencia</a>
                 <a href="#jaefetivado">ja foi efetivado</a>
@@ -37,7 +37,7 @@
                 <a href="#pendente">com documento pendente</a>
                 <a href="#indeferir">para indeferir</a>
                 <a href="#controle">controle do prazo</a>
-                <a href="#prazo">verificar prazo</a>
+                <a href="#foradoprazo">verificar prazo</a>
                 <a href="#renomear">renomear arquivos</a>
             </aside>
 
@@ -68,7 +68,7 @@
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="correto">
                     <legend>Caso esteja correto:</legend>
 
                     <h4>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>2</strong> / Julgamento:
@@ -88,7 +88,7 @@
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="30prazo">
                     <legend>Baixa solicitada dentro do prazo? (30 dias):</legend>
                     <ol>
                         <li>validar se a data colocada como de último dia trabalhado está compatível com a data do(s)
@@ -111,7 +111,7 @@
                     <button class="botao">Copiar</button>
                 </fieldset>
 
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="prazo">
                     <legend>Não apresentou documentos pendentes no prazo de 30 dias do protocolo:</legend>
                     <p>Local - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento - <strong>11</strong> /
                         Local Encaminhamento - <strong>11</strong></p>
@@ -124,7 +124,7 @@
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="desistencia">
                     <legend>Caso seja desistência:</legend>
 
                     <p>No protocolo, inicialmente alterar o campo “Dados do Protocolo”, acima das informações padrão,
@@ -155,7 +155,7 @@ DESISTÊNCIA EFETIVADA.</textarea>
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="jaefetivado">
                     <legend>Caso já tenha regularizado a baixa de forma presencial ou por meio de outro protocolo WEB
                         conferido::</legend>
 
@@ -172,7 +172,7 @@ DESISTÊNCIA EFETIVADA.</textarea>
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="incompleto">
                     <legend>Caso procedimento esteja com documentos errados ou incompleto:</legend>
 
                     <p>Clicar em Evolução: Local: <strong>46</strong> / Situação: <strong>25</strong> / Julgamento:
@@ -196,7 +196,7 @@ FAVOR CONSULTAR PASSO A PASSO NO LINK https://www.crf-pr.org.br/noticia/visualiz
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="pendente">
                     <legend>Caso de baixa com documentos pendentes (formulário novo):</legend>
                     <p>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>25</strong> / Julgamento:
                         <strong>2</strong> / Local Encaminhamento: <strong>32</strong>
@@ -221,7 +221,7 @@ PRESTADAS, E QUE NO PRAZO MÁXIMO DE 30 (TRINTA) DIAS DEVERÁ APRESENTAR OS DOCU
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="indeferir">
                     <legend>Caso procedimento com pedido de correção após um dia útil:</legend>
 
                     <ol>
@@ -251,7 +251,7 @@ PRESTADAS, E QUE NO PRAZO MÁXIMO DE 30 (TRINTA) DIAS DEVERÁ APRESENTAR OS DOCU
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="controle">
                     <legend>Controle de prazos de 1 dia útil para correção de procedimento:</legend>
                     <h3>Controle dos status 9436</h3>
                     <p>Selecionar Menu Sagicon:</p>
@@ -281,7 +281,7 @@ autuações e multas na constatação da ausência do(a) referido(a) farmacêuti
             <fieldset class="lado-a-lado">
                 <legend>Prazo e Renomear arquivos</legend>
                 <div>
-                    <p>Prazos</p>
+                    <p id="foraprazo">Prazos</p>
                     <input type="date" name="data" id="data">
                     <p class="prazo"> </p>
                     <p class="sessenta"> </p>
@@ -289,7 +289,7 @@ autuações e multas na constatação da ausência do(a) referido(a) farmacêuti
                     <p class="centoevinte"> </p>
                     <p class="centoesessenta"> </p>
                 </div>
-                <div>
+                <div id="renomear">
                     <p>Renomear</p>
                     <textarea class="area data area-texto-manual" type="text" readonly>Baixa de RT Web_</textarea>
                     <button class="botao">Copiar</button>
