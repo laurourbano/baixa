@@ -71,7 +71,7 @@ ol li {
 }
 aside {
     display: flex;
-    text-align: ;
+    position:static;
     flex-wrap: wrap;
 }
 aside a {
