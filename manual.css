@@ -61,9 +61,10 @@ ol li {
 .lado-a-lado {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: row;
     width: 80%;
+    min-height: 250px;
 }
 .lado-a-lado div {
     width: 100%;
