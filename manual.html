@@ -22,8 +22,25 @@
             </div>
         </div>
     </nav>
+
+
     <main>
         <section class="section-manual">
+            <aside class="navegacao">
+                <a href="#ocorrencia">ocorrencias</a>
+                <a href="#correto">correto</a>
+                <a href="#prazo">acima do prazo</a>
+                <a href="#semcomplemento">sem complemento</a>
+                <a href="#desistencia">desistencia</a>
+                <a href="#jaefetivado">ja foi efetivado</a>
+                <a href="#incompleto">incompleto e/ou incorreto</a>
+                <a href="#pendente">com documento pendente</a>
+                <a href="#indeferir">para indeferir</a>
+                <a href="#controle">controle do prazo</a>
+                <a href="#prazo">verificar prazo</a>
+                <a href="#renomear">renomear arquivos</a>
+            </aside>
+
             <div>
                 <h3 class="dataFormatada"></h3>
                 <div class="limita-secao">
@@ -32,7 +49,7 @@
                 </div>
             </div>
             <div>
-                <fieldset class="limita-secao">
+                <fieldset class="limita-secao" id="ocorrencia">
                     <legend>Ocorrências de baixa de contrato de trabalho (WEB):</legend>
 
                     <ul>
@@ -75,16 +92,13 @@
                     <legend>Baixa solicitada dentro do prazo? (30 dias):</legend>
                     <ol>
                         <li>validar se a data colocada como de último dia trabalhado está compatível com a data do(s)
-                            documento(s)
-                            apresentado(s). Em caso de divergência, considerar sempre data mais antiga – considerando
-                            formulário
-                            assinado pela empresa e profissional, baixa da vigilância ou rompimento de vínculo
-                            (CTPS/RESCISÃO ou
-                            DISTRATO);</li>
+                            documento(s) apresentado(s). Em caso de divergência, considerar sempre data mais antiga –
+                            considerando
+                            formulário assinado pela empresa e profissional, baixa da vigilância ou rompimento de
+                            vínculo
+                            (CTPS/RESCISÃO ou DISTRATO);</li>
                         <li>avaliar o prazo entre a data da baixa e do protocolo, ultrapassando 30 dias encaminhar a
-                            ética
-                            via
-                            protocolo interno:</li>
+                            ética via protocolo interno:</li>
                     </ol>
 
                     <p>Local da Evolução - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento -
@@ -95,7 +109,10 @@
                     <textarea
                         class='area-texto-manual area'>PROFISSIONAL PROTOCOLOU BAIXA EM PRAZO SUPERIOR A 30 DIAS, SENDO QUE SEU AFASTAMENTO FOI EM </textarea>
                     <button class="botao">Copiar</button>
+                </fieldset>
 
+                <fieldset class="limita-secao">
+                    <legend>Não apresentou documentos pendentes no prazo de 30 dias do protocolo:</legend>
                     <p>Local - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento - <strong>11</strong> /
                         Local Encaminhamento - <strong>11</strong></p>
                     <p><strong>Parecer</strong></p>
@@ -139,7 +156,8 @@ DESISTÊNCIA EFETIVADA.</textarea>
             </div>
             <div>
                 <fieldset class="limita-secao">
-                    <legend>Caso já tenha regularizado a baixa de forma presencial ou por meio de outro protocolo WEB conferido::</legend>
+                    <legend>Caso já tenha regularizado a baixa de forma presencial ou por meio de outro protocolo WEB
+                        conferido::</legend>
 
                     <p>Clicar em Evolução. Local: <strong>46</strong>/ Situação: 4 / Julgamento: 8</p>
 
@@ -250,7 +268,8 @@ PRESTADAS, E QUE NO PRAZO MÁXIMO DE 30 (TRINTA) DIAS DEVERÁ APRESENTAR OS DOCU
                     <img src="./relatorio.png" alt="">
                     <h3>Modelo de notificação ao estabelecimento após a baixa ser indeferida</h3>
 
-                    <textarea class='area-texto-manual area'>Oficiar (AR) o estabelecimento DROGARIA SJS LTDA, tendo em vista o protocolo nº 28564, de baixa da responsabilidade técnica via web do(a) profissional DESIREE NASCIMENTO, na condição de
+                    <textarea
+                        class='area-texto-manual area'>Oficiar (AR) o estabelecimento DROGARIA SJS LTDA, tendo em vista o protocolo nº 28564, de baixa da responsabilidade técnica via web do(a) profissional DESIREE NASCIMENTO, na condição de
 diretora técnica desse estabelecimento, informamos que embora a baixa não tenha sido efetivada por questões documentais, considerando a informação de que não trabalha mais nesse
 estabelecimento desde 12.01.2020, ficando sem assistência de farmacêutico habilitado para o horário de segunda a sábado das 09 às 12 h e 13 as 16 h, fica o estabelecimento notificado a
 regularizar a assistência farmacêutica para todo horário de funcionamento, na forma do art. 24 da Lei 3.820/60 combinado com art. 15 da Lei Federal 5.991/73 e Lei 13.021/2014, sob a pena

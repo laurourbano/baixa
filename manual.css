@@ -27,7 +27,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 80px;
+    padding-top: 50px;
     padding-bottom: 80px;
 }
 .section-manual {
@@ -68,6 +68,29 @@ ol li {
 }
 .lado-a-lado div {
     width: 100%;
+}
+aside {
+    display: flex;
+    text-align: ;
+    flex-wrap: wrap;
+}
+aside a {
+    border-radius: 15px;
+    text-align: center;
+    justify-content: center;
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: #a9f9f9;
+	background-color: #164d6d;
+    padding: 5px;
+    margin: 5px;
+}
+aside a:hover {
+	background-color: rgba(87, 152, 182, 0.8);
+	color: #111;
+	cursor: pointer;
 }
 footer{ 
     display: block;
