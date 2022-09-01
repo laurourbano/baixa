@@ -15,31 +15,31 @@
 <body>
     <nav class="navegacao">
         <div>
-            <h3 id="page-title">Dark Mode ON</h3>
-            <button aria-label="selecionar-modo" id="mode-selector">Dark Mode</button>
             <div>
-                <h3 class="nav-menu"><a href="index.html"><strong>Parecer</strong></a> </h3>
+                <h3 class="nav-menu"><a href="index.html"><strong>Acessar Página de Pareceres</strong></a> </h3>
             </div>
         </div>
+        <aside class="navegacao">
+            <a href="#ocorrencia">Ocorrências</a>
+            <a href="#documentoscorretos">Documentos corretos</a>
+            <a href="#prazotrinta">Baixa após trinta dias</a>
+            <a href="#semcomplemento">Sem complemento</a>
+            <a href="#desistencia">Desistência</a>
+            <a href="#jaefetivado">Efetivado em outro protocolo</a>
+            <a href="#incompleto">Para correção</a>
+            <a href="#pendente">Com documento pendente</a>
+            <a href="#indeferir">Para indeferimento</a>
+            <a href="#controle">Controle do prazo</a>
+            <a href="#verificaprazo">Verificar prazo</a>
+            <a href="#renomear">Renomear arquivos</a>
+        </aside>
+
     </nav>
 
 
-    <main>
+
+    <main id="inicio">
         <section class="section-manual">
-            <aside class="navegacao">
-                <a href="#ocorrencia">ocorrencias</a>
-                <a href="#correto">correto</a>
-                <a href="#30prazo">acima do prazo</a>
-                <a href="#semcomplemento">sem complemento</a>
-                <a href="#desistencia">desistencia</a>
-                <a href="#jaefetivado">ja foi efetivado</a>
-                <a href="#incompleto">incompleto e/ou incorreto</a>
-                <a href="#pendente">com documento pendente</a>
-                <a href="#indeferir">para indeferir</a>
-                <a href="#controle">controle do prazo</a>
-                <a href="#foradoprazo">verificar prazo</a>
-                <a href="#renomear">renomear arquivos</a>
-            </aside>
 
             <div>
                 <h3 class="dataFormatada"></h3>
@@ -68,7 +68,7 @@
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao" id="correto">
+                <fieldset class="limita-secao" id="documentoscorretos">
                     <legend>Caso esteja correto:</legend>
 
                     <h4>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>2</strong> / Julgamento:
@@ -88,7 +88,7 @@
                 </fieldset>
             </div>
             <div>
-                <fieldset class="limita-secao" id="30prazo">
+                <fieldset class="limita-secao" id="prazotrinta">
                     <legend>Baixa solicitada dentro do prazo? (30 dias):</legend>
                     <ol>
                         <li>validar se a data colocada como de último dia trabalhado está compatível com a data do(s)
@@ -111,7 +111,7 @@
                     <button class="botao">Copiar</button>
                 </fieldset>
 
-                <fieldset class="limita-secao" id="prazo">
+                <fieldset class="limita-secao" id="semcomplemento">
                     <legend>Não apresentou documentos pendentes no prazo de 30 dias do protocolo:</legend>
                     <p>Local - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento - <strong>11</strong> /
                         Local Encaminhamento - <strong>11</strong></p>
@@ -281,7 +281,7 @@ autuações e multas na constatação da ausência do(a) referido(a) farmacêuti
             <fieldset class="lado-a-lado">
                 <legend>Prazo e Renomear arquivos</legend>
                 <div>
-                    <p id="foraprazo">Prazos</p>
+                    <p id="verificaprazo">Prazos</p>
                     <input type="date" name="data" id="data">
                     <p class="prazo"> </p>
                     <p class="sessenta"> </p>
@@ -302,6 +302,10 @@ autuações e multas na constatação da ausência do(a) referido(a) farmacêuti
     </main>
     <footer>
         <p>Criado por ® Lauro Otávio Urbano <strong>versão 2022.01</strong></p>
+        <div>
+            <h3 class="nav-menu"><a href="#inicio"><strong>Voltar ao início</strong></a> </h3>
+        </div>
+
     </footer>
 
     <script src="main.js"></script>

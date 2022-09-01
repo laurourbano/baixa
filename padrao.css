@@ -32,12 +32,12 @@ body.light-mode {
 div .nav-menu {
 	display: flex;
 	align-items: center;
-	background-color: #000;
+	background-color: #06003f;
 	border: none;
 	border-radius: 5px;
-	color: #fff;
 	cursor: pointer;
-	height: 40px;
+	height: 50px;
+	width: 200px;
 	justify-content: center;
 	opacity: .7;
 	transition: all 0.5s linear;
@@ -60,19 +60,19 @@ div .nav-menu {
 	cursor: pointer;
 }
 
-nav div {
+footer div, nav div {
 	display: flex;
-	align-items: center;
+	align-items: flex-end;
 	margin-left: 20px;
 }
 
-nav div div h3 {
+footer div div h3, nav div div h3 {
 	display: flex;
 	align-items: center;
 
 }
 
-nav div div a {
+footer div div a, nav div div a {
 	text-decoration: none;
 	color: #79b9bb;
 	padding-right: 10px;
@@ -158,8 +158,8 @@ p {
 .dataFormatada {
 	display: flex;
 	position: fixed;
-	top: 5px;
-	right: 10px;
+	top: 15px;
+	left: 15px;
 	font-size: 1.5em;
 }
 
