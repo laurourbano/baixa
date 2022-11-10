@@ -36,6 +36,21 @@ strong {
 	bottom: 3px;
 	left: 4px;
 }
+.links{
+	display: flex;
+	flex-direction: column;
+	border: 1px solid white;
+	margin-left: 35px;
+	margin-right: 35px;
+	margin-top: 20px;
+	margin-bottom: 500px;
+}
+
+.links a {
+	text-decoration: none;
+	color: white;
+	padding: 0 20px;
+}
 
 @media screen and (max-width: 1050px) {
 	main {
