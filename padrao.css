@@ -18,7 +18,7 @@ body {
 	transition: all 0.5s linear;
 	justify-content: center;
 	align-items: center;
-	width: 100vw;
+	width: 100%;
 	height: 100vh;
 }
 
@@ -157,9 +157,6 @@ p {
 
 .dataFormatada {
 	display: flex;
-	position: fixed;
-	top: 15px;
-	left: 15px;
 	font-size: 1.5em;
 }
 
@@ -247,8 +244,6 @@ footer {
 	color: #999;
 	width: 100%;
 	padding: 0;
-	position: fixed;
-	bottom: 0;
 	text-align: center;
 	transition: all 0.5s linear;
 }
