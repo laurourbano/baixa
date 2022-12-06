@@ -7,69 +7,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Baixa de RT</title>
   <link rel="shortcut icon" href="crf.jpg" type="image/x-icon">
+
+  <!--
   <link rel="stylesheet" href="padrao.css">
-  <link rel="stylesheet" href="baixart.css">
+  <link rel="stylesheet" href="baixart.css">    
+  -->
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
 </head>
 
-<body>
-  <nav class="navegacao" id="inicio">
+<body class="bg-dark">
+  <nav class="navegacao text-light text-right m-3 container" id="inicio">
     <div>
-      <h3 class="dataFormatada"></h3>
+      <h5 class="dataFormatada float-left shadow badge-secondary p-1 ml-5 rounded"></h5>
     </div>
     <div>
       <div>
-        <h3 class="nav-menu"><a href="manual.html">Manual de baixa de RT</a> </h3>
+        <h3 class="nav-menu btn btn-secondary"><a class="text-light" href="pages/manual.html">Manual de baixa de RT</a>
+        </h3>
       </div>
     </div>
   </nav>
 
   <main>
-    <h3 class="titulo-principal">Parecer procedimentos de Baixa de Responsabilidade Técnica.</h3>
+    <h3 class="titulo-principal text-light text-center">Parecer procedimentos de Baixa de Responsabilidade Técnica.</h3>
 
     <section class="section-baixa">
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>2</strong> Julgamento: <strong>2</strong></p>
-        <textarea class="area estilo" type="text" readonly>PROTOCOLO FINALIZADO.</textarea>
-        <button class="botao">Finalizado</button>
-      </div>
+      <div class="container-fluid d-flex flex-wrap justify-content-center">
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Local: <strong>46</strong> Situação: <strong>2</strong> Julgamento: <strong>2</strong></p>
+          <textarea class="w-100 h-50 area" type="text" readonly>PROTOCOLO FINALIZADO.</textarea>
+          <button class="botao btn btn-primary w-100 h-50 my-2 ">Finalizado</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>2</strong> Julgamento: <strong>2</strong></p>
-        <textarea class="area estilo" id="texto3" type="text" readonly>PROCEDIMENTO TRATA-SE DE DESISTÊNCIA DA RT UMA VEZ QUE O INGRESSO SERIA APRECIADO PELO PLENÁRIO.
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Local: <strong>46</strong> Situação: <strong>2</strong> Julgamento: <strong>2</strong></p>
+          <textarea class="w-100 h-50 area" id="texto3" type="text" readonly>PROCEDIMENTO TRATA-SE DE DESISTÊNCIA DA RT UMA VEZ QUE O INGRESSO SERIA APRECIADO PELO PLENÁRIO.
 DESISTÊNCIA EFETIVADA.</textarea>
-        <button id="execCopy3" class="botao" ref="#texto3">Desistência</button>
-      </div>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy3"
+            ref="#texto3">Desistência</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
-        <textarea class="area estilo" id="texto1" type="text"
-          readonly>PROFISSIONAL PROTOCOLOU BAIXA EM PRAZO SUPERIOR A 30 DIAS, SENDO QUE SEU AFASTAMENTO FOI EM </textarea>
-        <button id="execCopy1" class="botao" ref="#texto1">Tardia</button>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
+          <textarea class="w-100 h-50 area" id="texto1" type="text"
+            readonly>PROFISSIONAL PROTOCOLOU BAIXA EM PRAZO SUPERIOR A 30 DIAS, SENDO QUE SEU AFASTAMENTO FOI EM </textarea>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy1"
+            ref="#texto1">Tardia</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
-        <textarea class="area estilo" id="texto2" type="text"
-          readonly>NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTOCOLO. PROTOCOLO EM 02/05/2022.</textarea>
-        <button id="execCopy2" class="botao" ref="#texto2">30 Dias</button>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
+          <textarea class="w-100 h-50 area" id="texto2" type="text"
+            readonly>NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTOCOLO. PROTOCOLO EM 02/05/2022.</textarea>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy2" ref="#texto2">30
+            Dias</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>4</strong> Julgamento: <strong>8</strong></p>
-        <textarea class="area estilo" type="text" readonly>*** FAVOR NÃO DUPLICAR PROTOCOLOS ***</textarea>
-        <button class="botao">Duplicado</button>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Local: <strong>46</strong> Situação: <strong>4</strong> Julgamento: <strong>8</strong></p>
+          <textarea class="w-100 h-50 area" type="text" readonly>*** FAVOR NÃO DUPLICAR PROTOCOLOS ***</textarea>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between">Duplicado</button>
+        </div>
 
-      <div>
-        <p>Renomear</p>
-        <textarea class="area data" type="text" readonly>Baixa de RT Web_</textarea>
-        <button class="botao">Renomear</button>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Renomear</p>
+          <textarea class="area data" type="text" readonly>Baixa de RT Web_</textarea>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between">Renomear</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>18</strong> Encaminhamento:
-          <strong>32</strong></p>
-        <textarea class="area estilo" id="texto5" type="text" readonly>- FALTA DECLARAÇÃO DE BAIXA DA VIGILÂNCIA SANITÁRIA 
+        <div class="card col-3 m-3 justify-content-between badge-success">
+          <p>Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>18</strong> Encaminhamento:
+            <strong>32</strong></p>
+          <textarea class="w-100 h-50 area" id="texto5" type="text" readonly>- FALTA DECLARAÇÃO DE BAIXA DA VIGILÂNCIA SANITÁRIA 
 (OU MINISTÉRIO DA AGRICULTURA E PECUÁRIA, EM CASO DE MANIPULAÇÃO DE PRODUTOS VETERINÁRIOS);
 
 - FALTA QUEBRA DE VÍNCULO DE TRABALHO; (EXTRATO DO CONTRATO BAIXADO NA CARTEIRA DE TRABALHO DIGITAL, 
@@ -92,13 +106,14 @@ https://www.crf-pr.org.br/servico/visualizar/id/84
 
 ***LEMBRANDO QUE MARCAR NO FORMULÁRIO QUE NÃO ESTÁ APRESENTANDO ALGUM DOCUMENTO, NÃO ISENTA DE 
 APRESENTAÇÃO POSTERIOR (EM ATÉ 30 DIAS) CONFORME DESCRITO NO FORMULÁRIO.</textarea>
-        <button id="execCopy5" class="botao" ref="#texto5">Falta</button>
-      </div>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy5"
+            ref="#texto5">Falta</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>2</strong> Encaminhamento:
-          <strong>32</strong></p>
-        <textarea class="area estilo" id="texto6" type="text" readonly>DOCUMENTO FALTANTES:
+        <div class="card col-3 m-3 justify-content-between badge-warning">
+          <p>Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>2</strong> Encaminhamento:
+            <strong>32</strong></p>
+          <textarea class="w-100 h-50 area" id="texto6" type="text" readonly>DOCUMENTO FALTANTES:
 - FALTA QUEBRA DE VÍNCULO DE TRABALHO; (EXTRATO DO CONTRATO BAIXADO NA CARTEIRA DE TRABALHO DIGITAL, 
 OU, PÁGINA DA CARTEIRA DE TRABALHO DO CONTRATO COM DATA DE SAÍDA E ASSINATURA DA EMPRESA, 
 OU AINDA, RESCISÃO/DISTRATO COM ASSINATURA DA EMPRESA E DO PROFISSIONAL);
@@ -117,104 +132,128 @@ DE 30 (TRINTA) DIAS DEVERÁ APRESENTAR OS DOCUMENTOS FALTANTES, SOB PENA DE RESP
 
 – PARA APRESENTAR OS DOCUMENTOS O PROFISSIONAL DEVERÁ ACESSAR O CRF EM CASA E “EM PROTOCOLOS AGUARDANDO 
 RESPOSTA” E ANEXAR O DOCUMENTO FALTANTE.</textarea>
-        <button id="execCopy6" class="botao" ref="#texto6">Pendente</button>
-      </div>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy6"
+            ref="#texto6">Pendente</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong> Encaminhamento:
-          <strong>32</strong></p>
-        <textarea class="area dataIndeferimento" id="texto7" type="text" readonly></textarea>
-        <button id="execCopy7" class="botao" ref="#texto7">Indeferido</button>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-danger">
+          <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong> Encaminhamento:
+            <strong>32</strong></p>
+          <textarea class="area dataIndeferimento" id="texto7" type="text" readonly></textarea>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy7"
+            ref="#texto7">Indeferido</button>
+        </div>
 
-      <div>
-        <p>Prazos</p>
-        <input type="date" name="data" id="data">
-        <p class="prazo"> </p>
-        <p class="sessenta"> </p>
-        <p class="noventa"> </p>
-        <p class="centoevinte"> </p>
-        <p class="centoesessenta"> </p>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Prazos</p>
+          <input type="date" name="data" id="data">
+          <p class="prazo"> </p>
+          <p class="sessenta"> </p>
+          <p class="noventa"> </p>
+          <p class="centoevinte"> </p>
+          <p class="centoesessenta"> </p>
+        </div>
 
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>13</strong> Julgamento: <strong>8</strong></p>
-        <textarea class="area estilo" type="text" readonly>PROTOCOLO ARQUIVADO POR ESTAR SEM ANDAMENTO E
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Local: <strong>46</strong> Situação: <strong>13</strong> Julgamento: <strong>8</strong></p>
+          <textarea class="w-100 h-50 area" type="text" readonly>PROTOCOLO ARQUIVADO POR ESTAR SEM ANDAMENTO E
 ENCAMINHADO PARA O DEPARTAMENTO DE ÉTICA PARA PROVIDÊNCIAS.</textarea>
-        <button class="botao">Sem andamento com documentos pendentes</button>
-      </div>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between">Sem andamento</button>
+        </div>
 
-      <div>
-        <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong></p>
-        <textarea class="area estilo" id="texto7" type="text"
-          readonly>Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberação 1004/21</textarea>
-        <button id="execCopy7" class="botao" ref="#texto7">Indeferimento de DAP</button>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong></p>
+          <textarea class="w-100 h-50 area" id="texto7" type="text"
+            readonly>Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberação 1004/21</textarea>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy7"
+            ref="#texto7">Indeferimento de DAP</button>
+        </div>
 
-      <div>
-        <h5>Lançamento de Status</h5>
-        <p class="tipoBotao"><strong>9436</strong> - Comunicado / Constatação de desligamento da RT</p>
-        <P class="tipoBotao"><strong>9464</strong> - Sem Diretor técnico - com assistência técnica</p>
-        <p class="tipoBotao"><strong>9457</strong> - Sem RT - Autuações suspensas temporariamente</p>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h5>Lançamento de Status</h5>
+          <p class="tipoBotao"><strong>9436</strong> - Comunicado / Constatação de desligamento da RT</p>
+          <P class="tipoBotao"><strong>9464</strong> - Sem Diretor técnico - com assistência técnica</p>
+          <p class="tipoBotao"><strong>9457</strong> - Sem RT - Autuações suspensas temporariamente</p>
+        </div>
 
-      <div>
-        <h5>Lançamento de Status</h5>
-        <p class="tipoBotao"><strong>14</strong> - Sem prof com prazo até:</p>
-        <p class="tipoBotao"><strong>16</strong> - Sem subst com prazo até:</p>
-        <p class="tipoBotao"><strong>9453</strong> - Sem assistência técnica com prazo até:</p>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h5>Lançamento de Status</h5>
+          <p class="tipoBotao"><strong>14</strong> - Sem prof com prazo até:</p>
+          <p class="tipoBotao"><strong>16</strong> - Sem subst com prazo até:</p>
+          <p class="tipoBotao"><strong>9453</strong> - Sem assistência técnica com prazo até:</p>
+        </div>
 
-      <div>
-        <h5>Lançamento de Status</h5>
-        <p class="tipoBotao"><strong>19</strong> - Sem prof autuar</p>
-        <p class="tipoBotao"><strong>21</strong> - Sem subst autuar</p>
-        <p class="tipoBotao"><strong>9454</strong> - Sem assistência técnica autuar</p>
-      </div>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h5>Lançamento de Status</h5>
+          <p class="tipoBotao"><strong>19</strong> - Sem prof autuar</p>
+          <p class="tipoBotao"><strong>21</strong> - Sem subst autuar</p>
+          <p class="tipoBotao"><strong>9454</strong> - Sem assistência técnica autuar</p>
+        </div>
 
-      <div>
-        <h6>ENCAMINHAR CORRESPONDÊNCIA PARA AS FILIAIS DA REDE </h6><span style="font-weight: bold; font-size:18px;">NISSEI</span>
-        <textarea class="area estilo" id="texto6" type="text" readonly>
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h6>ENCAMINHAR CORRESPONDÊNCIA PARA AS FILIAIS DA REDE </h6><span
+            style="font-weight: bold; font-size:18px;">NISSEI</span>
+          <textarea class="w-100 h-50 area" id="texto6" type="text" readonly>
 DEPARTAMENTO JURÍDICO NISSEI
 RUA ACRE 205 – ÁGUA VERDE 
 80620-900 CURITIBA - PARANÁ
         </textarea>
-        <button id="execCopy6" class="botao" ref="#texto6">NISSEI</button>
-      </div>
-      <div>
-        <h6>ENDEREÇO DAS EMPRESAS </h6><span style="font-weight: bold; font-size:18px;">MORIFARMA</span><br><span style="font-weight: bold; font-size:18px;">MAIS POPULAR</span>
-        <textarea class="area estilo" id="texto6" type="text" readonly>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy6"
+            ref="#texto6">NISSEI</button>
+        </div>
+
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h6>ENDEREÇO DAS EMPRESAS </h6>
+          <span style="font-weight: bold; font-size:18px;">MORIFARMA - MAIS POPULAR</span>
+          <textarea class="w-100 h-50 area" id="texto6" type="text" readonly>
 RECURSOS HUMANOS 
 RUA AMAURY LANGE SILVERIO 33 – PILARZINHO
 82120-000 - CURITIBA - PARANÁ
         </textarea>
-        <button id="execCopy6" class="botao" ref="#texto6">MORIFARMA - MAIS POPULAR</button>
-      </div>
-      <div>
-        <h6>ENCAMINHAR CORRESPONDÊNCIA PARA AS FILIAIS DA REDE </h6><span style="font-weight: bold; font-size:18px;">SÃO JOÃO</span>
-        <textarea class="area estilo" id="texto6" type="text" readonly>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy6"
+            ref="#texto6">MORIFARMA - MAIS POPULAR</button>
+        </div>
+
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h6>ENCAMINHAR CORRESPONDÊNCIA PARA AS FILIAIS DA REDE </h6><span
+            style="font-weight: bold; font-size:18px;">SÃO
+            JOÃO</span>
+          <textarea class="w-100 h-50 area" id="texto6" type="text" readonly>
 COMÉRCIO DE MEDICAMENTOS BRAIR LTDA
 FARMÁCIAS SÃO JOÃO
 AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
 99064-440 - PASSO FUNDO - RIO GRANDE DO SUL
         </textarea>
-        <button id="execCopy6" class="botao" ref="#texto6">SÃO JOÃO - BRAIR</button>
-      </div>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between" id="execCopy6" ref="#texto6">SÃO
+            JOÃO
+            - BRAIR</button>
+        </div>
 
-      <div>
-        <h3>visa CURITIBA</h3>
+
+
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h3>visa CURITIBA</h3>
           <p>Farmácia com e sem manipulação</p>
           <P>Distribuidora de medicamentos</P>
-          <br>
-        <button class="hover"><a href="arquivos/visa-curitiba.pdf" target="_blank">visualizar</a></button>
-        <button class="botao"><a href="arquivos/visa-curitiba.pdf" download="arquivos/visa-londrina.pdf">baixar</a></button>
-      </div>
-      <div>
-        <h3>link para oficio visa LONDRINA</h3>
-          <p>Farmácia com e sem manipulação</p>
-          <br>
-          <button class="hover"><a href="arquivos/visa-londrina.pdf" target="_blank">visualizar</a></button>
-          <button class="botao"><a href="arquivos/visa-londrina.pdf" download="arquivos/visa-londrina.pdf">baixar</a></button>
+
+          <button class="botao btn btn-success w-100 h-50 my-2 justify-content-between"><a class="text-light"
+              href="assets/arquivos/visa-curitiba.pdf" target="_blank">visualizar</a></button>
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between"><a class="text-light"
+              href="assets/arquivos/visa-curitiba.pdf" download="assets/arquivos/visa-londrina.pdf">baixar</a></button>
+        </div>
+
+        <div class="card col-3 m-3 justify-content-between badge-secondary">
+          <h3>visa LONDRINA</h3>
+          <p>Farmácia com manipulação</p>
+          <p>Farmácia sem manipulação</p>
+
+          <button class="botao btn btn-success w-100 h-50 my-2 justify-content-between"><a class="text-light"
+              href="assets/arquivos/visa-londrina.pdf" target="_blank">visualizar</a></button>
+
+          <button class="botao btn btn-primary w-100 h-50 my-2 justify-content-between"><a class="text-light"
+              href="assets/arquivos/visa-londrina.pdf" download="assets/arquivos/visa-londrina.pdf">baixar</a></button>
+
+        </div>
       </div>
     </section>
 
@@ -225,11 +264,25 @@ AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
     <p>Criado por ® Lauro Otávio Urbano <strong>versão 2022.02</strong></p>
   </footer>
 
-  <script src="main.js"></script>
 
-  <script src="data.js"></script>
 
-  <script src="copia.js"></script>
+  <!-- JavaScript (Opcional) -->
+  <script src="js/main.js"></script>
+
+  <script src="js/data.js"></script>
+
+  <script src="js/copia.js"></script>
+
+  <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+  </script>
 
 </body>
 
