@@ -35,4 +35,3 @@ const footer = document.getElementsByTagName('footer')[0];
 const nav = document.getElementsByTagName('nav')[0];
 const h3 = document.getElementsByTagName('h3')[0,1,2,3,4,5];
 
-//button.addEventListener('click', changeMode);
