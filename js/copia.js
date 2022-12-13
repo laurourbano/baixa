@@ -8,7 +8,8 @@ window.onload = function () {
     btn.addEventListener("click", function () {
 
       copyTextarea[idx].select();
-      //var msg = document.execCommand('copy') ? 'funcionou' : 'deu erro';
+      var msg = document.execCommand('copy') ? 'funcionou' : 'deu erro';
+      
       //console.log('executando para copiar texto ' + msg);
 
       copiado[idx].classList.remove('invisible');
