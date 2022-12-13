@@ -6,12 +6,10 @@ window.onload = function () {
       copyTextarea[idx].select();
       var msg = document.execCommand('copy') ? 'funcionou' : 'deu erro';
       console.log('executando para copiar texto ' + msg);
+      document.querySelector('.copiado').classList.remove('invisible')
+      setTimeout(() => {
+        document.querySelector('.copiado').classList.add('invisible')
+      }, 5 * 1000);
     });
   });
 }
-
-$(function () {
-  $('.popover-exemplo').popover({
-    container: 'body'
-  })
-})
