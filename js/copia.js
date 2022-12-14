@@ -10,7 +10,7 @@ window.onload = function () {
       copyTextarea[idx].select();
       var msg = document.execCommand('copy') ? 'funcionou' : 'deu erro';
       
-      //console.log('executando para copiar texto ' + msg);
+      console.log('executando para copiar texto ' + msg);
 
       copiado[idx].classList.remove('invisible');
       setTimeout(() => {
