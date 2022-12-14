@@ -2,8 +2,6 @@
 const lightModeClass = 'bg-light';
 const button = document.getElementById('botao');
 const body = document.getElementsByTagName('body')[0];
-const footer = document.getElementsByTagName('footer')[0];
-const nav = document.getElementsByTagName('nav')[0];
 
 function changeMode() {
 	changeClasses();
@@ -13,9 +11,7 @@ function changeMode() {
 function changeClasses() {
 	button.classList.toggle('btn-dark');
 	body.classList.toggle('bg-dark');
-	footer.classList.toggle('text-light');
-	nav.classList.toggle('text-light');
-	
+	body.classList.toggle('text-dark');
 }
 
 function changeText() {
