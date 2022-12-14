@@ -9,7 +9,7 @@ function changeMode() {
 }
 
 function changeClasses() {
-	button.classList.toggle('btn-dark');
+	button.classList.toggle('btn-outline-dark');
 	body.classList.toggle('bg-dark');
 	body.classList.toggle('text-dark');
 }
