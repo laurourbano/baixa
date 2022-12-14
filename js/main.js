@@ -1,21 +1,36 @@
+
+const lightModeClass = 'bg-light';
+console.log(lightModeClass)
+const button = document.getElementById('botao');
+console.log(button)
+const fieldset = document.getElementsByTagName('fieldset');
+console.log(fieldset)
+const body = document.getElementsByTagName('body')[0];
+console.log(body)
+const footer = document.getElementsByTagName('footer')[0];
+console.log(footer)
+const nav = document.getElementsByTagName('nav')[0];
+console.log(nav)
+
 function changeMode() {
 	changeClasses();
 	changeText();
 }
 
 function changeClasses() {
-	button.classList.toggle(lightModeClass);
-	h1.classList.toggle(lightModeClass);
-	body.classList.toggle(lightModeClass);
-	footer.classList.toggle(lightModeClass);
-	nav.classList.toggle(lightModeClass);
-	h3.classList.toggle(lightModeClass);
+	button.classList.toggle('btn-dark');
+	fieldset.forEach(function(){
+		fieldset.classList.toggle('text-dark')
+	});
+	body.classList.toggle('bg-dark');
+	footer.classList.toggle('text-dark');
+	nav.classList.toggle('text-dark');
 	
 }
 
 function changeText() {
-	const lightMode = 'Light Mode';
-	const darkMode = 'Dark Mode';
+	const lightMode = 'text-light';
+	const darkMode = 'text-dark';
 
 	if (body.classList.contains(lightModeClass)) {
 		button.innerHTML = lightMode;
@@ -26,12 +41,3 @@ function changeText() {
 	button.innerHTML = darkMode;
 	h1.innerHTML = darkMode + ' ON';
 }
-
-const lightModeClass = 'light-mode';
-const button = document.getElementById('mode-selector');
-const h1 = document.getElementById('page-title');
-const body = document.getElementsByTagName('body')[0];
-const footer = document.getElementsByTagName('footer')[0];
-const nav = document.getElementsByTagName('nav')[0];
-const h3 = document.getElementsByTagName('h3')[0,1,2,3,4,5];
-
