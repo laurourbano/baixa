@@ -1,5 +1,4 @@
 
-const lightModeClass = 'bg-light';
 const button = document.getElementById('botao');
 const body = document.getElementsByTagName('body')[0];
 
@@ -18,8 +17,8 @@ function changeText() {
 	const lightMode = 'text-light';
 	const darkMode = 'text-dark';
 
-	if (body.classList.contains(lightModeClass)) {
-		button.innerHTML = lightMode;
+	if (body.classList.contains('bg-light')) {
+		button.innerHTML = 'bg-light';
 		return;
 	}
 
