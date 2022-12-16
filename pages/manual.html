@@ -9,20 +9,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual de baixa de RT</title>
 
-     <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/manual.css">
 
 </head>
 
 <body class="bg-dark text-white-50">
-    <nav class="navegacao">
-        <div>
-            <div>
-                <a class="nav-menu btn btn-primary" href="../index.html">Acessar Página de Pareceres</a> 
+    <nav class="navegacao bg-dark">
+        <div class="border-bottom pb-2">
+            <div class="container-fluid">
+                <a class="nav-menu btn btn-primary mt-2" href="../index.html">Acessar Página de Pareceres</a>
             </div>
         </div>
-        <aside class="navegacao">
+        <aside class="navegacao d-flex justify-content-center my-3">
             <a class="badge badge-primary" href="#ocorrencia">Ocorrências</a>
             <a class="badge badge-primary" href="#documentoscorretos">Documentos corretos</a>
             <a class="badge badge-primary" href="#prazotrinta">Baixa após trinta dias</a>
@@ -38,153 +39,163 @@
         </aside>
 
     </nav>
+    <div class="container">
+        <main id="inicio">
+            <section class="section-manual">
 
+                <div>
+                    <h3 class="dataFormatada"></h3>
+                    <div class="limita-secao">
 
-
-    <main id="inicio">
-        <section class="section-manual">
-
-            <div>
-                <h3 class="dataFormatada"></h3>
-                <div class="limita-secao">
-
-                    <h1>Conferência de baixa de Responsabilidade Técnica via WEB:</h1>
+                        <h1>Conferência de baixa de Responsabilidade Técnica via WEB:</h1>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="ocorrencia">
-                    <legend>Ocorrências de baixa de contrato de trabalho (WEB):</legend>
+                <div>
+                    <fieldset class="limita-secao border p-2" id="ocorrencia">
+                        <legend>Ocorrências de baixa de contrato de trabalho (WEB):</legend>
 
-                    <ul>
-                        <li><strong>437</strong> B.R.T. PARA EXERCER ATIVIDADE EM ESTABELECIMENTO DE OUTRA NATUREZA</li>
-                        <li><strong>438</strong> B.R.T. POR MUDANÇA DA EMPRESA DE MESMA NATUREZA POR MELHORES CONDIÇÕES
-                            DE TRABALHO</li>
-                        <li><strong>439</strong> B.R.T. POR MUDANÇA DE FILIAL NA MESMA EMPRESA.</li>
-                        <li><strong>440</strong> B.R.T. POR MUDANÇA DE CIDADE OU TRANSFERÊNCIA PARA OUTRO CRF.</li>
-                        <li><strong>441</strong> B.R.T., É NÃO IREI MAIS EXERCER ATIVIDADE COMO PROFISSIONAL</li>
-                        <li><strong>442</strong> B.R.T. POR OUTROS MOTIVOS</li>
-                    </ul>
+                        <ul>
+                            <li><strong>437</strong> B.R.T. PARA EXERCER ATIVIDADE EM ESTABELECIMENTO DE OUTRA NATUREZA
+                            </li>
+                            <li><strong>438</strong> B.R.T. POR MUDANÇA DA EMPRESA DE MESMA NATUREZA POR MELHORES
+                                CONDIÇÕES
+                                DE TRABALHO</li>
+                            <li><strong>439</strong> B.R.T. POR MUDANÇA DE FILIAL NA MESMA EMPRESA.</li>
+                            <li><strong>440</strong> B.R.T. POR MUDANÇA DE CIDADE OU TRANSFERÊNCIA PARA OUTRO CRF.</li>
+                            <li><strong>441</strong> B.R.T., É NÃO IREI MAIS EXERCER ATIVIDADE COMO PROFISSIONAL</li>
+                            <li><strong>442</strong> B.R.T. POR OUTROS MOTIVOS</li>
+                        </ul>
 
-                    <ol>
-                        <li>Abrir protocolo e visualizar arquivos.</li>
-                    </ol>
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="documentoscorretos">
-                    <legend>Caso esteja correto:</legend>
+                        <ol>
+                            <li>Abrir protocolo e visualizar arquivos.</li>
+                        </ol>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="documentoscorretos">
+                        <legend>Caso esteja correto:</legend>
 
-                    <h4>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>2</strong> / Julgamento:
-                        <strong>2</strong>
-                    </h4>
+                        <h4>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>2</strong> / Julgamento:
+                            <strong>2</strong>
+                        </h4>
 
-                    <p>Fazer download dos arquivos e do protocolo e migrar para o GED (No GED renomear Baixa de RT web +
-                        data
-                        protocolo formato AAAA_MM_DD)</p>
-                    <p>Abrir o cadastro da empresa para verificar situação do estabelecimento:</p>
+                        <p>Fazer download dos arquivos e do protocolo e migrar para o GED (No GED renomear Baixa de RT
+                            web +
+                            data
+                            protocolo formato AAAA_MM_DD)</p>
+                        <p>Abrir o cadastro da empresa para verificar situação do estabelecimento:</p>
 
-                    <ol>
-                        <li>inativar o status <strong>210</strong> e incluir status atual da empresa, com horários e
-                            prazo.</li>
-                        <li>avaliar necessidade de ofício.</li>
-                    </ol>
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="prazotrinta">
-                    <legend>Baixa solicitada dentro do prazo? (30 dias):</legend>
-                    <ol>
-                        <li>validar se a data colocada como de último dia trabalhado está compatível com a data do(s)
-                            documento(s) apresentado(s). Em caso de divergência, considerar sempre data mais antiga –
-                            considerando
-                            formulário assinado pela empresa e profissional, baixa da vigilância ou rompimento de
-                            vínculo
-                            (CTPS/RESCISÃO ou DISTRATO);</li>
-                        <li>avaliar o prazo entre a data da baixa e do protocolo, ultrapassando 30 dias encaminhar a
-                            ética via protocolo interno:</li>
-                    </ol>
+                        <ol>
+                            <li>inativar o status <strong>210</strong> e incluir status atual da empresa, com horários e
+                                prazo.</li>
+                            <li>avaliar necessidade de ofício.</li>
+                        </ol>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="prazotrinta">
+                        <legend>Baixa solicitada dentro do prazo? (30 dias):</legend>
+                        <ol>
+                            <li>validar se a data colocada como de último dia trabalhado está compatível com a data
+                                do(s)
+                                documento(s) apresentado(s). Em caso de divergência, considerar sempre data mais antiga
+                                –
+                                considerando
+                                formulário assinado pela empresa e profissional, baixa da vigilância ou rompimento de
+                                vínculo
+                                (CTPS/RESCISÃO ou DISTRATO);</li>
+                            <li>avaliar o prazo entre a data da baixa e do protocolo, ultrapassando 30 dias encaminhar a
+                                ética via protocolo interno:</li>
+                        </ol>
 
-                    <p>Local da Evolução - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento -
-                        <strong>11</strong> / Local Encaminhamento - <strong>11</strong>
-                    </p>
-                    <p><strong>Parecer</strong></p>
+                        <p>Local da Evolução - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento -
+                            <strong>11</strong> / Local Encaminhamento - <strong>11</strong>
+                        </p>
+                        <p><strong>Parecer</strong></p>
 
-                    <textarea
-                        class='area-texto-manual area'>PROFISSIONAL PROTOCOLOU BAIXA EM PRAZO SUPERIOR A 30 DIAS, SENDO QUE SEU AFASTAMENTO FOI EM </textarea>
-                    <button class="botao">Copiar</button>
-                </fieldset>
+                        <textarea class='area-texto-manual w-50 area'
+                            rows="2">PROFISSIONAL PROTOCOLOU BAIXA EM PRAZO SUPERIOR A 30 DIAS, SENDO QUE SEU AFASTAMENTO FOI EM </textarea>
+                        <button class="botao btn btn-primary">Copiar</button>
+                    </fieldset>
 
-                <fieldset class="limita-secao" id="semcomplemento">
-                    <legend>Não apresentou documentos pendentes no prazo de 30 dias do protocolo:</legend>
-                    <p>Local - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento - <strong>11</strong> /
-                        Local Encaminhamento - <strong>11</strong></p>
-                    <p><strong>Parecer</strong></p>
+                    <fieldset class="limita-secao border p-2 none" id="semcomplemento">
+                        <legend>Não apresentou documentos pendentes no prazo de 30 dias do protocolo:</legend>
+                        <p>Local - <strong>11</strong> / Situação - <strong>6</strong> / Julgamento -
+                            <strong>11</strong> /
+                            Local Encaminhamento - <strong>11</strong></p>
+                        <p><strong>Parecer</strong></p>
 
-                    <textarea
-                        class='area-texto-manual area'>NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTOCOLO.</textarea>
-                    <button class="botao">Copiar</button>
+                        <textarea class='area-texto-manual w-50 area'
+                            rows="2">NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTOCOLO.</textarea>
+                        <button class="botao btn btn-primary">Copiar</button>
 
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="desistencia">
-                    <legend>Caso seja desistência:</legend>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="desistencia">
+                        <legend>Caso seja desistência:</legend>
 
-                    <p>No protocolo, inicialmente alterar o campo “Dados do Protocolo”, acima das informações padrão,
-                        incluir</p>
-                    <p>***DESISTÊNCIA DE RT***;</p>
+                        <p>No protocolo, inicialmente alterar o campo “Dados do Protocolo”, acima das informações
+                            padrão,
+                            incluir</p>
+                        <p>***DESISTÊNCIA DE RT***;</p>
 
 
-                    <p>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>2</strong> / Julgamento:
-                        <strong>2</strong>
-                    </p>
-                    <p><strong>Parecer</strong>:</p>
+                        <p>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>2</strong> / Julgamento:
+                            <strong>2</strong>
+                        </p>
+                        <p><strong>Parecer</strong>:</p>
 
-                    <textarea class='area-texto-manual area'>O PROCEDIMENTO TRATA-SE DE DESISTÊNCIA DA RT UMA VEZ QUE O INGRESSO SERIA APRECIADO PELO PLENÁRIO.
+                        <textarea class='area-texto-manual w-50 area' rows="2">O PROCEDIMENTO TRATA-SE DE DESISTÊNCIA DA RT UMA VEZ QUE O INGRESSO SERIA APRECIADO PELO PLENÁRIO.
 DESISTÊNCIA EFETIVADA.</textarea>
-                    <button class="botao">Copiar</button>
+                        <button class="botao btn btn-primary">Copiar</button>
 
-                    <p>Fazer download dos arquivos e do protocolo e migrar para o GED (No GED renomear Desistência de RT
-                        web
-                        + data protocolo formato AAAA_MM_DD)</p>
+                        <p>Fazer download dos arquivos e do protocolo e migrar para o GED (No GED renomear Desistência
+                            de RT
+                            web
+                            + data protocolo formato AAAA_MM_DD)</p>
 
-                    <p>Abrir o cadastro da empresa para verificar situação do estabelecimento considerando DESISTÊNCIA:
-                    </p>
-                    <ol>
-                        <li>inativar o status 100, 101, 105 ou 108 de registro ou ingresso aprovado Ad ou em andamento
-                            e,
-                            incluir status atual da empresa, com horários e prazo.</li>
-                    </ol>
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="jaefetivado">
-                    <legend>Caso já tenha regularizado a baixa de forma presencial ou por meio de outro protocolo WEB
-                        conferido::</legend>
+                        <p>Abrir o cadastro da empresa para verificar situação do estabelecimento considerando
+                            DESISTÊNCIA:
+                        </p>
+                        <ol>
+                            <li>inativar o status 100, 101, 105 ou 108 de registro ou ingresso aprovado Ad ou em
+                                andamento
+                                e,
+                                incluir status atual da empresa, com horários e prazo.</li>
+                        </ol>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="jaefetivado">
+                        <legend>Caso já tenha regularizado a baixa de forma presencial ou por meio de outro protocolo
+                            WEB
+                            conferido::</legend>
 
-                    <p>Clicar em Evolução. Local: <strong>46</strong>/ Situação: 4 / Julgamento: 8</p>
+                        <p>Clicar em Evolução. Local: <strong>46</strong>/ Situação: 4 / Julgamento: 8</p>
 
-                    <p><strong>Parecer</strong>:</p>
-                    <textarea
-                        class='area-texto-manual area'>PROCEDIMENTO DE BAIXA DE RT EFETIVADO EM PROCEDIMENTO PRESENCIAL DIA DD/MM/AAAA / PROCEDIMENTO DE BAIXA DE RT EFETIVADO EM PROTOCOLO ANTERIOR DE BAIXA DE RT WEB</textarea>
-                    <button class="botao">Copiar</button>
+                        <p><strong>Parecer</strong>:</p>
+                        <textarea class='area-texto-manual w-50 area'
+                            rows="2">PROCEDIMENTO DE BAIXA DE RT EFETIVADO EM PROCEDIMENTO PRESENCIAL DIA DD/MM/AAAA / PROCEDIMENTO DE BAIXA DE RT EFETIVADO EM PROTOCOLO ANTERIOR DE BAIXA DE RT WEB</textarea>
+                        <button class="botao btn btn-primary">Copiar</button>
 
-                    <p>Salvar protocolo. Não há necessidade de fazer download do arquivo e do protocolo e migrar para o
-                        GED
-                    </p>
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="incompleto">
-                    <legend>Caso procedimento esteja com documentos errados ou incompleto:</legend>
+                        <p>Salvar protocolo. Não há necessidade de fazer download do arquivo e do protocolo e migrar
+                            para o
+                            GED
+                        </p>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="incompleto">
+                        <legend>Caso procedimento esteja com documentos errados ou incompleto:</legend>
 
-                    <p>Clicar em Evolução: Local: <strong>46</strong> / Situação: <strong>25</strong> / Julgamento:
-                        <strong>18</strong> / Local Encaminhamento: <strong>32</strong>
-                    </p>
+                        <p>Clicar em Evolução: Local: <strong>46</strong> / Situação: <strong>25</strong> / Julgamento:
+                            <strong>18</strong> / Local Encaminhamento: <strong>32</strong>
+                        </p>
 
-                    <p><strong>Parecer</strong>:</p>
-                    <textarea
-                        class='area-texto-manual area'>FALTA DECLARAÇÃO DE BAIXA DA VIGILÂNCIA SANITÁRIA;
+                        <p><strong>Parecer</strong>:</p>
+                        <textarea class='area-texto-manual w-50 area'
+                            rows="2">FALTA DECLARAÇÃO DE BAIXA DA VIGILÂNCIA SANITÁRIA;
 FALTA QUEBRA DE VÍNCULO DE TRABALHO; (PÁGINA DA CTPS DO CONTRATO COM DATA DE SAÍDA E ASSINATURA DA EMPRESA OU RESCISÃO/DISTRATO COM ASSINATURA DA EMPRESA E DO PROFISSIONAL);
 OU
 CASO AINDA NÃO POSSUA TODOS OS DOCUMENTOS, PODERÁ APRESENTAR FORMULÁRIO DE REQUERIMENTO PREENCHIDO E ASSINADO (MARCANDO TODOS OS DOCUMENTOS QUE FALTAM E O MOTIVO);
@@ -194,21 +205,21 @@ FALTOU APRESENTAR A CTPS COM ANOTAÇÃO/DECLARAÇÃO DA TRANSFERÊNCIA, INDICAND
 FAVOR CONSULTAR PASSO A PASSO NO LINK https://www.crf-pr.org.br/noticia/visualizar/8459
 
 ***LEMBRANDO QUE MARCAR NO FORMULÁRIO QUE NÃO ESTÁ APRESENTANDO ALGUM DOCUMENTO, NÃO ISENTA DE APRESENTAÇÃO POSTERIOR (EM ATÉ 30 DIAS) CONFORME DESCRITO NO FORMULÁRIO.</textarea>
-                    <button class="botao">Copiar</button>
+                        <button class="botao btn btn-primary">Copiar</button>
 
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="pendente">
-                    <legend>Caso de baixa com documentos pendentes (formulário novo):</legend>
-                    <p>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>25</strong> / Julgamento:
-                        <strong>2</strong> / Local Encaminhamento: <strong>32</strong>
-                    </p>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="pendente">
+                        <legend>Caso de baixa com documentos pendentes (formulário novo):</legend>
+                        <p>Clicar em Evolução. Local: <strong>46</strong> / Situação: <strong>25</strong> / Julgamento:
+                            <strong>2</strong> / Local Encaminhamento: <strong>32</strong>
+                        </p>
 
-                    <p><strong>Parecer</strong>:</p>
+                        <p><strong>Parecer</strong>:</p>
 
-                    <textarea
-                        class='area-texto-manual area'>DOCUMENTOS FALTANTES:
+                        <textarea class='area-texto-manual w-50 area'
+                            rows="2">DOCUMENTOS FALTANTES:
 FALTA QUEBRA DE VÍNCULO DE TRABALHO; (PÁGINA DA CTPS DO CONTRATO COM DATA DE SAÍDA E ASSINATURA DA EMPRESA OU RESCISÃO/DISTRATO COM ASSINATURA DA EMPRESA E DO PROFISSIONAL);
 FALTA DECLARAÇÃO DE BAIXA DA VIGILÂNCIA SANITÁRIA;
 FALTOU APRESENTAR A CTPS COM ANOTAÇÃO/DECLARAÇÃO DA TRANSFERÊNCIA, INDICANDO A DATA E O CNPJ PARA O QUAL FOI TRANSFERIDO.
@@ -217,93 +228,100 @@ FALTOU APRESENTAR A CTPS COM ANOTAÇÃO/DECLARAÇÃO DA TRANSFERÊNCIA, INDICAND
 ATENÇÃO. REALIZADA A BAIXA DE RESPONSABILIDADE TÉCNICA DO ESTABELECIMENTO EM CARÁTER ***PROVISÓRIO***. O PROFISSIONAL ESTÁ CIENTE DE QUE RESPONDERÁ POR TODAS AS INFORMAÇÕES
 PRESTADAS, E QUE NO PRAZO MÁXIMO DE 30 (TRINTA) DIAS DEVERÁ APRESENTAR OS DOCUMENTOS FALTANTES, SOB PENA DE RESPONDER A PROCESSO ÉTICO DISCIPLINAR.
 – PARA APRESENTAR OS DOCUMENTOS O PROFISSIONAL DEVERÁ ACESSAR O CRF EM CASA E “EM PROTOCOLOS AGUARDANDO RESPOSTA” E ANEXAR O DOCUMENTO FALTANTE.</textarea>
-                    <button class="botao">Copiar</button>
+                        <button class="botao btn btn-primary">Copiar</button>
 
-                    <p>Fazer download dos arquivos e do protocolo e migrar para o GED (No GED renomear Baixa de RT web +
-                        data protocolo formato AAAA_MM_DD)</p>
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="indeferir">
-                    <legend>Caso procedimento com pedido de correção após um dia útil:</legend>
+                        <p>Fazer download dos arquivos e do protocolo e migrar para o GED (No GED renomear Baixa de RT
+                            web +
+                            data protocolo formato AAAA_MM_DD)</p>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="indeferir">
+                        <legend>Caso procedimento com pedido de correção após um dia útil:</legend>
 
-                    <ol>
-                        <li>Abrir protocolo para cancelamento da ocorrência da B.R.T.:</li>
-                    </ol>
-                    <p>Local: <strong>46</strong> / Situação: <strong>3</strong> / Julgamento: <strong>3</strong></p>
+                        <ol>
+                            <li>Abrir protocolo para cancelamento da ocorrência da B.R.T.:</li>
+                        </ol>
+                        <p>Local: <strong>46</strong> / Situação: <strong>3</strong> / Julgamento: <strong>3</strong>
+                        </p>
 
-                    <p><strong>Parecer</strong>:</p>
+                        <p><strong>Parecer</strong>:</p>
 
-                    <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong>
-                        Encaminhamento: <strong>32</strong></p>
+                        <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong>
+                            Encaminhamento: <strong>32</strong></p>
 
-                    <textarea class="area-texto-manual area dataIndeferimento" id="texto7" type="text"
-                        readonly></textarea>
-                    <button class="botao" ref="#texto7">Copiar</button>
+                        <textarea class="area-texto-manual w-50 area  rows=" 2"dataIndeferimento" id="texto7"
+                            type="text" readonly></textarea>
+                        <button class="botao btn btn-primary" ref="#texto7">Copiar</button>
 
-                    <p>Fazer download dos arquivos e do protocolo e migrar para o GED. (No GED renomear Indeferimento de
-                        Baixa de RT web + data protocolo formato AAAA_MM_DD)</p>
-                    <ol>
-                        <li>Abrir cadastro do estabelecimento para verificação da situação:</li>
-                    </ol>
-                    <p>Incluir status 9436 – COMUNICADO/ CONSTATAÇÃO DE DESLIGAMENTO DA RT:</p>
-                    <p>Colocar data de início = data do desligamento / data fim o prazo de 30 dias para programação de
-                        notificação ao estabelecimento caso o profissional não regularize a baixa e o estabelecimento
-                        fique
-                        irregular sem o profissional.</p>
-                </fieldset>
-            </div>
-            <div>
-                <fieldset class="limita-secao" id="controle">
-                    <legend>Controle de prazos de 1 dia útil para correção de procedimento:</legend>
-                    <h3>Controle dos status 9436</h3>
-                    <p>Selecionar Menu Sagicon:</p>
-                    <ol>
-                        <li>Status;</li>
-                        <li>Relatório/Manutenção de Status;</li>
-                        <li>Tipo de relatório Firma;</li>
-                        <li>Incluir status 9436;</li>
-                        <li>Pesquisar;</li>
-                        <li>Visualizar.</li>
-                    </ol>
-                    <p>Verificar os estabelecimentos com Data Vencimento próxima para notificar a empresa adequar
-                        assistência, caso o profissional ainda não tenha regularizado a baixa da RT.</p>
-                    <img src="../assets/img/relatorio.png" alt="">
-                    <h3>Modelo de notificação ao estabelecimento após a baixa ser indeferida</h3>
+                        <p>Fazer download dos arquivos e do protocolo e migrar para o GED. (No GED renomear
+                            Indeferimento de
+                            Baixa de RT web + data protocolo formato AAAA_MM_DD)</p>
+                        <ol>
+                            <li>Abrir cadastro do estabelecimento para verificação da situação:</li>
+                        </ol>
+                        <p>Incluir status 9436 – COMUNICADO/ CONSTATAÇÃO DE DESLIGAMENTO DA RT:</p>
+                        <p>Colocar data de início = data do desligamento / data fim o prazo de 30 dias para programação
+                            de
+                            notificação ao estabelecimento caso o profissional não regularize a baixa e o
+                            estabelecimento
+                            fique
+                            irregular sem o profissional.</p>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="limita-secao border p-2 none" id="controle">
+                        <legend>Controle de prazos de 1 dia útil para correção de procedimento:</legend>
+                        <h3>Controle dos status 9436</h3>
+                        <p>Selecionar Menu Sagicon:</p>
+                        <ol>
+                            <li>Status;</li>
+                            <li>Relatório/Manutenção de Status;</li>
+                            <li>Tipo de relatório Firma;</li>
+                            <li>Incluir status 9436;</li>
+                            <li>Pesquisar;</li>
+                            <li>Visualizar.</li>
+                        </ol>
+                        <p>Verificar os estabelecimentos com Data Vencimento próxima para notificar a empresa adequar
+                            assistência, caso o profissional ainda não tenha regularizado a baixa da RT.</p>
+                        <img src="../assets/img/relatorio.png" alt="">
+                        <h3>Modelo de notificação ao estabelecimento após a baixa ser indeferida</h3>
 
-                    <textarea
-                        class='area-texto-manual area'>Oficiar (AR) o estabelecimento DROGARIA SJS LTDA, tendo em vista o protocolo nº 28564, de baixa da responsabilidade técnica via web do(a) profissional DESIREE NASCIMENTO, na condição de
+                        <textarea class='area-texto-manual w-50 area'
+                            rows="2">Oficiar (AR) o estabelecimento DROGARIA SJS LTDA, tendo em vista o protocolo nº 28564, de baixa da responsabilidade técnica via web do(a) profissional DESIREE NASCIMENTO, na condição de
 diretora técnica desse estabelecimento, informamos que embora a baixa não tenha sido efetivada por questões documentais, considerando a informação de que não trabalha mais nesse
 estabelecimento desde 12.01.2020, ficando sem assistência de farmacêutico habilitado para o horário de segunda a sábado das 09 às 12 h e 13 as 16 h, fica o estabelecimento notificado a
 regularizar a assistência farmacêutica para todo horário de funcionamento, na forma do art. 24 da Lei 3.820/60 combinado com art. 15 da Lei Federal 5.991/73 e Lei 13.021/2014, sob a pena
 autuações e multas na constatação da ausência do(a) referido(a) farmacêutico(a), a partir da ciência do ofício, conforme previsto a Resolução 648/2017 do Conselho Federal de Farmácia.</textarea>
-                    <button class="botao">Copiar</button>
+                        <button class="botao btn btn-primary">Copiar</button>
 
+                    </fieldset>
+                </div>
+                <fieldset class="lado-a-lado">
+                    <legend>Prazo e Renomear arquivos</legend>
+                    <div>
+                        <p id="verificaprazo">Prazos</p>
+                        <input type="date" name="data" id="data">
+                        <p class="prazo"> </p>
+                        <p class="sessenta"> </p>
+                        <p class="noventa"> </p>
+                        <p class="centoevinte"> </p>
+                        <p class="centoesessenta"> </p>
+                    </div>
+                    <div id="renomear">
+                        <p>Renomear</p>
+                        <textarea class="area data area- rows=" 2"texto-manual" type="text"
+                            readonly>Baixa de RT Web_</textarea>
+                        <button class="botao btn btn-primary">Copiar</button>
+                    </div>
                 </fieldset>
-            </div>
-            <fieldset class="lado-a-lado">
-                <legend>Prazo e Renomear arquivos</legend>
-                <div>
-                    <p id="verificaprazo">Prazos</p>
-                    <input type="date" name="data" id="data">
-                    <p class="prazo"> </p>
-                    <p class="sessenta"> </p>
-                    <p class="noventa"> </p>
-                    <p class="centoevinte"> </p>
-                    <p class="centoesessenta"> </p>
-                </div>
-                <div id="renomear">
-                    <p>Renomear</p>
-                    <textarea class="area data area-texto-manual" type="text" readonly>Baixa de RT Web_</textarea>
-                    <button class="botao">Copiar</button>
-                </div>
-            </fieldset>
 
 
 
-        </section>
-    </main>
-    <footer>
+            </section>
+        </main>
+    </div>
+    <footer class="badge badge-dark d-flex flex-column border-top mt-5 pt-3">
         <p>Criado por ® Lauro Otávio Urbano <strong>versão 2022.01</strong></p>
         <div>
             <h3 class="nav-menu"><a href="#inicio"><strong>Voltar ao início</strong></a> </h3>
