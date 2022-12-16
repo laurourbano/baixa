@@ -2,17 +2,10 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-}
-.limita-secao {
-    width: 80%;
-    margin: 0 auto;
+    font-size: 18px;
 }
 section div {
     width: 100%;
-}
-fieldset {
-    padding: 15px;
-    background-color: rgb(49, 47, 66);
 }
 nav {
     display: block;
@@ -24,65 +17,17 @@ body {
     height: 100%;
 }
 main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 200px;
+    padding-top: 150px;
     padding-bottom: 80px;
 }
 .section-manual {
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-p {
-    font-size: 20px;
-}
 ul li {
-    font-size: 16px;
     list-style-type: none;
 }
 ol li {
-    font-size: 16px;
     list-style-type: none;
-}
-.lado-a-lado {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: row;
-    width: 80%;
-    min-height: 250px;
-}
-.lado-a-lado div {
-    width: 100%;
-}
-aside {
-    display: flex;
-    position:static;
-    flex-wrap: wrap;
-}
-aside a {
-    border-radius: 5px;
-    text-align: center;
-    justify-content: center;
-    width: 300px;
-    display: flex;
-    flex-wrap: wrap;
-    text-decoration: none;
-    color: #a9f9f9;
-	background-color: #164d6d;
-    padding: 2px;
-    margin: 2px;
-}
-aside a:hover {
-	background-color: rgba(87, 152, 182, 0.8);
-	color: #111;
-	cursor: pointer;
-}
-footer{ 
-    display: block;
-    justify-content: center;
-    align-items: center;
 }
