@@ -5,9 +5,9 @@ window.onload = function () {
     //cria um array relacionados a todos os itens com a classe .area
     let caixaTexto = Array.prototype.slice.call(document.querySelectorAll('.area'));
     //cria a funcao copiar texto da textarea com classe .area ao clicar no botao com classe .botao
-    botaoCopiar.forEach(function(botao, texto){
+    botaoCopiar.forEach(function (botao, texto) {
         //cria o evento de click e associa a funcao que copia o correspondente ao .botao[i] ao .area[i]
-        botao.addEventListener('click', function() {
+        botao.addEventListener('click', function () {
             //seleciona o texto no item da caixa de texto que correspondente à mesma posição do botao no array
             caixaTexto[texto].select();
             //verifica se funcionou ou deu erro através de um if ternário
