@@ -1,8 +1,9 @@
 
-const button = document.getElementsByTagName('input')[0];
-const body = document.getElementsByTagName('body')[0];
-const fieldset = document.getElementsByTagName('fieldset');
-const legend = document.getElementsByTagName('legend');
+const botao = document.getElementsByTagName('input')[0];
+const corpo = document.getElementsByTagName('corpo')[0];
+const container = document.getElementsByTagName('fieldset');
+const legenda = document.getElementsByTagName('legend');
+
 const textoEscuro = 'text-dark';
 const textoClaro = 'text-light';
 const botaoEscuro = 'btn-dark';
@@ -10,26 +11,25 @@ const fundoEscuro = 'bg-dark';
 const fundoClaro = 'bg-light';
 const botaoClaro = 'btn-light';
 
-function changeMode() {
-	changeClasses();
-	changeText();
+function alteraModo() {
+	alteraClasses();
+	alteraTexto();
 }
 
-function changeClasses() {
-	button.classList.toggle(fundoEscuro, botaoEscuro );
-	body.classList.toggle(fundoEscuro);
+function alteraClasses() {
+	botao.classList.toggle(fundoEscuro, botaoEscuro);
+	corpo.classList.toggle(fundoEscuro);
 }
 
-function changeText() {
+function alteraTexto() {
 	const lightMode = textoClaro;
 	const darkMode = textoEscuro;
 
-	if (body.classList.contains(fundoClaro)) { 
-		button.innerHTML = fundoClaro;
+	if (corpo.classList.contains(fundoClaro)) { 
+		botao.innerHTML = fundoClaro;
 		return;
 	}
 
-	button.innerHTML = darkMode;
-	body.classList.toggle(textoEscuro);
-
+	botao.innerHTML = darkMode;
+	corpo.classList.toggle(textoEscuro);
 }
