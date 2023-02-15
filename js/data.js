@@ -42,7 +42,7 @@ E ASSINADO *PELO REPRESENTANTE LEGAL E PELO PROFISSIONAL*
 
   let input = document.querySelector('#data');
   let prazo = document.querySelector('.prazo');
-  input.valueAsDate = new Date('0000-00-00');
+  input.valueAsDate = new Date('YYYY-MM-DD');
 
   input.addEventListener('input', () => {
     let input1 = input.value.split("/");
