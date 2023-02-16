@@ -13,6 +13,7 @@ window.onload = function () {
       console.log('executando para copiar texto ' + msg);
 
       copiado[idx].classList.remove('invisible');
+
       setTimeout(() => {
         copiado[idx].classList.add('invisible');
       }, 2 * 1000);
