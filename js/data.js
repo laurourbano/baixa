@@ -7,7 +7,7 @@ let mes = new Date().getMonth() + 1;
 let ano = new Date().getFullYear();
 let diaAnterior = dia - 1;
 let dataAtual = ano+"_"+mes+"_"+diaAnterior;
-data.innerHTML += dataAtual;
+data.innerHTML = `Baixa de RT Web_${dataAtual}` ;
 
 let dataFormatada = document.querySelector(".dataFormatada");
 let dataNova = dia+"/"+mes+"/"+ano;
