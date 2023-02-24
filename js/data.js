@@ -114,7 +114,7 @@ E ASSINADO *PELO REPRESENTANTE LEGAL E PELO PROFISSIONAL*
     centoevinte.innerHTML = (dataNoHtml3);
   });  
   
-  let centoesessenta = document.querySelector('.centoesessenta');
+  let centoeoitenta = document.querySelector('.centoeoitenta');
 
   input.addEventListener('input', () => {
     let input1 = input.value.split("/");
@@ -122,12 +122,12 @@ E ASSINADO *PELO REPRESENTANTE LEGAL E PELO PROFISSIONAL*
     let inputat = new Date(hj1);
     inputat.setDate(inputat.getDate());
     let myDate = new Date(hj1);
-    myDate.setDate(myDate.getDate() + 160);
+    myDate.setDate(myDate.getDate() + 180);
     let ano2 = myDate.getFullYear();
     let dia2 = myDate.getDate();
       if(dia2<10){dia2='0'+dia2};
     let mes2 = (myDate.getMonth()+1);
       if(mes2<10){mes2='0'+mes2};
-    let dataNoHtml4 = (("160 dias em: " + dia2 + "/" + mes2 + "/" + ano2));
-    centoesessenta.innerHTML = (dataNoHtml4);
+    let dataNoHtml4 = (("180 dias em: " + dia2 + "/" + mes2 + "/" + ano2));
+    centoeoitenta.innerHTML = (dataNoHtml4);
   });
