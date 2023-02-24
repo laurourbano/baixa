@@ -11,7 +11,7 @@ data.innerHTML = `Baixa de RT Web_${dataAtual}` ;
 
 let dataFormatada = document.querySelector(".dataFormatada");
 let dataNova = dia+"/"+mes+"/"+ano;
-dataFormatada.innerHTML += dataNova;
+dataFormatada.innerHTML += `${dataNova}`;
 
 let diaIndeferir = dia - 2;
 let dataIndeferimento = document.querySelector(".dataIndeferimento");

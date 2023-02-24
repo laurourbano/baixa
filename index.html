@@ -35,8 +35,8 @@
     <h3 class="titulo-principal text-center d-block w-100">Parecer procedimentos de Baixa de Responsabilidade
       Técnica.</h3>
 
-    <section class="section-baixa">
-      <div class="container-fluid d-flex flex-wrap justify-content-center">
+    <section class="section-baixa ">
+      <div class="container-fluid d-flex flex-wrap justify-content-center ">
         <h3 class="d-block w-100 text-center">Clique nos botões abaixo de cada cartão, para copiar os pareceres.</h3>
         <fieldset
           class=" bg-transparent text-danger shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-danger position-relative d-flex flex-column">
@@ -44,7 +44,7 @@
           <p>Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>18</strong> Encaminhamento:
             <strong>32</strong>
           </p>
-          <textarea rows="1" class="area w-100" id="texto5" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto5" type="text" readonly>
 - FALTA DECLARAÇÃO DE BAIXA DA VIGILÂNCIA SANITÁRIA 
 (OU MINISTÉRIO DA AGRICULTURA E PECUÁRIA, EM CASO DE MANIPULAÇÃO DE PRODUTOS VETERINÁRIOS);
 
@@ -69,8 +69,8 @@ https://www.crf-pr.org.br/servico/visualizar/id/84
 APRESENTAÇÃO POSTERIOR (EM ATÉ 30 DIAS) CONFORME DESCRITO NO FORMULÁRIO.
 </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75 " id="execCopy5" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double" aria-disabled="true"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied5" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="conteudo do popover"
               ref="#texto5"> Copiar <i class="fa fa-copy"></i>
             </button>
@@ -80,12 +80,12 @@ APRESENTAÇÃO POSTERIOR (EM ATÉ 30 DIAS) CONFORME DESCRITO NO FORMULÁRIO.
         </fieldset>
 
         <fieldset
-          class=" bg-transparent text-warning shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-warning">
+          class=" bg-transparent  text-warning shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-warning">
           <legend class="bg-transparent text-center rounded ">Aguarda Complementação</legend>
           <p>Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>2</strong> Encaminhamento:
             <strong>32</strong>
           </p>
-          <textarea rows="1" class="area w-100" id="texto6" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto6" type="text" readonly>
 AGUARDA DOCUMENTAÇÃO COMPLEMENTAR:
 - FALTA QUEBRA DE VÍNCULO DE TRABALHO; (EXTRATO DO CONTRATO BAIXADO NA CARTEIRA DE TRABALHO DIGITAL, 
 OU, PÁGINA DA CARTEIRA DE TRABALHO DO CONTRATO COM DATA DE SAÍDA E ASSINATURA DA EMPRESA, 
@@ -104,9 +104,9 @@ DE 30 (TRINTA) DIAS DEVERÁ APRESENTAR OS DOCUMENTOS FALTANTES, SOB PENA DE RESP
 – PARA APRESENTAR OS DOCUMENTOS O PROFISSIONAL DEVERÁ ACESSAR O CRF EM CASA E “EM PROTOCOLOS AGUARDANDO 
 RESPOSTA” E ANEXAR O DOCUMENTO FALTANTE.
 </textarea>
-          <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy6" title="Copiar"
+          <div class="d-flex justify-content-end align-items-center ">
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied6" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="conteudo do popover"
               ref="#texto6">Copiar <i class="fa fa-copy"></i></button>
           </div>
@@ -120,11 +120,11 @@ RESPOSTA” E ANEXAR O DOCUMENTO FALTANTE.
             <strong>32</strong>
           </p>
           
-          <textarea rows="1" class="area dataIndeferimento w-100" id="texto7" type="text" readonly></textarea>
+          <textarea rows="1" class="area dataIndeferimento w-100 bg-transparent text-white-50" id="texto7" type="text" readonly></textarea>
 
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy7" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied7" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="conteudo do popover"
               ref="#texto7">Copiar <i class="fa fa-copy"></i></button>
           </div>
@@ -135,10 +135,10 @@ RESPOSTA” E ANEXAR O DOCUMENTO FALTANTE.
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Finalizado</legend>
           <p>Local: <strong>46</strong> Situação: <strong>2</strong> Julgamento: <strong>2</strong></p>
-          <textarea rows="1" class="area w-100" type="text" readonly>PROTOCOLO FINALIZADO.</textarea>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" type="text" readonly>PROTOCOLO FINALIZADO.</textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" title="Copiar" data-container="body"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" title="Copiar" data-container="body"
               data-toggle="popover" data-placement="top" data-content="Conteudo do popover."> Copiar <i
                 class="fa fa-copy"></i></button>
           </div>
@@ -148,13 +148,13 @@ RESPOSTA” E ANEXAR O DOCUMENTO FALTANTE.
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Desistência</legend>
           <p>Local: <strong>46</strong> Situação: <strong>2</strong> Julgamento: <strong>2</strong></p>
-          <textarea rows="1" class="area w-100" id="texto3" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto3" type="text" readonly>
 PROCEDIMENTO TRATA-SE DE DESISTÊNCIA DA RT UMA VEZ QUE O INGRESSO SERIA APRECIADO PELO PLENÁRIO.
 DESISTÊNCIA EFETIVADA.
 </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy3" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied3" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
               ref="#texto3">Copiar <i class="fa fa-copy"></i></button>
           </div>
@@ -165,13 +165,13 @@ DESISTÊNCIA EFETIVADA.
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Tardia</legend>
           <p>Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
-          <textarea rows="1" class="area w-100" id="texto1" type="text"
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto1" type="text"
             readonly>
 PROFISSIONAL PROTOCOLOU BAIXA EM PRAZO SUPERIOR A 30 DIAS, SENDO QUE SEU AFASTAMENTO FOI EM 
 </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy1" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied1" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
               ref="#texto1">Copiar <i class="fa fa-copy"></i></button>
           </div>
@@ -182,13 +182,13 @@ PROFISSIONAL PROTOCOLOU BAIXA EM PRAZO SUPERIOR A 30 DIAS, SENDO QUE SEU AFASTAM
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">30 dias</legend>
           <p>Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
-          <textarea rows="1" class="area w-100" id="texto2" type="text"
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto2" type="text"
             readonly>
 NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTOCOLO. PROTOCOLO EM 02/05/2022.
 </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy2" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied2" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
               ref="#texto2">Copiar <i class="fa fa-copy"></i></button>
           </div>
@@ -199,12 +199,12 @@ NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTO
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Duplicado</legend>
           <p>Local: <strong>46</strong> Situação: <strong>4</strong> Julgamento: <strong>8</strong></p>
-          <textarea rows="1" class="area w-100" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" type="text" readonly>
 *** FAVOR NÃO DUPLICAR PROTOCOLOS ***
 </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" title="Copiar" data-container="body"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" title="Copiar" data-container="body"
               data-toggle="popover" data-placement="top" data-content="Conteudo do popover.">Copiar <i class="fa fa-copy"></i>
             </button>
           </div>
@@ -217,8 +217,8 @@ NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTO
           <p>Renomear</p>
           <textarea rows="1" class="area data  w-100" type="text" readonly></textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" title="Copiar" data-container="body"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" title="Copiar" data-container="body"
               data-toggle="popover" data-placement="top" data-content="Conteudo do popover."> Copiar <i class="fa fa-copy"></i>
             </button>
           </div>
@@ -239,12 +239,12 @@ NÃO APRESENTOU DOCUMENTOS OBRIGATÓRIOS PARA BAIXA NO PRAZO DE 30 DIAS DO PROTO
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Sem andamento</legend>
           <p>Local: <strong>46</strong> Situação: <strong>13</strong> Julgamento: <strong>8</strong></p>
-          <textarea rows="1" class="area w-100" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" type="text" readonly>
 PROTOCOLO ARQUIVADO POR ESTAR SEM ANDAMENTO E ENCAMINHADO PARA O DEPARTAMENTO DE ÉTICA PARA PROVIDÊNCIAS.
 </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" title="Copiar" data-container="body"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" title="Copiar" data-container="body"
               data-toggle="popover" data-placement="top" data-content="Conteudo do popover.">Copiar <i class="fa fa-copy"></i>
             </button>
           </div>
@@ -254,13 +254,13 @@ PROTOCOLO ARQUIVADO POR ESTAR SEM ANDAMENTO E ENCAMINHADO PARA O DEPARTAMENTO DE
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Indeferimento de DAP</legend>
           <p>Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong></p>
-          <textarea rows="1" class="area w-100" id="texto7" type="text"
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto7" type="text"
             readonly>
 Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberação 1004/21
 </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy7" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied7" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
               ref="#texto7">Copiar <i class="fa fa-copy"></i></button>
           </div>
@@ -293,17 +293,16 @@ Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberaç�
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Nissei</legend>
           <h6>Endereço para envio de correspondências</h6>
-          <textarea rows="1" class="area w-100" id="texto6" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto6" type="text" readonly>
 DEPARTAMENTO JURÍDICO NISSEI
 RUA ACRE 205 – ÁGUA VERDE 
 80620-900 CURITIBA - PARANÁ
         </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy6" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied6" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
               ref="#texto6">Copiar <i class="fa fa-copy"></i></button>
-          </div>
 
         </fieldset>
 
@@ -311,14 +310,14 @@ RUA ACRE 205 – ÁGUA VERDE
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">Morifarma/Mais popular</legend>
           <h6>Endereço para envio de correspondências</h6>
-          <textarea rows="1" class="area w-100" id="texto6" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto6" type="text" readonly>
 RECURSOS HUMANOS 
 RUA AMAURY LANGE SILVERIO 33 – PILARZINHO
 82120-000 - CURITIBA - PARANÁ
         </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy6" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied6" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
               ref="#texto6">Copiar <i class="fa fa-copy"></i></button>
           </div>
@@ -329,15 +328,15 @@ RUA AMAURY LANGE SILVERIO 33 – PILARZINHO
           class=" bg-transparent text-light shadow p-3 col-lg-3 my-1 mx-1 justify-content-between border border-light">
           <legend class="bg-transparent text-center rounded ">São João</legend>
           <h6>Endereço para envio de correspondências</h6>
-          <textarea rows="1" class="area w-100" id="texto6" type="text" readonly>
+          <textarea rows="1" class="area w-100 bg-transparent text-white-50" id="texto6" type="text" readonly>
 COMÉRCIO DE MEDICAMENTOS BRAIR LTDA
 FARMÁCIAS SÃO JOÃO
 AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
 99064-440 - PASSO FUNDO - RIO GRANDE DO SUL
         </textarea>
           <div class="d-flex justify-content-end align-items-center">
-            <span class="text-light copiado invisible shadow border border-success bg-success rounded rounded-5 position-absolute w-75 py-3 text-center">copy <i class="fas fa-check-double p-1"></i></span>
-            <button class="botao my-1 p-3 btn btn-outline-light w-75" id="execCopy6" title="Copiar"
+            <small class="text-white-50 copiado invisible border border-success shadow bg-secondary rounded rounded-5 position-absolute w-50 mx-0 py-3 text-center" disabled>copied <i class="fas fa-check-double"></i></small>
+            <button class="botao my-1 p-3 btn btn-outline-success w-50" id="execcopied6" title="Copiar"
               data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
               ref="#texto6">Copiar <i class="fa fa-copy"></i></button>
           </div>
