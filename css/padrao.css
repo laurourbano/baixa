@@ -20,6 +20,12 @@ a{
 textarea{
 	font-size: .8em !important;
 }
+textarea::selection{
+	opacity: 0;
+}
+textarea::shadow{
+	box-shadow: 1px;
+}
 button {
 	font-size: .8em !important;
 }
