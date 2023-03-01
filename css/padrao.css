@@ -18,10 +18,14 @@ a{
 	outline: none !important;
 }
 textarea{
+	background-color: transparent;
+	opacity: 60%;
 	font-size: .8em !important;
 }
 textarea::selection{
-	opacity: 0;
+	background-color: transparent;
+	color: green;
+	opacity: 1;
 }
 textarea::shadow{
 	box-shadow: 1px;
