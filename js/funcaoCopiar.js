@@ -1,4 +1,6 @@
-//cria uma função que inicia no carregamento da janela
+/* MINHA PRIMEIRA VERSÃO */
+
+/*//cria uma função que inicia no carregamento da janela
 window.onload = function () {
     //cria um array relacionado a todos os itens com a classe .botao
     let botaoCopiar = Array.prototype.slice.call(document.querySelectorAll('.botao'));
@@ -14,6 +16,25 @@ window.onload = function () {
             let mensagem = document.execCommand('copy') ? 'funcionou' : 'deu erro';
             //imprime o resultado no console para verificação
             console.log('executando para copiar texto ' + mensagem);
+        });
+    });
+}*/
+
+/* VERSÃO SIMPLIFICADA */
+// Quando a página terminar de carregar
+window.onload = function () {
+    // Crie arrays de todos os elementos com as classes .botao e .area
+    let botoes = Array.from(document.querySelectorAll('.botao'));
+    let caixasTexto = Array.from(document.querySelectorAll('.area'));
+    
+    // Para cada botão, adicione um evento de clique
+    botoes.forEach(function (botao, indice) {
+        botao.addEventListener('click', function () {
+            // Selecione o texto correspondente à caixa de texto do botão clicado
+            caixasTexto[indice].select();
+            // Tente copiar o texto selecionado e imprima o resultado no console
+            let mensagem = document.execCommand('copy') ? 'funcionou' : 'deu erro';
+            console.log('Cópia de texto ' + mensagem);
         });
     });
 }
