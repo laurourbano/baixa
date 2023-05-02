@@ -1,21 +1,65 @@
-
 let data = document.querySelector(".data");
 let dia = new Date().getDate();
-  if(dia<10){dia='0'+dia};
 let mes = new Date().getMonth() + 1;
-  if(mes<10){mes='0'+mes};
 let ano = new Date().getFullYear();
+
+function calcularData(input, dias) {
+  let input1 = input.value.split("/");
+  let hj1 = input1[2] + "-" + input1[1] + "-" + input1[0];
+  let inputat = new Date(hj1);
+  inputat.setDate(inputat.getDate());
+  let myDate = new Date(hj1);
+  myDate.setDate(myDate.getDate() + dias);
+  let ano2 = myDate.getFullYear();
+  let dia2 = myDate.getDate();
+  if (dia2 < 10) {
+    dia2 = '0' + dia2
+  };
+  let mes2 = (myDate.getMonth() + 1);
+  if (mes2 < 10) {
+    mes2 = '0' + mes2
+  };
+  return dia2 + "/" + mes2 + "/" + ano2;
+}
+
+if (dia < 10) {
+  dia = '0' + dia
+};
+if (mes < 10) {
+  mes = '0' + mes
+};
 let diaAnterior = dia - 1;
-let dataAtual = ano+"_"+mes+"_"+diaAnterior;
-data.innerHTML = `Baixa de RT Web_${dataAtual}` ;
+
+if (diaAnterior <= 0) {
+  mes = mes - 1;
+  if (mes === 0) {
+    mes = 12;
+    ano = ano - 1;
+  }
+  diaAnterior = new Date(ano, mes, 0).getDate();
+}
+
+let dataAtual = ano + "_" + mes + "_" + diaAnterior;
+data.innerHTML = `Baixa de RT Web_${dataAtual}`;
 
 let dataFormatada = document.querySelector(".dataFormatada");
-let dataNova = dia+"/"+mes+"/"+ano;
+let dataNova = dia + "/" + mes + "/" + ano;
 dataFormatada.innerHTML += `${dataNova}`;
 
 let diaIndeferir = dia - 2;
 let dataIndeferimento = document.querySelector(".dataIndeferimento");
-let dataAtual1 = diaIndeferir+"/"+mes+"/"+ano;
+let dataAtual1 = diaIndeferir + "/" + mes + "/" + ano;
+
+if (diaIndeferir <= 0) {
+  mes = mes - 1;
+  if (mes === 0) {
+    mes = 12;
+    ano = ano - 1;
+  }
+  diaIndeferir = new Date(ano, mes, 0).getDate() + diaIndeferir;
+  dataAtual1 = diaIndeferir + "/" + mes + "/" + ano;
+}
+
 dataIndeferimento.innerHTML = (`INDEFERIDO REQUERIMENTO DE BAIXA.
 DOCUMENTOS SOLICITADOS PARA CORREÇÃO DO PROCEDIMENTO DE BAIXA DE RT NÃO FORAM ENVIADOS NO PRAZO DE 01 
 (UM) DIA ÚTIL DA RESPOSTA DO CRF-PR.
@@ -37,95 +81,3 @@ E ASSINADO *PELO REPRESENTANTE LEGAL E PELO PROFISSIONAL*
 (MARCANDO TODOS OS DOCUMENTOS QUE FALTAM E O MOTIVO).
 
 - FALTA ASSINATURA, DO REPRESENTANTE LEGAL, NO REQUERIMENTO DE BAIXA PARA BAIXAR SEM DOCUMENTOS;`);
-
-  let input = document.querySelector('#data');
-  let prazo = document.querySelector('.prazo');
-  input.valueAsDate = new Date('YYYY-MM-DD');
-
-  input.addEventListener('input', () => {
-    let input1 = input.value.split("/");
-    let hj1 = input1[2]+"-"+input1[1]+"-"+input1[0];
-    let inputat = new Date(hj1);
-    inputat.setDate(inputat.getDate());
-    let myDate = new Date(hj1);
-    myDate.setDate(myDate.getDate() + 30);
-    let ano2 = myDate.getFullYear();
-    let dia2 = myDate.getDate();
-      if(dia2<10){dia2='0'+dia2};
-    let mes2 = (myDate.getMonth()+1);
-      if(mes2<10){mes2='0'+mes2};
-    let dataNoHtml = (("30 dias em: " + dia2 + "/" + mes2 + "/" + ano2));
-    prazo.innerHTML = (dataNoHtml);
-  });  
-
-  let sessenta = document.querySelector('.sessenta');
-
-  input.addEventListener('input', () => {
-    let input1 = input.value.split("/");
-    let hj1 = input1[2]+"-"+input1[1]+"-"+input1[0];
-    let inputat = new Date(hj1);
-    inputat.setDate(inputat.getDate());
-    let myDate = new Date(hj1);
-    myDate.setDate(myDate.getDate() + 60);
-    let ano2 = myDate.getFullYear();
-    let dia2 = myDate.getDate();
-      if(dia2<10){dia2='0'+dia2};
-    let mes2 = (myDate.getMonth()+1);
-      if(mes2<10){mes2='0'+mes2};
-    let dataNoHtml1 = (("60 dias em: " + dia2 + "/" + mes2 + "/" + ano2));
-    sessenta.innerHTML = (dataNoHtml1);
-  });
-
-  let noventa = document.querySelector('.noventa');
-
-  input.addEventListener('input', () => {
-    let input1 = input.value.split("/");
-    let hj1 = input1[2]+"-"+input1[1]+"-"+input1[0];
-    let inputat = new Date(hj1);
-    inputat.setDate(inputat.getDate());
-    let myDate = new Date(hj1);
-    myDate.setDate(myDate.getDate() + 90);
-    let ano2 = myDate.getFullYear();
-    let dia2 = myDate.getDate();
-      if(dia2<10){dia2='0'+dia2};
-    let mes2 = (myDate.getMonth()+1);
-      if(mes2<10){mes2='0'+mes2};
-    let dataNoHtml2 = (("90 dias em: " + dia2 + "/" + mes2 + "/" + ano2));
-    noventa.innerHTML = (dataNoHtml2);
-  });
-  
-  let centoevinte = document.querySelector('.centoevinte');
-
-  input.addEventListener('input', () => {
-    let input1 = input.value.split("/");
-    let hj1 = input1[2]+"-"+input1[1]+"-"+input1[0];
-    let inputat = new Date(hj1);
-    inputat.setDate(inputat.getDate());
-    let myDate = new Date(hj1);
-    myDate.setDate(myDate.getDate() + 120);
-    let ano2 = myDate.getFullYear();
-    let dia2 = myDate.getDate();
-      if(dia2<10){dia2='0'+dia2};
-    let mes2 = (myDate.getMonth()+1);
-      if(mes2<10){mes2='0'+mes2};
-    let dataNoHtml3 = (("120 dias em: " + dia2 + "/" + mes2 + "/" + ano2));
-    centoevinte.innerHTML = (dataNoHtml3);
-  });  
-  
-  let centoeoitenta = document.querySelector('.centoeoitenta');
-
-  input.addEventListener('input', () => {
-    let input1 = input.value.split("/");
-    let hj1 = input1[2]+"-"+input1[1]+"-"+input1[0];
-    let inputat = new Date(hj1);
-    inputat.setDate(inputat.getDate());
-    let myDate = new Date(hj1);
-    myDate.setDate(myDate.getDate() + 180);
-    let ano2 = myDate.getFullYear();
-    let dia2 = myDate.getDate();
-      if(dia2<10){dia2='0'+dia2};
-    let mes2 = (myDate.getMonth()+1);
-      if(mes2<10){mes2='0'+mes2};
-    let dataNoHtml4 = (("180 dias em: " + dia2 + "/" + mes2 + "/" + ano2));
-    centoeoitenta.innerHTML = (dataNoHtml4);
-  });
