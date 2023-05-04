@@ -101,3 +101,6 @@ calcularPrazos();
 
 // adicione um evento change ao input de data
 dataInput.addEventListener("change", calcularPrazos);
+
+// adicione um evento input ao input de data
+dataInput.addEventListener("input", calcularPrazos);
