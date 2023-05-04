@@ -3,6 +3,15 @@ let dia = new Date().getDate();
 let mes = new Date().getMonth() + 1;
 let ano = new Date().getFullYear();
 
+Object.keys(window).forEach(function (key) {
+  if (key.includes("dia") || key.includes("mes")) {
+    let value = window[key];
+    if (typeof value === "number" && value < 10) {
+      window[key] = value.toString().padStart(2, "0");
+    }
+  }
+});
+
 function calcularData(input, dias) {
   let input1 = input.value.split("/");
   let hj1 = input1[2] + "-" + input1[1] + "-" + input1[0];
@@ -11,23 +20,11 @@ function calcularData(input, dias) {
   let myDate = new Date(hj1);
   myDate.setDate(myDate.getDate() + dias);
   let ano2 = myDate.getFullYear();
-  let dia2 = myDate.getDate();
-  if (dia2 < 10) {
-    dia2 = '0' + dia2
-  };
-  let mes2 = (myDate.getMonth() + 1);
-  if (mes2 < 10) {
-    mes2 = '0' + mes2
-  };
+  let dia2 = myDate.getDate().toString().padStart(2, "0");
+  let mes2 = (myDate.getMonth() + 1).toString().padStart(2, "0");
   return dia2 + "/" + mes2 + "/" + ano2;
 }
 
-if (dia < 10) {
-  dia = '0' + dia
-};
-if (mes < 10) {
-  mes = '0' + mes
-};
 let diaAnterior = dia - 1;
 
 if (diaAnterior <= 0) {
@@ -39,16 +36,16 @@ if (diaAnterior <= 0) {
   diaAnterior = new Date(ano, mes, 0).getDate();
 }
 
-let dataAtual = ano + "_" + mes + "_" + diaAnterior;
+let dataAtual = ano + "_" + mes.toString().padStart(2, "0") + "_" + diaAnterior.toString().padStart(2, "0");
 data.innerHTML = `Baixa de RT Web_${dataAtual}`;
 
 let dataFormatada = document.querySelector(".dataFormatada");
-let dataNova = dia + "/" + mes + "/" + ano;
+let dataNova = dia.toString().padStart(2, "0") + "/" + mes.toString().padStart(2, "0") + "/" + ano;
 dataFormatada.innerHTML += `${dataNova}`;
 
 let diaIndeferir = dia - 2;
 let dataIndeferimento = document.querySelector(".dataIndeferimento");
-let dataAtual1 = diaIndeferir + "/" + mes + "/" + ano;
+let dataAtual1 = diaIndeferir.toString().padStart(2, "0") + "/" + mes.toString().padStart(2, "0") + "/" + ano;
 
 if (diaIndeferir <= 0) {
   mes = mes - 1;
@@ -57,7 +54,7 @@ if (diaIndeferir <= 0) {
     ano = ano - 1;
   }
   diaIndeferir = new Date(ano, mes, 0).getDate() + diaIndeferir;
-  dataAtual1 = diaIndeferir + "/" + mes + "/" + ano;
+  dataAtual1 = diaIndeferir.toString().padStart(2, "0") + "/" + mes.toString().padStart(2, "0") + "/" + ano;
 }
 
 dataIndeferimento.innerHTML = (`INDEFERIDO REQUERIMENTO DE BAIXA.
