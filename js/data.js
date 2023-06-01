@@ -28,8 +28,6 @@ function calcularData(input, dias) {
 let diaAnterior = dia - 1;
 
 if (diaAnterior <= 0) {
-  diaAnterior = 1;
-  mes = mes - 1;
   if (mes === 0) {
     mes = 12;
     ano = ano - 1;
@@ -37,7 +35,7 @@ if (diaAnterior <= 0) {
   diaAnterior = new Date(ano, mes, 0).getDate();
 }
 
-let dataAtual = ano + "_" + mes.toString().padStart(2, "0") + "_" + diaAnterior.toString().padStart(2, "0");
+let dataAtual = ano + "_" + mes.toString().padStart(2, "0") + "_" + dia.toString().padStart(2, "0");
 data.innerHTML = `Baixa de RT Web_${dataAtual}`;
 
 let dataFormatada = document.querySelector(".dataFormatada");
@@ -105,3 +103,6 @@ dataInput.addEventListener("change", calcularPrazos);
 
 // adicione um evento input ao input de data
 dataInput.addEventListener("input", calcularPrazos);
+
+// adicione um evento input ao input de data
+dataInput.addEventListener("click", calcularPrazos);
