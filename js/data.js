@@ -28,6 +28,7 @@ function calcularData(input, dias) {
 let diaAnterior = dia - 1;
 
 if (diaAnterior <= 0) {
+  diaAnterior = 1;
   mes = mes - 1;
   if (mes === 0) {
     mes = 12;
