@@ -10,6 +10,11 @@ A página possui as seguintes funcionalidades:
 
 1. Copiar Conteúdo: Permite ao usuário copiar o conteúdo desejado de cada assunto com apenas um clique.
 
+## Deploys
+
+<a href="https://baixa-kappa.vercel.app">vercel</a>
+<a href="https://laurourbano.github.io/baixa/">gitjub</a>
+
 ## Como Utilizar
 
 1. Clone ou faça o download deste repositório.
