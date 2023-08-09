@@ -76,12 +76,12 @@ OU
 // const dataInput = document.getElementById("data");
 // const prazos = document.querySelectorAll(".prazo, .sessenta, .noventa, .centoevinte, .centoeoitenta");
 
-// // crie uma função para calcular as datas de prazo a partir da data inserida
+// crie uma função para calcular as datas de prazo a partir da data inserida
 // function calcularPrazos() {
-//   // obtenha a data inserida no formato do Moment.js
-//   const data = moment(dataInput.value, "YYYY-MM-DD");
+  // obtenha a data inserida no formato do Moment.js
+  // const data = moment(dataInput.value, "YYYY-MM-DD");
   
-//   // atualize o conteúdo dos parágrafos correspondentes com as datas de prazo calculadas
+  // atualize o conteúdo dos parágrafos correspondentes com as datas de prazo calculadas
 //   prazos.forEach((prazo) => {
 //     const dias = Number(prazo.classList[0].match(/\d+/)[0]);
 //     const prazoData = data.clone().add(dias, "days").format("DD/MM/YYYY");
@@ -89,14 +89,14 @@ OU
 //   });
 // }
 
-// // chame a função para calcular as datas de prazo assim que a página for carregada
+// chame a função para calcular as datas de prazo assim que a página for carregada
 // calcularPrazos();
 
-// // adicione um evento change ao input de data
+// adicione um evento change ao input de data
 // dataInput.addEventListener("change", calcularPrazos);
 
-// // adicione um evento input ao input de data
+// adicione um evento input ao input de data
 // dataInput.addEventListener("input", calcularPrazos);
 
-// // adicione um evento input ao input de data
+// adicione um evento input ao input de data
 // dataInput.addEventListener("click", calcularPrazos);
