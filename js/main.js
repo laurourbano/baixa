@@ -33,3 +33,4 @@ function alteraTexto() {
 	botao.innerHTML = darkMode;
 	corpo.classList.toggle(textoEscuro);
 }
+
