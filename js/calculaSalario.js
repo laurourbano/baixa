@@ -5,6 +5,7 @@ const quantidadeHorasInput = document.getElementById("quantidadeHoras");
 const resultado = document.getElementById("resultado");
 const valorPorHora = document.getElementById("valorPorHora");
 
+resultado.innerHTML = 0;
 valorPorHora.innerHTML = 0;
 
 quantidadeHorasInput.addEventListener("change", () => {
