@@ -27,32 +27,38 @@
         <h4 class="titulo-principal text-center d-block w-100 mt-3">
             Calculo do piso salarial. Referência (Piso homologado em ACT)
         </h4>
-        <a href="../index.html" rel="noopener noreferrer" class="btn btn-secondary">Baixa</a>
 
-        <section class="justify-content-center w-100 align-content-center text-center container">
+        <div class="container-fluid">
+            <a href="../index.html" rel="noopener noreferrer" class="btn btn-outline-secondary">Baixa</a>
+        </div>
 
-            <div class="row container">
+        <section class="justify-content-center w-100 container">
+
+            <div class="row">
 
                 <div class="col-12">
                     <div class="col-6">
-                        <label for="valorPisoSalarial">Digite o valor do piso:
+                        <label for="valorPisoSalarial">
+                            Digite o valor do piso:
                         </label>
                         <input type="number" name="" id="valorPisoSalarial">
                     </div>
                     <div class="col-6">
-                        <label for="quantidadeHoras">Digite e quantidade de horas:
+                        <label for="quantidadeHoras">
+                            Digite e quantidade de horas:
                         </label>
                         <input type="number" name="" id="quantidadeHoras">
                     </div>
-                    <div class="col-6 mt-2">
-                        <button id="calcular" class="btn btn-success col-6"
-                            onclick="calcularSalario()">Calcular</button>
+                    <div class="col-4 mt-2">
+                        <button id="calcular" class="btn btn-outline-success col-6" onclick="calcularSalario()">
+                            Calcular
+                        </button>
                     </div>
                 </div>
 
-                <div class="d-block mt-5 col-12">
+                <div class="container ml-3 mt-5">
                     <h3 class="justify-content-end">Resultado R$: <span id="resultado" class="m-5"></span></span></h3>
-                        <h3 class="justify-content-end"> Valor por hora: <span id="valorPorHora" class="m-5"></span></h3>
+                    <h3 class="justify-content-end"> Valor por hora: <span id="valorPorHora" class="m-5"></span></h3>
                 </div>
 
             </div>
