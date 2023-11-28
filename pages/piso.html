@@ -23,7 +23,7 @@
 </head>
 
 <body class="bg-dark text-light">
-    <main class="p-0">
+    <main class="p-0 ">
         <h4 class="titulo-principal text-center d-block w-100 mt-3">
             Calculo do piso salarial. Referência (Piso homologado em ACT)
         </h4>
@@ -32,33 +32,46 @@
             <a href="../index.html" rel="noopener noreferrer" class="btn btn-outline-secondary">Baixa</a>
         </div>
 
-        <section class="justify-content-center w-100 container">
+        <section class="w-100 container">
 
             <div class="row">
+                <div class="col-4">
 
-                <div class="col-10">
-                    <div class="col-12 col-lg-6">
+                </div>
+                <div class="col-4">
+                    <div class="col-12 col-lg-12">
                         <label for="valorPisoSalarial">
                             Digite o valor do piso:
                         </label>
                         <input type="number" name="" id="valorPisoSalarial" class="w-100 ml-1 breadcrumb">
                     </div>
-                    <div class="col-12 col-lg-6">
-                        <label for="quantidadeHoras" >
+                    <div class="col-12 col-lg-12">
+                        <label for="quantidadeHoras">
                             Digite e quantidade de horas:
                         </label>
                         <input type="number" name="" id="quantidadeHoras" class="w-100 ml-1 breadcrumb">
                     </div>
-                    <div class="mt-2 ml-3 w-75">
-                        <button id="calcular" class="btn btn-outline-success col-5" onclick="calcularSalario()">
+                    <div class="col-12 col-lg-12">
+                        <button id="calcular" class="btn btn-outline-success w-100" onclick="calcularSalario()">
                             Calcular
                         </button>
                     </div>
                 </div>
+                <div class="col-4">
 
-                <div class="container ml-3 mt-5">
-                    <h5 class="justify-content-end">Resultado R$: <span id="resultado" class="m-5"></span></span></h5>
-                    <h5 class="justify-content-end"> Valor por hora: <span id="valorPorHora" class="m-5"></span></h5>
+                </div>
+            </div>
+            <div class="row ml-2 mt-4">
+                <div class="col-4">
+
+                </div>
+
+                <div class="col-4">
+                    <h5 class="justify-content-end">Resultado: R$<span id="resultado"></span></span></h5>
+                    <h5 class="justify-content-end"> Valor por hora: R$<span id="valorPorHora"></span></h5>
+                </div>
+                <div class="col-4">
+
                 </div>
 
             </div>
