@@ -24,15 +24,17 @@
 
 <body class="bg-dark text-light">
 
-  <main class="p-0">
+  <main class="p-0 container-fluid">
     <h4 class="titulo-principal text-center d-block w-100 mt-3">
       Parecer procedimentos de Baixa de Responsabilidade Técnica.
     </h4>
+    <!--
     <div class="container">
       <a href="/pages/piso.html" rel="noopener noreferrer" class="btn btn-outline-secondary">Piso</a>
     </div>
+-->
     <section class="section-baixa ">
-      <div class="container d-flex flex-wrap justify-content-center ">
+      <div class="container d-flex flex-wrap">
         <h5 class="d-block w-100 text-center">Clique nos botões abaixo de cada cartão, para copiar os pareceres.</h5>
 
         <fieldset
@@ -367,42 +369,44 @@ AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
         <fieldset class=" bg-transparent text-light shadow p-3 col-lg-3  justify-content-between border border-light">
         </fieldset>
 
-          <fieldset class=" bg-transparent text-light shadow p-3 col-lg-12  justify-content-between border border-light">
+        <fieldset class=" bg-transparent text-light shadow p-3 col-lg-6  justify-content-between border border-light">
 
           <div class="row">
             <div class="col-12">
-              <div class="col-6">
+              <div class="col-12">
+                <div class="col-12">
+
                 <label for="valorPisoSalarial">
                   Digite o valor do piso:
                 </label>
                 <input type="number" name="" id="valorPisoSalarial" class="w-100">
               </div>
-              <div class="col-6">
-                <label for="quantidadeHoras">
+
+                <div class="col-12">
+                  <label for="quantidadeHoras">
                   Digite e quantidade de horas:
                 </label>
                 <input type="number" name="" id="quantidadeHoras" class="w-100">
               </div>
-              <div class="col-6 mt-1">
-                <button id="calcular" class="btn btn-outline-success w-100" onclick="calcularSalario()">
-                  Calcular
-                </button>
+
+                <div class="col-12 mt-1">
+                  <button id="calcular" class="btn btn-outline-success w-100" onclick="calcularSalario()">
+                    Calcular
+                  </button>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="col-12">
+                  <h5 class="justify-content-end">Salário total: R$<span id="resultado"></span></span></h5>
+                  <h5 class="justify-content-end">Salário hora: R$<span id="valorPorHora"></span></h5>
+                </div>
               </div>
             </div>
           </div>
-          <div class="row ml-2 mt-4">
-            <div class="col-12">
-              <h5 class="justify-content-end">Salário total: R$<span id="resultado"></span></span></h5>
-              <h5 class="justify-content-end">Salário hora: R$<span id="valorPorHora"></span></h5>
-            </div>
-
-          </div>
-
       </div>
       </fieldset>
 
     </section>
-
 
   </main>
 
