@@ -28,11 +28,11 @@
     <h4 class="titulo-principal text-center d-block w-100 mt-3">
       Parecer procedimentos de Baixa de Responsabilidade Técnica.
     </h4>
-    <div class="container-fluid">
+    <div class="container">
       <a href="/pages/piso.html" rel="noopener noreferrer" class="btn btn-outline-secondary">Piso</a>
     </div>
     <section class="section-baixa ">
-      <div class="container-fluid d-flex flex-wrap justify-content-center ">
+      <div class="container d-flex flex-wrap justify-content-center ">
         <h5 class="d-block w-100 text-center">Clique nos botões abaixo de cada cartão, para copiar os pareceres.</h5>
 
         <fieldset
@@ -364,7 +364,46 @@ AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
           <p>Retornou prazos dia 15/08/2023</p>
         </fieldset>
 
+        <fieldset class=" bg-transparent text-light shadow p-3 col-lg-3  justify-content-between border border-light">
+        </fieldset>
+
+          <fieldset class=" bg-transparent text-light shadow p-3 col-lg-3  justify-content-between border border-light">
+
+          <div class="row">
+            <div class="col-12">
+              <div class="col-12">
+                <label for="valorPisoSalarial">
+                  Digite o valor do piso:
+                </label>
+                <input type="number" name="" id="valorPisoSalarial" class="w-100">
+              </div>
+              <div class="col-12">
+                <label for="quantidadeHoras">
+                  Digite e quantidade de horas:
+                </label>
+                <input type="number" name="" id="quantidadeHoras" class="w-100">
+              </div>
+              <div class="col-12 mt-1">
+                <button id="calcular" class="btn btn-outline-success w-100" onclick="calcularSalario()">
+                  Calcular
+                </button>
+              </div>
+            </div>
+            <div class="col-12">
+
+            </div>
+          </div>
+          <div class="row ml-2 mt-4">
+            <div class="col-12">
+              <h5 class="justify-content-end">Resultado: R$<span id="resultado"></span></span></h5>
+              <h5 class="justify-content-end"> Valor por hora: R$<span id="valorPorHora"></span></h5>
+            </div>
+
+          </div>
+
       </div>
+      </fieldset>
+
     </section>
 
 
@@ -378,8 +417,8 @@ AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
 
   <!-- JavaScript (Opcional) -->
   <script src="js/data.js"></script>
-
   <script src="js/copia.js"></script>
+  <script src="../js/calculaSalario.js"></script>
 
   <!-- Popper js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
