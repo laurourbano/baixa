@@ -373,32 +373,26 @@ AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
           <legend class="bg-transparent text-center rounded ">Valor do piso conforme acordo coletivo de trabalho - ACT</legend>
 
           <div class="row">
-            <div class="col-12">
+            <div class="col-12 mt-2">
               <div class="row">
-                <div class="col-6">
-                  <label for="valorPisoSalarial">
-                    Valor do piso:
-                  </label>
-                  <input type="number" name="" id="valorPisoSalarial" class="w-100">
+                <div class="col-5">
+                  <input type="number" name="" id="valorPisoSalarial" class="w-100" placeholder="Valor do piso">
                 </div>
 
-                <div class="col-6">
-                  <label for="quantidadeHoras">
-                    Quantidade de horas:
-                  </label>
-                  <input type="number" name="" id="quantidadeHoras" class="w-100">
+                <div class="col-4">
+                  <input type="number" name="" id="quantidadeHoras" class="w-100" placeholder="Horas semanais">
                 </div>
 
-                <div class="col-12 mt-1">
-                  <button id="calcular" class="btn btn-outline-success w-100" onclick="calcularSalario()">
+                <div class="col-2 justify-content-center">
+                  <button id="calcular" class="btn btn-outline-success" onclick="calcularSalario()">
                     Calcular
                   </button>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="row">
-                  <h5 class="justify-content-end mr-5">Salário total: R$<span id="resultado"></span></span></h5>
-                  <h5 class="justify-content-end">Salário hora: R$<span id="valorPorHora"></span></h5>
+              <div class="col-12 mt-2">
+                <div class="col-12">
+                  <h7 class="mr-5">Salário total: R$<span id="resultado"></span></span></h7>
+                  <h7 >Salário hora: R$<span id="valorPorHora"></span></h7>
                 </div>
               </div>
             </div>
