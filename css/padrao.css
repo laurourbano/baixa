@@ -21,6 +21,7 @@ textarea{
 	background-color: transparent;
 	opacity: 60%;
 	font-size: .8em !important;
+	overflow: hidden;
 }
 textarea::selection{
 	background-color: transparent;
