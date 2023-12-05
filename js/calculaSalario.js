@@ -14,7 +14,10 @@ quantidadeHorasInput.addEventListener("change", () => {
 });
 
 function calcularSalario() {
+
   let valorPiso = 0;
+  let pisoPorHora = 0;
+
   // Captura o valor do piso salarial
   valorPiso = parseFloat(pisoSalario.value);
 
@@ -25,9 +28,9 @@ function calcularSalario() {
   resultado.textContent = valorSalario.toFixed(2);
 
   // Calcula o valor do salário por hora
-  let pisoPorHora = 0;
   pisoPorHora = valorPiso / 220;
 
   // Insere o resultado no span de id valorPorHora
   valorPorHora.textContent = pisoPorHora.toFixed(2);
+
 }
