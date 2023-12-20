@@ -31,9 +31,6 @@ textarea::selection{
 textarea::shadow{
 	box-shadow: 1px;
 }
-button {
-	font-size: .8em !important;
-}
 legend {
 	font-size: 1em !important;
 }
