@@ -28,9 +28,9 @@ Uma ferramenta web simples para agilizar a criação de pareceres de baixa, dese
 
 Escolha seu deploy preferido:
 
-[![Vercel](https://img.shields.io/badge/🔗_Acessar_na_Vercel-000?style=for-the-badge)](https://baixaparecer.vercel.app)
+[![Vercel](https://img.shields.io/badge/🔗_Acessar_na_Vercel-00C7B7?style=for-the-badge)](https://baixaparecer.vercel.app)
 
-[![GitHubPages](https://img.shields.io/badge/🔗_Acessar_no_GitHub-222?style=for-the-badge)](https://laurourbano.github.io/baixa/)
+[![GitHubPages](https://img.shields.io/badge/🔗_Acessar_no_GitHub-00C7B7?style=for-the-badge)](https://laurourbano.github.io/baixa/)
 
 [![Netlify](https://img.shields.io/badge/🔗_Acessar_na_Netlify-00C7B7?style=for-the-badge)](https://baixaparecer.netlify.app)
 
