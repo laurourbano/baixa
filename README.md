@@ -1,4 +1,4 @@
-```markdown
+
 # 📋 Projeto Pessoal - Página de Pareceres de Baixa
 
 [![Licença MIT](https://img.shields.io/badge/Licença-MIT-green.svg)](LICENSE)
@@ -78,15 +78,4 @@ Escolha seu deploy preferido:
 
 ## 📜 Licença
 
-Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para detalhes.
-
-```
-
-**Principais Melhorias:**  
-- Adição de badges profissionais para licença e deploys
-- Seção de tecnologias com ícones automatizados
-- Passos de instalação mais técnicos com blocos de código
-- Destaques visuais para funcionalidades-chave
-- Links de acesso destacados com emojis e estilo
-- Detalhamento técnico sobre compatibilidade
-- Chamadas claras para personalização
+Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para detalhes
