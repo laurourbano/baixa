@@ -24,8 +24,6 @@ Uma ferramenta web simples para agilizar a criação de pareceres de baixa, dese
 
 ## 🌐 Acesso Rápido
 
-## 🌐 Acesso Rápido
-
 Escolha seu deploy preferido:
 
 [![Vercel](https://img.shields.io/badge/🔗_Acessar_na_Vercel-00C7B7?style=for-the-badge)](https://baixaparecer.vercel.app)
