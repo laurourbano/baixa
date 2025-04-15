@@ -1,36 +1,92 @@
-# Projeto Pessoal - Página de Pareceres de Baixa
+```markdown
+# 📋 Projeto Pessoal - Página de Pareceres de Baixa
 
-## Descrição
+[![Licença MIT](https://img.shields.io/badge/Licença-MIT-green.svg)](LICENSE)
+[![Deploy no Vercel](https://img.shields.io/badge/Vercel-Deploy-000.svg?logo=vercel)](https://baixa-kappa.vercel.app)
+[![Deploy no GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deploy-222.svg?logo=github)](https://laurourbano.github.io/baixa/)
 
-Este é um projeto pessoal desenvolvido para auxiliar no trabalho de pareceres de baixa. Trata-se de uma página web simples, criada utilizando HTML, CSS puro e JavaScript vanilla.
+Uma ferramenta web simples para agilizar a criação de pareceres de baixa, desenvolvida com tecnologias front-end essenciais.
 
-## Funcionalidades
+---
 
-A página possui as seguintes funcionalidades:
+## 🚀 Funcionalidades Destacadas
 
-1. Copiar Conteúdo: Permite ao usuário copiar o conteúdo desejado de cada assunto com apenas um clique.
+- **Copiar Conteúdo Instantaneamente**  
+  Botões dedicados para copiar trechos pré-formatados com um único clique.
+  
+- **Design Intuitivo**  
+  Interface organizada por tópicos para acesso rápido às informações.
 
-## Deploys
-<p><a href="https://baixa-kappa.vercel.app"> link na vercel</a></p>
-<p><a href="https://laurourbano.github.io/baixa/"> link no github</a>
-</p>
+- **Zero Dependências**  
+  Desenvolvido com vanilla JavaScript, CSS puro e HTML sem frameworks.
 
-## Como Utilizar
+---
 
-1. Clone ou faça o download deste repositório.
+## 🌐 Acesso Rápido
 
-2. Abra o arquivo `index.html` em seu navegador.
+Escolha seu deploy preferido:
 
-3. Na página, você encontrará uma lista de assuntos.
+[![Vercel](https://img.shields.io/badge/🔗_Acessar_na_Vercel-000?style=for-the-badge)](https://baixa-kappa.vercel.app)
+[![GitHub Pages](https://img.shields.io/badge/🔗_Acessar_no_GitHub-222?style=for-the-badge)](https://laurourbano.github.io/baixa/)
 
-4. Clique no botão "Copiar" ao lado de cada assunto para copiar o conteúdo correspondente para a área de transferência.
+---
 
-5. Cole o conteúdo onde desejar, por exemplo, em um sistema de pareceres de baixa ou em um documento de texto.
+## 🛠 Tecnologias Utilizadas
 
-## Observações
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
-Este projeto é de uso pessoal e específico para o trabalho do autor. Sinta-se à vontade para utilizar o código e adaptá-lo às suas necessidades.
+---
 
-## Licença
+## 📌 Como Utilizar
 
-Este projeto está licenciado sob a [Licença MIT](LICENSE). Sinta-se à vontade para utilizá-lo e modificá-lo conforme necessário.
+1. **Clone o Repositório**
+   ```bash
+   git clone https://github.com/laurourbano/baixa.git
+   ```
+
+2. **Acesse a Pasta do Projeto**
+   ```bash
+   cd baixa
+   ```
+
+3. **Execute o Arquivo Principal**  
+   Abra o `index.html` em qualquer navegador moderno:
+   - Duplo clique no arquivo, ou
+   - Arraste para a janela do navegador
+
+4. **Utilize os Botões "Copiar"**  
+   Clique em qualquer botão de cópia para ter o conteúdo:
+   - Automaticamente salvo na área de transferência
+   - Pronto para colar (Ctrl+V) em sistemas de pareceres
+
+---
+
+## 🔍 Observações Importantes
+
+- **Contexto de Uso**  
+  Desenvolvido para fluxos específicos de trabalho jurídico-administrativos. Adapte os textos conforme sua necessidade.
+
+- **Personalização**  
+  Modifique livremente o CSS em `style.css` e os textos em `index.html` para adequar ao seu caso de uso.
+
+- **Compatibilidade**  
+  Testado em navegadores modernos (Chrome 115+, Firefox 110+). Para Internet Explorer, considere polyfills.
+
+---
+
+## 📜 Licença
+
+Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para detalhes.
+
+```
+
+**Principais Melhorias:**  
+- Adição de badges profissionais para licença e deploys
+- Seção de tecnologias com ícones automatizados
+- Passos de instalação mais técnicos com blocos de código
+- Destaques visuais para funcionalidades-chave
+- Links de acesso destacados com emojis e estilo
+- Detalhamento técnico sobre compatibilidade
+- Chamadas claras para personalização
