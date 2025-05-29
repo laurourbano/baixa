@@ -9,7 +9,7 @@ resultado.innerHTML = 0;
 valorPorHora.innerHTML = 0;
 
 quantidadeHorasInput.addEventListener("change", () => {
-  quantidadeHoras = parseInt(quantidadeHorasInput.value);
+  quantidadeHoras = parseFloat(quantidadeHorasInput.value);
   calcularSalario();
 });
 
