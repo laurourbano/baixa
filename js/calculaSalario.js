@@ -1,4 +1,7 @@
-let quantidadeHoras; // Declare a variável fora da função
+let quantidadeHoras = 0; // Declare a variável fora da função
+let pisoPorHora = 0;
+let valorSalario = 0;
+let valorPiso = 0;
 
 const pisoSalario = document.getElementById("valorPisoSalarial");
 const quantidadeHorasInput = document.getElementById("quantidadeHoras");
@@ -22,15 +25,21 @@ function calcularSalario() {
   valorPiso = parseFloat(pisoSalario.value);
 
   // Calcula o valor do salário
-  const valorSalario = valorPiso * quantidadeHoras / 44;
+  const valorSalario = parseFloat(valorPiso * quantidadeHoras / 44);
 
   // Insere o resultado no span de id resultado
   resultado.textContent = valorSalario.toFixed(2);
+  if (isNaN(valorSalario)) {
+    resultado.textContent = 0;
+  }
 
   // Calcula o valor do salário por hora
-  pisoPorHora = valorPiso / 220;
+  pisoPorHora = parseFloat(valorPiso / 220);
 
   // Insere o resultado no span de id valorPorHora
   valorPorHora.textContent = pisoPorHora.toFixed(2);
+  if (isNaN(pisoPorHora)) {
+    valorPorHora.textContent = 0;
+  }
 
 }
