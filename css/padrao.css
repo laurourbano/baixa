@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap');
 
-*{
+* {
 	outline: 0;
 	margin: 0;
 	padding: 0;
 	border: 0;
 }
+
 body {
 	box-sizing: border-box;
 	font-family: 'Source Sans Pro', sans-serif !important;
@@ -14,36 +15,52 @@ body {
 	flex-direction: column;
 }
 
-main{
+main {
 	flex: 1 1 auto;
 }
+
 p {
 	font-size: .7em !important;
 }
-a{
+
+a {
 	text-decoration: none !important;
 	outline: none !important;
 }
-textarea{
+
+textarea {
 	background-color: transparent;
 	opacity: 60%;
 	font-size: .8em !important;
 	overflow: hidden;
 }
-textarea::selection{
+
+textarea::selection {
 	background-color: transparent;
 	color: green;
 	opacity: 1;
 }
-textarea::shadow{
+
+textarea::shadow {
 	box-shadow: 1px;
 }
+
 legend {
 	font-size: 1em !important;
 }
-input{
+
+input {
 	font-size: 1em !important;
 }
-.btn.disabled, .btn:disabled{
+
+.btn.disabled,
+.btn:disabled {
 	opacity: 1 !important;
+}
+
+input,
+select {
+	padding: 5px;
+	font-size: 16px;
+	width: 300px;
 }

@@ -20,11 +20,13 @@
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
   <link rel="stylesheet" href="css/padrao.css">
+
 </head>
 
 <body class="bg-dark text-light">
 
   <main class="p-0 container-fluid">
+    <p class="data"></p>
     <h5 class="titulo-principal text-center d-block w-100 mt-2">
       Parecer procedimentos de Baixa de Responsabilidade Técnica.
     </h5>
@@ -41,8 +43,8 @@
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>18</strong>
           </p>
           <div class="row justify-content-between">
-            <textarea rows="1" cols="0" class="area bg-transparent text-dark" id="texto5" type="text" readonly>
-Pendência de Transferência (27/06/2025)
+            <textarea rows="1" cols="0" class="area bg-transparent text-dark data" id="texto1" type="text" readonly>
+Pendência de Transferência
 O que é?
     Seu protocolo está PENDENTE por falta do registro de transferência na carteira de trabalho. 
     (declarações simples não são mais aceitas).
@@ -55,7 +57,7 @@ Onde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícon
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute"
                 disabled><i class="fas fa-check-double" aria-disabled="true"></i></button>
-              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied5" title="Copiar"
+              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied1" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="conteúdo do popover"
                 ref="#texto5"><i class="fa fa-copy"></i>
               </button>
@@ -71,8 +73,9 @@ Onde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícon
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>18</strong>
           </p>
           <div class="row justify-content-between">
-            <textarea rows="1" cols="0" class="area bg-transparent text-dark" id="texto5" type="text" readonly>
-Pendência de Quebra de Vínculo  (27/06/2025)
+            <p class="data"></p>
+            <textarea rows="1" cols="0" class="area bg-transparent text-dark data" id="texto2" type="text" readonly>
+Pendência de Quebra de Vínculo
 O que é?
     Seu protocolo está PENDENTE por falta do comprovante de quebra de vínculo.
 Como resolver?
@@ -85,7 +88,7 @@ Onde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícon
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute"
                 disabled><i class="fas fa-check-double" aria-disabled="true"></i></button>
-              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied5" title="Copiar"
+              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied2" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="conteúdo do popover"
                 ref="#texto5"><i class="fa fa-copy"></i>
               </button>
@@ -99,7 +102,7 @@ Onde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícon
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong>
           </p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto3" type="text" readonly>
 Indeferimento por falta de Transferência (`${data}`)
 O que é?
     Seu protocolo foi INDEFERIDO por [falta documento de transferência].
@@ -115,7 +118,7 @@ Se ainda não tiver: Envie o formulário de pendência assinado por você e pela
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied7" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied3" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="conteudo do popover"
                 ref="#texto7"> <i class="fa fa-copy"></i></button>
             </div>
@@ -128,7 +131,7 @@ Se ainda não tiver: Envie o formulário de pendência assinado por você e pela
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong>
           </p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto4" type="text" readonly>
 Indeferimento por falta de Quebra de Vínculo (`${diaAtual}`)
 O que é?
     Seu protocolo foi INDEFERIDO por [falta quebra de vinculo]. O requerimento de baixa de responsabilidade técnica foi negado.
@@ -143,7 +146,7 @@ Se ainda não tiver: Envie o formulário de pendência assinado por você e pela
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied7" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied4" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="conteudo do popover"
                 ref="#texto7"> <i class="fa fa-copy"></i></button>
             </div>
@@ -157,7 +160,7 @@ Se ainda não tiver: Envie o formulário de pendência assinado por você e pela
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>25</strong> Julgamento: <strong>2</strong>
           </p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark " type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto5" type="text" readonly>
 Documento Complementar
 O que é?
     Sua baixa foi feita, mas há um documento pendente (desde  [26/06/2025] ).
@@ -171,7 +174,7 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute "
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied6" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied5" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="conteudo do popover"
                 ref="#texto6"> <i class="fa fa-copy"></i></button>
             </div>
@@ -182,14 +185,14 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
           <legend class="bg-transparent text-center rounded ">Desistência</legend>
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>2</strong> Julgamento: <strong>2</strong></p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto6" type="text" readonly>
   Procedimento trata-se de desistência do ingresso uma vez que ainda seria apreciado pelo plenário.
   Desistência efetivada.</textarea>
             <div class="d-flex justify-content-end align-items-center">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied3" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied6" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
                 ref="#texto3"> <i class="fa fa-copy"></i></button>
             </div>
@@ -200,13 +203,13 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
           <legend class="bg-transparent text-center rounded ">Tardia</legend>
           <p class="m-0 p-0">Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto7" type="text" readonly>
   Profissional protocolou baixa em prazo superior a 30 dias.</textarea>
             <div class="d-flex justify-content-end align-items-end">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied1" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied7" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
                 ref="#texto1"> <i class="fa fa-copy"></i></button>
             </div>
@@ -217,13 +220,13 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
           <legend class="bg-transparent text-center rounded ">30 dias</legend>
           <p class="m-0 p-0">Local: <strong>11</strong> Situação: <strong>6</strong> Julgamento: <strong>11</strong></p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto8" type="text" readonly>
   Não apresentou quebra de vínculo para finalizar a baixa no prazo de 30 dias.</textarea>
             <div class="d-flex justify-content-end align-items-center">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied2" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied8" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
                 ref="#texto2"> <i class="fa fa-copy"></i></button>
             </div>
@@ -234,14 +237,14 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
           <legend class="bg-transparent text-center rounded ">Duplicado</legend>
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>4</strong> Julgamento: <strong>8</strong></p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text">
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto9" type="text">
   Pedimos a gentileza de não realizar mais de um protocolo para o mesmo procedimento e agradecemos a compreensão.
   Caso o procedimento seja aberto para correção deverá responder o mesmo protocolo, através do acesso em 'protocolos aguardando resposta'.</textarea>
             <div class="d-flex justify-content-end align-items-center">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" title="Copiar" data-container="body"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied9" title="Copiar" data-container="body"
                 data-toggle="popover" data-placement="top" data-content="Conteudo do popover."> <i
                   class="fa fa-copy"></i>
               </button>
@@ -253,13 +256,13 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
           <legend class="bg-transparent text-center rounded ">Sem andamento</legend>
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>13</strong> Julgamento: <strong>8</strong></p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text">
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto10" type="text">
   Protocolo arquivado por estar sem andamento.</textarea>
             <div class="d-flex justify-content-end align-items-center">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" title="Copiar" data-container="body"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied10" title="Copiar" data-container="body"
                 data-toggle="popover" data-placement="top" data-content="Conteudo do popover."> <i
                   class="fa fa-copy"></i>
               </button>
@@ -271,13 +274,13 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
           <legend class="bg-transparent text-center rounded ">Indeferimento de DAP</legend>
           <p class="m-0 p-0">Local: <strong>46</strong> Situação: <strong>3</strong> Julgamento: <strong>3</strong></p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark data" id="texto11" type="text" readonly>
   Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberação 1004/21.</textarea>
             <div class="d-flex justify-content-end align-items-center">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied7" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied11" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
                 ref="#texto7"> <i class="fa fa-copy"></i></button>
             </div>
@@ -307,14 +310,14 @@ Onde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e ane
           <legend class="bg-transparent text-center rounded ">Nissei</legend>
           <p class="m-0 p-0">Endereço para envio de correspondências</p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark" id="texto12" type="text" readonly>
 RUA ACRE 205 – ÁGUA VERDE
 80.620-900 - CURITIBA - PARANÁ</textarea>
             <div class="d-flex justify-content-end align-items-center">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute  text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied6" title="Copiar"
+              <button class="botao  btn btn-outline-success mx-1 px-4" id="execcopied12" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
                 ref="#texto6"> <i class="fa fa-copy"></i></button>
             </div>
@@ -324,14 +327,14 @@ RUA ACRE 205 – ÁGUA VERDE
           <legend class="bg-transparent text-center rounded ">Morifarma/Mais popular</legend>
           <p class="m-0 p-0">Endereço para envio de correspondências</p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark"  id="texto13" type="text" readonly>
 RUA AMAURY LANGE SILVÉRIO 33 – PILARZINHO
 82.120-000 - CURITIBA - PARANÁ</textarea>
             <div class="d-flex justify-content-end align-items-center">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute text-center"
                 disabled> <i class="fas fa-check-double"></i></button>
-              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied6" title="Copiar"
+              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied13" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
                 ref="#texto6"> <i class="fa fa-copy"></i></button>
             </div>
@@ -342,14 +345,14 @@ RUA AMAURY LANGE SILVÉRIO 33 – PILARZINHO
           <legend class="bg-transparent text-center rounded ">São João</legend>
           <p class="m-0 p-0">Endereço para envio de correspondências</p>
           <div class="row justify-content-between">
-            <textarea rows="1" class="area bg-transparent text-dark" type="text" readonly>
+            <textarea rows="1" class="area bg-transparent text-dark" id="texto14" type="text" readonly>
 AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
 99.064-440 - PASSO FUNDO - RIO GRANDE DO SUL</textarea>
             <div class="d-flex mt-lg-3">
               <button
                 class="btn text-white-50 copiado invisible mx-1 px-4 border border-success shadow bg-secondary rounded rounded-5 position-absolute text-center"
                 disabled><i class="fas fa-check-double"></i></button>
-              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied6" title="Copiar"
+              <button class="botao btn btn-outline-success mx-1 px-4" id="execcopied14" title="Copiar"
                 data-container="body" data-toggle="popover" data-placement="top" data-content="Conteudo do popover."
                 ref="#texto6"> <i class="fa fa-copy"></i></button>
             </div>
@@ -411,6 +414,12 @@ AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
           </div>
       </fieldset>
 
+      <fieldset class="bg-transparent text-light shadow col-lg-12 col-md-12 col-sm-12  justify-content-between border border-light py-1">
+        <input type="file" id="fileInput1" />
+        <input type="text" id="cidadeInput1" disabled />
+        <div id="resultado1"></div>
+      </fieldset>
+
     </section>
 
   </main>
@@ -442,6 +451,8 @@ AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
   </script>
   <script src="https://kit.fontawesome.com/abaa35b434.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+
 
 </body>
 
