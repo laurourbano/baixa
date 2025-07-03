@@ -114,3 +114,24 @@ function popularSelectCidades() {
 function normalizar(texto) {
   return texto.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
+
+// ------------------------ FIM BUSCA DE FISCAIS ------------------------
+
+// ------------------------ SALARIO POR CIDADE ------------------------
+
+const cidadeInput3 = document.getElementById("cidadeInput3");
+const resultado3 = document.getElementById("resultado3");
+
+cidadeInput3.addEventListener("change", buscarSalarioPorCidade);
+
+function buscarSalarioPorCidade() {
+  const cidade = cidadeInput3.value;
+
+  const info = dadosSalario.find(obj => obj.cidade === cidade);
+
+  resultado3.textContent = info
+    ? `Cidade: ${info.cidadeOriginal} | Salário: ${info.salario} | Quantidade de Horas: ${info.quantidadeHoras} | Salário por hora: ${info.salarioPorHora}`
+    : "Cidade não encontrada.";
+}
+
+// ------------------------ FIM SALARIO POR CIDADE ------------------------
