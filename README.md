@@ -45,11 +45,13 @@ Escolha seu deploy preferido:
 ## 📌 Como Utilizar
 
 1. **Clone o Repositório**
+
    ```bash
    git clone https://github.com/laurourbano/baixa.git
    ```
 
 2. **Acesse a Pasta do Projeto**
+
    ```bash
    cd baixa
    ```
