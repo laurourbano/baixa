@@ -1,5 +1,7 @@
 {
   "cSpell.language": "en,pt-BR,pt",
-  "cloudcode.duetAI.inlineSuggestions.enableAuto": false,
-  "cSpell.words": ["Morifarma"]
+  "cSpell.words": [
+    "Morifarma"
+  ],
+  "geminicodeassist.inlineSuggestions.enableAuto": false
 }
