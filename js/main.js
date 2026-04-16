@@ -81,7 +81,7 @@ const MainApp = (function() {
                         </div>
                     </div>
                     <legend>${card.title}</legend>
-                    ${card.local ? `<p class="info-line">Local: <b>${card.local}</b> Sit: <b>${card.sit}</b> Julg: <b>${card.julg}</b></p>` : ''}
+                    ${card.local || card.sit || card.julg ? `<p class="info-line">Local: <b>${card.local || ''}</b> Situação: <b>${card.sit || ''}</b> Julgamento: <b>${card.julg || ''}</b></p>` : ''}
                     <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${card.content}</textarea>
                     <button class="btn-copy" onclick="MainApp.copy(this, '${card.id}')">Copiar Texto</button>
                 </fieldset>
@@ -96,7 +96,10 @@ const MainApp = (function() {
         const data = {
             title: document.getElementById('m-title').value,
             content: document.getElementById('m-content').value,
-            color: document.getElementById('m-color').value
+            color: document.getElementById('m-color').value,
+            local: document.getElementById('m-local').value,
+            sit: document.getElementById('m-sit').value,
+            julg: document.getElementById('m-julg').value
         };
 
         if (id) {
@@ -117,6 +120,9 @@ const MainApp = (function() {
         document.getElementById('m-title').value = card.title;
         document.getElementById('m-content').value = card.content;
         document.getElementById('m-color').value = card.color || 'light';
+        document.getElementById('m-local').value = card.local || '';
+        document.getElementById('m-sit').value = card.sit || '';
+        document.getElementById('m-julg').value = card.julg || '';
         document.getElementById('modal').style.display = 'flex';
     }
 
@@ -230,6 +236,9 @@ const MainApp = (function() {
         document.getElementById('m-title').value = '';
         document.getElementById('m-content').value = '';
         document.getElementById('m-color').value = 'light';
+        document.getElementById('m-local').value = '';
+        document.getElementById('m-sit').value = '';
+        document.getElementById('m-julg').value = '';
         document.getElementById('modal').style.display = 'flex';
     }};
 })();
