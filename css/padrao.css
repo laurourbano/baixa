@@ -76,7 +76,6 @@ textarea {
 	resize: none;
 	border: none;
 	overflow: hidden;
-	max-height: 65px;
 }
 
 textarea:focus {
@@ -172,15 +171,25 @@ fieldset {
 	flex-direction: column !important;
 }
 
-/* Grid: 2 por linha em desktop, 1 em mobile */
-.section-baixa fieldset {
+/* Grid: cards de parecer (col-lg-3) viram 50% em desktop */
+.section-baixa fieldset.col-lg-3 {
 	-ms-flex: 0 0 50% !important;
 	flex: 0 0 50% !important;
 	max-width: 50% !important;
 }
 
+/* Cards maiores (calculadora, resultado, cidade) mantêm suas proporções nativas */
+.section-baixa fieldset.col-lg-4,
+.section-baixa fieldset.col-lg-2 {
+	-ms-flex: unset !important;
+	flex: unset !important;
+	max-width: unset !important;
+}
+
 @media (max-width: 575px) {
-	.section-baixa fieldset {
+	.section-baixa fieldset.col-lg-3,
+	.section-baixa fieldset.col-lg-4,
+	.section-baixa fieldset.col-lg-2 {
 		-ms-flex: 0 0 100% !important;
 		flex: 0 0 100% !important;
 		max-width: 100% !important;
