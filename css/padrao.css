@@ -171,28 +171,36 @@ fieldset {
 	flex-direction: column !important;
 }
 
-/* Grid: cards de parecer (col-lg-3) viram 50% em desktop */
-.section-baixa fieldset.col-lg-3 {
-	-ms-flex: 0 0 50% !important;
-	flex: 0 0 50% !important;
-	max-width: 50% !important;
+/* Grid: mínimo 3 por linha, ajusta ao conteúdo e à largura da janela */
+.section-baixa .container {
+	display: grid !important;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 0.5rem;
+	align-items: start;
 }
 
-/* Cards maiores (calculadora, resultado, cidade) mantêm suas proporções nativas */
-.section-baixa fieldset.col-lg-4,
+/* Campos especiais (calculadora, resultado) podem ocupar mais colunas */
+.section-baixa fieldset.col-lg-4 {
+	grid-column: span 2;
+}
 .section-baixa fieldset.col-lg-2 {
-	-ms-flex: unset !important;
-	flex: unset !important;
-	max-width: unset !important;
+	grid-column: span 1;
 }
 
-@media (max-width: 575px) {
-	.section-baixa fieldset.col-lg-3,
+/* Remove overrides de Bootstrap que conflitam com o grid */
+.section-baixa fieldset {
+	width: 100% !important;
+	max-width: 100% !important;
+	flex: none !important;
+}
+
+@media (max-width: 640px) {
+	.section-baixa .container {
+		grid-template-columns: 1fr;
+	}
 	.section-baixa fieldset.col-lg-4,
 	.section-baixa fieldset.col-lg-2 {
-		-ms-flex: 0 0 100% !important;
-		flex: 0 0 100% !important;
-		max-width: 100% !important;
+		grid-column: span 1;
 	}
 }
 
