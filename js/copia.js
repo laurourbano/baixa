@@ -10,8 +10,10 @@ window.onload = function () {
         await navigator.clipboard.writeText(textToCopy);
         console.log('Copiado com sucesso');
         
+        // Re-seleciona para gerar o highlight clássico de visibilidade
+        copyTextarea[idx].select();
+        
         copiado[idx].classList.remove('invisible');
-        copiado[idx].style.opacity = '1';
         
         setTimeout(() => {
           copiado[idx].classList.add('invisible');

@@ -29,13 +29,13 @@ h5.titulo-principal {
 	text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
+/* Deixamos o margin original do Bootstrap assumir o controle do tamanho das colunas */
 fieldset {
 	background: rgba(255, 255, 255, 0.03) !important;
 	-webkit-backdrop-filter: blur(16px);
 	backdrop-filter: blur(16px);
 	border-radius: 12px;
 	padding: 10px !important;
-	margin: 5px;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
@@ -65,7 +65,7 @@ a {
 textarea {
 	background-color: transparent !important;
 	color: inherit !important;
-	opacity: 0.6 !important;
+	opacity: 0.6;
 	font-size: 0.8em !important;
 	border-radius: 8px;
 	padding: 5px;
@@ -77,14 +77,13 @@ textarea {
 }
 
 textarea:focus {
-	border-color: transparent;
-	background-color: transparent !important;
-    opacity: 1 !important;
+	opacity: 1;
 }
 
 textarea::selection {
-	background-color: rgba(74, 222, 128, 0.3);
-	color: #fff;
+	background-color: transparent;
+	color: #4ade80;
+	opacity: 1;
 }
 
 legend {
@@ -144,6 +143,7 @@ input:disabled, select:disabled {
 	font-size: 0.9em;
 	padding: 8px 16px !important;
 	border-radius: 20px !important;
+	z-index: 10;
 }
 
 ::-webkit-scrollbar {
@@ -158,10 +158,4 @@ input:disabled, select:disabled {
 }
 ::-webkit-scrollbar-thumb:hover {
 	background: rgba(255,255,255,0.3); 
-}
-
-/* Fix for spacing inside the card rows */
-.row {
-	margin-top: 10px;
-	margin-bottom: 5px;
 }
