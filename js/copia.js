@@ -20,11 +20,15 @@ window.onload = function () {
         btn.classList.add('bg-success', 'text-white', 'border-success');
         btn.classList.remove('btn-outline-success');
         
-        // Retorna o botão ao estado normal após 2 segundos
+        // DESABILITA O BOTÃO impedindo clones/conflitos e cliques consecutivos
+        btn.disabled = true;
+        
+        // Retorna o botão ao estado normal e ativo após 2 segundos
         setTimeout(() => {
           btn.innerHTML = originalHtml;
           btn.classList.remove('bg-success', 'text-white', 'border-success');
           btn.classList.add('btn-outline-success');
+          btn.disabled = false;
         }, 2000);
       } catch (err) {
         console.error('Falha ao copiar texto: ', err);
