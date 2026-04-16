@@ -148,4 +148,22 @@ input:disabled, select:disabled {
 }
 ::-webkit-scrollbar-thumb:hover {
 	background: rgba(255,255,255,0.3); 
+}
+
+/* CSS para travar e alinhar corretamente os componentes nas bases */
+.btn-wrap {
+	display: flex;
+	justify-content: flex-end; /* Empurra pra Direita */
+	align-items: flex-end;
+	margin-top: auto; /* Empurra pra Base */
+}
+
+.row.flex-grow-1 {
+	display: flex !important;
+	flex-direction: column !important;
+}
+
+fieldset {
+	display: flex !important;
+	flex-direction: column !important;
 }
