@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "web-recommended"
+  ],
+  "hints": {
+    "axe/name-role-value": "off",
+    "button-type": "off"
+  }
+}

@@ -124,6 +124,9 @@ const resultado3 = document.getElementById("resultado3");
 
 cidadeInput3.addEventListener("change", buscarSalarioPorCidade);
 
+// Todo: 'dadosSalario' deve ser populado ou proveniente de uma base de dados.
+const dadosSalario = window.dadosSalario || [];
+
 function buscarSalarioPorCidade() {
   const cidade = cidadeInput3.value;
 
@@ -131,7 +134,7 @@ function buscarSalarioPorCidade() {
 
   resultado3.textContent = info
     ? `Cidade: ${info.cidadeOriginal} | Salário: ${info.salario} | Quantidade de Horas: ${info.quantidadeHoras} | Salário por hora: ${info.salarioPorHora}`
-    : "Cidade não encontrada.";
+    : "Dados de salário não cadastrados nesta versão.";
 }
 
 // ------------------------ FIM SALARIO POR CIDADE ------------------------

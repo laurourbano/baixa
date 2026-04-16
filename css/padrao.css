@@ -1,66 +1,166 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
 * {
 	outline: 0;
 	margin: 0;
 	padding: 0;
-	border: 0;
+	box-sizing: border-box;
 }
 
 body {
-	box-sizing: border-box;
-	font-family: 'Source Sans Pro', sans-serif !important;
-	height: 100dvh;
+	font-family: 'Inter', sans-serif !important;
+	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
+	background: linear-gradient(135deg, #111827 0%, #1f2937 100%) !important;
+	color: #e5e7eb;
 }
 
 main {
 	flex: 1 1 auto;
+	padding-bottom: 2rem;
 }
 
+h5.titulo-principal {
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	margin-bottom: 1.5rem !important;
+	color: #f3f4f6;
+	text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+fieldset {
+	background: rgba(255, 255, 255, 0.03) !important;
+	-webkit-backdrop-filter: blur(16px);
+	backdrop-filter: blur(16px);
+	border-radius: 12px;
+	padding: 16px !important;
+	margin-bottom: 15px;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+fieldset:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Adjusting Bootstrap Colors for readability on dark */
+fieldset.text-danger  { border-color: rgba(239, 68, 68, 0.4) !important; }
+fieldset.text-danger legend { color: #fca5a5 !important; }
+fieldset.text-warning { border-color: rgba(245, 158, 11, 0.4) !important; }
+fieldset.text-warning legend { color: #fcd34d !important; }
+
 p {
-	font-size: .7em !important;
+	font-size: 0.85em !important;
+	color: #9ca3af;
 }
 
 a {
 	text-decoration: none !important;
 	outline: none !important;
+	transition: color 0.2s ease;
 }
 
 textarea {
-	background-color: transparent;
-	opacity: 60%;
-	font-size: .8em !important;
-	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.25) !important;
+	color: #e5e7eb !important;
+	font-size: 0.85em !important;
+	border-radius: 8px;
+	padding: 12px;
+	width: 100%;
+	line-height: 1.5;
+	resize: none;
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	transition: border-color 0.3s ease, background-color 0.3s ease;
+	height: 150px; /* fixed height instead of rows=1 */
+}
+
+textarea:focus {
+	border-color: rgba(74, 222, 128, 0.5);
+	background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
 textarea::selection {
-	background-color: transparent;
-	color: green;
-	opacity: 1;
-}
-
-textarea::shadow {
-	box-shadow: 1px;
+	background-color: rgba(74, 222, 128, 0.3);
+	color: #fff;
 }
 
 legend {
+	font-size: 1.05em !important;
+	font-weight: 600;
+	padding: 6px 12px;
+	background: rgba(0, 0, 0, 0.2) !important;
+	border-radius: 6px;
+	margin-bottom: 12px;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+input, select {
+	padding: 10px 12px;
 	font-size: 1em !important;
+	background-color: rgba(0, 0, 0, 0.2) !important;
+	color: #f3f4f6 !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	width: 100%;
 }
 
-input {
-	font-size: 1em !important;
+input:focus, select:focus {
+	border-color: rgba(74, 222, 128, 0.5) !important;
+	background-color: rgba(0, 0, 0, 0.3) !important;
+	box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.2);
 }
 
-.btn.disabled,
-.btn:disabled {
-	opacity: 1 !important;
+input:disabled, select:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 
-input,
-select {
-	padding: 5px;
-	font-size: 16px;
-	max-width: 250px;
+.btn {
+	border-radius: 8px !important;
+	font-weight: 600;
+	transition: all 0.2s ease;
 }
+
+.btn-outline-success {
+	color: #4ade80 !important;
+	border-color: rgba(74, 222, 128, 0.5) !important;
+}
+
+.btn-outline-success:hover {
+	background-color: #4ade80 !important;
+	color: #111827 !important;
+	border-color: #4ade80 !important;
+	transform: scale(1.05);
+}
+
+.copiado {
+	background-color: #1f2937 !important;
+	color: #4ade80 !important;
+	border: 1px solid rgba(74, 222, 128, 0.4) !important;
+	font-size: 0.9em;
+	padding: 8px 16px !important;
+	border-radius: 20px !important;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+::-webkit-scrollbar-track {
+	background: rgba(0,0,0,0.2); 
+}
+::-webkit-scrollbar-thumb {
+	background: rgba(255,255,255,0.2); 
+	border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(255,255,255,0.3); 
+}
+
+/* Fix for spacing inside the card rows */
+.row {
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
