@@ -2,37 +2,53 @@ window.onload = function () {
   var copyTextareaBtn = Array.prototype.slice.call(document.querySelectorAll('.botao'));
   var copyTextarea = Array.prototype.slice.call(document.querySelectorAll('.area'));
 
+  // Função de cópia reutilizável por índice
+  async function copiarPorIndice(idx) {
+    const btn = copyTextareaBtn[idx];
+    if (!btn || btn.disabled) return;
+    try {
+      const textToCopy = copyTextarea[idx].value;
+      await navigator.clipboard.writeText(textToCopy);
+
+      copyTextarea[idx].select();
+
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check-double"></i>';
+      btn.classList.add('bg-success', 'text-white', 'border-success');
+      btn.classList.remove('btn-outline-success');
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+        btn.classList.remove('bg-success', 'text-white', 'border-success');
+        btn.classList.add('btn-outline-success');
+        btn.disabled = false;
+      }, 2000);
+    } catch (err) {
+      console.error('Falha ao copiar texto: ', err);
+    }
+  }
+
+  // Listener individual em cada botão
   copyTextareaBtn.forEach(function (btn, idx) {
-    btn.addEventListener("click", async function () {
-      try {
-        const textToCopy = copyTextarea[idx].value;
-        await navigator.clipboard.writeText(textToCopy);
-        console.log('Copiado com sucesso');
-        
-        // Re-seleciona para gerar o highlight clássico de visibilidade
-        copyTextarea[idx].select();
-        
-        // Armazena o conteúdo original
-        const originalHtml = btn.innerHTML;
-        
-        // Transforma permanentemente o botão visualmente como feedback inline ("encobre" tudo)
-        btn.innerHTML = '<i class="fas fa-check-double"></i>';
-        btn.classList.add('bg-success', 'text-white', 'border-success');
-        btn.classList.remove('btn-outline-success');
-        
-        // DESABILITA O BOTÃO impedindo clones/conflitos e cliques consecutivos
-        btn.disabled = true;
-        
-        // Retorna o botão ao estado normal e ativo após 2 segundos
-        setTimeout(() => {
-          btn.innerHTML = originalHtml;
-          btn.classList.remove('bg-success', 'text-white', 'border-success');
-          btn.classList.add('btn-outline-success');
-          btn.disabled = false;
-        }, 2000);
-      } catch (err) {
-        console.error('Falha ao copiar texto: ', err);
-      }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation(); // Evita disparar o click do fieldset
+      copiarPorIndice(idx);
+    });
+  });
+
+  // Click no fieldset dispara a cópia (ignora cards sem .botao, como o Plano e os de Status)
+  document.querySelectorAll('fieldset').forEach(function (fieldset) {
+    const btn = fieldset.querySelector('.botao');
+    if (!btn) return; // Só age em cards com botão de cópia
+
+    fieldset.style.cursor = 'pointer';
+
+    fieldset.addEventListener('click', function (e) {
+      // Ignora se o clique foi direto no botão ou num link
+      if (e.target.closest('.botao') || e.target.closest('a')) return;
+      const idx = copyTextareaBtn.indexOf(btn);
+      if (idx !== -1) copiarPorIndice(idx);
     });
   });
 
