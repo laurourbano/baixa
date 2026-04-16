@@ -56,3 +56,15 @@ body { background: #111827; font-family: sans-serif; }
 .border-warning { border-color: #f59e0b !important; color: #fcd34d; }
 .border-info { border-color: #0ea5e9 !important; color: #7dd3fc; }
 .border-light { border-color: #374151 !important; color: #e5e7eb; }
+
+/* Legibilidade para os dados técnicos */
+.info-line {
+    font-size: 0.65rem;
+    color: #9ca3af;
+    margin-bottom: 5px;
+    background: rgba(0,0,0,0.1);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+.info-line b { color: #f3f4f6; }
+
