@@ -35,4 +35,32 @@ window.onload = function () {
       }
     });
   });
+
+  // Atualiza dinamicamente o botão do plano para o mais atual da tabela do CRF-PR
+  atualizarPlanoFiscalizacao();
+}
+
+async function atualizarPlanoFiscalizacao() {
+  const btnPlano = document.getElementById('btnPlanoFiscalizacao');
+  if(!btnPlano) return;
+  try {
+    // Utiliza AllOrigins proxy para evadir política de CORS restrita via runtime de navegador
+    const proxyUrl = "https://api.allorigins.win/get?url=";
+    const targetUrl = encodeURIComponent("https://crf-pr.org.br/documento/index?DocumentoSearch%5Bid_documento_categoria%5D=19");
+    
+    const response = await fetch(proxyUrl + targetUrl);
+    const data = await response.json();
+    const htmlSite = data.contents;
+    
+    // Procura na raspagem do grid da página pela primeira view vinculada que tenha 'plano' e a numeração
+    const match = htmlSite.match(/href="(\/documento\/view\/\d+\/[pP]lano-[^"]*)"/);
+    if(match && match[1]) {
+        // Redireciona para o visualizador/download nativo oficial do órgão usando a URL combinada montada
+        const crfOficialUrl = "https://crf-pr.org.br" + match[1];
+        btnPlano.href = crfOficialUrl;
+        console.log("Plano de fiscalização sincronizado via proxy: [Última versão]", crfOficialUrl);
+    }
+  } catch (err) {
+    console.error("Falha ao puxar plano de fiscalização atualizado, fallback será mantido.", err);
+  }
 }
