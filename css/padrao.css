@@ -179,6 +179,12 @@ fieldset {
 	align-items: start;
 }
 
+/* h6 de instrução ocupa toda a largura, fora do fluxo de cards */
+.section-baixa .container h6 {
+	grid-column: 1 / -1;
+	margin-bottom: 0.25rem;
+}
+
 /* Campos especiais (calculadora, resultado) podem ocupar mais colunas */
 .section-baixa fieldset.col-lg-4 {
 	grid-column: span 2;
