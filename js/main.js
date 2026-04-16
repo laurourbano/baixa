@@ -155,12 +155,14 @@ const MainApp = (function() {
     function initFiscalSearch() {
         const select = document.getElementById('fiscal-select');
         fetch('assets/dados.ods').then(r => r.arrayBuffer()).then(buf => {
-            // Silenciar avisos do XLSX (ODS number format warnings)
+            // Silenciar todos os logs do XLSX (ODS number format warnings usam console.error)
             const _warn = console.warn;
-            console.warn = () => {};
+            const _error = console.error;
+            console.warn = console.error = () => {};
             try {
                 const wb = XLSX.read(buf, {type:'array', cellNF: false});
                 console.warn = _warn;
+                console.error = _error;
                 const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, raw: true});
                 fiscalData = json.slice(1).filter(l => l[0]).map(l => ({ 
                     cidade: l[0], 
@@ -174,6 +176,7 @@ const MainApp = (function() {
                 select.disabled = false;
             } catch (err) {
                 console.warn = _warn;
+                console.error = _error;
                 throw err;
             }
         }).catch(() => {
