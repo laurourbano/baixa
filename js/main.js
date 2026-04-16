@@ -155,13 +155,27 @@ const MainApp = (function() {
     function initFiscalSearch() {
         const select = document.getElementById('fiscal-select');
         fetch('assets/dados.ods').then(r => r.arrayBuffer()).then(buf => {
-            const wb = XLSX.read(buf, {type:'array'});
-            const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
-            fiscalData = json.slice(1).map(l => ({ cidade: l[0], fiscal: l[1], regiao: l[2] }));
-            
-            select.innerHTML = '<option value="">Selecione a cidade</option>' + 
-                fiscalData.map(d => `<option value="${d.cidade}">${d.cidade}</option>`).join('');
-            select.disabled = false;
+            // Silenciar avisos do XLSX (ODS number format warnings)
+            const _warn = console.warn;
+            console.warn = () => {};
+            try {
+                const wb = XLSX.read(buf, {type:'array', cellNF: false});
+                console.warn = _warn;
+                const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, raw: true});
+                fiscalData = json.slice(1).filter(l => l[0]).map(l => ({ 
+                    cidade: l[0], 
+                    fiscal: l[1], 
+                    regiao: l[2], 
+                    codigo: l[3] 
+                }));
+                
+                select.innerHTML = '<option value="">Selecione a cidade</option>' + 
+                    fiscalData.map(d => `<option value="${d.cidade}">${d.cidade}</option>`).join('');
+                select.disabled = false;
+            } catch (err) {
+                console.warn = _warn;
+                throw err;
+            }
         }).catch(() => {
             const res = document.getElementById('fiscal-res');
             if(res) res.textContent = 'Planilha não encontrada.';
@@ -170,7 +184,7 @@ const MainApp = (function() {
         select.onchange = (e) => {
             const d = fiscalData.find(x => x.cidade === e.target.value);
             document.getElementById('fiscal-res').innerHTML = d 
-                ? `<b>Fiscal:</b> ${d.fiscal}<br><b>Região:</b> ${d.regiao}` 
+                ? `<b>Código:</b> ${d.codigo}<br><b>Região:</b> ${d.regiao}` 
                 : 'Aguardando seleção...';
         };
     }
