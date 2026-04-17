@@ -141,7 +141,7 @@ const MainApp = (function() {
             const textarea = document.querySelector(`[data-id="${id}"] textarea`);
             const original = btn.textContent;
             btn.textContent = 'Copiado!';
-            textarea.style.background = '#22c55e';
+            textarea.style.color = '#22c55e';
             btn.style.background = '#22c55e';
             btn.style.color = '#fff';
             setTimeout(() => { 
