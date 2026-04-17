@@ -26,12 +26,12 @@ body { background: #111827; font-family: sans-serif; }
 
 .card textarea {
     background: transparent; border: none; font-size: 0.75rem;
-    color: #1F2937; resize: none; overflow: hidden; height: 60px; pointer-events: none;
+    color: #1F2937; resize: none; overflow: hidden; height: 40px; pointer-events: none;
 }
 
 .btn-copy {
     margin-top: auto; border: 1px solid #374151; background: transparent;
-    color: #4ade80; border-radius: 5px; font-size: 0.75rem; padding: 6px; cursor: pointer;
+    color: #4ade80; border-radius: 5px; font-size: 0.75rem; padding: 8px; cursor: pointer;
 }
 
 /* Modal */
