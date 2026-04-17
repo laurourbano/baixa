@@ -22,7 +22,7 @@ body { background: #111827; font-family: sans-serif; }
 
 .card-head { display: flex; justify-content: space-between; color: #6b7280; font-size: 0.8rem; }
 
-.card legend { font-size: 0.9rem; font-weight: bold; padding: 5px 0; border:none; width: 100%; color: inherit; }
+.card legend { font-size: 0.9rem; font-weight: bold; padding: 5px 0; border:none; width: 100%; color: inherit; text-align: center; }
 
 .card textarea {
     background: transparent; border: none; font-size: 0.75rem;
