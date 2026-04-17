@@ -25,7 +25,7 @@ body { background: #111827; font-family: sans-serif; }
 .card legend { font-size: 0.7rem; font-weight: bold; padding: 2px 0; border:none; width: 100%; color: inherit; text-align: center; }
 
 .card textarea {
-    background: transparent; border: none; font-size: 0.75rem;
+    background: transparent; border: none; font-size: 0.55rem;
     color: #1F2937; resize: none; overflow: hidden; height: 40px; pointer-events: none;
 }
 
