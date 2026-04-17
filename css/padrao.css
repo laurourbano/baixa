@@ -26,7 +26,7 @@ body { background: #111827; font-family: sans-serif; }
 
 .card textarea {
     background: transparent; border: none; font-size: 0.75rem;
-    color: #343A40; resize: none; overflow: hidden; height: 60px; pointer-events: none;
+    color: #1F2937; resize: none; overflow: hidden; height: 60px; pointer-events: none;
 }
 
 .btn-copy {
