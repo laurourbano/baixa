@@ -148,6 +148,7 @@ const MainApp = (function() {
                 btn.textContent = original; 
                 btn.style.background = ''; 
                 btn.style.color = '';
+                textarea.style.color = '';
             }, 1200);
         } catch(e) { alert('Erro ao copiar'); }
     }
