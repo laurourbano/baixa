@@ -11,6 +11,9 @@ const MainApp = (function() {
         edits: {},
         deleted: []
     };
+    const actualDate = new Date();
+    const formatedDate = actualDate.toLocaleDateString('pt-BR');
+    
 
     // CONTEÚDO COMPLETO RECUPERADO
     const INITIAL_CARDS = [
@@ -82,7 +85,7 @@ const MainApp = (function() {
                     </div>
                     <legend>${card.title}</legend>
                     ${card.local || card.sit || card.julg ? `<p class="info-line">Local: <b>${card.local || ''}</b> Situação: <b>${card.sit || ''}</b> Julgamento: <b>${card.julg || ''}</b></p>` : ''}
-                    <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${card.content}</textarea>
+                    <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${formatedDate} - ${card.content}</textarea>
                     <button class="btn-copy" onclick="MainApp.copy(this, '${card.id}')">Copiar Texto</button>
                 </fieldset>
             `).join('');
