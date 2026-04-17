@@ -138,8 +138,10 @@ const MainApp = (function() {
         try {
             await navigator.clipboard.writeText(text);
             const btn = document.querySelector(`[data-id="${id}"] .btn-copy`);
+            const textarea = document.querySelector(`[data-id="${id}"] textarea`);
             const original = btn.textContent;
             btn.textContent = 'Copiado!';
+            textarea.style.background = '#22c55e';
             btn.style.background = '#22c55e';
             btn.style.color = '#fff';
             setTimeout(() => { 
