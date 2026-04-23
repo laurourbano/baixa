@@ -81,11 +81,11 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 }
 
 /* Alinhamento de Bordas e Fundos Bootstrap com o Tema */
-.border-light { border-color: #374151 !important; background-color: rgba(55, 65, 81, 0.2) !important; }
-.border-danger { border-color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.15) !important; }
-.border-warning { border-color: #f59e0b !important; background-color: rgba(245, 158, 11, 0.15) !important; }
-.border-info { border-color: #0ea5e9 !important; background-color: rgba(14, 165, 233, 0.15) !important; }
-.border-success { border-color: #10b981 !important; background-color: rgba(16, 185, 129, 0.15) !important; }
+.border-light { border-color: #374151 !important; background-color: rgba(55, 65, 81, 0.1) !important; }
+.border-danger { border-color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.08) !important; }
+.border-warning { border-color: #f59e0b !important; background-color: rgba(245, 158, 11, 0.08) !important; }
+.border-info { border-color: #0ea5e9 !important; background-color: rgba(14, 165, 233, 0.08) !important; }
+.border-success { border-color: #10b981 !important; background-color: rgba(16, 185, 129, 0.08) !important; }
 
 /* Modal Styles */
 .modal-content { background-color: #1f2937 !important; border: 1px solid #374151 !important; }
