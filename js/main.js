@@ -175,24 +175,39 @@ const MainApp = (function() {
         }
     }
 
+    let _copying = false;
     async function copy(el, id) {
-        const text = el.tagName === 'TEXTAREA' ? el.value : el.previousElementSibling.value;
+        if (_copying) return;          // bloqueia duplo-clique
+        _copying = true;
+
+        const card = document.querySelector(`[data-id="${id}"]`);
+        const textarea = card && card.querySelector('textarea');
+        if (!textarea) { _copying = false; return; }
+
+        const text = textarea.value;
         try {
             await navigator.clipboard.writeText(text);
-            const btn = document.querySelector(`[data-id="${id}"] .btn-copy`);
-            const textarea = document.querySelector(`[data-id="${id}"] textarea`);
-            const original = btn.textContent;
-            btn.textContent = 'Copiado!';
+            const btn = card.querySelector('.btn-copy');
+            if (btn) {
+                const original = btn.textContent;
+                btn.textContent = 'Copiado!';
+                btn.style.background = '#22c55e';
+                btn.style.color = '#fff';
+            }
             textarea.style.color = '#22c55e';
-            btn.style.background = '#22c55e';
-            btn.style.color = '#fff';
-            setTimeout(() => { 
-                btn.textContent = original; 
-                btn.style.background = ''; 
-                btn.style.color = '';
+            setTimeout(() => {
+                if (btn) {
+                    btn.textContent = 'Copiar Texto';
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }
                 textarea.style.color = '';
+                _copying = false;        // libera após o feedback visual
             }, 1200);
-        } catch(e) { alert('Erro ao copiar'); }
+        } catch(e) {
+            _copying = false;
+            alert('Erro ao copiar');
+        }
     }
 
     /* ── Busca de Fiscais ─────────────────────────────────── */
