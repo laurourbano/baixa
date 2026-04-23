@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Ferramenta para agilizar a criação de pareceres de baixa",
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   }
 }
