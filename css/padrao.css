@@ -94,14 +94,16 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 .actions i { cursor: pointer; margin-left: 8px; font-size: 0.8rem; }
 
 .info-line {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     color: #9ca3af;
     margin: 4px 0;
     background: rgba(0,0,0,0.2);
-    padding: 2px 5px;
+    padding: 3px 5px;
     border-radius: 4px;
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px;
 }
 .info-line b { color: #f3f4f6; }
 
