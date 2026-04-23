@@ -145,7 +145,7 @@ const MainApp = (function() {
                             </a>
                         </div>
                     ` : `
-                        <textarea readonly>${card.showDate !== false ? formattedDate + ' - ' : ''}${card.content.replace(/\[\s*00\/00\/0000\s*\]/g, formattedDate)}</textarea>
+                        <div class="content-display">${card.showDate !== false ? `<span class="date-highlight">${formattedDate}</span> - ` : ''}${card.content.replace(/\[\s*00\/00\/0000\s*\]/g, `<span class="date-highlight">${formattedDate}</span>`)}</div>
                         <button class="btn btn-outline-success btn-sm-compact" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
                             <i class="fas fa-copy me-1"></i>Copiar Texto
                         </button>
