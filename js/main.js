@@ -77,6 +77,9 @@ const MainApp = (function() {
         
         const savedToken = localStorage.getItem('gh_token');
         if (savedToken) document.getElementById('gh-token').value = savedToken;
+        
+        const savedRepo = localStorage.getItem('gh_repo');
+        if (savedRepo) document.getElementById('gh-repo').value = savedRepo;
     }
 
     /* ── Renderização ────────────────────────────────────── */
@@ -305,20 +308,26 @@ const MainApp = (function() {
 
     async function cloudBackup() {
         const token = document.getElementById('gh-token').value;
+        const repo = document.getElementById('gh-repo').value;
         const status = document.getElementById('gh-status');
-        if (!token) { status.textContent = 'Erro: Token vazio'; return; }
+        if (!token || !repo) { status.textContent = 'Erro: Preencha Token e Repo'; return; }
         
         status.textContent = 'Enviando...';
         try {
-            const repo = 'baixa-rt-dashboard';
             const path = 'cards_backup.json';
             const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
-            if (!userRes.ok) throw new Error();
+            if (userRes.status === 401) { status.textContent = 'Token Inválido'; return; }
             const userData = await userRes.json();
             const username = userData.login;
             
             let sha = null;
             const fileRes = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
+            
+            if (fileRes.status === 404 && (await fetch(`https://api.github.com/repos/${username}/${repo}`, { headers: { 'Authorization': `token ${token}` } })).status === 404) {
+                status.textContent = 'Repositório não encontrado';
+                return;
+            }
+
             if (fileRes.ok) {
                 const fileData = await fileRes.json();
                 sha = fileData.sha;
@@ -338,25 +347,27 @@ const MainApp = (function() {
             if (res.ok) {
                 status.textContent = 'Backup ok! ' + new Date().toLocaleTimeString();
                 localStorage.setItem('gh_token', token);
+                localStorage.setItem('gh_repo', repo);
             } else {
-                status.textContent = 'Erro ao enviar.';
+                const err = await res.json();
+                status.textContent = 'Erro: ' + (err.message || 'Falha no envio');
             }
         } catch (e) {
-            status.textContent = 'Erro de Token ou Rede.';
+            status.textContent = 'Erro de Rede.';
         }
     }
 
     async function cloudRestore() {
         const token = document.getElementById('gh-token').value;
+        const repo = document.getElementById('gh-repo').value;
         const status = document.getElementById('gh-status');
-        if (!token) { status.textContent = 'Erro: Token vazio'; return; }
+        if (!token || !repo) { status.textContent = 'Erro: Preencha Token e Repo'; return; }
 
         status.textContent = 'Sincronizando...';
         try {
-            const repo = 'baixa-rt-dashboard';
             const path = 'cards_backup.json';
             const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
-            if (!userRes.ok) throw new Error();
+            if (userRes.status === 401) { status.textContent = 'Token Inválido'; return; }
             const userData = await userRes.json();
             const username = userData.login;
 
@@ -370,6 +381,7 @@ const MainApp = (function() {
                     render();
                     status.textContent = 'Sincronizado! ' + new Date().toLocaleTimeString();
                     localStorage.setItem('gh_token', token);
+                    localStorage.setItem('gh_repo', repo);
                 } else {
                     status.textContent = 'Cancelado.';
                 }
@@ -377,7 +389,7 @@ const MainApp = (function() {
                 status.textContent = 'Backup não encontrado.';
             }
         } catch (e) {
-            status.textContent = 'Erro de Token ou Rede.';
+            status.textContent = 'Erro de Rede.';
         }
     }
 
