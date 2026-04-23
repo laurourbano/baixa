@@ -3,4 +3,4 @@
   command = "echo 'Static site deploy - skipping build'"
 
 [context.production.environment]
-  NODE_VERSION = "24"
+  NODE_VERSION = "22"
