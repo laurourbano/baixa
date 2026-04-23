@@ -5,6 +5,7 @@
   "hints": {
     "axe/forms": "off",
     "button-type": "off",
-    "css-prefix-order": "off"
+    "css-prefix-order": "off",
+    "no-inline-styles": "off"
   }
 }
