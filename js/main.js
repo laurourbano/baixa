@@ -98,8 +98,8 @@ const MainApp = (function() {
                 const btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
                 
                 return `
-                <fieldset class="card border-${card.color || 'light'}" data-id="${card.id}" draggable="true">
-                    <div class="card-head">
+                <fieldset class="card border-${card.color || 'light'}" data-id="${card.id}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
+                    <div class="card-head" onclick="event.stopPropagation()">
                         <span class="handle">⠿</span>
                         <div class="actions">
                             <i class="fa fa-pen" onclick="MainApp.edit('${card.id}')"></i>
@@ -112,13 +112,13 @@ const MainApp = (function() {
                     ${isLink ? `
                         <div class="link-card-body">
                             <p class="small text-muted mb-2">${card.content || 'Sem descrição'}</p>
-                            <a href="${card.link}" target="_blank" class="btn btn-block btn-outline-${card.color === 'light' ? 'primary' : card.color} btn-sm mt-auto">
+                            <a href="${card.link}" target="_blank" class="btn btn-block btn-outline-${card.color === 'light' ? 'primary' : card.color} btn-sm mt-auto" onclick="event.stopPropagation()">
                                 <i class="fas ${icon} mr-2"></i>${btnLabel}
                             </a>
                         </div>
                     ` : `
-                        <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${formattedDate} - ${card.content}</textarea>
-                        <button class="btn-copy" onclick="MainApp.copy(this, '${card.id}')">Copiar Texto</button>
+                        <textarea readonly>${formattedDate} - ${card.content}</textarea>
+                        <button class="btn-copy" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">Copiar Texto</button>
                     `}
                 </fieldset>
             `}).join('');
