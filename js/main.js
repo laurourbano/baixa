@@ -52,7 +52,7 @@ const MainApp = (function() {
         { 
             id: 'c5', title: 'Aguarda Complementação', color: 'warning', 
             local: '46', sit: '25', julgamento: '2',
-            content: 'Documento Complementar\nO que é?\n    Sua baixa foi feita, mas há um documento pendente desde [ 00/00/0000 ].\nO que enviar?\n    A Carteira de Trabalho com a transferência OU o Extrato do e-Social completo. OU a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nPrazo para responder: 30 dias para enviar o comprovante de quebra de vínculo ou transferência.\nOnde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e anexe o documento.' 
+            content: `Documento Complementar\nO que é?\n    Sua baixa foi feita, mas há um documento pendente desde <b>${formattedDate}</b>.\nO que enviar?\n    A Carteira de Trabalho com a transferência OU o Extrato do e-Social completo. OU a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nPrazo para responder: 30 dias para enviar o comprovante de quebra de vínculo ou transferência.\nOnde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e anexe o documento.`
         },
         { id: 'c6', title: 'Desistência', color: 'light', local: '46', sit: '2', julgamento: '2', content: 'Procedimento trata-se de desistência do ingresso uma vez que ainda seria apreciado pelo plenário.\nDesistência efetivada.' },
         { id: 'c7', title: 'Tardia', color: 'light', local: '11', sit: '6', julgamento: '11', content: 'Profissional protocolou baixa em prazo superior a 30 dias.' },
