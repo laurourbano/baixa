@@ -117,10 +117,11 @@ const MainApp = (function() {
                 const isLink = card.type === 'link' || card.type === 'pdf';
                 const icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
                 const btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
-                const borderClass = `border-${card.color || 'light'}-custom`;
+                const color = card.color || 'light';
+                const bootstrapColor = color === 'light' ? 'secondary' : color;
                 
                 return `
-                <div class="card-custom ${borderClass}" data-id="${card.id}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
+                <div class="card border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
                     <div class="card-head" onclick="event.stopPropagation()">
                         <span class="handle">⠿</span>
                         <div class="actions">
@@ -138,14 +139,16 @@ const MainApp = (function() {
                     
                     ${isLink ? `
                         <div class="link-card-body text-center mt-2">
-                            <p class="mb-2">${card.content || 'Acesso rápido'}</p>
-                            <a href="${card.link}" target="_blank" class="btn btn-xs btn-outline-${card.color === 'light' ? 'primary' : card.color} w-100" onclick="event.stopPropagation()">
+                            <p>${card.content || 'Acesso rápido'}</p>
+                            <a href="${card.link}" target="_blank" class="btn btn-outline-${bootstrapColor} btn-sm-compact" onclick="event.stopPropagation()">
                                 <i class="fas ${icon} me-1"></i>${btnLabel}
                             </a>
                         </div>
                     ` : `
                         <textarea readonly>${formattedDate} - ${card.content}</textarea>
-                        <button class="btn-copy-custom" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">Copiar Texto</button>
+                        <button class="btn btn-outline-success btn-sm-compact" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
+                            <i class="fas fa-copy me-1"></i>Copiar Texto
+                        </button>
                     `}
                 </div>
             `}).join('');
@@ -214,26 +217,36 @@ const MainApp = (function() {
         const text = textarea.value;
         try {
             await navigator.clipboard.writeText(text);
-            const btn = card.querySelector('.btn-copy-custom');
+            const btn = card.querySelector('.btn-sm-compact');
             if (btn) {
-                const originalContent = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check me-2"></i>Copiado!';
-                btn.style.background = 'var(--accent-success)';
-                btn.style.color = '#fff';
+                const originalHTML = btn.innerHTML;
                 
-                textarea.style.color = 'var(--accent-success)';
+                // Aplicar classes de destaque do Bootstrap
+                btn.classList.replace('btn-outline-success', 'btn-success');
+                btn.innerHTML = '<i class="fas fa-check me-1"></i>Copiado!';
+                
+                textarea.classList.add('text-success', 'fw-bold');
+                card.classList.add('border-success', 'shadow-lg');
                 
                 setTimeout(() => {
-                    btn.innerHTML = originalContent;
-                    btn.style.background = '';
-                    btn.style.color = '';
-                    textarea.style.color = '';
+                    btn.classList.replace('btn-success', 'btn-outline-success');
+                    btn.innerHTML = originalHTML;
+                    
+                    textarea.classList.remove('text-success', 'fw-bold');
+                    card.classList.remove('shadow-lg');
+                    
+                    const originalColor = card.getAttribute('data-color') || 'light';
+                    if (originalColor !== 'success') {
+                        card.classList.remove('border-success');
+                        card.classList.add(`border-${originalColor}`);
+                    }
+
                     _copying = false;
-                }, 1500);
+                }, 1200);
             }
         } catch(e) {
             _copying = false;
-            alert('Erro ao copiar');
+            console.error('Erro ao copiar:', e);
         }
     }
 

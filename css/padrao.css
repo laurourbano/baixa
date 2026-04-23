@@ -7,11 +7,11 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     background: #1f2937; 
     padding: 10px; 
     border-radius: 8px; 
-    border-left: 4px solid #374151;
+    border-left: 4px solid #4b5563;
     margin-bottom: 10px;
 }
 
-/* Grid de Cards */
+/* Grid de Cards Compacto */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -19,29 +19,29 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     margin-top: 10px;
 }
 
-.card-custom {
-    background: #1f2937; 
-    border-radius: 8px; 
-    padding: 8px;
+.card {
+    background: #1f2937 !important; 
+    border-radius: 8px !important; 
+    padding: 8px !important;
     display: flex; 
     flex-direction: column; 
     cursor: pointer; 
     transition: 0.2s;
-    border: 1px solid #374151;
-    position: relative;
+    border-width: 1px !important;
+    min-height: 160px;
 }
 
-.card-custom:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
 
 .card-head { 
     display: flex; 
     justify-content: space-between; 
     color: #9ca3af; 
-    font-size: 0.8rem; 
+    font-size: 0.75rem; 
     margin-bottom: 4px;
 }
 
-.card-custom legend { 
+.card legend { 
     font-size: 0.75rem; 
     font-weight: bold; 
     padding: 0; 
@@ -52,34 +52,37 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     border: none;
 }
 
-.card-custom textarea {
-    background: transparent; 
-    border: none; 
-    font-size: 0.58rem;
-    color: #d1d5db; 
-    resize: none; 
-    overflow: hidden; 
-    height: 45px; 
+.card textarea {
+    background: transparent !important; 
+    border: none !important; 
+    font-size: 0.58rem !important;
+    color: #d1d5db !important; 
+    resize: none !important; 
+    overflow: hidden !important; 
+    height: 50px !important; 
     pointer-events: none;
-    padding: 4px 0;
-    width: 100%;
-    margin-bottom: 4px;
-}
-
-.btn-copy-custom {
-    margin-top: auto; 
-    border: 1px solid #4b5563; 
-    background: transparent;
-    color: #4ade80; 
-    border-radius: 4px; 
-    font-size: 0.7rem; 
-    padding: 6px; 
-    cursor: pointer;
+    padding: 4px 0 !important;
     width: 100%;
 }
 
-/* Modal */
-.modal-content { border-radius: 12px; }
+/* Botões Customizados via Classes Bootstrap */
+.btn-sm-compact {
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+    width: 100%;
+    margin-top: auto;
+}
+
+/* Alinhamento de Bordas Bootstrap com o Tema */
+.border-light { border-color: #374151 !important; }
+.border-danger { border-color: #ef4444 !important; }
+.border-warning { border-color: #f59e0b !important; }
+.border-info { border-color: #0ea5e9 !important; }
+.border-success { border-color: #10b981 !important; }
+
+/* Modal Styles */
+.modal-content { background-color: #1f2937 !important; border: 1px solid #374151 !important; }
+.modal-header, .modal-footer { border-color: #374151 !important; }
 
 .btn-add {
     position: fixed; bottom: 25px; right: 25px; width: 45px; height: 45px;
@@ -89,13 +92,6 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 
 .handle { cursor: grab; }
 .actions i { cursor: pointer; margin-left: 8px; font-size: 0.8rem; }
-
-/* Cores de Borda */
-.border-danger-custom { border-color: #ef4444 !important; }
-.border-warning-custom { border-color: #f59e0b !important; }
-.border-info-custom { border-color: #0ea5e9 !important; }
-.border-success-custom { border-color: #10b981 !important; }
-.border-light-custom { border-color: #4b5563 !important; }
 
 .info-line {
     font-size: 0.65rem;
@@ -113,8 +109,9 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 .btn-xs { padding: 2px 6px; font-size: 0.75rem; }
 
 /* Links */
-.link-card-body { padding-top: 4px; }
-.link-card-body p { font-size: 0.7rem; color: #9ca3af; margin-bottom: 8px; }
+.link-card-body { padding-top: 4px; flex-grow: 1; display: flex; flex-direction: column; }
+.link-card-body p { font-size: 0.7rem; color: #9ca3af; margin-bottom: 8px; flex-grow: 1; }
+
 
 
 
