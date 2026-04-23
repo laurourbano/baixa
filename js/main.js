@@ -121,7 +121,7 @@ const MainApp = (function() {
                 const bootstrapColor = color === 'light' ? 'secondary' : color;
                 
                 return `
-                <div class="card border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
+                <div class="card border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
                     <div class="card-head" onclick="event.stopPropagation()">
                         <span class="handle">⠿</span>
                         <div class="actions">
@@ -213,10 +213,10 @@ const MainApp = (function() {
         _copying = true;
 
         const card = document.querySelector(`[data-id="${id}"]`);
-        const textarea = card && card.querySelector('textarea');
-        if (!textarea) { _copying = false; return; }
+        const contentEl = card && (card.querySelector('.content-display') || card.querySelector('textarea'));
+        if (!contentEl) { _copying = false; return; }
 
-        const text = textarea.value;
+        const text = contentEl.innerText || contentEl.value;
         try {
             await navigator.clipboard.writeText(text);
             const btn = card.querySelector('.btn-sm-compact');
