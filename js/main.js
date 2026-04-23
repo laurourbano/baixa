@@ -74,6 +74,9 @@ const MainApp = (function() {
         initCalculator();
         initPlanoInspection();
         window.saveCard = saveCard;
+        
+        const savedToken = localStorage.getItem('gh_token');
+        if (savedToken) document.getElementById('gh-token').value = savedToken;
     }
 
     /* ── Renderização ────────────────────────────────────── */
@@ -300,9 +303,87 @@ const MainApp = (function() {
         }
     }
 
+    async function cloudBackup() {
+        const token = document.getElementById('gh-token').value;
+        const status = document.getElementById('gh-status');
+        if (!token) { status.textContent = 'Erro: Token vazio'; return; }
+        
+        status.textContent = 'Enviando...';
+        try {
+            const repo = 'baixa-rt-dashboard';
+            const path = 'cards_backup.json';
+            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
+            if (!userRes.ok) throw new Error();
+            const userData = await userRes.json();
+            const username = userData.login;
+            
+            let sha = null;
+            const fileRes = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
+            if (fileRes.ok) {
+                const fileData = await fileRes.json();
+                sha = fileData.sha;
+            }
+
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+            const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Backup ${new Date().toLocaleString()}`,
+                    content: content,
+                    sha: sha
+                })
+            });
+
+            if (res.ok) {
+                status.textContent = 'Backup ok! ' + new Date().toLocaleTimeString();
+                localStorage.setItem('gh_token', token);
+            } else {
+                status.textContent = 'Erro ao enviar.';
+            }
+        } catch (e) {
+            status.textContent = 'Erro de Token ou Rede.';
+        }
+    }
+
+    async function cloudRestore() {
+        const token = document.getElementById('gh-token').value;
+        const status = document.getElementById('gh-status');
+        if (!token) { status.textContent = 'Erro: Token vazio'; return; }
+
+        status.textContent = 'Sincronizando...';
+        try {
+            const repo = 'baixa-rt-dashboard';
+            const path = 'cards_backup.json';
+            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
+            if (!userRes.ok) throw new Error();
+            const userData = await userRes.json();
+            const username = userData.login;
+
+            const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
+            if (res.ok) {
+                const data = await res.json();
+                const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+                
+                if (confirm('Substituir cards locais pelos da nuvem?')) {
+                    Object.assign(state, json);
+                    render();
+                    status.textContent = 'Sincronizado! ' + new Date().toLocaleTimeString();
+                    localStorage.setItem('gh_token', token);
+                } else {
+                    status.textContent = 'Cancelado.';
+                }
+            } else {
+                status.textContent = 'Backup não encontrado.';
+            }
+        } catch (e) {
+            status.textContent = 'Erro de Token ou Rede.';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 
-    return { edit, del, copy, closeModal, toggleLinkField, openCreate: () => {
+    return { edit, del, copy, closeModal, toggleLinkField, cloudBackup, cloudRestore, openCreate: () => {
         document.getElementById('m-id').value = '';
         document.getElementById('m-title').value = '';
         document.getElementById('m-content').value = '';

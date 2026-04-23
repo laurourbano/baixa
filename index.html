@@ -19,21 +19,32 @@
 
         <!-- Ferramentas Fixas (Calculadora e Busca) ao Final -->
         <div class="row mt-2 mb-2">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-4 mb-2">
                 <div class="tool-box border-info">
                     <h6>Calculadora de Piso</h6>
-                    <div class="d-flex gap-1">
-                        <input id="piso" type="number" placeholder="Valor Piso" class="form-control mr-2">
-                        <input id="horas" type="number" placeholder="Horas" class="form-control">
+                    <div class="d-flex">
+                        <input id="piso" type="number" placeholder="Valor" class="form-control mr-1 form-control-sm">
+                        <input id="horas" type="number" placeholder="Hrs" class="form-control form-control-sm">
                     </div>
-                    <div class="mt-2 small">Total: R$ <span id="res-total">0</span> | Hora: R$ <span id="res-hora">0</span></div>
+                    <div class="mt-2 x-small">Total: R$ <span id="res-total">0</span> | Hora: R$ <span id="res-hora">0</span></div>
                 </div>
             </div>
-            <div class="col-md-6 mb-2">
+            <div class="col-md-4 mb-2">
                 <div class="tool-box border-warning">
                     <h6>Busca de Fiscal</h6>
-                    <select id="fiscal-select" class="form-control" disabled><option>Carregando...</option></select>
-                    <div id="fiscal-res" class="mt-2 small text-muted">Aguardando...</div>
+                    <select id="fiscal-select" class="form-control form-control-sm" disabled><option>Carregando...</option></select>
+                    <div id="fiscal-res" class="mt-2 x-small text-muted">Aguardando...</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="tool-box border-success">
+                    <h6>Nuvem (GitHub)</h6>
+                    <input id="gh-token" type="password" placeholder="Token GitHub" class="form-control form-control-sm mb-1">
+                    <div class="d-flex">
+                        <button onclick="MainApp.cloudBackup()" class="btn btn-xs btn-success flex-grow-1 mr-1">Backup</button>
+                        <button onclick="MainApp.cloudRestore()" class="btn btn-xs btn-outline-success flex-grow-1">Sincronizar</button>
+                    </div>
+                    <div id="gh-status" class="mt-1 x-small text-muted">Não conectado</div>
                 </div>
             </div>
         </div>
