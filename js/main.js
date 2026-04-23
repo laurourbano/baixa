@@ -227,14 +227,14 @@ const MainApp = (function() {
                 btn.classList.replace('btn-outline-success', 'btn-success');
                 btn.innerHTML = '<i class="fas fa-check me-1"></i>Copiado!';
                 
-                textarea.classList.add('text-success', 'fw-bold');
+                contentEl.classList.add('text-success', 'fw-bold');
                 card.classList.add('border-success', 'shadow-lg');
                 
                 setTimeout(() => {
                     btn.classList.replace('btn-success', 'btn-outline-success');
                     btn.innerHTML = originalHTML;
                     
-                    textarea.classList.remove('text-success', 'fw-bold');
+                    contentEl.classList.remove('text-success', 'fw-bold');
                     card.classList.remove('shadow-lg');
                     
                     const originalColor = card.getAttribute('data-color') || 'light';
