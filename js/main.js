@@ -12,42 +12,54 @@ const MainApp = (function() {
         deleted: []
     };
     const actualDate = new Date();
-    const formatedDate = actualDate.toLocaleDateString('pt-BR');
-    
+    const formattedDate = actualDate.toLocaleDateString('pt-BR');
+
+    // Migração de dados legados (julg/judgment -> julgamento)
+    const migrate = (obj) => {
+        if (!obj) return;
+        if (obj['julg'] || obj['judgment']) {
+            obj['julgamento'] = obj['julgamento'] || obj['judgment'] || obj['julg'];
+            delete obj['julg'];
+            delete obj['judgment'];
+        }
+    };
+    state.customs.forEach(migrate);
+    Object.values(state.edits).forEach(migrate);
+
 
     // CONTEÚDO COMPLETO RECUPERADO
     const INITIAL_CARDS = [
         { 
             id: 'c1', title: 'Pendência Transferência', color: 'danger', 
-            local: '46', sit: '25', julg: '18',
+            local: '46', sit: '25', julgamento: '18',
             content: 'Pendência de Transferência\nO que é?\n    Seu protocolo está PENDENTE por falta do registro de transferência na carteira de trabalho. (declarações simples não são mais aceitas).\nComo resolver?\n    Envie a Carteira de Trabalho com a transferência OU o Extrato do e-Social completo (com data da alteração e dados da troca de CNPJ).\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.\nPrazo para resposta: 1 dia útil.\nOnde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícone "caneta".' 
         },
         { 
             id: 'c2', title: 'Pendência Quebra de vínculo', color: 'warning', 
-            local: '46', sit: '25', julg: '18',
+            local: '46', sit: '25', julgamento: '18',
             content: 'Pendência de Quebra de Vínculo\nO que é?\n    Seu protocolo está PENDENTE por falta do comprovante de quebra de vínculo.\nComo resolver?\n    Envie a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.\nPrazo para resposta: 1 dia útil.\nOnde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícone "caneta".' 
         },
         { 
             id: 'c3', title: 'Indeferimento Transferência', color: 'danger', 
-            local: '46', sit: '3', julg: '3',
+            local: '46', sit: '3', julgamento: '3',
             content: 'Indeferimento por falta de Transferência\nO que é?\n    Seu protocolo foi INDEFERIDO por [falta documento de transferência]. (declarações simples não são mais aceitas). O requerimento de baixa de responsabilidade técnica foi negado.\nComo resolver?\n    Inicie um novo requerimento.\nO que enviar?\n    A Carteira de Trabalho com a transferência OU o Extrato do e-Social completo.\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.' 
         },
         { 
             id: 'c4', title: 'Indeferimento Quebra de vínculo', color: 'warning', 
-            local: '46', sit: '3', julg: '3',
+            local: '46', sit: '3', julgamento: '3',
             content: 'Indeferimento por falta de Quebra de Vínculo\nO que é?\n    Seu protocolo foi INDEFERIDO por [falta quebra de vinculo]. O requerimento de baixa de responsabilidade técnica foi negado.\nComo resolver?\n    Inicie um novo requerimento com todos os documentos.\nO que enviar?\n    Envie a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.' 
         },
         { 
             id: 'c5', title: 'Aguarda Complementação', color: 'warning', 
-            local: '46', sit: '25', julg: '2',
+            local: '46', sit: '25', julgamento: '2',
             content: 'Documento Complementar\nO que é?\n    Sua baixa foi feita, mas há um documento pendente desde [ 00/00/0000 ].\nO que enviar?\n    A Carteira de Trabalho com a transferência OU o Extrato do e-Social completo. OU a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nPrazo para responder: 30 dias para enviar o comprovante de quebra de vínculo ou transferência.\nOnde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e anexe o documento.' 
         },
-        { id: 'c6', title: 'Desistência', color: 'light', local: '46', sit: '2', julg: '2', content: 'Procedimento trata-se de desistência do ingresso uma vez que ainda seria apreciado pelo plenário.\nDesistência efetivada.' },
-        { id: 'c7', title: 'Tardia', color: 'light', local: '11', sit: '6', julg: '11', content: 'Profissional protocolou baixa em prazo superior a 30 dias.' },
-        { id: 'c8', title: '30 dias', color: 'light', local: '11', sit: '6', julg: '11', content: 'Não apresentou quebra de vínculo para finalizar a baixa no prazo de 30 dias.' },
-        { id: 'c9', title: 'Duplicado', color: 'light', local: '46', sit: '4', julg: '8', content: 'Pedimos a gentileza de não realizar mais de um protocolo para o mesmo procedimento e agradecemos a compreensão.\nCaso o procedimento seja aberto para correção deverá responder o mesmo protocolo, através do acesso em \'protocolos aguardando resposta\'.' },
-        { id: 'c10', title: 'Sem andamento', color: 'light', local: '46', sit: '13', julg: '8', content: 'Protocolo arquivado por estar sem andamento.' },
-        { id: 'c11', title: 'Indeferimento de DAP', color: 'light', local: '46', sit: '3', julg: '3', content: 'Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberação 1004/21.' },
+        { id: 'c6', title: 'Desistência', color: 'light', local: '46', sit: '2', julgamento: '2', content: 'Procedimento trata-se de desistência do ingresso uma vez que ainda seria apreciado pelo plenário.\nDesistência efetivada.' },
+        { id: 'c7', title: 'Tardia', color: 'light', local: '11', sit: '6', julgamento: '11', content: 'Profissional protocolou baixa em prazo superior a 30 dias.' },
+        { id: 'c8', title: '30 dias', color: 'light', local: '11', sit: '6', julgamento: '11', content: 'Não apresentou quebra de vínculo para finalizar a baixa no prazo de 30 dias.' },
+        { id: 'c9', title: 'Duplicado', color: 'light', local: '46', sit: '4', julgamento: '8', content: 'Pedimos a gentileza de não realizar mais de um protocolo para o mesmo procedimento e agradecemos a compreensão.\nCaso o procedimento seja aberto para correção deverá responder o mesmo protocolo, através do acesso em \'protocolos aguardando resposta\'.' },
+        { id: 'c10', title: 'Sem andamento', color: 'light', local: '46', sit: '13', julgamento: '8', content: 'Protocolo arquivado por estar sem andamento.' },
+        { id: 'c11', title: 'Indeferimento de DAP', color: 'light', local: '46', sit: '3', julgamento: '3', content: 'Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberação 1004/21.' },
         { id: 'c12', title: 'Nissei (Endereço)', color: 'light', content: 'RUA ACRE 205 – ÁGUA VERDE\n80.620-040 - CURITIBA - PARANÁ' },
         { id: 'c13', title: 'Morifarma (Endereço)', color: 'light', content: 'RUA AMAURY LANGE SILVÉRIO 33 – PILARZINHO\n82.120-000 - CURITIBA - PARANÁ' },
         { id: 'c14', title: 'São João (Endereço)', color: 'light', content: 'AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO\n99.064-440 - PASSO FUNDO - RIO GRANDE DO SUL' },
@@ -60,7 +72,7 @@ const MainApp = (function() {
         setupDragAndDrop();
         initFiscalSearch();
         initCalculator();
-        initPlanoFiscalizacao();
+        initPlanoInspection();
         window.saveCard = saveCard;
     }
 
@@ -89,7 +101,7 @@ const MainApp = (function() {
                         </div>
                     </div>
                     <legend>${card.title}</legend>
-                    ${card.local || card.sit || card.julg ? `<p class="info-line">Local: <b>${card.local || ''}</b> Situação: <b>${card.sit || ''}</b> Julgamento: <b>${card.julg || ''}</b></p>` : ''}
+                    ${card.local || card.sit || card.julgamento ? `<p class="info-line">Local: <b>${card.local || ''}</b> Situação: <b>${card.sit || ''}</b> Julgamento: <b>${card.julgamento || ''}</b></p>` : ''}
                     
                     ${isLink ? `
                         <div class="link-card-body">
@@ -99,7 +111,7 @@ const MainApp = (function() {
                             </a>
                         </div>
                     ` : `
-                        <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${formatedDate} - ${card.content}</textarea>
+                        <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${formattedDate} - ${card.content}</textarea>
                         <button class="btn-copy" onclick="MainApp.copy(this, '${card.id}')">Copiar Texto</button>
                     `}
                 </fieldset>
@@ -117,7 +129,7 @@ const MainApp = (function() {
             color: document.getElementById('m-color').value,
             local: document.getElementById('m-local').value,
             sit: document.getElementById('m-sit').value,
-            julg: document.getElementById('m-julg').value,
+            julgamento: document.getElementById('m-julgamento').value,
             type: document.getElementById('m-type').value,
             link: document.getElementById('m-link').value
         };
@@ -142,7 +154,7 @@ const MainApp = (function() {
         document.getElementById('m-color').value = card.color || 'light';
         document.getElementById('m-local').value = card.local || '';
         document.getElementById('m-sit').value = card.sit || '';
-        document.getElementById('m-julg').value = card.julg || '';
+        document.getElementById('m-julgamento').value = card.julgamento || '';
         document.getElementById('m-type').value = card.type || 'copy';
         document.getElementById('m-link').value = card.link || '';
         
@@ -194,8 +206,8 @@ const MainApp = (function() {
                 fiscalData = json.slice(1).filter(l => l[0]).map(l => ({ 
                     cidade: l[0], 
                     fiscal: l[1], 
-                    regiao: l[2], 
-                    codigo: l[3] 
+                    region: l[2], 
+                    code: l[3] 
                 }));
                 
                 select.innerHTML = '<option value="">Selecione a cidade</option>' + 
@@ -214,7 +226,7 @@ const MainApp = (function() {
         select.onchange = (e) => {
             const d = fiscalData.find(x => x.cidade === e.target.value);
             document.getElementById('fiscal-res').innerHTML = d 
-                ? `<b>Código:</b> ${d.codigo}<br><b>Região:</b> ${d.regiao}` 
+                ? `<b>Código:</b> ${d.code}<br><b>Região:</b> ${d.region}` 
                 : 'Aguardando seleção...';
         };
     }
@@ -233,9 +245,9 @@ const MainApp = (function() {
         document.getElementById('horas').oninput = calc;
     }
 
-    /* ── Plano Fiscalização ──────────────────────────────── */
-    async function initPlanoFiscalizacao() {
-        const btnPlano = document.getElementById('btnPlanoFiscalizacao');
+    /* ── Plano Inspeção ────────────────────────────────── */
+    async function initPlanoInspection() {
+        const btnPlano = document.getElementById('btnPlanoInspection');
         if(!btnPlano) return;
         try {
             const proxyUrl = "https://api.allorigins.win/get?url=";
@@ -297,7 +309,7 @@ const MainApp = (function() {
         document.getElementById('m-color').value = 'light';
         document.getElementById('m-local').value = '';
         document.getElementById('m-sit').value = '';
-        document.getElementById('m-julg').value = '';
+        document.getElementById('m-julgamento').value = '';
         document.getElementById('m-type').value = 'copy';
         document.getElementById('m-link').value = '';
         toggleLinkField();
