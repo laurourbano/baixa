@@ -2,7 +2,6 @@
 # 📋 Projeto Pessoal - Página de Pareceres de Baixa
 
 [![Licença MIT](https://img.shields.io/badge/Licença-MIT-green.svg)](LICENSE)
-[![Deploy no Vercel](https://img.shields.io/badge/Vercel-Deploy-000.svg?logo=vercel)](https://baixa-kappa.vercel.app)
 [![Deploy no GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deploy-222.svg?logo=github)](https://laurourbano.github.io/baixa/)
 
 Uma ferramenta web simples para agilizar a criação de pareceres de baixa, desenvolvida com tecnologias front-end essenciais.
@@ -25,8 +24,6 @@ Uma ferramenta web simples para agilizar a criação de pareceres de baixa, dese
 ## 🌐 Acesso Rápido
 
 Escolha seu deploy preferido:
-
-[![Vercel](https://img.shields.io/badge/🔗_Acessar_na_Vercel-00C7B7?style=for-the-badge)](https://baixaparecer.vercel.app)
 
 [![GitHubPages](https://img.shields.io/badge/🔗_Acessar_no_GitHub-00C7B7?style=for-the-badge)](https://laurourbano.github.io/baixa/)
 
