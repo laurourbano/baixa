@@ -74,7 +74,12 @@ const MainApp = (function() {
             .filter(c => !state.deleted.includes(c.id))
             .map(c => ({ ...c, ...state.edits[c.id] }))
             .sort((a, b) => (state.order.indexOf(a.id) - state.order.indexOf(b.id)))
-            .map(card => `
+            .map(card => {
+                const isLink = card.type === 'link' || card.type === 'pdf';
+                const icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
+                const btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
+                
+                return `
                 <fieldset class="card border-${card.color || 'light'}" data-id="${card.id}" draggable="true">
                     <div class="card-head">
                         <span class="handle">⠿</span>
@@ -85,10 +90,20 @@ const MainApp = (function() {
                     </div>
                     <legend>${card.title}</legend>
                     ${card.local || card.sit || card.julg ? `<p class="info-line">Local: <b>${card.local || ''}</b> Situação: <b>${card.sit || ''}</b> Julgamento: <b>${card.julg || ''}</b></p>` : ''}
-                    <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${formatedDate} - ${card.content}</textarea>
-                    <button class="btn-copy" onclick="MainApp.copy(this, '${card.id}')">Copiar Texto</button>
+                    
+                    ${isLink ? `
+                        <div class="link-card-body">
+                            <p class="small text-muted mb-2">${card.content || 'Sem descrição'}</p>
+                            <a href="${card.link}" target="_blank" class="btn btn-block btn-outline-${card.color === 'light' ? 'primary' : card.color} btn-sm mt-auto">
+                                <i class="fas ${icon} mr-2"></i>${btnLabel}
+                            </a>
+                        </div>
+                    ` : `
+                        <textarea readonly onclick="MainApp.copy(this, '${card.id}')">${formatedDate} - ${card.content}</textarea>
+                        <button class="btn-copy" onclick="MainApp.copy(this, '${card.id}')">Copiar Texto</button>
+                    `}
                 </fieldset>
-            `).join('');
+            `}).join('');
         
         save();
     }
@@ -102,7 +117,9 @@ const MainApp = (function() {
             color: document.getElementById('m-color').value,
             local: document.getElementById('m-local').value,
             sit: document.getElementById('m-sit').value,
-            julg: document.getElementById('m-julg').value
+            julg: document.getElementById('m-julg').value,
+            type: document.getElementById('m-type').value,
+            link: document.getElementById('m-link').value
         };
 
         if (id) {
@@ -126,6 +143,10 @@ const MainApp = (function() {
         document.getElementById('m-local').value = card.local || '';
         document.getElementById('m-sit').value = card.sit || '';
         document.getElementById('m-julg').value = card.julg || '';
+        document.getElementById('m-type').value = card.type || 'copy';
+        document.getElementById('m-link').value = card.link || '';
+        
+        toggleLinkField();
         document.getElementById('modal').style.display = 'flex';
     }
 
@@ -252,9 +273,24 @@ const MainApp = (function() {
     const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     const closeModal = () => document.getElementById('modal').style.display = 'none';
 
+    function toggleLinkField() {
+        const type = document.getElementById('m-type').value;
+        const group = document.getElementById('link-field-group');
+        group.style.display = (type === 'link' || type === 'pdf') ? 'block' : 'none';
+        
+        const contentLabel = document.getElementById('m-content');
+        if (type === 'link' || type === 'pdf') {
+            contentLabel.placeholder = "Descrição curta (opcional)";
+            contentLabel.rows = 2;
+        } else {
+            contentLabel.placeholder = "Conteúdo";
+            contentLabel.rows = 4;
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 
-    return { edit, del, copy, closeModal, openCreate: () => {
+    return { edit, del, copy, closeModal, toggleLinkField, openCreate: () => {
         document.getElementById('m-id').value = '';
         document.getElementById('m-title').value = '';
         document.getElementById('m-content').value = '';
@@ -262,6 +298,9 @@ const MainApp = (function() {
         document.getElementById('m-local').value = '';
         document.getElementById('m-sit').value = '';
         document.getElementById('m-julg').value = '';
+        document.getElementById('m-type').value = 'copy';
+        document.getElementById('m-link').value = '';
+        toggleLinkField();
         document.getElementById('modal').style.display = 'flex';
     }};
 })();

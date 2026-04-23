@@ -47,10 +47,26 @@
             <h6>Editar Card</h6>
             <input id="m-id" type="hidden">
             <input id="m-title" type="text" placeholder="Título" class="form-control mb-2">
-            <select id="m-color" class="form-control mb-2">
-                <option value="light">Padrão</option><option value="danger">Vermelho</option>
-                <option value="warning">Amarelo</option><option value="info">Azul</option>
-            </select>
+            <div class="row mb-2">
+                <div class="col-6">
+                    <select id="m-type" class="form-control" onchange="MainApp.toggleLinkField()">
+                        <option value="copy">Copiável (Texto)</option>
+                        <option value="link">Link Externo</option>
+                        <option value="pdf">Arquivo PDF</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <select id="m-color" class="form-control">
+                        <option value="light">Cor: Padrão</option>
+                        <option value="danger">Cor: Vermelho</option>
+                        <option value="warning">Cor: Amarelo</option>
+                        <option value="info">Cor: Azul</option>
+                    </select>
+                </div>
+            </div>
+            <div id="link-field-group" style="display: none;">
+                <input id="m-link" type="text" placeholder="URL do Link ou Caminho do PDF" class="form-control mb-2">
+            </div>
             <div class="row mb-1">
                 <div class="col-4"><input id="m-local" type="text" placeholder="Local" class="form-control"></div>
                 <div class="col-4"><input id="m-sit" type="text" placeholder="Situação" class="form-control"></div>

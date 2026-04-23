@@ -72,3 +72,20 @@ h1 {
 }
 .info-line b { color: #f3f4f6; }
 
+/* Link Cards */
+.link-card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 80px;
+    padding-top: 5px;
+}
+
+.link-card-body p {
+    flex-grow: 1;
+    font-size: 0.7rem;
+}
+
+.btn-block { width: 100%; }
+
+
