@@ -88,6 +88,11 @@ const MainApp = (function() {
         
         const savedRepo = localStorage.getItem('gh_repo');
         if (savedRepo) document.getElementById('gh-repo').value = savedRepo;
+
+        // Limpeza de duplicatas: remove custom cards que agora são hardcoded (pelo título)
+        const initialTitles = INITIAL_CARDS.map(c => c.title.toLowerCase());
+        state.customs = state.customs.filter(c => !initialTitles.includes(c.title.toLowerCase()));
+        save();
     }
 
     /* ── Renderização ────────────────────────────────────── */
@@ -99,7 +104,13 @@ const MainApp = (function() {
             .concat(state.customs)
             .filter(c => !state.deleted.includes(c.id))
             .map(c => ({ ...c, ...state.edits[c.id] }))
-            .sort((a, b) => (state.order.indexOf(a.id) - state.order.indexOf(b.id)))
+            .sort((a, b) => {
+                let ia = state.order.indexOf(a.id);
+                let ib = state.order.indexOf(b.id);
+                if (ia === -1) ia = 999;
+                if (ib === -1) ib = 999;
+                return ia - ib;
+            })
             .map(card => {
                 const isLink = card.type === 'link' || card.type === 'pdf';
                 const icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
