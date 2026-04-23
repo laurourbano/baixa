@@ -145,7 +145,7 @@ const MainApp = (function() {
                             </a>
                         </div>
                     ` : `
-                        <textarea readonly>${formattedDate} - ${card.content}</textarea>
+                        <textarea readonly>${card.showDate !== false ? formattedDate + ' - ' : ''}${card.content}</textarea>
                         <button class="btn btn-outline-success btn-sm-compact" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
                             <i class="fas fa-copy me-1"></i>Copiar Texto
                         </button>
@@ -167,7 +167,8 @@ const MainApp = (function() {
             sit: document.getElementById('m-sit').value,
             julgamento: document.getElementById('m-julgamento').value,
             type: document.getElementById('m-type').value,
-            link: document.getElementById('m-link').value
+            link: document.getElementById('m-link').value,
+            showDate: document.getElementById('m-showDate').checked
         };
 
         if (id) {
@@ -193,6 +194,7 @@ const MainApp = (function() {
         document.getElementById('m-julgamento').value = card.julgamento || '';
         document.getElementById('m-type').value = card.type || 'copy';
         document.getElementById('m-link').value = card.link || '';
+        document.getElementById('m-showDate').checked = card.showDate !== false;
         
         toggleLinkField();
         window.bsModal.show();
@@ -349,10 +351,14 @@ const MainApp = (function() {
     function toggleLinkField() {
         const type = document.getElementById('m-type').value;
         const group = document.getElementById('link-field-group');
+        const showDateGroup = document.getElementById('m-showDate').closest('.form-check');
+        
         if (type === 'link' || type === 'pdf') {
             group.classList.remove('d-none');
+            showDateGroup.classList.add('d-none');
         } else {
             group.classList.add('d-none');
+            showDateGroup.classList.remove('d-none');
         }
         
         const contentLabel = document.getElementById('m-content');
@@ -465,6 +471,7 @@ const MainApp = (function() {
         document.getElementById('m-julgamento').value = '';
         document.getElementById('m-type').value = 'copy';
         document.getElementById('m-link').value = '';
+        document.getElementById('m-showDate').checked = true;
         toggleLinkField();
         window.bsModal.show();
     }};
