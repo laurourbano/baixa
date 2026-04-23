@@ -25,7 +25,7 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     padding: 8px !important;
     display: flex; 
     flex-direction: column; 
-    cursor: pointer; 
+    cursor: grab; 
     transition: 0.2s;
     border-width: 1px !important;
     min-height: 160px;
@@ -97,7 +97,8 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     font-size: 1.5rem; cursor: pointer; z-index: 1000;
 }
 
-.handle { cursor: grab; }
+.handle { cursor: grab; font-size: 0.9rem; }
+.card.dragging { opacity: 0.5; transform: scale(0.98); border-style: dashed !important; cursor: grabbing; }
 .actions i { cursor: pointer; margin-left: 8px; font-size: 0.8rem; }
 
 .info-line {

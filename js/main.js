@@ -328,9 +328,9 @@ const MainApp = (function() {
         grid.ondrop = e => {
             e.preventDefault();
             const draggedId = e.dataTransfer.getData('id');
-            const target = e.target.closest('.card-custom');
+            const target = e.target.closest('.card');
             if (target && target.dataset.id !== draggedId) {
-                const currentIds = Array.from(grid.querySelectorAll('.card-custom')).map(f => f.dataset.id);
+                const currentIds = Array.from(grid.querySelectorAll('.card')).map(f => f.dataset.id);
                 const fromIdx = currentIds.indexOf(draggedId);
                 const toIdx = currentIds.indexOf(target.dataset.id);
                 currentIds.splice(toIdx, 0, currentIds.splice(fromIdx, 1)[0]);
@@ -339,9 +339,14 @@ const MainApp = (function() {
             }
         };
         grid.ondragstart = e => {
-            const card = e.target.closest('.card-custom');
+            const card = e.target.closest('.card');
             if (!card) return e.preventDefault();
             e.dataTransfer.setData('id', card.dataset.id);
+            setTimeout(() => card.classList.add('dragging'), 0);
+        };
+        grid.ondragend = e => {
+            const card = e.target.closest('.card');
+            if (card) card.classList.remove('dragging');
         };
     }
 
