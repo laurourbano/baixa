@@ -76,6 +76,9 @@ const MainApp = (function() {
     ];
 
     function init() {
+        // Inicializa o modal do Bootstrap
+        window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
+        
         render();
         setupDragAndDrop();
         initFiscalSearch();
@@ -89,7 +92,6 @@ const MainApp = (function() {
         const savedRepo = localStorage.getItem('gh_repo');
         if (savedRepo) document.getElementById('gh-repo').value = savedRepo;
 
-        // Limpeza de duplicatas: remove custom cards que agora são hardcoded (pelo título)
         const initialTitles = INITIAL_CARDS.map(c => c.title.toLowerCase());
         state.customs = state.customs.filter(c => !initialTitles.includes(c.title.toLowerCase()));
         save();
@@ -115,31 +117,43 @@ const MainApp = (function() {
                 const isLink = card.type === 'link' || card.type === 'pdf';
                 const icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
                 const btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
+                const colorClass = `border-${card.color || 'light'}-custom`;
                 
                 return `
-                <fieldset class="card border-${card.color || 'light'}" data-id="${card.id}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
-                    <div class="card-head" onclick="event.stopPropagation()">
-                        <span class="handle">⠿</span>
+                <div class="card card-custom glass-card ${colorClass}" data-id="${card.id}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
+                    <div class="card-header-actions" onclick="event.stopPropagation()">
+                        <span class="handle"><i class="fas fa-grip-vertical"></i></span>
                         <div class="actions">
-                            <i class="fa fa-pen" onclick="MainApp.edit('${card.id}')"></i>
-                            <i class="fa fa-trash" onclick="MainApp.del('${card.id}')"></i>
+                            <i class="fa fa-pen me-2" onclick="MainApp.edit('${card.id}')"></i>
+                            <i class="fa fa-trash text-danger opacity-75" onclick="MainApp.del('${card.id}')"></i>
                         </div>
                     </div>
-                    <legend>${card.title}</legend>
-                    ${card.local || card.sit || card.julgamento ? `<p class="info-line">Local: <b>${card.local || ''}</b> Situação: <b>${card.sit || ''}</b> Julgamento: <b>${card.julgamento || ''}</b></p>` : ''}
-                    
-                    ${isLink ? `
-                        <div class="link-card-body">
-                            <p class="small text-muted mb-2">${card.content || 'Sem descrição'}</p>
-                            <a href="${card.link}" target="_blank" class="btn btn-block btn-outline-${card.color === 'light' ? 'primary' : card.color} btn-sm mt-auto" onclick="event.stopPropagation()">
-                                <i class="fas ${icon} mr-2"></i>${btnLabel}
-                            </a>
-                        </div>
-                    ` : `
-                        <textarea readonly>${formattedDate} - ${card.content}</textarea>
-                        <button class="btn-copy" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">Copiar Texto</button>
-                    `}
-                </fieldset>
+                    <div class="p-3 pt-2">
+                        <legend>${card.title}</legend>
+                        ${card.local || card.sit || card.julgamento ? `
+                            <div class="info-line">
+                                <span>Loc: <b>${card.local || '-'}</b></span>
+                                <span>Sit: <b>${card.sit || '-'}</b></span>
+                                <span>Julg: <b>${card.julgamento || '-'}</b></span>
+                            </div>` : ''}
+                        
+                        ${isLink ? `
+                            <div class="px-2 pb-2">
+                                <p class="small text-muted mb-3" style="font-size: 0.75rem;">${card.content || 'Acesso rápido ao documento.'}</p>
+                                <a href="${card.link}" target="_blank" class="btn btn-sm w-100 btn-outline-${card.color === 'light' ? 'success' : card.color}" onclick="event.stopPropagation()">
+                                    <i class="fas ${icon} me-2"></i>${btnLabel}
+                                </a>
+                            </div>
+                        ` : `
+                            <textarea readonly class="form-control-plaintext mb-2">${formattedDate} - ${card.content}</textarea>
+                            <div class="px-2 pb-1">
+                                <button class="btn-copy-custom" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
+                                    <i class="fas fa-copy me-2"></i>Copiar Texto
+                                </button>
+                            </div>
+                        `}
+                    </div>
+                </div>
             `}).join('');
         
         save();
@@ -184,7 +198,7 @@ const MainApp = (function() {
         document.getElementById('m-link').value = card.link || '';
         
         toggleLinkField();
-        document.getElementById('modal').style.display = 'flex';
+        window.bsModal.show();
     }
 
     function del(id) {
@@ -196,7 +210,7 @@ const MainApp = (function() {
 
     let _copying = false;
     async function copy(el, id) {
-        if (_copying) return;          // bloqueia duplo-clique
+        if (_copying) return;
         _copying = true;
 
         const card = document.querySelector(`[data-id="${id}"]`);
@@ -206,23 +220,23 @@ const MainApp = (function() {
         const text = textarea.value;
         try {
             await navigator.clipboard.writeText(text);
-            const btn = card.querySelector('.btn-copy');
+            const btn = card.querySelector('.btn-copy-custom');
             if (btn) {
-                const original = btn.textContent;
-                btn.textContent = 'Copiado!';
-                btn.style.background = '#22c55e';
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check me-2"></i>Copiado!';
+                btn.style.background = 'var(--accent-success)';
                 btn.style.color = '#fff';
-            }
-            textarea.style.color = '#22c55e';
-            setTimeout(() => {
-                if (btn) {
-                    btn.textContent = 'Copiar Texto';
+                
+                textarea.style.color = 'var(--accent-success)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
                     btn.style.background = '';
                     btn.style.color = '';
-                }
-                textarea.style.color = '';
-                _copying = false;        // libera após o feedback visual
-            }, 1200);
+                    textarea.style.color = '';
+                    _copying = false;
+                }, 1500);
+            }
         } catch(e) {
             _copying = false;
             alert('Erro ao copiar');
@@ -234,7 +248,6 @@ const MainApp = (function() {
     function initFiscalSearch() {
         const select = document.getElementById('fiscal-select');
         fetch('assets/dados.ods').then(r => r.arrayBuffer()).then(buf => {
-            // Silenciar todos os logs do XLSX (ODS number format warnings usam console.error)
             const _warn = console.warn;
             const _error = console.error;
             console.warn = console.error = () => {};
@@ -266,7 +279,7 @@ const MainApp = (function() {
         select.onchange = (e) => {
             const d = fiscalData.find(x => x.cidade === e.target.value);
             document.getElementById('fiscal-res').innerHTML = d 
-                ? `<b>Código:</b> ${d.code}<br><b>Região:</b> ${d.region}` 
+                ? `<div class="d-flex justify-content-between"><span>Código: <b>${d.code}</b></span><span>Região: <b>${d.region}</b></span></div>` 
                 : 'Aguardando seleção...';
         };
     }
@@ -306,9 +319,9 @@ const MainApp = (function() {
         grid.ondrop = e => {
             e.preventDefault();
             const draggedId = e.dataTransfer.getData('id');
-            const target = e.target.closest('fieldset');
+            const target = e.target.closest('.card-custom');
             if (target && target.dataset.id !== draggedId) {
-                const currentIds = Array.from(grid.querySelectorAll('fieldset')).map(f => f.dataset.id);
+                const currentIds = Array.from(grid.querySelectorAll('.card-custom')).map(f => f.dataset.id);
                 const fromIdx = currentIds.indexOf(draggedId);
                 const toIdx = currentIds.indexOf(target.dataset.id);
                 currentIds.splice(toIdx, 0, currentIds.splice(fromIdx, 1)[0]);
@@ -317,18 +330,23 @@ const MainApp = (function() {
             }
         };
         grid.ondragstart = e => {
-            if (!e.target.classList.contains('card')) return e.preventDefault();
-            e.dataTransfer.setData('id', e.target.dataset.id);
+            const card = e.target.closest('.card-custom');
+            if (!card) return e.preventDefault();
+            e.dataTransfer.setData('id', card.dataset.id);
         };
     }
 
     const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    const closeModal = () => document.getElementById('modal').style.display = 'none';
+    const closeModal = () => window.bsModal.hide();
 
     function toggleLinkField() {
         const type = document.getElementById('m-type').value;
         const group = document.getElementById('link-field-group');
-        group.style.display = (type === 'link' || type === 'pdf') ? 'block' : 'none';
+        if (type === 'link' || type === 'pdf') {
+            group.classList.remove('d-none');
+        } else {
+            group.classList.add('d-none');
+        }
         
         const contentLabel = document.getElementById('m-content');
         if (type === 'link' || type === 'pdf') {
@@ -339,6 +357,7 @@ const MainApp = (function() {
             contentLabel.rows = 4;
         }
     }
+
 
     async function cloudBackup() {
         const token = document.getElementById('gh-token').value;
@@ -440,6 +459,6 @@ const MainApp = (function() {
         document.getElementById('m-type').value = 'copy';
         document.getElementById('m-link').value = '';
         toggleLinkField();
-        document.getElementById('modal').style.display = 'flex';
+        window.bsModal.show();
     }};
 })();
