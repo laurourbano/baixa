@@ -117,42 +117,36 @@ const MainApp = (function() {
                 const isLink = card.type === 'link' || card.type === 'pdf';
                 const icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
                 const btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
-                const colorClass = `border-${card.color || 'light'}-custom`;
+                const borderClass = `border-${card.color || 'light'}-custom`;
                 
                 return `
-                <div class="card card-custom glass-card ${colorClass}" data-id="${card.id}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
-                    <div class="card-header-actions" onclick="event.stopPropagation()">
-                        <span class="handle"><i class="fas fa-grip-vertical"></i></span>
+                <div class="card-custom ${borderClass}" data-id="${card.id}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('textarea'), '${card.id}')"` : ''}>
+                    <div class="card-head" onclick="event.stopPropagation()">
+                        <span class="handle">⠿</span>
                         <div class="actions">
-                            <i class="fa fa-pen me-2" onclick="MainApp.edit('${card.id}')"></i>
-                            <i class="fa fa-trash text-danger opacity-75" onclick="MainApp.del('${card.id}')"></i>
+                            <i class="fa fa-pen" onclick="MainApp.edit('${card.id}')"></i>
+                            <i class="fa fa-trash text-danger opacity-50" onclick="MainApp.del('${card.id}')"></i>
                         </div>
                     </div>
-                    <div class="p-3 pt-2">
-                        <legend>${card.title}</legend>
-                        ${card.local || card.sit || card.julgamento ? `
-                            <div class="info-line">
-                                <span>Loc: <b>${card.local || '-'}</b></span>
-                                <span>Sit: <b>${card.sit || '-'}</b></span>
-                                <span>Julg: <b>${card.julgamento || '-'}</b></span>
-                            </div>` : ''}
-                        
-                        ${isLink ? `
-                            <div class="px-2 pb-2">
-                                <p class="small text-muted mb-3" style="font-size: 0.75rem;">${card.content || 'Acesso rápido ao documento.'}</p>
-                                <a href="${card.link}" target="_blank" class="btn btn-sm w-100 btn-outline-${card.color === 'light' ? 'success' : card.color}" onclick="event.stopPropagation()">
-                                    <i class="fas ${icon} me-2"></i>${btnLabel}
-                                </a>
-                            </div>
-                        ` : `
-                            <textarea readonly class="form-control-plaintext mb-2">${formattedDate} - ${card.content}</textarea>
-                            <div class="px-2 pb-1">
-                                <button class="btn-copy-custom" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
-                                    <i class="fas fa-copy me-2"></i>Copiar Texto
-                                </button>
-                            </div>
-                        `}
-                    </div>
+                    <legend>${card.title}</legend>
+                    ${card.local || card.sit || card.julgamento ? `
+                        <div class="info-line">
+                            <span>L: <b>${card.local || ''}</b></span>
+                            <span>S: <b>${card.sit || ''}</b></span>
+                            <span>J: <b>${card.julgamento || ''}</b></span>
+                        </div>` : ''}
+                    
+                    ${isLink ? `
+                        <div class="link-card-body text-center mt-2">
+                            <p class="mb-2">${card.content || 'Acesso rápido'}</p>
+                            <a href="${card.link}" target="_blank" class="btn btn-xs btn-outline-${card.color === 'light' ? 'primary' : card.color} w-100" onclick="event.stopPropagation()">
+                                <i class="fas ${icon} me-1"></i>${btnLabel}
+                            </a>
+                        </div>
+                    ` : `
+                        <textarea readonly>${formattedDate} - ${card.content}</textarea>
+                        <button class="btn-copy-custom" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">Copiar Texto</button>
+                    `}
                 </div>
             `}).join('');
         

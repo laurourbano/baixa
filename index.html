@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal de Pareceres - Baixa RT</title>
     
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="./assets/img/favicon.ico">
     
@@ -22,169 +17,101 @@
 </head>
 <body class="bg-dark text-light">
 
-    <!-- Navbar Minimalista -->
-    <nav class="navbar navbar-expand-lg border-bottom border-secondary-subtle sticky-top bg-dark bg-opacity-75 backdrop-blur mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-success" href="#">
-                <i class="fas fa-file-invoice me-2"></i>PARECERES
-            </a>
-            <span class="navbar-text d-none d-sm-block text-muted small">
-                Portal de Baixa de Responsabilidade Técnica
-            </span>
-            <div class="ms-auto">
-                <button class="btn btn-sm btn-outline-success rounded-pill px-3 shadow-sm" onclick="MainApp.openCreate()">
-                    <i class="fas fa-plus me-1"></i> Novo Card
-                </button>
-            </div>
-        </div>
-    </nav>
+    <header class="text-center py-2">
+        <h1 class="h6 fw-bold mb-0">Portal de Pareceres - Baixa RT</h1>
+    </header>
 
-    <main class="container mb-5">
-        
-        <!-- Seção de Ferramentas -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <div class="card h-100 bg-secondary bg-opacity-10 border-info border-opacity-25 glass-card">
-                    <div class="card-body p-3">
-                        <h6 class="card-title text-info small fw-bold mb-3">
-                            <i class="fas fa-calculator me-2"></i>CALCULADORA DE PISO
-                        </h6>
-                        <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text bg-dark border-secondary">R$</span>
-                            <input id="piso" type="number" placeholder="Valor do Piso" class="form-control bg-dark border-secondary text-light">
-                            <input id="horas" type="number" placeholder="Horas" class="form-control bg-dark border-secondary text-light" style="max-width: 80px;">
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2 p-2 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
-                            <div class="small">Total: <span id="res-total" class="fw-bold text-success">0,00</span></div>
-                            <div class="small">Hora: <span id="res-hora" class="fw-bold text-info">0,00</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card h-100 bg-secondary bg-opacity-10 border-warning border-opacity-25 glass-card">
-                    <div class="card-body p-3">
-                        <h6 class="card-title text-warning small fw-bold mb-3">
-                            <i class="fas fa-user-tie me-2"></i>BUSCA DE FISCAL
-                        </h6>
-                        <select id="fiscal-select" class="form-select form-select-sm bg-dark border-secondary text-light mb-2" disabled>
-                            <option>Carregando cidades...</option>
-                        </select>
-                        <div id="fiscal-res" class="small text-muted p-2 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25 min-h-35">
-                            Aguardando seleção...
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card h-100 bg-secondary bg-opacity-10 border-success border-opacity-25 glass-card">
-                    <div class="card-body p-3">
-                        <h6 class="card-title text-success small fw-bold mb-3">
-                            <i class="fab fa-github me-2"></i>NUVEM (SYNC)
-                        </h6>
-                        <div class="input-group input-group-sm mb-2">
-                            <input id="gh-repo" type="text" placeholder="Repositório" class="form-control bg-dark border-secondary text-light">
-                            <input id="gh-token" type="password" placeholder="Token" class="form-control bg-dark border-secondary text-light">
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button onclick="MainApp.cloudBackup()" class="btn btn-sm btn-success flex-grow-1 shadow-sm">
-                                <i class="fas fa-cloud-upload-alt me-1"></i>Backup
-                            </button>
-                            <button onclick="MainApp.cloudRestore()" class="btn btn-sm btn-outline-success flex-grow-1">
-                                <i class="fas fa-sync-alt me-1"></i>Sincronizar
-                            </button>
-                        </div>
-                        <div id="gh-status" class="x-small text-muted mt-2 text-center">
-                            Sincronização não iniciada
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <main class="container-fluid px-3">
         <!-- Grid de Cards Dinâmicos -->
-        <div id="main-grid" class="cards-grid">
-            <!-- Os cards serão injetados aqui -->
-        </div>
+        <div id="main-grid" class="cards-grid"></div>
 
+        <!-- Ferramentas Fixas ao Final -->
+        <div class="row g-2 mt-2 mb-4">
+            <div class="col-md-4">
+                <div class="tool-box border-info">
+                    <h6 class="small fw-bold text-info mb-2">Calculadora de Piso</h6>
+                    <div class="d-flex gap-1">
+                        <input id="piso" type="number" placeholder="Valor" class="form-control form-control-sm bg-dark text-light border-secondary">
+                        <input id="horas" type="number" placeholder="Hrs" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width: 70px;">
+                    </div>
+                    <div class="mt-2 x-small">Total: R$ <span id="res-total" class="fw-bold text-success">0</span> | Hora: R$ <span id="res-hora" class="fw-bold text-info">0</span></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="tool-box border-warning">
+                    <h6 class="small fw-bold text-warning mb-2">Busca de Fiscal</h6>
+                    <select id="fiscal-select" class="form-select form-select-sm bg-dark text-light border-secondary" disabled>
+                        <option>Carregando...</option>
+                    </select>
+                    <div id="fiscal-res" class="mt-2 x-small text-muted">Aguardando...</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="tool-box border-success">
+                    <h6 class="small fw-bold text-success mb-2">Nuvem (GitHub)</h6>
+                    <div class="d-flex gap-1 mb-1">
+                        <input id="gh-repo" type="text" placeholder="Repositório" class="form-control form-control-sm bg-dark text-light border-secondary">
+                        <input id="gh-token" type="password" placeholder="Token" class="form-control form-control-sm bg-dark text-light border-secondary">
+                    </div>
+                    <div class="d-flex gap-1">
+                        <button onclick="MainApp.cloudBackup()" class="btn btn-xs btn-success flex-grow-1">Backup</button>
+                        <button onclick="MainApp.cloudRestore()" class="btn btn-xs btn-outline-success flex-grow-1">Sincronizar</button>
+                    </div>
+                    <div id="gh-status" class="mt-1 x-small text-muted">Não conectado</div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Botão Flutuante (Add) -->
-    <button class="btn-add btn btn-success shadow-lg" onclick="MainApp.openCreate()" title="Novo Card">
-        <i class="fas fa-plus"></i>
-    </button>
+    <button class="btn-add shadow" onclick="MainApp.openCreate()">+</button>
 
     <!-- Bootstrap 5 Modal -->
-    <div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
+    <div class="modal fade" id="cardModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark border-secondary glass-card shadow-lg">
-                <div class="modal-header border-secondary-subtle">
-                    <h6 class="modal-title fw-bold" id="cardModalLabel">
-                        <i class="fas fa-edit me-2 text-success"></i>GERENCIAR CARD
-                    </h6>
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header py-2 border-secondary">
+                    <h6 class="modal-title small fw-bold">Editar Card</h6>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body p-3">
                     <input id="m-id" type="hidden">
+                    <input id="m-title" type="text" placeholder="Título" class="form-control form-control-sm bg-dark text-light border-secondary mb-2">
                     
-                    <div class="mb-3">
-                        <label class="form-label small text-muted">Título do Card</label>
-                        <input id="m-title" type="text" placeholder="Ex: Pendência de Quebra" class="form-control bg-dark border-secondary text-light border-opacity-50 shadow-none">
-                    </div>
-
-                    <div class="row g-2 mb-3">
+                    <div class="row g-2 mb-2">
                         <div class="col-6">
-                            <label class="form-label small text-muted">Tipo de Ação</label>
-                            <select id="m-type" class="form-select bg-dark border-secondary text-light border-opacity-50 shadow-none" onchange="MainApp.toggleLinkField()">
+                            <select id="m-type" class="form-select form-select-sm bg-dark text-light border-secondary" onchange="MainApp.toggleLinkField()">
                                 <option value="copy">Copiável (Texto)</option>
                                 <option value="link">Link Externo</option>
                                 <option value="pdf">Arquivo PDF</option>
                             </select>
                         </div>
                         <div class="col-6">
-                            <label class="form-label small text-muted">Cor de Destaque</label>
-                            <select id="m-color" class="form-select bg-dark border-secondary text-light border-opacity-50 shadow-none">
-                                <option value="light">Padrão</option>
-                                <option value="danger">Vermelho</option>
-                                <option value="warning">Amarelo</option>
-                                <option value="info">Azul</option>
-                                <option value="success">Verde</option>
+                            <select id="m-color" class="form-select form-select-sm bg-dark text-light border-secondary">
+                                <option value="light">Cor: Padrão</option>
+                                <option value="danger">Cor: Vermelho</option>
+                                <option value="warning">Cor: Amarelo</option>
+                                <option value="info">Cor: Azul</option>
+                                <option value="success">Cor: Verde</option>
                             </select>
                         </div>
                     </div>
 
-                    <div id="link-field-group" class="mb-3 d-none">
-                        <label class="form-label small text-muted">URL / Caminho</label>
-                        <input id="m-link" type="text" placeholder="https://..." class="form-control bg-dark border-secondary text-light border-opacity-50 shadow-none">
+                    <div id="link-field-group" class="d-none mb-2">
+                        <input id="m-link" type="text" placeholder="URL do Link ou Caminho do PDF" class="form-control form-control-sm bg-dark text-light border-secondary">
                     </div>
 
-                    <div class="row g-2 mb-3">
-                        <div class="col-4">
-                            <label class="form-label small text-muted">Local</label>
-                            <input id="m-local" type="text" placeholder="Ex: 46" class="form-control bg-dark border-secondary text-light border-opacity-50 shadow-none">
-                        </div>
-                        <div class="col-4">
-                            <label class="form-label small text-muted">Situação</label>
-                            <input id="m-sit" type="text" placeholder="Ex: 25" class="form-control bg-dark border-secondary text-light border-opacity-50 shadow-none">
-                        </div>
-                        <div class="col-4">
-                            <label class="form-label small text-muted">Julgam.</label>
-                            <input id="m-julgamento" type="text" placeholder="Ex: 18" class="form-control bg-dark border-secondary text-light border-opacity-50 shadow-none">
-                        </div>
+                    <div class="row g-1 mb-2">
+                        <div class="col-4"><input id="m-local" type="text" placeholder="Local" class="form-control form-control-sm bg-dark text-light border-secondary"></div>
+                        <div class="col-4"><input id="m-sit" type="text" placeholder="Situação" class="form-control form-control-sm bg-dark text-light border-secondary"></div>
+                        <div class="col-4"><input id="m-julgamento" type="text" placeholder="Julgamento" class="form-control form-control-sm bg-dark text-light border-secondary"></div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label small text-muted">Conteúdo do Parecer</label>
-                        <textarea id="m-content" rows="4" placeholder="Descreva o parecer..." class="form-control bg-dark border-secondary text-light border-opacity-50 shadow-none"></textarea>
+                    <textarea id="m-content" rows="4" placeholder="Conteúdo" class="form-control form-control-sm bg-dark text-light border-secondary mb-2"></textarea>
+                    
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" onclick="saveCard()" class="btn btn-sm btn-success px-3">Salvar</button>
                     </div>
-                </div>
-                <div class="modal-footer border-secondary-subtle">
-                    <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="saveCard()" class="btn btn-sm btn-success px-4 shadow-sm">
-                        <i class="fas fa-save me-1"></i>Salvar Alterações
-                    </button>
                 </div>
             </div>
         </div>

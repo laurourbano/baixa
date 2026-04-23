@@ -1,157 +1,121 @@
-:root {
-    --bg-dark: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --accent-success: #10b981;
-    --accent-info: #0ea5e9;
-    --accent-warning: #f59e0b;
-    --accent-danger: #ef4444;
-}
+body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #f3f4f6; }
 
-body { 
-    background: var(--bg-dark); 
-    font-family: 'Inter', sans-serif; 
-    color: #f8fafc;
-    -webkit-font-smoothing: antialiased;
-}
+.container-fluid { max-width: 1400px; }
 
-.backdrop-blur {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-.glass-card {
-    background: var(--card-bg) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Ferramentas ao fundo */
+.tool-box { 
+    background: #1f2937; 
+    padding: 10px; 
+    border-radius: 8px; 
+    border-left: 4px solid #374151;
+    margin-bottom: 10px;
 }
 
 /* Grid de Cards */
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
 }
 
 .card-custom {
-    cursor: pointer;
+    background: #1f2937; 
+    border-radius: 8px; 
+    padding: 8px;
+    display: flex; 
+    flex-direction: column; 
+    cursor: pointer; 
+    transition: 0.2s;
+    border: 1px solid #374151;
     position: relative;
-    overflow: hidden;
 }
 
-.card-custom:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.2) !important;
-}
+.card-custom:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
 
-.card-custom .card-header-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0.75rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid var(--border-color);
+.card-head { 
+    display: flex; 
+    justify-content: space-between; 
+    color: #9ca3af; 
+    font-size: 0.8rem; 
+    margin-bottom: 4px;
 }
 
 .card-custom legend { 
-    font-size: 0.85rem; 
-    font-weight: 700; 
-    padding: 0.5rem; 
+    font-size: 0.75rem; 
+    font-weight: bold; 
+    padding: 0; 
     margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-    color: #f1f5f9;
+    width: 100%; 
+    color: #e5e7eb; 
+    text-align: center; 
+    border: none;
 }
 
 .card-custom textarea {
     background: transparent; 
     border: none; 
-    font-size: 0.7rem;
-    color: #cbd5e1; 
+    font-size: 0.58rem;
+    color: #d1d5db; 
     resize: none; 
     overflow: hidden; 
-    height: 80px; 
+    height: 45px; 
     pointer-events: none;
+    padding: 4px 0;
     width: 100%;
-    line-height: 1.5;
-    padding: 0.5rem;
+    margin-bottom: 4px;
 }
 
 .btn-copy-custom {
-    border: 1px solid rgba(255, 255, 255, 0.1); 
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--accent-success); 
-    border-radius: 6px; 
-    font-size: 0.75rem; 
-    font-weight: 600;
-    padding: 0.5rem; 
+    margin-top: auto; 
+    border: 1px solid #4b5563; 
+    background: transparent;
+    color: #4ade80; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    padding: 6px; 
     cursor: pointer;
-    transition: all 0.2s;
     width: 100%;
 }
 
-.btn-copy-custom:hover {
-    background: var(--accent-success);
-    color: white;
+/* Modal */
+.modal-content { border-radius: 12px; }
+
+.btn-add {
+    position: fixed; bottom: 25px; right: 25px; width: 45px; height: 45px;
+    border-radius: 50%; background: #22c55e; border: none; color: white;
+    font-size: 1.5rem; cursor: pointer; z-index: 1000;
 }
 
-/* Info Line */
+.handle { cursor: grab; }
+.actions i { cursor: pointer; margin-left: 8px; font-size: 0.8rem; }
+
+/* Cores de Borda */
+.border-danger-custom { border-color: #ef4444 !important; }
+.border-warning-custom { border-color: #f59e0b !important; }
+.border-info-custom { border-color: #0ea5e9 !important; }
+.border-success-custom { border-color: #10b981 !important; }
+.border-light-custom { border-color: #4b5563 !important; }
+
 .info-line {
     font-size: 0.65rem;
-    color: #94a3b8;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 0.4rem 0.6rem;
+    color: #9ca3af;
+    margin: 4px 0;
+    background: rgba(0,0,0,0.2);
+    padding: 2px 5px;
     border-radius: 4px;
-    margin: 0.5rem;
     display: flex;
     justify-content: space-around;
 }
+.info-line b { color: #f3f4f6; }
 
-.info-line b { color: #f1f5f9; font-weight: 600; }
+.x-small { font-size: 0.7rem; }
+.btn-xs { padding: 2px 6px; font-size: 0.75rem; }
 
-/* Botão Flutuante */
-.btn-add {
-    position: fixed; 
-    bottom: 2rem; 
-    right: 2rem; 
-    width: 56px; 
-    height: 56px;
-    border-radius: 28px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem; 
-    z-index: 1030;
-    transition: transform 0.2s;
-}
+/* Links */
+.link-card-body { padding-top: 4px; }
+.link-card-body p { font-size: 0.7rem; color: #9ca3af; margin-bottom: 8px; }
 
-.btn-add:hover {
-    transform: scale(1.1) rotate(90deg);
-}
-
-.handle { cursor: grab; color: #64748b; font-size: 1.1rem; }
-.actions i { cursor: pointer; color: #64748b; transition: color 0.2s; font-size: 0.9rem; }
-.actions i:hover { color: #f8fafc; }
-
-/* Cores de Borda Custom */
-.border-danger-custom { border-left: 4px solid var(--accent-danger) !important; }
-.border-warning-custom { border-left: 4px solid var(--accent-warning) !important; }
-.border-info-custom { border-left: 4px solid var(--accent-info) !important; }
-.border-success-custom { border-left: 4px solid var(--accent-success) !important; }
-.border-light-custom { border-left: 4px solid #64748b !important; }
-
-.min-h-35 { min-height: 35px; }
-.x-small { font-size: 0.65rem; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
 
 
 
