@@ -34,58 +34,57 @@ const MainApp = (function() {
         // Inicializa o modal do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
         
-        // Carrega dados do backup local e mescla com o estado atual
+        // Carrega dados do backup local e mescla de forma segura
         try {
             const response = await fetch('cards_backup.json');
             if (response.ok) {
                 const backupData = await response.json();
-                
-                // 1. Mesclar customs: evita duplicados por ID ou Título
                 const backupCustoms = backupData.customs || [];
+                
                 backupCustoms.forEach(bCard => {
-                    // Procura por ID ou por Título idêntico
-                    const bTitle = bCard.title.toLowerCase().trim();
-                    const existing = state.customs.find(c => 
-                        c.id === bCard.id || 
-                        c.title.toLowerCase().trim() === bTitle
-                    );
+                    // Busca por ID exato
+                    let existing = state.customs.find(c => c.id === bCard.id);
+                    
+                    // Se não achou por ID, busca por Título + Conteúdo (mesmo card, ID diferente)
+                    if (!existing) {
+                        existing = state.customs.find(c => 
+                            c.title.toLowerCase().trim() === bCard.title.toLowerCase().trim() &&
+                            c.content.trim() === bCard.content.trim()
+                        );
+                    }
 
                     if (existing) {
-                        // Preenche campos faltantes mas mantém dados do usuário
-                        existing.local = existing.local || bCard.local || '';
-                        existing.sit = existing.sit || bCard.sit || '';
-                        existing.julgamento = existing.julgamento || bCard.julgamento || '';
-                        existing.color = existing.color || bCard.color || 'light';
-                        // Se o ID era temporário, atualiza para o ID padrão do backup
-                        if (existing.id.startsWith('custom-') && bCard.id) {
-                            existing.id = bCard.id;
-                        }
+                        // Preenche campos faltantes sem sobrescrever o que o usuário já tem
+                        if (existing.local === undefined || existing.local === '') existing.local = bCard.local || '';
+                        if (existing.sit === undefined || existing.sit === '') existing.sit = bCard.sit || '';
+                        if (existing.julgamento === undefined || existing.julgamento === '') existing.julgamento = bCard.julgamento || '';
+                        if (!existing.color || existing.color === 'light') existing.color = bCard.color || 'light';
+                        
+                        // IMPORTANTE: NÃO alteramos o ID para não quebrar state.edits (cores personalizadas)
                     } else if (!state.deleted.includes(bCard.id)) {
+                        // Se não existe de forma alguma, adiciona como novo
                         state.customs.push(bCard);
                     }
                 });
 
-                // 2. Mesclar Edits (Apenas se não existirem localmente)
-                if (backupData.edits) {
-                    for (const [id, editData] of Object.entries(backupData.edits)) {
-                        if (!state.edits[id]) {
-                            state.edits[id] = editData;
-                        }
+                // Tenta recuperar cores de state.edits que podem ter ficado "órfãs" (opcional, mas seguro)
+                state.customs.forEach(card => {
+                    if (state.edits[card.id]) {
+                        const edit = state.edits[card.id];
+                        if (edit.color) card.color = edit.color;
+                        if (edit.local) card.local = edit.local;
+                        if (edit.sit) card.sit = edit.sit;
+                        if (edit.julgamento) card.julgamento = edit.julgamento;
                     }
-                }
-
-                // 3. Deduplicação final por Título (limpeza de segurança)
-                const seenTitles = new Set();
-                state.customs = state.customs.filter(card => {
-                    const t = card.title.toLowerCase().trim();
-                    if (seenTitles.has(t)) return false;
-                    seenTitles.add(t);
-                    return true;
                 });
 
-                // 4. Se a ordem estiver vazia ou muito curta, usa a do backup
+                // Se a ordem estiver vazia ou muito curta, tenta restaurar
                 if (state.order.length < state.customs.length && backupData.order) {
-                    state.order = backupData.order;
+                    const newOrder = [...state.order];
+                    backupData.order.forEach(id => {
+                        if (!newOrder.includes(id)) newOrder.push(id);
+                    });
+                    state.order = newOrder;
                 }
                 
                 save();
