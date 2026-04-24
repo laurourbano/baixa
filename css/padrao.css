@@ -12,6 +12,17 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     margin-bottom: 10px;
 }
 
+/* Divisor entre cards e ferramentas */
+.tools-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(17, 24, 39, 0.5);
+    backdrop-filter: blur(5px);
+    margin-top: 0 !important;
+    padding-top: 10px;
+    box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
 /* Grid de Cards Compacto */
 .cards-grid {
     display: grid;
