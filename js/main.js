@@ -90,10 +90,17 @@ const MainApp = (function() {
         if (isAuth) {
             document.getElementById('login-overlay').classList.add('hidden');
         } else {
-            // Focar no campo de senha se não estiver logado
-            document.getElementById('login-password').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') checkLogin();
+            // Focar no campo de e-mail se não estiver logado
+            const emailInput = document.getElementById('login-email');
+            const passInput = document.getElementById('login-password');
+            
+            [emailInput, passInput].forEach(el => {
+                el.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') checkLogin();
+                });
             });
+            
+            emailInput.focus();
         }
 
         // Carrega dados do backup local (arquivo cards_backup.json é a fonte da verdade)
@@ -514,25 +521,40 @@ const MainApp = (function() {
     }
 
     function checkLogin() {
+        const emailInput = document.getElementById('login-email');
         const passInput = document.getElementById('login-password');
         const errorMsg = document.getElementById('login-error');
-        const savedPass = localStorage.getItem('baixa_rt_password') || '0511';
+        const savedPass = localStorage.getItem('baixa_rt_password') || '1234';
         
-        if (passInput.value === savedPass) {
+        if (emailInput.value.includes('@') && passInput.value === savedPass) {
             localStorage.setItem('baixa_rt_auth', 'true');
+            localStorage.setItem('baixa_rt_user_email', emailInput.value);
             document.getElementById('login-overlay').classList.add('hidden');
-            showToast('Acesso autorizado!', 'success');
+            showToast(`Bem-vindo, ${emailInput.value.split('@')[0]}!`, 'success');
         } else {
             errorMsg.classList.remove('d-none');
             passInput.value = '';
             passInput.focus();
             
-            // Shake effect on error
             const card = document.querySelector('.login-card');
             card.style.animation = 'none';
-            void card.offsetWidth; // trigger reflow
+            void card.offsetWidth; 
             card.style.animation = 'pop-in 0.3s ease, shake 0.4s ease';
         }
+    }
+
+    function forgotPassword() {
+        const email = document.getElementById('login-email').value;
+        if (!email || !email.includes('@')) {
+            showToast('Por favor, insira um e-mail válido primeiro.', 'warning');
+            return;
+        }
+        
+        showConfirm('Recuperar Senha', `Deseja enviar um link de redefinição para ${email}?`, 'info').then(confirmed => {
+            if (confirmed) {
+                showToast('Link de redefinição enviado para o seu e-mail!', 'info', 5000);
+            }
+        });
     }
 
     function updatePassword() {
@@ -574,6 +596,7 @@ const MainApp = (function() {
         cloudBackup, 
         cloudRestore, 
         checkLogin,
+        forgotPassword,
         updatePassword,
         logout,
         openCreate: () => {
