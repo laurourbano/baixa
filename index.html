@@ -60,42 +60,46 @@
     </header>
 
     <main class="container-fluid px-3 pb-0">
-        <!-- Grid de Cards Dinâmicos -->
-        <div id="main-grid" class="cards-grid"></div>
+        <div class="dashboard-panel shadow-sm">
+            <!-- Grid de Cards Dinâmicos -->
+            <div id="main-grid" class="cards-grid"></div>
 
-        <!-- Ferramentas Fixas ao Final -->
-        <div class="row g-2 mt-0 mb-2 tools-footer">
-            <div class="col-md-4">
-                <div class="tool-box border-info">
-                    <h6 class="small fw-bold text-info mb-2">Calculadora de Piso</h6>
-                    <div class="d-flex gap-1">
-                        <input id="piso" type="number" placeholder="Valor" class="form-control form-control-sm bg-dark text-light border-secondary">
-                        <input id="horas" type="number" placeholder="Hrs" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width: 70px;">
+            <!-- Ferramentas Integradas -->
+            <div class="tools-area">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <div class="tool-box border-info">
+                            <h6 class="small fw-bold text-info mb-2">Calculadora de Piso</h6>
+                            <div class="d-flex gap-1">
+                                <input id="piso" type="number" placeholder="Valor" class="form-control form-control-sm bg-dark text-light border-secondary">
+                                <input id="horas" type="number" placeholder="Hrs" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width: 70px;">
+                            </div>
+                            <div class="mt-2 x-small">Total: R$ <span id="res-total" class="fw-bold text-success">0</span> | Hora: R$ <span id="res-hora" class="fw-bold text-info">0</span></div>
+                        </div>
                     </div>
-                    <div class="mt-2 x-small">Total: R$ <span id="res-total" class="fw-bold text-success">0</span> | Hora: R$ <span id="res-hora" class="fw-bold text-info">0</span></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="tool-box border-warning">
-                    <h6 class="small fw-bold text-warning mb-2">Busca de Fiscal</h6>
-                    <select id="fiscal-select" class="form-select form-select-sm bg-dark text-light border-secondary" disabled>
-                        <option>Carregando...</option>
-                    </select>
-                    <div id="fiscal-res" class="mt-2 x-small text-muted">Aguardando...</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="tool-box border-success">
-                    <h6 class="small fw-bold text-success mb-2">Nuvem (GitHub)</h6>
-                    <div class="d-flex gap-1 mb-1">
-                        <input id="gh-repo" type="text" placeholder="Repositório" class="form-control form-control-sm bg-dark text-light border-secondary">
-                        <input id="gh-token" type="password" placeholder="Token" class="form-control form-control-sm bg-dark text-light border-secondary">
+                    <div class="col-md-4">
+                        <div class="tool-box border-warning">
+                            <h6 class="small fw-bold text-warning mb-2">Busca de Fiscal</h6>
+                            <select id="fiscal-select" class="form-select form-select-sm bg-dark text-light border-secondary" disabled>
+                                <option>Carregando...</option>
+                            </select>
+                            <div id="fiscal-res" class="mt-2 x-small text-muted">Aguardando...</div>
+                        </div>
                     </div>
-                    <div class="d-flex gap-1">
-                        <button onclick="MainApp.cloudBackup()" class="btn btn-xs btn-success flex-grow-1">Backup</button>
-                        <button onclick="MainApp.cloudRestore()" class="btn btn-xs btn-outline-success flex-grow-1">Sincronizar</button>
+                    <div class="col-md-4">
+                        <div class="tool-box border-success">
+                            <h6 class="small fw-bold text-success mb-2">Nuvem (GitHub)</h6>
+                            <div class="d-flex gap-1 mb-1">
+                                <input id="gh-repo" type="text" placeholder="Repositório" class="form-control form-control-sm bg-dark text-light border-secondary">
+                                <input id="gh-token" type="password" placeholder="Token" class="form-control form-control-sm bg-dark text-light border-secondary">
+                            </div>
+                            <div class="d-flex gap-1">
+                                <button onclick="MainApp.cloudBackup()" class="btn btn-xs btn-success flex-grow-1">Backup</button>
+                                <button onclick="MainApp.cloudRestore()" class="btn btn-xs btn-outline-success flex-grow-1">Sincronizar</button>
+                            </div>
+                            <div id="gh-status" class="mt-1 x-small text-muted">Não conectado</div>
+                        </div>
                     </div>
-                    <div id="gh-status" class="mt-1 x-small text-muted">Não conectado</div>
                 </div>
             </div>
         </div>
