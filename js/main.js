@@ -14,6 +14,71 @@ const MainApp = (function() {
     const actualDate = new Date();
     const formattedDate = actualDate.toLocaleDateString('pt-BR');
 
+    /* ── UI Helpers (Standardized Popups) ────────────────── */
+    function showToast(message, type = 'success', duration = 3000) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `custom-toast toast-${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            warning: 'fa-exclamation-triangle',
+            danger: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
+
+        toast.innerHTML = `
+            <i class="fas ${icons[type]} toast-icon"></i>
+            <span class="toast-message small">${message}</span>
+        `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-20px) scale(0.9)';
+            toast.style.transition = '0.3s ease-out';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+
+    function showConfirm(title, message, type = 'warning') {
+        return new Promise((resolve) => {
+            const modalEl = document.getElementById('confirmModal');
+            const modal = new bootstrap.Modal(modalEl);
+            
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            
+            const iconEl = document.getElementById('confirm-icon');
+            const icons = {
+                warning: '<i class="fas fa-question-circle fa-3x text-warning"></i>',
+                danger: '<i class="fas fa-exclamation-triangle fa-3x text-danger"></i>',
+                info: '<i class="fas fa-info-circle fa-3x text-info"></i>'
+            };
+            iconEl.innerHTML = icons[type] || icons.warning;
+
+            const yesBtn = document.getElementById('confirm-btn-yes');
+            
+            // Limpa event listeners antigos
+            const newYesBtn = yesBtn.cloneNode(true);
+            yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
+            
+            newYesBtn.onclick = () => {
+                modal.hide();
+                resolve(true);
+            };
+
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                resolve(false);
+            }, { once: true });
+
+            modal.show();
+        });
+    }
+
     // Os dados agora vêm exclusivamente do arquivo cards_backup.json
 
     async function init() {
@@ -144,6 +209,7 @@ const MainApp = (function() {
         if (status) {
             status.innerHTML = '<span class="text-warning fw-bold"><i class="fas fa-exclamation-triangle me-1"></i>Alterações pendentes! Faça backup.</span>';
         }
+        showToast('Alteração detectada! Não esqueça do backup.', 'warning', 4000);
     }
 
     function edit(id) {
@@ -165,11 +231,13 @@ const MainApp = (function() {
         window.bsModal.show();
     }
 
-    function del(id) {
-        if (confirm('Excluir este card permanentemente?')) {
+    async function del(id) {
+        const confirmed = await showConfirm('Excluir Card', 'Deseja excluir este card permanentemente?', 'danger');
+        if (confirmed) {
             state.deleted.push(id);
             render();
             notifyChange();
+            showToast('Card removido com sucesso.', 'info');
         }
     }
 
@@ -384,6 +452,7 @@ const MainApp = (function() {
 
             if (res.ok) {
                 status.textContent = 'Backup ok! ' + new Date().toLocaleTimeString();
+                showToast('Backup realizado com sucesso no GitHub!', 'success');
                 localStorage.setItem('gh_token', token);
                 localStorage.setItem('gh_repo', repo);
             } else {
@@ -414,10 +483,12 @@ const MainApp = (function() {
                 const data = await res.json();
                 const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
                 
-                if (confirm('Substituir cards locais pelos da nuvem?')) {
+                const confirmed = await showConfirm('Restaurar Backup', 'Isso irá substituir todos os seus cards locais pelos da nuvem. Continuar?', 'info');
+                if (confirmed) {
                     Object.assign(state, json);
                     render();
                     status.textContent = 'Sincronizado! ' + new Date().toLocaleTimeString();
+                    showToast('Dados sincronizados com sucesso!', 'success');
                     localStorage.setItem('gh_token', token);
                     localStorage.setItem('gh_repo', repo);
                 } else {
