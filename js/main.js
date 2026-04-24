@@ -28,57 +28,39 @@ const MainApp = (function() {
 
 
     // CONTEÚDO COMPLETO RECUPERADO
-    const INITIAL_CARDS = [
-        { 
-            id: 'c1', title: 'Pendência Transferência', color: 'danger', 
-            local: '46', sit: '25', julgamento: '18',
-            content: 'Pendência de Transferência\nO que é?\n    Seu protocolo está PENDENTE por falta do registro de transferência na carteira de trabalho. (declarações simples não são mais aceitas).\nComo resolver?\n    Envie a Carteira de Trabalho com a transferência OU o Extrato do e-Social completo (com data da alteração e dados da troca de CNPJ).\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.\nPrazo para resposta: 1 dia útil.\nOnde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícone "caneta".' 
-        },
-        { 
-            id: 'c2', title: 'Pendência Quebra de vínculo', color: 'warning', 
-            local: '46', sit: '25', julgamento: '18',
-            content: 'Pendência de Quebra de Vínculo\nO que é?\n    Seu protocolo está PENDENTE por falta do comprovante de quebra de vínculo.\nComo resolver?\n    Envie a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.\nPrazo para resposta: 1 dia útil.\nOnde enviar: No protocolo em "protocolos aguardando resposta", clicando no ícone "caneta".' 
-        },
-        { 
-            id: 'c3', title: 'Indeferimento Transferência', color: 'danger', 
-            local: '46', sit: '3', julgamento: '3',
-            content: 'Indeferimento por falta de Transferência\nO que é?\n    Seu protocolo foi INDEFERIDO por [falta documento de transferência]. (declarações simples não são mais aceitas). O requerimento de baixa de responsabilidade técnica foi negado.\nComo resolver?\n    Inicie um novo requerimento.\nO que enviar?\n    A Carteira de Trabalho com a transferência OU o Extrato do e-Social completo.\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.' 
-        },
-        { 
-            id: 'c4', title: 'Indeferimento Quebra de vínculo', color: 'warning', 
-            local: '46', sit: '3', julgamento: '3',
-            content: 'Indeferimento por falta de Quebra de Vínculo\nO que é?\n    Seu protocolo foi INDEFERIDO por [falta quebra de vinculo]. O requerimento de baixa de responsabilidade técnica foi negado.\nComo resolver?\n    Inicie um novo requerimento com todos os documentos.\nO que enviar?\n    Envie a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nSe ainda não tiver: Envie o formulário de pendência assinado por você e pela empresa, marcando a opção que se compromete a entregar em até 30 dias.' 
-        },
-        { 
-            id: 'c5', title: 'Aguarda Complementação', color: 'info', 
-            local: '46', sit: '25', julgamento: '2',
-            content: `Documento Complementar\nO que é?\n    Sua baixa foi feita, mas há um documento pendente desde [ 00/00/0000 ].\nO que enviar?\n    A Carteira de Trabalho com a transferência OU o Extrato do e-Social completo. OU a Carteira de Trabalho com a baixa OU o Termo de Rescisão completo e assinado. (assinaturas digitais precisam ser verificáveis).\nPrazo para responder: 30 dias para enviar o comprovante de quebra de vínculo ou transferência.\nOnde enviar: Acesse o CRF em Casa, vá em "Protocolos Aguardando Resposta" e anexe o documento.`
-        },
-        { id: 'c6', title: 'Desistência', color: 'light', local: '46', sit: '2', julgamento: '2', content: 'Procedimento trata-se de desistência do ingresso uma vez que ainda seria apreciado pelo plenário.\nDesistência efetivada.' },
-        { id: 'c7', title: 'Tardia', color: 'warning', local: '11', sit: '6', julgamento: '11', content: 'Profissional protocolou baixa em prazo superior a 30 dias.' },
-        { id: 'c8', title: '30 dias', color: 'danger', local: '11', sit: '6', julgamento: '11', content: 'Não apresentou quebra de vínculo para finalizar a baixa no prazo de 30 dias.' },
-        { id: 'c9', title: 'Duplicado', color: 'light', local: '46', sit: '4', julgamento: '8', content: 'Pedimos a gentileza de não realizar mais de um protocolo para o mesmo procedimento e agradecemos a compreensão.\nCaso o procedimento seja aberto para correção deverá responder o mesmo protocolo, através do acesso em \'protocolos aguardando resposta\'.' },
-        { id: 'c10', title: 'Sem andamento', color: 'light', local: '46', sit: '13', julgamento: '8', content: 'Protocolo arquivado por estar sem andamento.' },
-        { id: 'c11', title: 'Indeferimento de DAP', color: 'light', local: '46', sit: '3', julgamento: '3', content: 'Indeferido protocolo de DAP por estar em desacordo com o art. 3º da Deliberação 1004/21.' },
-        { id: 'c12', title: 'Nissei (Endereço)', color: 'light', content: 'RUA ACRE 205 – ÁGUA VERDE\n80.620-040 - CURITIBA - PARANÁ' },
-        { id: 'c13', title: 'Morifarma (Endereço)', color: 'light', content: 'RUA AMAURY LANGE SILVÉRIO 33 – PILARZINHO\n82.120-000 - CURITIBA - PARANÁ' },
-        { id: 'c14', title: 'São João (Endereço)', color: 'light', content: 'AVENIDA PERIMETRAL CORONEL JARBAS QUADROS DA SILVA 3701 – SÃO CRISTÓVÃO\n99.064-440 - PASSO FUNDO - RIO GRANDE DO SUL' },
-        { id: 'c15', title: 'Lançamento Status I', color: 'light', content: '9436 - Comunicado / Constatação de desligamento da RT\n9464 - Sem Diretor técnico - com assistência técnica\n9457 - Sem RT - Autuações suspensas temporariamente' },
-        { id: 'c16', title: 'Lançamento Status II', color: 'light', content: '14 - Sem prof com prazo até\n9467 - Sem assistência farmacêutica com prazo até\n19 - Sem prof autuar\n9468 - Sem assistência farmacêutica autuar' },
-        { id: 'c17', title: 'Plano anual de fiscalização', color: 'light', content: 'plano anual de fiscalização', type: 'pdf', link: 'https://crf-pr.org.br/uploads/documento/24780/CCfzSSTrVo4kemWMhnXB9RH027YttX6d.pdf', local: '0', sit: '0', julgamento: '0' },
-        { id: 'c18', title: 'correios', color: 'light', content: 'Correios', type: 'link', link: 'https://meuscorreios.app/sectweblogin.aspx' },
-        { id: 'c19', title: 'intranet crf-pr', color: 'light', content: 'Intranet', type: 'link', link: 'https://intranet.crf-pr.org.br/index.php' },
-        { id: 'c20', title: 'Sei', color: 'light', content: 'SEI', type: 'link', link: 'https://documentos.cff.org.br/sei/controlador.php?acao=painel_controle_visualizar&acao_origem=principal&acao_retorno=principal&inicializando=1&infra_sistema=100000100&infra_unidade_atual=110002144&infra_hash=c581e50330157567f7c18c85c78175fceab8c29963172a8cb0974cb7341e6b3f' },
-        { id: 'c21', title: 'e-Forms', color: 'light', content: 'Formulários digitais', type: 'link', link: 'https://servicos.crf-pr.org.br' },
-        { id: 'c22', title: 'Agendamento', color: 'light', content: 'Agendamento presencial', type: 'link', link: 'https://agendamento.crf-pr.org.br:543/' },
-        { id: 'c23', title: 'crf-pr em casa', color: 'light', content: 'crf-pr em casa', type: 'link', link: 'https://crfemcasa.crf-pr.org.br/crf-em-casa/login.jsf' },
-        { id: 'c24', title: 'smartcore', color: 'light', content: 'crf-pr.9905@SMARTCORE\ns1gm4f0n7', type: 'copy' }
-    ];
+    const INITIAL_CARDS = [];
 
-    function init() {
+    async function init() {
         // Inicializa o modal do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
         
+        // Carrega dados do backup local e mescla com o estado atual
+        try {
+            const response = await fetch('cards_backup.json');
+            if (response.ok) {
+                const backupData = await response.json();
+                
+                // Mesclar customs: apenas adicionar o que não existe no estado atual (por ID)
+                const currentIds = new Set(state.customs.map(c => c.id));
+                const backupCustoms = backupData.customs || [];
+                
+                backupCustoms.forEach(card => {
+                    if (!currentIds.has(card.id) && !state.deleted.includes(card.id)) {
+                        state.customs.push(card);
+                    }
+                });
+
+                // Se a ordem estiver vazia, usa a do backup
+                if (state.order.length === 0 && backupData.order) {
+                    state.order = backupData.order;
+                }
+                
+                save();
+            }
+        } catch (e) {
+            console.error("Erro ao carregar/mesclar backup:", e);
+        }
+
         render();
         setupDragAndDrop();
         initFiscalSearch();
@@ -92,8 +74,6 @@ const MainApp = (function() {
         const savedRepo = localStorage.getItem('gh_repo');
         if (savedRepo) document.getElementById('gh-repo').value = savedRepo;
 
-        const initialTitles = INITIAL_CARDS.map(c => c.title.toLowerCase());
-        state.customs = state.customs.filter(c => !initialTitles.includes(c.title.toLowerCase()));
         save();
     }
 
