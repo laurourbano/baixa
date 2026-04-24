@@ -85,6 +85,17 @@ const MainApp = (function() {
         // Inicializa o modal do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
         
+        // Verifica Autenticação
+        const isAuth = localStorage.getItem('baixa_rt_auth') === 'true';
+        if (isAuth) {
+            document.getElementById('login-overlay').classList.add('hidden');
+        } else {
+            // Focar no campo de senha se não estiver logado
+            document.getElementById('login-password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkLogin();
+            });
+        }
+
         // Carrega dados do backup local (arquivo cards_backup.json é a fonte da verdade)
         try {
             const response = await fetch('cards_backup.json');
@@ -502,20 +513,51 @@ const MainApp = (function() {
         }
     }
 
+    function checkLogin() {
+        const passInput = document.getElementById('login-password');
+        const errorMsg = document.getElementById('login-error');
+        
+        if (passInput.value === '0511') {
+            localStorage.setItem('baixa_rt_auth', 'true');
+            document.getElementById('login-overlay').classList.add('hidden');
+            showToast('Acesso autorizado!', 'success');
+        } else {
+            errorMsg.classList.remove('d-none');
+            passInput.value = '';
+            passInput.focus();
+            
+            // Shake effect on error
+            const card = document.querySelector('.login-card');
+            card.style.animation = 'none';
+            void card.offsetWidth; // trigger reflow
+            card.style.animation = 'pop-in 0.3s ease, shake 0.4s ease';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 
-    return { edit, del, copy, closeModal, toggleLinkField, cloudBackup, cloudRestore, openCreate: () => {
-        document.getElementById('m-id').value = '';
-        document.getElementById('m-title').value = '';
-        document.getElementById('m-content').value = '';
-        document.getElementById('m-color').value = 'light';
-        document.getElementById('m-local').value = '';
-        document.getElementById('m-sit').value = '';
-        document.getElementById('m-julgamento').value = '';
-        document.getElementById('m-type').value = 'copy';
-        document.getElementById('m-link').value = '';
-        document.getElementById('m-showDate').checked = true;
-        toggleLinkField();
-        window.bsModal.show();
-    }};
+    return { 
+        edit, 
+        del, 
+        copy, 
+        closeModal, 
+        toggleLinkField, 
+        cloudBackup, 
+        cloudRestore, 
+        checkLogin,
+        openCreate: () => {
+            document.getElementById('m-id').value = '';
+            document.getElementById('m-title').value = '';
+            document.getElementById('m-content').value = '';
+            document.getElementById('m-color').value = 'light';
+            document.getElementById('m-local').value = '';
+            document.getElementById('m-sit').value = '';
+            document.getElementById('m-julgamento').value = '';
+            document.getElementById('m-type').value = 'copy';
+            document.getElementById('m-link').value = '';
+            document.getElementById('m-showDate').checked = true;
+            toggleLinkField();
+            window.bsModal.show();
+        }
+    };
 })();
