@@ -140,7 +140,7 @@ const MainApp = (function() {
 
     /* ── Renderização ────────────────────────────────────── */
     function render() {
-        const grid = document.getElementById('main-grid');
+        const grid = document.getElementById('dynamic-cards');
         if (!grid) return;
 
         grid.innerHTML = state.customs
