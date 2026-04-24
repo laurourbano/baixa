@@ -516,8 +516,9 @@ const MainApp = (function() {
     function checkLogin() {
         const passInput = document.getElementById('login-password');
         const errorMsg = document.getElementById('login-error');
+        const savedPass = localStorage.getItem('baixa_rt_password') || '0511';
         
-        if (passInput.value === '0511') {
+        if (passInput.value === savedPass) {
             localStorage.setItem('baixa_rt_auth', 'true');
             document.getElementById('login-overlay').classList.add('hidden');
             showToast('Acesso autorizado!', 'success');
@@ -534,6 +535,34 @@ const MainApp = (function() {
         }
     }
 
+    function updatePassword() {
+        const p1 = document.getElementById('new-password').value;
+        const p2 = document.getElementById('confirm-new-password').value;
+        
+        if (!p1 || p1.length < 4) {
+            showToast('A senha deve ter pelo menos 4 dígitos', 'warning');
+            return;
+        }
+        
+        if (p1 !== p2) {
+            showToast('As senhas não coincidem!', 'danger');
+            return;
+        }
+        
+        localStorage.setItem('baixa_rt_password', p1);
+        showToast('Senha alterada com sucesso!', 'success');
+        bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide();
+        
+        // Limpa os campos
+        document.getElementById('new-password').value = '';
+        document.getElementById('confirm-new-password').value = '';
+    }
+
+    function logout() {
+        localStorage.removeItem('baixa_rt_auth');
+        location.reload();
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 
     return { 
@@ -545,6 +574,8 @@ const MainApp = (function() {
         cloudBackup, 
         cloudRestore, 
         checkLogin,
+        updatePassword,
+        logout,
         openCreate: () => {
             document.getElementById('m-id').value = '';
             document.getElementById('m-title').value = '';
