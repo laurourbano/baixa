@@ -99,7 +99,35 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 
 .handle { cursor: grab; font-size: 0.9rem; }
 .card.dragging { opacity: 0.5; transform: scale(0.98); border-style: dashed !important; cursor: grabbing; }
-.actions i { cursor: pointer; margin-left: 8px; font-size: 0.8rem; }
+.actions i { 
+    cursor: pointer; 
+    margin-left: 2px; 
+    font-size: 0.9rem; 
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    color: #9ca3af;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.actions i:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f3f4f6;
+}
+
+.actions .fa-trash:hover {
+    color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.actions .fa-pen:hover {
+    color: #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.15);
+}
 
 .info-line {
     font-size: 0.62rem;

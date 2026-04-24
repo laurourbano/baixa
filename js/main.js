@@ -148,7 +148,7 @@ const MainApp = (function() {
                         <span class="handle">⠿</span>
                         <div class="actions">
                             <i class="fa fa-pen" onclick="MainApp.edit('${card.id}')"></i>
-                            <i class="fa fa-trash text-danger opacity-50" onclick="MainApp.del('${card.id}')"></i>
+                            <i class="fa fa-trash" onclick="MainApp.del('${card.id}')"></i>
                         </div>
                     </div>
                     <legend>${card.title}</legend>
