@@ -40,18 +40,51 @@ const MainApp = (function() {
             if (response.ok) {
                 const backupData = await response.json();
                 
-                // Mesclar customs: apenas adicionar o que não existe no estado atual (por ID)
-                const currentIds = new Set(state.customs.map(c => c.id));
+                // 1. Mesclar customs: evita duplicados por ID ou Título
                 const backupCustoms = backupData.customs || [];
-                
-                backupCustoms.forEach(card => {
-                    if (!currentIds.has(card.id) && !state.deleted.includes(card.id)) {
-                        state.customs.push(card);
+                backupCustoms.forEach(bCard => {
+                    // Procura por ID ou por Título idêntico
+                    const bTitle = bCard.title.toLowerCase().trim();
+                    const existing = state.customs.find(c => 
+                        c.id === bCard.id || 
+                        c.title.toLowerCase().trim() === bTitle
+                    );
+
+                    if (existing) {
+                        // Preenche campos faltantes mas mantém dados do usuário
+                        existing.local = existing.local || bCard.local || '';
+                        existing.sit = existing.sit || bCard.sit || '';
+                        existing.julgamento = existing.julgamento || bCard.julgamento || '';
+                        existing.color = existing.color || bCard.color || 'light';
+                        // Se o ID era temporário, atualiza para o ID padrão do backup
+                        if (existing.id.startsWith('custom-') && bCard.id) {
+                            existing.id = bCard.id;
+                        }
+                    } else if (!state.deleted.includes(bCard.id)) {
+                        state.customs.push(bCard);
                     }
                 });
 
-                // Se a ordem estiver vazia, usa a do backup
-                if (state.order.length === 0 && backupData.order) {
+                // 2. Mesclar Edits (Apenas se não existirem localmente)
+                if (backupData.edits) {
+                    for (const [id, editData] of Object.entries(backupData.edits)) {
+                        if (!state.edits[id]) {
+                            state.edits[id] = editData;
+                        }
+                    }
+                }
+
+                // 3. Deduplicação final por Título (limpeza de segurança)
+                const seenTitles = new Set();
+                state.customs = state.customs.filter(card => {
+                    const t = card.title.toLowerCase().trim();
+                    if (seenTitles.has(t)) return false;
+                    seenTitles.add(t);
+                    return true;
+                });
+
+                // 4. Se a ordem estiver vazia ou muito curta, usa a do backup
+                if (state.order.length < state.customs.length && backupData.order) {
                     state.order = backupData.order;
                 }
                 
