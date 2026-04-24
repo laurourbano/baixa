@@ -136,6 +136,14 @@ const MainApp = (function() {
 
         closeModal();
         render();
+        notifyChange();
+    }
+
+    function notifyChange() {
+        const status = document.getElementById('gh-status');
+        if (status) {
+            status.innerHTML = '<span class="text-warning fw-bold"><i class="fas fa-exclamation-triangle me-1"></i>Alterações pendentes! Faça backup.</span>';
+        }
     }
 
     function edit(id) {
@@ -161,6 +169,7 @@ const MainApp = (function() {
         if (confirm('Excluir este card permanentemente?')) {
             state.deleted.push(id);
             render();
+            notifyChange();
         }
     }
 
@@ -293,6 +302,7 @@ const MainApp = (function() {
                 currentIds.splice(toIdx, 0, currentIds.splice(fromIdx, 1)[0]);
                 state.order = currentIds;
                 render();
+                notifyChange();
             }
         };
         grid.ondragstart = e => {
