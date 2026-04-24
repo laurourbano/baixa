@@ -543,7 +543,8 @@ const MainApp = (function() {
         }
     }
 
-    function forgotPassword() {
+    function forgotPassword(e) {
+        if (e) e.preventDefault();
         const email = document.getElementById('login-email').value;
         if (!email || !email.includes('@')) {
             showToast('Por favor, insira um e-mail válido primeiro.', 'warning');
