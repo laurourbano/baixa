@@ -20,63 +20,23 @@ const MainApp = (function() {
         // Inicializa o modal do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
         
-        // Carrega dados do backup local e mescla de forma segura
+        // Carrega dados do backup local (arquivo cards_backup.json é a fonte da verdade)
         try {
             const response = await fetch('cards_backup.json');
             if (response.ok) {
                 const backupData = await response.json();
-                const backupCustoms = backupData.customs || [];
                 
-                backupCustoms.forEach(bCard => {
-                    // Busca por ID exato
-                    let existing = state.customs.find(c => c.id === bCard.id);
-                    
-                    // Se não achou por ID, busca por Título + Conteúdo (mesmo card, ID diferente)
-                    if (!existing) {
-                        existing = state.customs.find(c => 
-                            c.title.toLowerCase().trim() === bCard.title.toLowerCase().trim() &&
-                            c.content.trim() === bCard.content.trim()
-                        );
-                    }
-
-                    if (existing) {
-                        // Preenche campos faltantes sem sobrescrever o que o usuário já tem
-                        if (existing.local === undefined || existing.local === '') existing.local = bCard.local || '';
-                        if (existing.sit === undefined || existing.sit === '') existing.sit = bCard.sit || '';
-                        if (existing.julgamento === undefined || existing.julgamento === '') existing.julgamento = bCard.julgamento || '';
-                        if (!existing.color || existing.color === 'light') existing.color = bCard.color || 'light';
-                        
-                        // IMPORTANTE: NÃO alteramos o ID para não quebrar state.edits (cores personalizadas)
-                    } else if (!state.deleted.includes(bCard.id)) {
-                        // Se não existe de forma alguma, adiciona como novo
-                        state.customs.push(bCard);
-                    }
-                });
-
-                // Tenta recuperar cores de state.edits que podem ter ficado "órfãs" (opcional, mas seguro)
-                state.customs.forEach(card => {
-                    if (state.edits[card.id]) {
-                        const edit = state.edits[card.id];
-                        if (edit.color) card.color = edit.color;
-                        if (edit.local) card.local = edit.local;
-                        if (edit.sit) card.sit = edit.sit;
-                        if (edit.julgamento) card.julgamento = edit.julgamento;
-                    }
-                });
-
-                // Se a ordem estiver vazia ou muito curta, tenta restaurar
-                if (state.order.length < state.customs.length && backupData.order) {
-                    const newOrder = [...state.order];
-                    backupData.order.forEach(id => {
-                        if (!newOrder.includes(id)) newOrder.push(id);
-                    });
-                    state.order = newOrder;
-                }
+                // Sobrescreve o estado local com o backup de forma estrita
+                state.order = backupData.order || [];
+                state.customs = backupData.customs || [];
+                state.edits = backupData.edits || {};
+                state.deleted = backupData.deleted || [];
                 
                 save();
             }
         } catch (e) {
-            console.error("Erro ao carregar/mesclar backup:", e);
+            console.error("Erro ao carregar backup:", e);
+            // Se falhar o fetch, mantém o que está no localStorage como fallback
         }
 
         render();
