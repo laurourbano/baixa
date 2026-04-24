@@ -14,21 +14,7 @@ const MainApp = (function() {
     const actualDate = new Date();
     const formattedDate = actualDate.toLocaleDateString('pt-BR');
 
-    // Migração de dados legados (julg/judgment -> julgamento)
-    const migrate = (obj) => {
-        if (!obj) return;
-        if (obj['julg'] || obj['judgment']) {
-            obj['julgamento'] = obj['julgamento'] || obj['judgment'] || obj['julg'];
-            delete obj['julg'];
-            delete obj['judgment'];
-        }
-    };
-    state.customs.forEach(migrate);
-    Object.values(state.edits).forEach(migrate);
-
-
-    // CONTEÚDO COMPLETO RECUPERADO
-    const INITIAL_CARDS = [];
+    // Os dados agora vêm exclusivamente do arquivo cards_backup.json
 
     async function init() {
         // Inicializa o modal do Bootstrap
@@ -114,8 +100,7 @@ const MainApp = (function() {
         const grid = document.getElementById('main-grid');
         if (!grid) return;
 
-        grid.innerHTML = INITIAL_CARDS
-            .concat(state.customs)
+        grid.innerHTML = state.customs
             .filter(c => !state.deleted.includes(c.id))
             .map(c => ({ ...c, ...state.edits[c.id] }))
             .sort((a, b) => {
@@ -194,7 +179,7 @@ const MainApp = (function() {
     }
 
     function edit(id) {
-        const all = INITIAL_CARDS.concat(state.customs);
+        const all = state.customs;
         const card = { ...all.find(c => c.id === id), ...state.edits[id] };
         
         document.getElementById('m-id').value = id;
