@@ -4,21 +4,34 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 .container-fluid { 
     max-width: 1400px; 
     flex: 1; 
-    overflow-y: auto; 
-    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* O bloco cuidará do scroll */
 }
 
-/* Ferramentas como Cards */
-.tool-card {
-    border-style: solid !important;
-    background: rgba(31, 41, 55, 0.6) !important;
+/* Bloco Único de Trabalho */
+.workspace-block {
+    background: rgba(31, 41, 55, 0.4);
+    border: 1px solid #374151;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    backdrop-filter: blur(10px);
 }
 
-.tool-card legend {
-    text-align: left !important;
-    margin-top: 5px !important;
-    font-size: 0.85rem !important;
+.workspace-tool {
+    background: #111827;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    height: 100%;
 }
+
+.letter-spacing { letter-spacing: 1px; }
 
 .tool-box { 
     background: #1f2937; 
@@ -28,12 +41,11 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     height: 100%;
 }
 
-/* Grid de Cards Unificado */
+/* Grid de Cards Integrado */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 12px;
-    margin-top: 10px;
 }
 
 .card {

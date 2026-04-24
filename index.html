@@ -60,60 +60,52 @@
     </header>
 
     <main class="container-fluid px-3 pb-3">
-        <div id="main-grid" class="cards-grid">
-            <!-- Card de Calculadora (Estático) -->
-            <div class="card border-info tool-card">
-                <div class="card-head">
-                    <span class="text-info small fw-bold"><i class="fas fa-calculator me-1"></i> Calculadora</span>
-                </div>
-                <legend class="text-info">Piso Salarial</legend>
-                <div class="mt-2">
-                    <div class="d-flex gap-1 mb-2">
-                        <input id="piso" type="number" placeholder="Piso" class="form-control form-control-sm bg-dark text-light border-secondary">
-                        <input id="horas" type="number" placeholder="Hrs" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width: 60px;">
+        <div class="workspace-block shadow-lg">
+            <div class="workspace-header mb-4">
+                <div class="row g-3">
+                    <!-- Ferramenta: Calculadora -->
+                    <div class="col-md-4">
+                        <div class="workspace-tool">
+                            <h6 class="x-small fw-bold text-info mb-2 text-uppercase letter-spacing"><i class="fas fa-calculator me-1"></i> Calculadora de Piso</h6>
+                            <div class="d-flex gap-1 mb-2">
+                                <input id="piso" type="number" placeholder="Valor" class="form-control form-control-sm bg-dark text-light border-secondary">
+                                <input id="horas" type="number" placeholder="Hrs" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width: 60px;">
+                            </div>
+                            <div class="x-small text-muted">Total: <span id="res-total" class="text-success fw-bold">0</span> | Hora: <span id="res-hora" class="text-info fw-bold">0</span></div>
+                        </div>
                     </div>
-                    <div class="x-small text-muted">
-                        Total: <b class="text-success">R$ <span id="res-total">0</span></b> | 
-                        Hora: <b class="text-info">R$ <span id="res-hora">0</span></b>
+                    <!-- Ferramenta: Busca Fiscal -->
+                    <div class="col-md-4">
+                        <div class="workspace-tool">
+                            <h6 class="x-small fw-bold text-warning mb-2 text-uppercase letter-spacing"><i class="fas fa-search me-1"></i> Busca de Fiscal</h6>
+                            <select id="fiscal-select" class="form-select form-select-sm bg-dark text-light border-secondary mb-2" disabled>
+                                <option>Carregando...</option>
+                            </select>
+                            <div id="fiscal-res" class="x-small text-muted">Selecione uma cidade</div>
+                        </div>
+                    </div>
+                    <!-- Ferramenta: Nuvem -->
+                    <div class="col-md-4">
+                        <div class="workspace-tool">
+                            <h6 class="x-small fw-bold text-success mb-2 text-uppercase letter-spacing"><i class="fas fa-cloud me-1"></i> Sincronização Cloud</h6>
+                            <div class="d-flex gap-1 mb-2">
+                                <input id="gh-repo" type="text" placeholder="Repositório" class="form-control form-control-sm bg-dark text-light border-secondary">
+                                <input id="gh-token" type="password" placeholder="Token" class="form-control form-control-sm bg-dark text-light border-secondary">
+                            </div>
+                            <div class="d-flex gap-1">
+                                <button onclick="MainApp.cloudBackup()" class="btn btn-xs btn-success flex-grow-1">Backup</button>
+                                <button onclick="MainApp.cloudRestore()" class="btn btn-xs btn-outline-success flex-grow-1">Sinc</button>
+                                <span id="gh-status" class="ms-auto x-small text-muted d-flex align-items-center" style="font-size: 0.6rem;">Status: Off</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card de Busca de Fiscal (Estático) -->
-            <div class="card border-warning tool-card">
-                <div class="card-head">
-                    <span class="text-warning small fw-bold"><i class="fas fa-search me-1"></i> Fiscal</span>
-                </div>
-                <legend class="text-warning">Busca de Fiscal</legend>
-                <div class="mt-2">
-                    <select id="fiscal-select" class="form-select form-select-sm bg-dark text-light border-secondary mb-2" disabled>
-                        <option>Carregando...</option>
-                    </select>
-                    <div id="fiscal-res" class="x-small text-muted">Selecione uma cidade</div>
-                </div>
+            <div id="main-grid" class="cards-grid">
+                <!-- Cards Dinâmicos Renderizados Aqui -->
+                <div id="dynamic-cards" style="display: contents;"></div>
             </div>
-
-            <!-- Card de Nuvem (Estático) -->
-            <div class="card border-success tool-card">
-                <div class="card-head">
-                    <span class="text-success small fw-bold"><i class="fas fa-cloud me-1"></i> Nuvem</span>
-                </div>
-                <legend class="text-success">Sincronização</legend>
-                <div class="mt-2">
-                    <div class="d-flex gap-1 mb-1">
-                        <input id="gh-repo" type="text" placeholder="Repo" class="form-control form-control-sm bg-dark text-light border-secondary">
-                        <input id="gh-token" type="password" placeholder="Token" class="form-control form-control-sm bg-dark text-light border-secondary">
-                    </div>
-                    <div class="d-flex gap-1">
-                        <button onclick="MainApp.cloudBackup()" class="btn btn-xs btn-success flex-grow-1">Backup</button>
-                        <button onclick="MainApp.cloudRestore()" class="btn btn-xs btn-outline-success flex-grow-1">Sinc</button>
-                    </div>
-                    <div id="gh-status" class="mt-1 x-small text-muted" style="font-size: 0.6rem;">GitHub não conectado</div>
-                </div>
-            </div>
-
-            <!-- Container para Cards Dinâmicos (Sincronizado com JS) -->
-            <div id="dynamic-cards" style="display: contents;"></div>
         </div>
     </main>
 
