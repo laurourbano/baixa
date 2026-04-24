@@ -182,7 +182,7 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 .toast-danger .toast-icon { color: #ef4444; }
 .toast-info .toast-icon { color: #0ea5e9; }
 
-/* Garante que o container de toasts fique acima de tudo, inclusive do login (z-index 2000) */
+/* Garante que o container de toasts fique acima de tudo */
 #toast-container {
     z-index: 3000 !important;
 }
@@ -192,15 +192,6 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(12px);
     background: rgba(17, 24, 39, 0.9) !important;
-}
-
-/* Garante que o modal de confirmação também fique acima do login */
-#confirmModal {
-    z-index: 2500 !important;
-}
-
-.modal-backdrop {
-    z-index: 2400 !important;
 }
 
 #confirmModal h6 { letter-spacing: 0.5px; }
@@ -219,7 +210,7 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     width: 100%;
     height: 100%;
     background: #0f172a;
-    z-index: 2000;
+    z-index: 1040;
     backdrop-filter: blur(10px);
     transition: opacity 0.5s ease-out, visibility 0.5s;
 }
