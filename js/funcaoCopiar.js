@@ -26,7 +26,7 @@ window.onload = function () {
     // Crie arrays de todos os elementos com as classes .botao e .area
     let botoes = Array.from(document.querySelectorAll('.botao'));
     let caixasTexto = Array.from(document.querySelectorAll('.area'));
-    
+
     // Para cada botão, adicione um evento de clique
     botoes.forEach(function (botao, indice) {
         botao.addEventListener('click', function () {

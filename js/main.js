@@ -1,7 +1,7 @@
 /**
  * main.js — O Cérebro do Sistema (Versão com CONTEÚDO COMPLETO)
  */
-const MainApp = (function() {
+const MainApp = (function () {
     'use strict';
 
     const STORAGE_KEY = 'baixa_rt_data';
@@ -21,7 +21,7 @@ const MainApp = (function() {
 
         const toast = document.createElement('div');
         toast.className = `custom-toast toast-${type}`;
-        
+
         const icons = {
             success: 'fa-check-circle',
             warning: 'fa-exclamation-triangle',
@@ -48,10 +48,10 @@ const MainApp = (function() {
         return new Promise((resolve) => {
             const modalEl = document.getElementById('confirmModal');
             const modal = new bootstrap.Modal(modalEl);
-            
+
             document.getElementById('confirm-title').textContent = title;
             document.getElementById('confirm-message').textContent = message;
-            
+
             const iconEl = document.getElementById('confirm-icon');
             const icons = {
                 warning: '<i class="fas fa-question-circle fa-3x text-warning"></i>',
@@ -61,11 +61,11 @@ const MainApp = (function() {
             iconEl.innerHTML = icons[type] || icons.warning;
 
             const yesBtn = document.getElementById('confirm-btn-yes');
-            
+
             // Limpa event listeners antigos
             const newYesBtn = yesBtn.cloneNode(true);
             yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
-            
+
             newYesBtn.onclick = () => {
                 modal.hide();
                 resolve(true);
@@ -84,7 +84,7 @@ const MainApp = (function() {
     async function init() {
         // Inicializa o modal do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
-        
+
         // Verifica Autenticação
         const isAuth = localStorage.getItem('baixa_rt_auth') === 'true';
         if (isAuth) {
@@ -93,13 +93,13 @@ const MainApp = (function() {
             // Focar no campo de e-mail se não estiver logado
             const emailInput = document.getElementById('login-email');
             const passInput = document.getElementById('login-password');
-            
+
             [emailInput, passInput].forEach(el => {
                 el.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') checkLogin();
                 });
             });
-            
+
             emailInput.focus();
         }
 
@@ -108,13 +108,13 @@ const MainApp = (function() {
             const response = await fetch('cards_backup.json');
             if (response.ok) {
                 const backupData = await response.json();
-                
+
                 // Sobrescreve o estado local com o backup de forma estrita
                 state.order = backupData.order || [];
                 state.customs = backupData.customs || [];
                 state.edits = backupData.edits || {};
                 state.deleted = backupData.deleted || [];
-                
+
                 save();
             }
         } catch (e) {
@@ -128,10 +128,10 @@ const MainApp = (function() {
         initCalculator();
         initPlanoInspection();
         window.saveCard = saveCard;
-        
+
         const savedToken = localStorage.getItem('gh_token');
         if (savedToken) document.getElementById('gh-token').value = savedToken;
-        
+
         const savedRepo = localStorage.getItem('gh_repo');
         if (savedRepo) document.getElementById('gh-repo').value = savedRepo;
 
@@ -159,7 +159,7 @@ const MainApp = (function() {
                 const btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
                 const color = card.color || 'light';
                 const bootstrapColor = color === 'light' ? 'secondary' : color;
-                
+
                 return `
                 <div class="card border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
                     <div class="card-head" onclick="event.stopPropagation()">
@@ -192,7 +192,7 @@ const MainApp = (function() {
                     `}
                 </div>
             `}).join('');
-        
+
         save();
     }
 
@@ -233,7 +233,7 @@ const MainApp = (function() {
     function edit(id) {
         const all = state.customs;
         const card = { ...all.find(c => c.id === id), ...state.edits[id] };
-        
+
         document.getElementById('m-id').value = id;
         document.getElementById('m-title').value = card.title;
         document.getElementById('m-content').value = card.content;
@@ -244,7 +244,7 @@ const MainApp = (function() {
         document.getElementById('m-type').value = card.type || 'copy';
         document.getElementById('m-link').value = card.link || '';
         document.getElementById('m-showDate').checked = card.showDate !== false;
-        
+
         toggleLinkField();
         window.bsModal.show();
     }
@@ -274,21 +274,21 @@ const MainApp = (function() {
             const btn = card.querySelector('.btn-sm-compact');
             if (btn) {
                 const originalHTML = btn.innerHTML;
-                
+
                 // Aplicar classes de destaque do Bootstrap
                 btn.classList.replace('btn-outline-success', 'btn-success');
                 btn.innerHTML = '<i class="fas fa-check me-1"></i>Copiado!';
-                
+
                 contentEl.classList.add('text-success', 'fw-bold');
                 card.classList.add('border-success', 'shadow-lg');
-                
+
                 setTimeout(() => {
                     btn.classList.replace('btn-success', 'btn-outline-success');
                     btn.innerHTML = originalHTML;
-                    
+
                     contentEl.classList.remove('text-success', 'fw-bold');
                     card.classList.remove('shadow-lg');
-                    
+
                     const originalColor = card.getAttribute('data-color') || 'light';
                     if (originalColor !== 'success') {
                         card.classList.remove('border-success');
@@ -298,7 +298,7 @@ const MainApp = (function() {
                     _copying = false;
                 }, 1200);
             }
-        } catch(e) {
+        } catch (e) {
             _copying = false;
             console.error('Erro ao copiar:', e);
         }
@@ -311,20 +311,20 @@ const MainApp = (function() {
         fetch('assets/dados.ods').then(r => r.arrayBuffer()).then(buf => {
             const _warn = console.warn;
             const _error = console.error;
-            console.warn = console.error = () => {};
+            console.warn = console.error = () => { };
             try {
-                const wb = XLSX.read(buf, {type:'array', cellNF: false});
+                const wb = XLSX.read(buf, { type: 'array', cellNF: false });
                 console.warn = _warn;
                 console.error = _error;
-                const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, raw: true});
-                fiscalData = json.slice(1).filter(l => l[0]).map(l => ({ 
-                    cidade: l[0], 
-                    fiscal: l[1], 
-                    region: l[2], 
-                    code: l[3] 
+                const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true });
+                fiscalData = json.slice(1).filter(l => l[0]).map(l => ({
+                    cidade: l[0],
+                    fiscal: l[1],
+                    region: l[2],
+                    code: l[3]
                 }));
-                
-                select.innerHTML = '<option value="">Selecione a cidade</option>' + 
+
+                select.innerHTML = '<option value="">Selecione a cidade</option>' +
                     fiscalData.map(d => `<option value="${d.cidade}">${d.cidade}</option>`).join('');
                 select.disabled = false;
             } catch (err) {
@@ -334,13 +334,13 @@ const MainApp = (function() {
             }
         }).catch(() => {
             const res = document.getElementById('fiscal-res');
-            if(res) res.textContent = 'Planilha não encontrada.';
+            if (res) res.textContent = 'Planilha não encontrada.';
         });
 
         select.onchange = (e) => {
             const d = fiscalData.find(x => x.cidade === e.target.value);
-            document.getElementById('fiscal-res').innerHTML = d 
-                ? `<div class="d-flex justify-content-between"><span>Código: <b>${d.code}</b></span><span>Região: <b>${d.region}</b></span></div>` 
+            document.getElementById('fiscal-res').innerHTML = d
+                ? `<div class="d-flex justify-content-between"><span>Código: <b>${d.code}</b></span><span>Região: <b>${d.region}</b></span></div>`
                 : 'Aguardando seleção...';
         };
     }
@@ -362,15 +362,15 @@ const MainApp = (function() {
     /* ── Plano Inspeção ────────────────────────────────── */
     async function initPlanoInspection() {
         const btnPlano = document.getElementById('btnPlanoInspection');
-        if(!btnPlano) return;
+        if (!btnPlano) return;
         try {
             const proxyUrl = "https://api.allorigins.win/get?url=";
             const target = encodeURIComponent("https://crf-pr.org.br/documento/index?DocumentoSearch%5Bid_documento_categoria%5D=19");
             const response = await fetch(proxyUrl + target);
             const data = await response.json();
             const match = data.contents.match(/href="(\/documento\/view\/\d+\/[pP]lano-[^"]*)"/);
-            if(match && match[1]) btnPlano.href = "https://crf-pr.org.br" + match[1];
-        } catch (e) {}
+            if (match && match[1]) btnPlano.href = "https://crf-pr.org.br" + match[1];
+        } catch (e) { }
     }
 
     /* ── Drag & Drop ─────────────────────────────────────── */
@@ -410,7 +410,7 @@ const MainApp = (function() {
         const type = document.getElementById('m-type').value;
         const group = document.getElementById('link-field-group');
         const showDateGroup = document.getElementById('m-showDate').closest('.form-check');
-        
+
         if (type === 'link' || type === 'pdf') {
             group.classList.remove('d-none');
             showDateGroup.classList.add('d-none');
@@ -418,7 +418,7 @@ const MainApp = (function() {
             group.classList.add('d-none');
             showDateGroup.classList.remove('d-none');
         }
-        
+
         const contentLabel = document.getElementById('m-content');
         if (type === 'link' || type === 'pdf') {
             contentLabel.placeholder = "Descrição curta (opcional)";
@@ -435,7 +435,7 @@ const MainApp = (function() {
         const repo = document.getElementById('gh-repo').value;
         const status = document.getElementById('gh-status');
         if (!token || !repo) { status.textContent = 'Erro: Preencha Token e Repo'; return; }
-        
+
         status.textContent = 'Enviando...';
         try {
             const path = 'cards_backup.json';
@@ -443,10 +443,10 @@ const MainApp = (function() {
             if (userRes.status === 401) { status.textContent = 'Token Inválido'; return; }
             const userData = await userRes.json();
             const username = userData.login;
-            
+
             let sha = null;
             const fileRes = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
-            
+
             if (fileRes.status === 404 && (await fetch(`https://api.github.com/repos/${username}/${repo}`, { headers: { 'Authorization': `token ${token}` } })).status === 404) {
                 status.textContent = 'Repositório não encontrado';
                 return;
@@ -500,7 +500,7 @@ const MainApp = (function() {
             if (res.ok) {
                 const data = await res.json();
                 const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-                
+
                 const confirmed = await showConfirm('Restaurar Backup', 'Isso irá substituir todos os seus cards locais pelos da nuvem. Continuar?', 'info');
                 if (confirmed) {
                     Object.assign(state, json);
@@ -525,7 +525,7 @@ const MainApp = (function() {
         const passInput = document.getElementById('login-password');
         const errorMsg = document.getElementById('login-error');
         const savedPass = localStorage.getItem('baixa_rt_password') || '1234';
-        
+
         if (emailInput.value.includes('@') && passInput.value === savedPass) {
             localStorage.setItem('baixa_rt_auth', 'true');
             localStorage.setItem('baixa_rt_user_email', emailInput.value);
@@ -535,10 +535,10 @@ const MainApp = (function() {
             errorMsg.classList.remove('d-none');
             passInput.value = '';
             passInput.focus();
-            
+
             const card = document.querySelector('.login-card');
             card.style.animation = 'none';
-            void card.offsetWidth; 
+            void card.offsetWidth;
             card.style.animation = 'pop-in 0.3s ease, shake 0.4s ease';
         }
     }
@@ -550,7 +550,7 @@ const MainApp = (function() {
             showToast('Por favor, insira um e-mail válido primeiro.', 'warning');
             return;
         }
-        
+
         showConfirm('Recuperar Senha', `Deseja enviar um link de redefinição para ${email}?`, 'info').then(confirmed => {
             if (confirmed) {
                 showToast('Link de redefinição enviado para o seu e-mail!', 'info', 5000);
@@ -561,21 +561,21 @@ const MainApp = (function() {
     function updatePassword() {
         const p1 = document.getElementById('new-password').value;
         const p2 = document.getElementById('confirm-new-password').value;
-        
+
         if (!p1 || p1.length < 4) {
             showToast('A senha deve ter pelo menos 4 dígitos', 'warning');
             return;
         }
-        
+
         if (p1 !== p2) {
             showToast('As senhas não coincidem!', 'danger');
             return;
         }
-        
+
         localStorage.setItem('baixa_rt_password', p1);
         showToast('Senha alterada com sucesso!', 'success');
         bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide();
-        
+
         // Limpa os campos
         document.getElementById('new-password').value = '';
         document.getElementById('confirm-new-password').value = '';
@@ -588,14 +588,14 @@ const MainApp = (function() {
 
     document.addEventListener('DOMContentLoaded', init);
 
-    return { 
-        edit, 
-        del, 
-        copy, 
-        closeModal, 
-        toggleLinkField, 
-        cloudBackup, 
-        cloudRestore, 
+    return {
+        edit,
+        del,
+        copy,
+        closeModal,
+        toggleLinkField,
+        cloudBackup,
+        cloudRestore,
         checkLogin,
         forgotPassword,
         updatePassword,

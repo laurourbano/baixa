@@ -1,83 +1,83 @@
+# 🏛️ Portal de Pareceres - Baixa RT
 
-# 📋 Projeto Pessoal - Página de Pareceres de Baixa
+[![Vercel Deploy](https://img.shields.io/badge/Vercel-Deploy-000?style=for-the-badge&logo=vercel)](https://vercel.com/)
+[![Licença MIT](https://img.shields.io/badge/Licença-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![Status do Projeto](https://img.shields.io/badge/Status-Ativo-success?style=for-the-badge)](https://baixaparecer.netlify.app/)
 
-[![Licença MIT](https://img.shields.io/badge/Licença-MIT-green.svg)](LICENSE)
-[![Deploy no GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deploy-222.svg?logo=github)](https://laurourbano.github.io/baixa/)
-
-Uma ferramenta web simples para agilizar a criação de pareceres de baixa, desenvolvida com tecnologias front-end essenciais.
-
----
-
-## 🚀 Funcionalidades Destacadas
-
-- **Copiar Conteúdo Instantaneamente**  
-  Botões dedicados para copiar trechos pré-formatados com um único clique.
-  
-- **Design Intuitivo**  
-  Interface organizada por tópicos para acesso rápido às informações.
-
-- **Zero Dependências**  
-  Desenvolvido com vanilla JavaScript, CSS puro e HTML sem frameworks.
+O **Portal de Pareceres - Baixa RT** é uma solução centralizada e inteligente desenvolvida para otimizar o fluxo de trabalho jurídico-administrativo. A ferramenta permite a gestão dinâmica de modelos de pareceres, cálculos automatizados e sincronização em nuvem, garantindo agilidade e precisão nas atividades diárias.
 
 ---
 
-## 🌐 Acesso Rápido
+## 📸 Demonstração
 
-Escolha seu deploy preferido:
+![Captura Real do Portal](file:///C:/Users/lauro.urbano/.gemini/antigravity/brain/06a10fc0-71dc-4bda-b189-4f6367a77571/app_initial_state_1777290417176.png)
 
-[![GitHubPages](https://img.shields.io/badge/🔗_Acessar_no_GitHub-00C7B7?style=for-the-badge)](https://laurourbano.github.io/baixa/)
-
-[![Netlify](https://img.shields.io/badge/🔗_Acessar_na_Netlify-00C7B7?style=for-the-badge)](https://baixaparecer.netlify.app)
-
----
-
-## 🛠 Tecnologias Utilizadas
-
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+> [!NOTE]
+> O design foi projetado para ser intuitivo, com foco na produtividade e no conforto visual (Dark Mode).
 
 ---
 
-## 📌 Como Utilizar
+## ✨ Funcionalidades Principais
 
-1. **Clone o Repositório**
+- **🔐 Acesso Protegido**: Camada de segurança por senha (Padrão: `1234`) para proteger seus modelos.
+- **⚡ Cópia Inteligente**: Botões de um clique para copiar pareceres pré-formatados com inserção automática de data.
+- **🗂️ Gestão Dinâmica (CRUD)**: Adicione, edite e remova cards de pareceres, links externos ou PDFs diretamente pela interface.
+- **🧮 Calculadora de Piso**: Ferramenta integrada para cálculo rápido de valores baseados em horas de trabalho.
+- **🔍 Busca de Fiscal**: Localização rápida de fiscais por cidade.
+- **☁️ Sincronização Cloud**: Backup e restauração via GitHub API para nunca perder seus dados.
+- **📊 Exportação**: Gere relatórios em Excel (.xlsx) de todos os seus pareceres cadastrados.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+O projeto utiliza uma stack leve e performática, focada em zero dependências pesadas de backend:
+
+- **Frontend**: HTML5 Semântico, CSS3 (Bootstrap 5.3 + Custom CSS)
+- **Lógica**: Vanilla JavaScript (ES6+)
+- **Bibliotecas**:
+  - [Font Awesome 6](https://fontawesome.com/) (Ícones)
+  - [SheetJS](https://sheetjs.com/) (Exportação Excel)
+  - [Bootstrap 5.3](https://getbootstrap.com/) (UI/UX)
+
+---
+
+## 🚀 Como Executar Localmente
+
+1. **Clone o repositório**:
 
    ```bash
    git clone https://github.com/laurourbano/baixa.git
    ```
 
-2. **Acesse a Pasta do Projeto**
+2. **Entre na pasta**:
 
    ```bash
    cd baixa
    ```
 
-3. **Execute o Arquivo Principal**  
-   Abra o `index.html` em qualquer navegador moderno:
-   - Duplo clique no arquivo, ou
-   - Arraste para a janela do navegador
-
-4. **Utilize os Botões "Copiar"**  
-   Clique em qualquer botão de cópia para ter o conteúdo:
-   - Automaticamente salvo na área de transferência
-   - Pronto para colar (Ctrl+V) em sistemas de pareceres
+3. **Abra o arquivo**:
+   Basta abrir o `index.html` em qualquer navegador moderno.
 
 ---
 
-## 🔍 Observações Importantes
+## 🌍 Deploy na Vercel
 
-- **Contexto de Uso**  
-  Desenvolvido para fluxos específicos de trabalho jurídico-administrativos. Adapte os textos conforme sua necessidade.
+Para hospedar este projeto na Vercel de forma gratuita e profissional:
 
-- **Personalização**  
-  Modifique livremente o CSS em `style.css` e os textos em `index.html` para adequar ao seu caso de uso.
-
-- **Compatibilidade**  
-  Testado em navegadores modernos (Chrome 115+, Firefox 110+). Para Internet Explorer, considere polyfills.
+1. **Conecte seu GitHub** na [Vercel](https://vercel.com/).
+2. **Importe o repositório** `baixa`.
+3. **Configurações**:
+   - Build Command: (Deixe em branco ou `npm run build` se houver)
+   - Output Directory: `.` (Diretório raiz)
+4. **Pronto!** A Vercel fornecerá um link `.vercel.app` com SSL automático.
 
 ---
 
 ## 📜 Licença
 
-Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para detalhes
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
+
+---
+
+<p align="center">Desenvolvido com ❤️ para agilizar processos jurídicos.</p>
