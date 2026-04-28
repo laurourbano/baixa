@@ -1,13 +1,13 @@
 :root {
-    --color-bg: #111827;
-    --color-bg-gradient: linear-gradient(135deg, #111827 0%, #1e293b 100%);
-    --color-text: #f3f4f6;
-    --color-text-muted: #9ca3af;
+    --color-bg: #1e293b;
+    --color-bg-gradient: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    --color-text: #f8fafc;
+    --color-text-muted: #cbd5e1;
     --color-primary: #22c55e;
-    --color-card-bg: #1f2937;
-    --color-border: #374151;
-    --color-glass-bg: rgba(31, 41, 55, 0.4);
-    --color-glass-modal-bg: rgba(17, 24, 39, 0.85);
+    --color-card-bg: #273548;
+    --color-border: #475569;
+    --color-glass-bg: rgba(30, 41, 59, 0.6);
+    --color-glass-modal-bg: rgba(30, 41, 59, 0.9);
     --color-glass-border: rgba(255, 255, 255, 0.1);
     --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     
@@ -18,15 +18,15 @@
 }
 
 [data-theme="light"] {
-    --color-bg: #f3f4f6;
-    --color-bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e2e8f0 100%);
-    --color-text: #1f2937;
-    --color-text-muted: #4b5563;
+    --color-bg: #e2e8f0;
+    --color-bg-gradient: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    --color-text: #334155;
+    --color-text-muted: #64748b;
     --color-primary: #16a34a;
-    --color-card-bg: #ffffff;
-    --color-border: #d1d5db;
-    --color-glass-bg: rgba(255, 255, 255, 0.6);
-    --color-glass-modal-bg: rgba(255, 255, 255, 0.85);
+    --color-card-bg: #f8fafc;
+    --color-border: #cbd5e1;
+    --color-glass-bg: rgba(248, 250, 252, 0.7);
+    --color-glass-modal-bg: rgba(248, 250, 252, 0.95);
     --color-glass-border: rgba(0, 0, 0, 0.1);
 }
 
