@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal de Pareceres - Baixa RT</title>
+<meta name="description" content="Portal de Pareceres - Baixa RT - acesso seguro e rápido aos pareceres.">
+
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="./assets/img/favicon.ico">
@@ -14,6 +16,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/padrao.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-dark text-light">
 
@@ -54,8 +59,8 @@
 
     <header class="text-center py-2 position-relative">
         <h1 class="h6 fw-bold mb-0">Portal de Pareceres - Baixa RT</h1>
-        <button class="btn btn-link text-muted position-absolute top-50 end-0 translate-middle-y me-2" data-bs-toggle="modal" data-bs-target="#settingsModal">
-            <i class="fas fa-cog"></i>
+        <button class="btn btn-link text-muted position-absolute top-50 end-0 translate-middle-y me-2" data-bs-toggle="modal" data-bs-target="#settingsModal" aria-label="Abrir configurações">
+            <i class="fas fa-cog" aria-hidden="true" title="Configurações"></i>
         </button>
     </header>
 
@@ -109,7 +114,7 @@
         </div>
     </main>
 
-    <button class="btn-add shadow" onclick="MainApp.openCreate()">+</button>
+    <button aria-label="Add new card" class="btn-add shadow" onclick="MainApp.openCreate()">+</button>
 
     <!-- Bootstrap 5 Modal -->
     <div class="modal fade" id="cardModal" tabindex="-1" aria-hidden="true">
@@ -193,11 +198,11 @@
     </div>
 
     <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SheetJS -->
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+    <script defer src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <!-- Main JS -->
-    <script src="js/main.js"></script>
+    <script defer src="js/main.js"></script>
 
     <!-- Container para Toasts/Notificações -->
     <div id="toast-container" class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;"></div>
