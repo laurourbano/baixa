@@ -1,5 +1,51 @@
+:root {
+    --color-bg: #111827;
+    --color-bg-gradient: linear-gradient(135deg, #111827 0%, #1e293b 100%);
+    --color-text: #f3f4f6;
+    --color-text-muted: #9ca3af;
+    --color-primary: #22c55e;
+    --color-card-bg: #1f2937;
+    --color-border: #374151;
+    --color-glass-bg: rgba(31, 41, 55, 0.4);
+    --color-glass-modal-bg: rgba(17, 24, 39, 0.85);
+    --color-glass-border: rgba(255, 255, 255, 0.1);
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    --color-danger: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #0ea5e9;
+    --color-success: #10b981;
+}
+
+[data-theme="light"] {
+    --color-bg: #f3f4f6;
+    --color-bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e2e8f0 100%);
+    --color-text: #1f2937;
+    --color-text-muted: #4b5563;
+    --color-primary: #16a34a;
+    --color-card-bg: #ffffff;
+    --color-border: #d1d5db;
+    --color-glass-bg: rgba(255, 255, 255, 0.6);
+    --color-glass-modal-bg: rgba(255, 255, 255, 0.85);
+    --color-glass-border: rgba(0, 0, 0, 0.1);
+}
+
+/* Force Bootstrap overrides when in light mode */
+[data-theme="light"] .bg-dark { background-color: var(--color-bg) !important; }
+[data-theme="light"] .text-light, [data-theme="light"] .text-white { color: var(--color-text) !important; }
+[data-theme="light"] .border-secondary { border-color: var(--color-border) !important; }
+[data-theme="light"] .text-muted { color: var(--color-text-muted) !important; }
+[data-theme="light"] .form-control, 
+[data-theme="light"] .form-select, 
+[data-theme="light"] .form-check-input {
+    background-color: var(--color-bg) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
+}
+[data-theme="light"] .btn-close-white { filter: invert(1) grayscale(100%) brightness(50%); }
+
 html, body { height: 100dvh; overflow: hidden; }
-body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #f3f4f6; display: flex; flex-direction: column; }
+body { background: var(--color-bg); background: var(--color-bg-gradient); font-family: var(--font-main); color: var(--color-text); display: flex; flex-direction: column; transition: background 0.3s ease, color 0.3s ease; }
 
 .container-fluid { 
     max-width: 1400px; 
@@ -11,8 +57,8 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 
 /* Bloco Único de Trabalho */
 .workspace-block {
-    background: rgba(31, 41, 55, 0.4);
-    border: 1px solid #374151;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-border);
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -21,24 +67,27 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     overflow-y: auto;
     margin-bottom: 15px;
     backdrop-filter: blur(10px);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .workspace-tool {
-    background: #111827;
+    background: var(--color-bg);
     padding: 12px;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-glass-border);
     height: 100%;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .letter-spacing { letter-spacing: 1px; }
 
 .tool-box { 
-    background: #1f2937; 
+    background: var(--color-card-bg); 
     padding: 10px; 
     border-radius: 8px; 
     border-left: 4px solid #4b5563;
     height: 100%;
+    transition: background 0.3s ease;
 }
 
 /* Grid de Cards Integrado */
@@ -49,14 +98,14 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 }
 
 .card {
-    background: #1f2937 !important; 
+    background: var(--color-card-bg) !important; 
     border-radius: 8px !important; 
     padding: 8px !important;
     display: flex; 
     flex-direction: column; 
     cursor: grab; 
-    transition: 0.2s;
-    border-width: 1px !important;
+    transition: all 0.2s ease;
+    border: 1px solid var(--color-border) !important;
     min-height: 160px;
 }
 
@@ -65,7 +114,7 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 .card-head { 
     display: flex; 
     justify-content: space-between; 
-    color: #9ca3af; 
+    color: var(--color-text-muted); 
     font-size: 0.75rem; 
     margin-bottom: 4px;
 }
@@ -76,14 +125,14 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     padding: 0; 
     margin: 0;
     width: 100%; 
-    color: #e5e7eb; 
+    color: var(--color-text); 
     text-align: center; 
     border: none;
 }
 
 .card .content-display {
     font-size: 0.58rem !important;
-    color: #d1d5db !important; 
+    color: var(--color-text-muted) !important; 
     height: 55px !important; 
     overflow-y: hidden; 
     padding: 4px 0 !important;
@@ -110,20 +159,31 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 }
 
 /* Alinhamento de Bordas e Fundos Bootstrap com o Tema */
-.border-light { border-color: #374151 !important; background-color: rgba(55, 65, 81, 0.1) !important; }
-.border-danger { border-color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.08) !important; }
-.border-warning { border-color: #f59e0b !important; background-color: rgba(245, 158, 11, 0.08) !important; }
-.border-info { border-color: #0ea5e9 !important; background-color: rgba(14, 165, 233, 0.08) !important; }
-.border-success { border-color: #10b981 !important; background-color: rgba(16, 185, 129, 0.08) !important; }
+.border-light { border-color: var(--color-border) !important; background-color: rgba(55, 65, 81, 0.1) !important; }
+.border-danger { border-color: var(--color-danger) !important; background-color: rgba(239, 68, 68, 0.08) !important; }
+.border-warning { border-color: var(--color-warning) !important; background-color: rgba(245, 158, 11, 0.08) !important; }
+.border-info { border-color: var(--color-info) !important; background-color: rgba(14, 165, 233, 0.08) !important; }
+.border-success { border-color: var(--color-success) !important; background-color: rgba(16, 185, 129, 0.08) !important; }
 
-/* Modal Styles */
-.modal-content { background-color: #1f2937 !important; border: 1px solid #374151 !important; }
-.modal-header, .modal-footer { border-color: #374151 !important; }
+/* Modal Styles - Glassmorphism applied to all modals */
+.modal-content { 
+    background-color: var(--color-glass-modal-bg) !important; 
+    border: 1px solid var(--color-glass-border) !important; 
+    backdrop-filter: blur(12px);
+    color: var(--color-text);
+}
+.modal-header, .modal-footer { border-color: var(--color-border) !important; }
 
 .btn-add {
     position: fixed; bottom: 25px; right: 25px; width: 45px; height: 45px;
-    border-radius: 50%; background: #22c55e; border: none; color: white;
+    border-radius: 50%; background: var(--color-primary); border: none; color: white;
     font-size: 1.5rem; cursor: pointer; z-index: 1000;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-add:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
 }
 
 .handle { cursor: grab; font-size: 0.9rem; }
@@ -135,7 +195,7 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     padding: 10px;
     border-radius: 8px;
     transition: all 0.2s ease;
-    color: #9ca3af;
+    color: var(--color-text-muted);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -144,23 +204,23 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 }
 
 .actions i:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #f3f4f6;
+    background: var(--color-glass-border);
+    color: var(--color-text);
 }
 
 .actions .fa-trash:hover {
-    color: #ef4444 !important;
+    color: var(--color-danger) !important;
     background: rgba(239, 68, 68, 0.15);
 }
 
 .actions .fa-pen:hover {
-    color: #3b82f6 !important;
-    background: rgba(59, 130, 246, 0.15);
+    color: var(--color-info) !important;
+    background: rgba(14, 165, 233, 0.15);
 }
 
 .info-line {
     font-size: 0.62rem;
-    color: #9ca3af;
+    color: var(--color-text-muted);
     margin: 4px 0;
     background: rgba(0,0,0,0.2);
     padding: 3px 5px;
@@ -170,14 +230,14 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     justify-content: space-between;
     gap: 4px;
 }
-.info-line b { color: #f3f4f6; }
+.info-line b { color: var(--color-text); }
 
 .x-small { font-size: 0.7rem; }
 .btn-xs { padding: 2px 6px; font-size: 0.75rem; }
 
 /* Links */
 .link-card-body { padding-top: 4px; flex-grow: 1; display: flex; flex-direction: column; }
-.link-card-body p { font-size: 0.7rem; color: #9ca3af; margin-bottom: 8px; flex-grow: 1; }
+.link-card-body p { font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 8px; flex-grow: 1; }
 
 
 
@@ -186,10 +246,10 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 
 /* Toasts Customizados */
 .custom-toast {
-    background: rgba(31, 41, 55, 0.95);
+    background: var(--color-glass-modal-bg);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text);
     border-radius: 12px;
     padding: 12px 20px;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
@@ -206,30 +266,24 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 }
 
 .toast-icon { font-size: 1.2rem; }
-.toast-success .toast-icon { color: #10b981; }
-.toast-warning .toast-icon { color: #f59e0b; }
-.toast-danger .toast-icon { color: #ef4444; }
-.toast-info .toast-icon { color: #0ea5e9; }
+.toast-success .toast-icon { color: var(--color-success); }
+.toast-warning .toast-icon { color: var(--color-warning); }
+.toast-danger .toast-icon { color: var(--color-danger); }
+.toast-info .toast-icon { color: var(--color-info); }
 
 /* Garante que o container de toasts fique acima de tudo */
 #toast-container {
     z-index: 3000 !important;
 }
 
-/* Modal Glassmorphism */
-#confirmModal .modal-content {
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(12px);
-    background: rgba(17, 24, 39, 0.9) !important;
-}
-
+/* Modal Glassmorphism já aplicado globalmente em .modal-content */
 #confirmModal h6 { letter-spacing: 0.5px; }
 
 /* Scrollbar Customizada */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #111827; }
-::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
 
 /* Tela de Login */
 .login-overlay {
@@ -238,15 +292,15 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
     left: 0;
     width: 100%;
     height: 100%;
-    background: #0f172a;
+    background: var(--color-bg);
     z-index: 1040;
     backdrop-filter: blur(10px);
     transition: opacity 0.5s ease-out, visibility 0.5s;
 }
 
 .login-card {
-    background: rgba(31, 41, 55, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-glass-modal-bg);
+    border: 1px solid var(--color-glass-border);
     border-radius: 20px;
     width: 100%;
     max-width: 380px;
@@ -293,5 +347,5 @@ body { background: #111827; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sa
 
 #login-password:focus {
     box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
-    border-color: #22c55e;
+    border-color: var(--color-primary);
 }
