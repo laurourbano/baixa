@@ -24,16 +24,22 @@
 }
 
 [data-theme="light"] {
-    --color-bg: #e2e8f0;
-    --color-bg-gradient: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-    --color-text: #334155;
-    --color-text-muted: #64748b;
-    --color-primary: #16a34a;
-    --color-card-bg: #f8fafc;
-    --color-border: #cbd5e1;
-    --color-glass-bg: rgba(248, 250, 252, 0.7);
-    --color-glass-modal-bg: rgba(248, 250, 252, 0.95);
-    --color-glass-border: rgba(0, 0, 0, 0.1);
+    --color-bg: #f4f6f8; /* Fundo principal claro */
+    --color-bg-gradient: linear-gradient(135deg, #f4f6f8 0%, #e2e6ea 100%);
+    --color-text: #333333; /* Texto escuro padrão */
+    --color-text-muted: #6c757d; /* Texto secundário */
+    --color-primary: #337ab7; /* Azul principal (botões, header) */
+    --color-card-bg: #ffffff; /* Fundo branco puro para painéis */
+    --color-border: #cccccc; /* Bordas estilo formulário padrão */
+    --color-glass-bg: rgba(255, 255, 255, 0.92); /* Efeito vidro mais sólido */
+    --color-glass-modal-bg: rgba(255, 255, 255, 0.98);
+    --color-glass-border: rgba(0, 0, 0, 0.15);
+    
+    /* Cores auxiliares inspiradas no print */
+    --color-danger: #d9534f; /* Botão vermelho "Fechar" */
+    --color-success: #5cb85c;
+    --color-warning: #f0ad4e;
+    --color-info: #5bc0de;
 }
 
 /* Force Bootstrap overrides when in light mode */
@@ -44,7 +50,7 @@
 [data-theme="light"] .form-control, 
 [data-theme="light"] .form-select, 
 [data-theme="light"] .form-check-input {
-    background-color: var(--color-bg) !important;
+    background-color: #ffffff !important; /* Fundo dos inputs sempre branco no tema light */
     color: var(--color-text) !important;
     border-color: var(--color-border) !important;
 }
