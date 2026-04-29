@@ -18,9 +18,14 @@
     <link rel="stylesheet" href="css/padrao.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
+    <!-- Background Blobs for Premium Feel -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
 
     <!-- Tela de Login (Proteção por Senha) -->
     <div id="login-overlay" class="login-overlay d-flex align-items-center justify-content-center">
@@ -57,67 +62,106 @@
         </div>
     </div>
 
-    <header class="text-center py-2 position-relative">
-        <h1 class="h6 fw-bold mb-0">Portal de Pareceres - Baixa RT</h1>
-        <div class="position-absolute top-50 end-0 translate-middle-y me-2 d-flex align-items-center">
-            <button class="btn btn-link text-muted p-1 me-1" onclick="toggleTheme()" aria-label="Alternar Tema">
-                <i id="theme-icon" class="fas fa-moon" aria-hidden="true" title="Alternar Tema"></i>
-            </button>
-            <button class="btn btn-link text-muted p-1" data-bs-toggle="modal" data-bs-target="#settingsModal" aria-label="Abrir configurações">
-                <i class="fas fa-cog" aria-hidden="true" title="Configurações"></i>
-            </button>
-        </div>
-    </header>
-
-    <main class="container-fluid px-3 pb-3">
-        <div class="workspace-block shadow-lg">
-            <div id="main-grid" class="cards-grid">
-                <!-- Cards Dinâmicos Renderizados Aqui -->
-                <div id="dynamic-cards" style="display: contents;"></div>
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar shadow-lg">
+            <div class="sidebar-header">
+                <div class="logo-wrapper">
+                    <i class="fas fa-layer-group text-primary"></i>
+                </div>
+                <span class="logo-text">Portal RT</span>
             </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" id="nav-dashboard" class="nav-item active" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i class="fas fa-tools"></i> Ferramentas</a>
+                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fas fa-cog"></i> Configurações</a>
+            </nav>
 
-            <div class="workspace-header mt-4">
-                <div class="row g-3">
-                    <!-- Ferramenta: Calculadora -->
-                    <div class="col-md-4">
-                        <div class="workspace-tool">
-                            <h6 class="x-small fw-bold text-info mb-2 text-uppercase letter-spacing"><i class="fas fa-calculator me-1"></i> Calculadora de Piso</h6>
-                            <div class="d-flex gap-1 mb-2">
-                                <input id="piso" type="number" placeholder="Valor" class="form-control form-control-sm bg-dark text-light border-secondary">
-                                <input id="horas" type="number" placeholder="Hrs" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width: 60px;">
-                            </div>
-                            <div class="x-small text-muted">Total: <span id="res-total" class="text-success fw-bold">0</span> | Hora: <span id="res-hora" class="text-info fw-bold">0</span></div>
-                        </div>
+            <div class="sidebar-footer mt-auto">
+                <button onclick="MainApp.logout()" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair do Sistema
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="d-flex align-items-center gap-3">
+                    <h1 id="page-title" class="h5 fw-bold mb-0">Dashboard de Pareceres</h1>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3">Baixa RT</span>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-link text-muted p-2" onclick="toggleTheme()" aria-label="Alternar Tema">
+                        <i id="theme-icon" class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-profile">
+                        <div class="avatar">RT</div>
                     </div>
-                    <!-- Ferramenta: Busca Fiscal -->
-                    <div class="col-md-4">
-                        <div class="workspace-tool">
-                            <h6 class="x-small fw-bold text-warning mb-2 text-uppercase letter-spacing"><i class="fas fa-search me-1"></i> Busca de Fiscal</h6>
-                            <select id="fiscal-select" class="form-select form-select-sm bg-dark text-light border-secondary mb-2" disabled>
-                                <option>Carregando...</option>
-                            </select>
-                            <div id="fiscal-res" class="x-small text-muted">Selecione uma cidade</div>
-                        </div>
+                </div>
+            </header>
+
+            <section class="content-wrapper">
+                <!-- VIEW: DASHBOARD -->
+                <div id="view-dashboard" class="app-view">
+                    <div id="main-grid" class="cards-grid">
+                        <!-- Cards Dinâmicos Renderizados Aqui -->
+                        <div id="dynamic-cards" style="display: contents;"></div>
                     </div>
-                    <!-- Ferramenta: Nuvem -->
-                    <div class="col-md-4">
-                        <div class="workspace-tool">
-                            <h6 class="x-small fw-bold text-success mb-2 text-uppercase letter-spacing"><i class="fas fa-cloud me-1"></i> Sincronização Cloud</h6>
-                            <div class="d-flex gap-1 mb-2">
-                                <input id="gh-repo" type="text" placeholder="Repositório" class="form-control form-control-sm bg-dark text-light border-secondary">
-                                <input id="gh-token" type="password" placeholder="Token" class="form-control form-control-sm bg-dark text-light border-secondary">
+                </div>
+
+                <!-- VIEW: FERRAMENTAS -->
+                <div id="view-ferramentas" class="app-view d-none">
+                    <div class="row g-4">
+                        <!-- Ferramenta: Calculadora -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="workspace-tool">
+                                <h6 class="fw-bold text-info mb-3 text-uppercase letter-spacing"><i class="fas fa-calculator me-2"></i> Calculadora</h6>
+                                <div class="d-flex gap-2 mb-3">
+                                    <input id="piso" type="number" placeholder="Valor" class="form-control">
+                                    <input id="horas" type="number" placeholder="Hrs" class="form-control" style="max-width: 80px;">
+                                </div>
+                                <div class="small text-muted d-flex justify-content-between p-2 bg-dark bg-opacity-25 rounded border border-secondary">
+                                    <span>Total: <b id="res-total" class="text-success">0</b></span>
+                                    <span>Hora: <b id="res-hora" class="text-info">0</b></span>
+                                </div>
                             </div>
-                            <div class="d-flex gap-1">
-                                <button onclick="MainApp.cloudBackup()" class="btn btn-xs btn-success flex-grow-1">Backup</button>
-                                <button onclick="MainApp.cloudRestore()" class="btn btn-xs btn-outline-success flex-grow-1">Sinc</button>
-                                <span id="gh-status" class="ms-auto x-small text-muted d-flex align-items-center" style="font-size: 0.6rem;">Status: Off</span>
+                        </div>
+
+                        <!-- Ferramenta: Busca Fiscal -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="workspace-tool">
+                                <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i class="fas fa-search me-2"></i> Fiscal</h6>
+                                <select id="fiscal-select" class="form-select mb-3" disabled>
+                                    <option>Carregando...</option>
+                                </select>
+                                <div id="fiscal-res" class="small text-muted p-2 bg-dark bg-opacity-25 rounded border border-secondary">Selecione uma cidade</div>
+                            </div>
+                        </div>
+
+                        <!-- Ferramenta: Nuvem -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="workspace-tool">
+                                <h6 class="fw-bold text-success mb-3 text-uppercase letter-spacing"><i class="fas fa-cloud me-2"></i> Cloud</h6>
+                                <div class="d-flex flex-column gap-3">
+                                    <input id="gh-repo" type="text" placeholder="Repositório (ex: user/repo)" class="form-control">
+                                    <input id="gh-token" type="password" placeholder="GitHub Token" class="form-control">
+                                    <div class="d-flex gap-2">
+                                        <button onclick="MainApp.cloudBackup()" class="btn btn-success flex-grow-1">Fazer Backup</button>
+                                        <button onclick="MainApp.cloudRestore()" class="btn btn-outline-success flex-grow-1">Sincronizar</button>
+                                    </div>
+                                    <span id="gh-status" class="small text-muted text-center p-2 bg-dark bg-opacity-25 rounded border border-secondary">Status: Off</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </main>
+            </section>
+        </main>
+    </div>
+
 
     <button aria-label="Add new card" class="btn-add shadow" onclick="MainApp.openCreate()">+</button>
 
@@ -222,6 +266,28 @@
                     icon.classList.remove('fa-sun');
                     icon.classList.add('fa-moon');
                 }
+            }
+        }
+
+        function switchView(viewName) {
+            // Update nav active state
+            document.querySelectorAll('.sidebar-nav .nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-' + viewName).classList.add('active');
+
+            // Hide all views
+            document.querySelectorAll('.app-view').forEach(el => el.classList.add('d-none'));
+            
+            // Show selected view
+            document.getElementById('view-' + viewName).classList.remove('d-none');
+
+            // Update title
+            const titleEl = document.getElementById('page-title');
+            if(viewName === 'dashboard') {
+                titleEl.textContent = 'Dashboard de Pareceres';
+                document.querySelector('.btn-add').classList.remove('d-none');
+            } else if(viewName === 'ferramentas') {
+                titleEl.textContent = 'Ferramentas Secundárias';
+                document.querySelector('.btn-add').classList.add('d-none');
             }
         }
 
