@@ -64,7 +64,7 @@
 
     <div class="app-layout">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar shadow-lg">
+        <aside class="sidebar shadow-lg" onclick="toggleSidebar(event)">
             <div class="sidebar-header">
                 <div class="logo-wrapper">
                     <i class="fas fa-layer-group text-primary"></i>
@@ -73,14 +73,14 @@
             </div>
             
             <nav class="sidebar-nav">
-                <a href="#" id="nav-dashboard" class="nav-item active" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i> Dashboard</a>
-                <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i class="fas fa-tools"></i> Ferramentas</a>
-                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fas fa-cog"></i> Configurações</a>
+                <a href="#" id="nav-dashboard" class="nav-item active" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
+                <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i class="fas fa-tools"></i> <span>Ferramentas</span></a>
+                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fas fa-cog"></i> <span>Configurações</span></a>
             </nav>
 
             <div class="sidebar-footer mt-auto">
                 <button onclick="MainApp.logout()" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Sair do Sistema
+                    <i class="fas fa-sign-out-alt"></i> <span>Sair do Sistema</span>
                 </button>
             </div>
         </aside>
@@ -247,6 +247,14 @@
     </div>
 
     <script>
+        function toggleSidebar(e) {
+            // Ignorar toggle se clicar em um link ou botão que possui ação própria
+            if (e && (e.target.closest('.nav-item') || e.target.closest('.logout-btn'))) {
+                return;
+            }
+            document.querySelector('.sidebar').classList.toggle('expanded');
+        }
+
         function toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
