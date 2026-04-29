@@ -1,0 +1,561 @@
+[33ma00b703[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33mbaf0fb4[m Revert "feat: implement central application controller with dynamic card rendering and data management system"
+[33maacc7bf[m Revert "feat: initialize core application logic and UI structure with dynamic card management and backup support"
+[33ma8bda6f[m feat: initialize core application logic and UI structure with dynamic card management and backup support
+[33m31a500d[m Backup 29/04/2026, 08:34:50
+[33m2a70426[m Backup 29/04/2026, 08:34:24
+[33ma3c34cc[m feat: add initial CSS layout and theme variables for standard application dashboard
+[33mf6e710f[m feat: implement global CSS variables and responsive dashboard layout stylesheet
+[33mf6c3998[m Revamp theme and layout; add sidebar & blobs
+[33m477843e[m Revert "feat: implement central application controller with dynamic card rendering and data management system"
+[33m6394014[m Revert "feat: initialize core application logic and UI structure with dynamic card management and backup support"
+[33m50d4056[m feat: initialize core application logic and UI structure with dynamic card management and backup support
+[33m45cb74f[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33m7656b24[m feat: implement central application controller with dynamic card rendering and data management system
+[33maff5d17[m Backup 29/04/2026, 08:34:50
+[33m1c33b74[m Backup 29/04/2026, 08:34:24
+[33m0a55ffb[m feat: add initial CSS layout and theme variables for standard application dashboard
+[33mf5261df[m feat: implement global CSS variables and responsive dashboard layout stylesheet
+[33mb71982c[m Revamp theme and layout; add sidebar & blobs
+[33mc6e0ca6[m feat: add CSS stylesheet with global theme variables and glassmorphism design components
+[33md2c8e7c[m checkout: temporary commit for worktree checkout
+[33m25f138b[m checkout: temporary commit for worktree checkout
+[33m257e140[m Backup 28/04/2026, 08:38:48
+[33m6eaeac8[m feat: create custom CSS theme with glassmorphism and light/dark modes
+[33m6bf4c78[m feat: implement global dark/light theme with CSS variables and add associated styles to index.html
+[33mca6498e[m feat: implement dynamic theme switching with light and dark mode support
+[33m31d8bd1[m feat: add meta description and Inter font, improve accessibility, and optimize script loading
+[33mb28784e[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33m4533b00[m feat: implement core application logic with dynamic card rendering and text clipboard functionality
+[33mea592bf[m Backup 27/04/2026, 08:31:57
+[33m92b0a09[m Backup 24/04/2026, 15:24:12
+[33m95c697c[m style: update workspace-header margin from bottom to top
+[33m882844b[m refactor: move dynamic cards container to the top of the workspace block
+[33m7d47019[m feat: implement dark mode UI layout and global styles for the workspace dashboard
+[33mfe248a9[m feat: implement core application logic with dynamic card rendering and data persistence management
+[33mfb0ed1f[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33m90de3fa[m feat: implement modern dark theme styling and restructured dashboard layout with integrated tool panels
+[33md06a0f5[m Backup 24/04/2026, 15:01:45
+[33mc5e5024[m feat: implement custom dark theme styling and layout enhancements
+[33m6a6059e[m feat: implement dark mode UI layout and custom CSS styling
+[33m36c0f28[m feat: implement dark mode dashboard styling and add custom toast and login overlay components
+[33macf9200[m feat: create padrao.css with custom UI components, layout styles, and toast notifications
+[33maf0eb07[m feat: implement core application logic including state management, UI utilities, and dynamic card rendering
+[33mbd73f46[m chore: disable axe button-name check in .hintrc configuration
+[33m03e4f53[m feat: update login interface and implement core application logic in main.js
+[33m430bb6a[m feat: add settings modal for password management and authentication logic to main.js
+[33ma7f5e0d[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33mbd35945[m feat: implement password-protected login interface and custom styling for task management system
+[33mf1a7d94[m Backup 24/04/2026, 14:10:55
+[33m8e112a1[m Backup 24/04/2026, 12:07:35
+[33m42710b2[m feat: add dark mode stylesheet with card, modal, and toast components
+[33m3faf93e[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33m0e9ca1f[m feat: implement dark mode UI styling and modular JavaScript core for task management
+[33m9baf5d8[m Backup 24/04/2026, 10:09:49
+[33me4aeaad[m chore: ignore backdrop-filter in compat-api/css hint rules
+[33m03cb5c8[m Backup 24/04/2026, 09:54:28
+[33me39dd94[m feat: implement dynamic dashboard core with backup-driven state and card management logic
+[33madaa386[m feat: implement main application logic with dynamic data loading and card management functionality
+[33m73a8dcf[m feat: implement main application logic and data synchronization from local backup
+[33m3c414c2[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33m67c0955[m feat: implement main application logic with local storage persistence and dynamic card rendering from backup data
+[33mfc861c1[m Fix: Clean restore of cards_backup.json with previous edits
+[33mc04a88a[m Backup 24/04/2026, 09:38:32
+[33m9584d1a[m Fix: Manual revert of cards_backup.json to restore edits
+[33m7f61b5b[m chore: delete redundant cards_backup.json file
+[33m09bfc15[m Backup 24/04/2026, 09:35:43
+[33m8eb6e28[m Backup 24/04/2026, 09:35:10
+[33m2302b56[m feat: implement main.js core logic for state management, card rendering, and backup synchronization
+[33mb299771[m feat: implement core application logic including persistent state management, data migration, and card rendering system
+[33m2b8ee7b[m feat: implement main application controller for card management and rendering functionality
+[33m2b661a6[m Backup 23/04/2026, 16:10:32
+[33me5ee8ff[m chore: downgrade Node.js version to 22.x across all configuration files
+[33m968da26[m chore: upgrade Node.js version to 24 and configure Netlify deployment settings
+[33m1b44bd0[m style: increase transparency of colored card backgrounds
+[33m6fe448a[m fix: restore drag and drop functionality and add visual feedback
+[33mea1f4ab[m fix: resolve undefined variable in copy function and restore timeout feedback
+[33mb03ec78[m chore: update Node.js version to 22.19.1
+[33m8bc89ac[m fix: downgrade node version to 22.x for netlify compatibility
+[33mbaef410[m chore: disable no-inline-styles hint in .hintrc
+[33mc681331[m feat: add main.js with state management and card rendering for technical responsibility low-down system
+[33m7e617b0[m feat: initialize main application logic and data structure with pre-defined utility cards
+[33m829774c[m feat: implement base logic and card management interface in main.js
+[33m6ff7a50[m feat: initialize main.js with structured card data and state management
+[33m3401cd7[m feat: add toggle option to include current date in copied content
+[33m3e35ce0[m feat: implement dark mode base stylesheet with custom card and layout components
+[33m25ee434[m feat: add custom CSS styles and main logic for card-based protocol management system
+[33m2f4add1[m feat: implement card-based management system with styling and persistent storage functionality
+[33meaf73b3[m refactor: implement custom UI styling, restructure layout, and add main application logic
+[33m99d020d[m feat: implement modern dark-themed UI with custom CSS, Bootstrap 5.3, and core application logic in main.js
+[33m554b9e9[m chore: update page title to Parecer de Baixa in index.html
+[33m42abee1[m chore: update favicon path and add webhint configuration file
+[33mffe3f39[m feat: add favicon to index page
+[33m889d599[m chore: replace favicon with updated icon asset
+[33m904a43f[m feat: add main.js with central application state and dashboard card rendering logic
+[33m0d7eab9[m feat: implement MainApp core logic with persistent state management and card rendering system
+[33m633271c[m feat: implement main.js core logic with card management, storage persistence, and data migration
+[33m294b2e0[m Merge branch 'main' of https://github.com/laurourbano/baixa
+[33me059514[m feat: implement main.js core logic with state management and dynamic card rendering
+[33meef054d[m Backup 23/04/2026, 12:07:41
+[33m8bf40a1[m Backup 23/04/2026, 11:44:50
+[33m2c3b537[m Backup 23/04/2026, 11:42:44
+[33mb1e39c8[m Backup 23/04/2026, 11:31:25
+[33m03acbc6[m Backup 23/04/2026, 11:30:01
+[33m1267c49[m Backup 23/04/2026, 11:15:37
+[33mefc680d[m feat: initialize main.js with structured card management system and UI rendering logic
+[33md4640cc[m feat: initialize project configuration with Node.js 24.x support
+[33m117624e[m chore: remove Vercel deployment references and unused webhint configuration
+[33m761ce94[m Backup 23/04/2026, 10:31:13
+[33m6d4a85e[m fix: disable clipboard and context menu interactions on GitHub token input field
+[33mcc4b45a[m Backup 23/04/2026, 10:28:39
+[33mfd2c3d0[m feat: add repository configuration and initialize MainApp logic with card management features
+[33mb002e8e[m feat: add GitHub cloud backup/restore functionality and modularize application logic
+[33mf1c93c0[m Initial commit with dynamic cards and link support
+[33mbefeaf0[m feat: add card types (copy, link, PDF) with dynamic link input and supporting UI/logic.
+[33m97b03b6[m feat: implement MainApp module with card management, persistence, and copy-to-clipboard functionality
+[33m521b705[m feat: add base stylesheet with layout, card grid, and modal components
+[33m5cc4349[m style: update header typography and adjust layout spacing for better visual balance
+[33m44d9a84[m feat: add base stylesheet with layout, card grid, and modal components
+[33mb48c8e6[m feat: add base stylesheet with layout, card grid, and modal components
+[33m0277fbc[m feat: add base stylesheet with layout, card, and modal components
+[33m077ad0c[m feat: add base stylesheet with layout, card grid, and modal components
+[33m7d3491a[m feat: add base CSS styles for layout, cards, and modal components
+[33m25433a7[m feat: initialize main application logic with card management and persistence features
+[33md2d0ef6[m feat: implement core application logic and card management system in main.js
+[33mdc5a15f[m feat: implement main application logic with card management, persistence, and copy functionality
+[33m0fd805c[m feat: create base stylesheet with layout, card grid, and modal components
+[33m35d5234[m feat: add base stylesheet with layout, card grid, and modal components
+[33m3f0fa35[m feat: add base stylesheet with layout, card, and modal components
+[33md4cdd9c[m feat: add custom CSS styling and adjust modal layout spacing
+[33m093e22d[m feat: implement main application logic with card management and persistence system
+[33mec44047[m feat: implement core application logic and card management system in main.js
+[33mc22dc07[m feat: add local, situation, and judgment fields to card management UI and logic
+[33m244debf[m refactor: reorder main layout to display dynamic cards before fixed tools
+[33me7cf503[m feat: implement main application logic and styling for dynamic card management system
+[33m58889eb[m refactor: remove UI components from index.html and migrate logic to main.js
+[33m34332e7[m feat: implement clipboard copy functionality and dynamic fiscalization plan URL synchronization
+[33m0da55fa[m feat: add dark mode stylesheet with custom grid layout and glassmorphism components
+[33mec35f84[m feat: add custom dark-themed stylesheet with responsive grid layout for baixa section
+[33m5545b48[m feat: add dark mode theme and responsive layout styles in padrao.css
+[33m669cdb5[m feat: add global dark theme stylesheet with custom component styling
+[33m0548ca8[m feat: add dark mode stylesheet with custom glassmorphism and responsive grid layout
+[33meca4b28[m feat: plano fiscalizacao sincroniza com CRF-PR; corrige alinhamento btn-wrap
+[33mfeebd7d[m refactor: standardize button container classes and layout wrappers for consistent styling
+[33m65b0a09[m feat: implement dark mode theme and refactor layout structure for improved component alignment
+[33maca0ca7[m refactor: update layout to flexbox for improved button alignment and consistency across cards
+[33ma908755[m feat: add clipboard copy functionality with visual feedback for buttons
+[33m81959d9[m update
+[33m3dae178[m refactor: remove unused popover attributes from copy buttons in index.html
+[33m0aab3c5[m feat: implement dark mode UI styling and clipboard copy functionality
+[33m3437617[m feat: add global dark theme stylesheet with custom component styling
+[33m1813350[m feat: implement dark mode styling, improve accessibility, and add utility scripts for text copying and salary calculation.
+[33m935d481[m Update settings.json
+[33m7b639c2[m Update README.md
+[33m5a80e4d[m Update index.html
+[33mbebcd2a[m Update index.html
+[33mbf7a333[m update
+[33m9fe2a1a[m update
+[33m78181ea[m Update index.html
+[33me35e24b[m update
+[33m1c81903[m Update index.html
+[33m2083faf[m update 1
+[33m1f62d62[m update
+[33m4eded68[m update
+[33m7f6a762[m update
+[33mee0ef00[m update
+[33mf6478e2[m update
+[33m70f3b74[m Update calculaSalario.js
+[33m53e4049[m Atualizar o README.md
+[33m75c4098[m Atualizar o README.md
+[33m6e57a96[m Atualizar o README.md
+[33m549cd77[m Atualizar o README.md
+[33m5845778[m Atualizar o README.md
+[33mdf96bb4[m Atualizar o README.md
+[33maebf71f[m Atualizar o README.md
+[33mbe0d72b[m Atualizar o README.md
+[33m3da9c66[m update
+[33ma83b209[m Merge pull request #140 from laurourbano/refatorar
+[33m64d0405[m[33m ([m[1;31morigin/refatorar[m[33m)[m Update index.html
+[33mfcc318a[m Merge pull request #139 from laurourbano/refatorar
+[33md5dda46[m Update index.html
+[33m1033f95[m Merge pull request #138 from laurourbano/refatorar
+[33m1ab1060[m Update index.html
+[33m2a27586[m Merge pull request #137 from laurourbano/refatorar
+[33mb4ac95e[m Update index.html
+[33mafa3ec6[m Merge pull request #136 from laurourbano/refatorar
+[33m696bd4a[m Merge branch 'main' into refatorar
+[33mb6102f2[m update
+[33m0d6a949[m update
+[33m44de08b[m Merge pull request #135 from laurourbano/refatorar
+[33m95bf131[m Update index.html
+[33mffab912[m Merge pull request #134 from laurourbano/refatorar
+[33m78ac383[m Update index.html
+[33m313ee82[m Merge pull request #133 from laurourbano/refatorar
+[33m897dcba[m Update index.html
+[33m638de97[m Merge pull request #132 from laurourbano/refatorar
+[33m6d8c8d3[m update position button copy
+[33mf55536e[m Merge pull request #131 from laurourbano/refatorar
+[33m8f08e5b[m Update index.html
+[33m6fb425a[m Merge pull request #130 from laurourbano/refatorar
+[33m53db65f[m update button padrao
+[33ma864e15[m Merge pull request #129 from laurourbano/refatorar
+[33me8e6d8b[m update layout
+[33mfc26c53[m update
+[33m44817e2[m Merge pull request #128 from laurourbano/refatorar
+[33mda2dda5[m Update index.html
+[33m4d9c0ef[m Merge pull request #127 from laurourbano/refatorar
+[33m62a3577[m Update index.html
+[33m10f64b0[m Update index.html
+[33ma8323fa[m Merge pull request #126 from laurourbano/refatorar
+[33m8fefbae[m update scroll
+[33m6621cb0[m Merge pull request #125 from laurourbano/refatorar
+[33m014ab73[m Update index.html
+[33md77418d[m Merge pull request #124 from laurourbano/refatorar
+[33md7eb85b[m Update index.html
+[33md5f8d32[m Update index.html
+[33ma294f8d[m Merge pull request #123 from laurourbano/refatorar
+[33mec73b3b[m Update index.html
+[33md40c54e[m Merge pull request #122 from laurourbano/refatorar
+[33m31d6938[m Update index.html
+[33m5820b6d[m Merge pull request #121 from laurourbano/refatorar
+[33mb5a4259[m update align do salario
+[33m19d065d[m Merge pull request #120 from laurourbano/refatorar
+[33m232774f[m update padding fieldset
+[33m71a2e46[m Update index.html
+[33m17b43a6[m Merge pull request #119 from laurourbano/refatorar
+[33m321a239[m Merge pull request #118 from laurourbano/refatorar
+[33m3dac11f[m Update index.html
+[33m431fab3[m Update index.html
+[33m065d308[m Merge pull request #117 from laurourbano/refatorar
+[33m5a47d09[m update
+[33mf2949c7[m Merge pull request #116 from laurourbano/refatorar
+[33m9b783c7[m Update index.html
+[33m110ee1e[m Merge pull request #115 from laurourbano/refatorar
+[33mb2eabc7[m Update index.html
+[33m5a66a74[m Merge pull request #114 from laurourbano/refatorar
+[33m7b6d143[m Merge pull request #113 from laurourbano/refatorar
+[33me6eb539[m prazos
+[33m3546cdc[m prazos
+[33m2c2ebca[m Merge pull request #112 from laurourbano/refatorar
+[33mf5a31a3[m Update piso.html
+[33m666c7e9[m Merge pull request #111 from laurourbano/refatorar
+[33mf3c4d6c[m update
+[33m4baed2d[m Update piso.html
+[33m59bf8d2[m Merge pull request #110 from laurourbano/refatorar
+[33m2cee00d[m Merge pull request #109 from laurourbano/refatorar
+[33m0bdb5f5[m Update piso.html
+[33ma9efe6a[m ajustando layout
+[33m3ec3ba5[m Merge pull request #108 from laurourbano/refatorar
+[33md850cdc[m Merge pull request #107 from laurourbano/refatorar
+[33mf975756[m update
+[33mf1710fa[m Merge pull request #106 from laurourbano/refatorar
+[33mf410f4d[m update
+[33m117c501[m update
+[33m3e89387[m Merge pull request #105 from laurourbano/refatorar
+[33ma057da1[m Merge pull request #104 from laurourbano/refatorar
+[33m38c0342[m incluindo funcionalidade page salario
+[33m4cd7ad8[m Merge pull request #103 from laurourbano/refatorar
+[33m8e1a788[m update
+[33mcd12baf[m Merge pull request #102 from laurourbano/refatorar
+[33m8e171b0[m Update index.html
+[33mdc62fb4[m Merge pull request #101 from laurourbano/refatorar
+[33mf212b5e[m update
+[33m4ca4681[m Merge pull request #100 from laurourbano/refatorar
+[33m7eb744a[m Update index.html
+[33m9ef3fd5[m Merge pull request #99 from laurourbano/refatorar
+[33ma60d6a5[m updates
+[33m998e60c[m Update index.html
+[33m06b8667[m Merge pull request #98 from laurourbano/refatorar
+[33m2d21f42[m Update index.html
+[33m8c8f141[m Merge pull request #97 from laurourbano/refatorar
+[33m460c608[m update
+[33m53392d0[m Merge pull request #96 from laurourbano/refatorar
+[33me62cf5e[m update favicon
+[33m52b741a[m retirando arquivos e funções inutilizadas
+[33me9e5f09[m Merge pull request #95 from laurourbano/refatorar
+[33m673f36a[m espaços
+[33maae8c28[m Merge pull request #94 from laurourbano/refatorar
+[33m0e3705b[m novo link baixas
+[33m6e6c02f[m Merge pull request #93 from laurourbano/refatorar
+[33ma84b44c[m atualizando links de baixa
+[33m3812ff1[m Merge pull request #92 from laurourbano/refatorar
+[33m7a5f87a[m Merge branch 'refatorar' of https://github.com/laurourbano/baixa into refatorar
+[33m9e9495a[m Update index.html
+[33mfe1e076[m Merge pull request #91 from laurourbano/main
+[33m577b2cd[m Update index.html
+[33m40a732e[m Update index.html
+[33mdd5205a[m Merge pull request #90 from laurourbano/refatorar
+[33m06566e7[m Update index.html
+[33mb1bb97c[m Merge pull request #89 from laurourbano/refatorar
+[33mc925047[m Merge pull request #88 from laurourbano/refatorar
+[33m6a0561a[m update corrigindo texto simplificando orientações
+[33mf65d2f4[m Merge pull request #87 from laurourbano/refatorar
+[33m6c45fd6[m update capitalize
+[33m1132a1e[m Merge pull request #86 from laurourbano/refatorar
+[33mebe51ff[m Merge branch 'refatorar' of https://github.com/laurourbano/baixa into refatorar
+[33m2521bed[m Update index.html
+[33mca9bebe[m Merge pull request #85 from laurourbano/refatorar
+[33m39e0d54[m Merge branch 'main' into refatorar
+[33m6dcc250[m update
+[33m6e796ca[m Update index.html
+[33ma8ac32b[m Merge pull request #84 from laurourbano/refatorar
+[33m851b602[m Update index.html
+[33m4c663d7[m Merge pull request #83 from laurourbano/refatorar
+[33m41e3bcb[m button troca tema não implementado
+[33mfd426bc[m retirando calcula prazos não implementado
+[33m6fab537[m Merge pull request #82 from laurourbano/refatorar
+[33med7cb82[m corrigindo quebras de linhas indeferimento
+[33m6d5832b[m Update index.html
+[33m2b47660[m Update README.md
+[33m4c85a94[m Update README.md
+[33md0216e3[m Create README.md
+[33mc3eb9f9[m Merge pull request #81 from laurourbano/refatorar
+[33m2a17021[m update data
+[33m76c3646[m Merge pull request #80 from laurourbano/refatorar
+[33m1b00aeb[m arrumando o bug do diaAnterior e dataFormatada
+[33m43979c4[m Merge pull request #79 from laurourbano/refatorar
+[33m078e68f[m Update data.js
+[33m81a1fae[m Update data.js
+[33m0f0d741[m Merge pull request #78 from laurourbano/refatorar
+[33mc51751a[m Update data.js
+[33mbdfb72d[m Merge pull request #77 from laurourbano/refatorar
+[33m9af03f6[m Update data.js
+[33m7aa3ab6[m Merge pull request #76 from laurourbano/refatorar
+[33m65c06c4[m Update funcaoCopiar.js
+[33m3e6e301[m Merge pull request #75 from laurourbano/refatorar
+[33me6791f3[m retirando frase sobre manipulação veterinária.
+[33m97d520d[m Merge pull request #74 from laurourbano/refatorar
+[33mf5ba92d[m Update index.html
+[33mb8089c5[m Merge pull request #73 from laurourbano/refatorar
+[33m9e29137[m Update padrao.css
+[33m3e58be1[m Merge pull request #72 from laurourbano/refatorar
+[33m4af22c0[m Update index.html
+[33m5b1a3c2[m Merge pull request #71 from laurourbano/refatorar
+[33m702d3a7[m opacidade 0 na selecao do textarea
+[33m15c4b68[m Merge pull request #70 from laurourbano/refatorar
+[33md420a51[m invisible textareas
+[33m7a162d9[m Merge pull request #69 from laurourbano/refatorar
+[33m345a89f[m Update index.html
+[33ma18eac7[m Merge pull request #68 from laurourbano/refatorar
+[33mdb907f5[m Update manual.html
+[33m75bd846[m Merge pull request #67 from laurourbano/refatorar
+[33mca1b1e7[m update prazos
+[33m930d600[m Merge pull request #66 from laurourbano/refatorar
+[33m936f2cc[m mudando cores do layout
+[33m5147e78[m Merge pull request #65 from laurourbano/refatorar
+[33md9f11e5[m Update index.html
+[33m15934bd[m Merge pull request #64 from laurourbano/refatorar
+[33m23159a4[m Update index.html
+[33m0bcb34f[m Update index.html
+[33m49e21f2[m Merge pull request #63 from laurourbano/refatorar
+[33m64cfc2a[m UPDATE
+[33mc8cdee2[m Merge pull request #62 from laurourbano/refatorar
+[33m57c8f9b[m Update index.html
+[33m836d62b[m Merge pull request #61 from laurourbano/refatorar
+[33m42b9650[m ajustando o botão de copiar e sobrepondo a mensagem de sucesso
+[33md62343a[m Merge pull request #60 from laurourbano/refatorar
+[33md9b4f00[m Update index.html
+[33m08c4abd[m Merge pull request #59 from laurourbano/refatorar
+[33m125b59f[m update
+[33m136e85c[m Merge pull request #58 from laurourbano/refatorar
+[33m65a3aa0[m UPDATE DATA
+[33mcb6a4d3[m Merge pull request #57 from laurourbano/refatorar
+[33m9a180b9[m UPDATE
+[33m5a2db06[m Merge pull request #56 from laurourbano/refatorar
+[33m9525f16[m Update index.html
+[33mbe5c1a4[m UPDATE
+[33m2a90c82[m corrigir toggle da aplicacao
+[33m714509e[m Merge pull request #55 from laurourbano/refatorar
+[33md126fdb[m Update index.html
+[33m9064afa[m Update manual.html
+[33md480a8d[m Merge pull request #54 from laurourbano/refatorar
+[33mdb99d6a[m Merge pull request #53 from laurourbano/refatorar
+[33ma0da23b[m Update index.html
+[33m766eb54[m Merge pull request #52 from laurourbano/refatorar
+[33m0220ca5[m 1
+[33maef56f7[m Update funcaoCopiar.js
+[33ma110e1e[m Merge pull request #51 from laurourbano/refatorar
+[33m50124c0[m update manual.html
+[33mf144fdc[m Merge pull request #50 from laurourbano/refatorar
+[33me2cabfe[m update
+[33mfd0d903[m Merge pull request #49 from laurourbano/refatorar
+[33m680cb4d[m Update index.html
+[33ma97a26c[m Update index.html
+[33m17f4bb5[m Update main.js
+[33maf30783[m Merge pull request #48 from laurourbano/refatorar
+[33m11c689c[m Update index.html
+[33mf8f761b[m Merge pull request #47 from laurourbano/refatorar
+[33mb7792ee[m mexendo um pouco no fundo
+[33m79aeeee[m Merge pull request #46 from laurourbano/refatorar
+[33mbd4a55c[m cor do botao
+[33m61380e4[m mudar cor do texto - ainda nao deu
+[33m4d9e971[m atualizando o button modetheme
+[33m2d9e5d1[m Merge pull request #45 from laurourbano/refatorar
+[33m0665239[m 1
+[33m5de54ee[m mudando conteudo do popover
+[33m4926a69[m Merge pull request #44 from laurourbano/refatorar
+[33m483ef3e[m Update index.html
+[33mc70d1a6[m Update index.html
+[33m4d4b27d[m Merge pull request #43 from laurourbano/refatorar
+[33mf3b7cba[m Update index.html
+[33m2ec9d36[m Update index.html
+[33m67a1d4e[m Merge pull request #42 from laurourbano/refatorar
+[33mdb6acd6[m Update copia.js
+[33m3c599cf[m Merge pull request #41 from laurourbano/refatorar
+[33m5723050[m Update index.html
+[33md36cb19[m Merge pull request #40 from laurourbano/refatorar
+[33m9ee42c8[m Update index.html
+[33m6c50cde[m Merge pull request #39 from laurourbano/refatorar
+[33m97875b8[m Update copia.js
+[33m731a10a[m Update copia.js
+[33m05aade8[m Merge pull request #38 from laurourbano/refatorar
+[33m55ee466[m Update copia.js
+[33m37bfea1[m Merge pull request #37 from laurourbano/refatorar
+[33mc0f5d3c[m Update copia.js
+[33mae5e1ad[m Update index.html
+[33m8a8552a[m Update index.html
+[33m31b288a[m Update index.html
+[33m972c9b8[m Merge pull request #36 from laurourbano/refatorar
+[33m2073bd2[m Update index.html
+[33m42440a6[m Update index.html
+[33m16be897[m Merge pull request #35 from laurourbano/refatorar
+[33m8059d21[m atualizando
+[33m904fa53[m Merge pull request #34 from laurourbano/refatorar
+[33mce5a740[m Update index.html
+[33mf44c7da[m Merge pull request #33 from laurourbano/refatorar
+[33m2f807c8[m Update index.html
+[33ma74d55b[m Merge pull request #32 from laurourbano/refatorar
+[33mc7360a8[m Update index.html
+[33m4544790[m Merge pull request #31 from laurourbano/refatorar
+[33m9c76cc1[m Update index.html
+[33mc5b1eab[m Update manual.html
+[33m438b320[m Update manual.html
+[33mfd3bf52[m Merge pull request #30 from laurourbano/refatorar
+[33m04bf18c[m Update manual.html
+[33mead1c78[m Merge pull request #29 from laurourbano/refatorar
+[33m2a92080[m Update manual.html
+[33m6d7ebe1[m Merge pull request #28 from laurourbano/refatorar
+[33m2f9ba01[m Update manual.html
+[33m43612bc[m Update manual.html
+[33m27ee592[m Merge pull request #27 from laurourbano/refatorar
+[33me294041[m Update index.html
+[33m8806031[m Merge pull request #26 from laurourbano/refatorar
+[33mbf9e95f[m Merge pull request #25 from laurourbano/refatorar
+[33md47e090[m Update index.html
+[33ma108415[m Merge pull request #24 from laurourbano/refatorar
+[33m1d9da36[m mudando layout
+[33ma20d906[m Merge pull request #23 from laurourbano/refatorar
+[33me30b01f[m Update manual.html
+[33m32d8c00[m Merge pull request #22 from laurourbano/refatorar
+[33m12f2853[m Update index.html
+[33m705fb53[m Merge pull request #21 from laurourbano/refatorar
+[33m9ebcfd2[m Update index.html
+[33m9ec1e37[m Merge pull request #20 from laurourbano/refatorar
+[33m61b30eb[m 1
+[33medfb7ad[m Merge pull request #19 from laurourbano/refatorar
+[33me1acc7f[m 1
+[33m139a6d8[m Merge pull request #18 from laurourbano/refatorar
+[33m5fb55b9[m Update index.html
+[33m29a3846[m Merge pull request #17 from laurourbano/refatorar
+[33m9320fa2[m Update index.html
+[33m5f415fb[m Merge pull request #16 from laurourbano/refatorar
+[33m9932365[m 1
+[33ma0d0009[m Merge pull request #15 from laurourbano/refatorar
+[33m3f98eff[m Update index.html
+[33mb7cca22[m Merge pull request #14 from laurourbano/refatorar
+[33md2ebfa6[m Update index.html
+[33m1b9e060[m Update index.html
+[33m37cfc9d[m Merge pull request #13 from laurourbano/refatorar
+[33mb942b22[m Update padrao.css
+[33mec1e30c[m Merge pull request #12 from laurourbano/refatorar
+[33m92c4d01[m Update index.html
+[33me5c819c[m Merge pull request #11 from laurourbano/refatorar
+[33md2ecdbe[m Update index.html
+[33m3409602[m Merge pull request #10 from laurourbano/refatorar
+[33mbe69f31[m Update index.html
+[33mcf9a333[m Merge pull request #9 from laurourbano/refatorar
+[33m7cb4644[m Update index.html
+[33mbce0c24[m Merge pull request #8 from laurourbano/refatorar
+[33m8f2a8f4[m Update index.html
+[33md8e38bd[m Merge pull request #7 from laurourbano/refatorar
+[33mc740574[m Update index.html
+[33me61819e[m Merge pull request #6 from laurourbano/refatorar
+[33m31c4165[m Update index.html
+[33mf3db9f5[m Merge pull request #5 from laurourbano/refatorar
+[33mc8415fb[m Update index.html
+[33m11c61d6[m Merge pull request #4 from laurourbano/refatorar
+[33m2c920dc[m Update index.html
+[33m8534fbc[m Merge pull request #3 from laurourbano/refatorar
+[33m4a13f01[m Update index.html
+[33mde6b579[m Merge pull request #2 from laurourbano/refatorar
+[33m96065f5[m 1
+[33m43ec98d[m Merge pull request #1 from laurourbano/refatorar
+[33m837e93e[m mexendo no arquivo de baixas
+[33m0fa7784[m Update data.js
+[33m38bdc34[m Update index.html
+[33m2841809[m Update index.html
+[33mb5f3ed5[m Update index.html
+[33meec3ca0[m Update index.html
+[33m631a32a[m 1
+[33medc3af6[m Update index.html
+[33m14b261f[m 1
+[33mf578ff8[m Update index.html
+[33me3f5e7f[m 1
+[33m232a3fe[m 1
+[33m130c0fa[m Update baixart.css
+[33m0d32ec7[m 1
+[33m092ca6f[m Update index.html
+[33m8341ced[m Update index.html
+[33m2a5373d[m Update index.html
+[33meca0139[m Update index.html
+[33mc1ac84f[m Update index.html
+[33mdb7a3ca[m Update index.html
+[33m5727b76[m Update index.html
+[33m407dac1[m Update index.html
+[33m4fe4063[m update
+[33m5f57752[m combustivel
+[33m087c626[m lauro
+[33m998f021[m Create index.js
+[33m475cda7[m 1
+[33m286955b[m Update manual.css
+[33md0cd91c[m Update manual.html
+[33m58e9aba[m nova lista - acesso rapido
+[33m12d7e4d[m change align
+[33mc2bc2f7[m Update manual.html
+[33m4c4e0f1[m update
+[33m3cb2777[m update
+[33ma360e19[m 1
+[33m2ca9a10[m Update manual.html
+[33me2a2717[m update
+[33m51ec862[m update
+[33mf897088[m UP
+[33m9deeadb[m Update index.html
+[33m9c05305[m update css manual
+[33m1048281[m correção de cores
+[33m9196d25[m atualiza layout baixa e manual
+[33mde75cfc[m Update procedimento_baixa.html
+[33m4ed4016[m 26.08.2022
+[33mfaa909d[m atualizando paginas
+[33md001671[m ATUALIZANDO ARQUIVOS
+[33mc784403[m update
+[33maacd884[m Update index.html
+[33m347ec92[m Update baixart.css
+[33m354a440[m update style
+[33m4f7dbe7[m Update data.js
+[33maaf6aeb[m Update data.js
+[33mafc1e38[m 1
+[33mdecfde7[m update style
+[33m4170566[m 1
+[33m49bf4c5[m funcao copiar comentada
+[33mf4100f3[m update layout
+[33m5e64463[m update layout
+[33mbc92c0c[m Update baixart.css
+[33m8474c8d[m update
+[33mfd61421[m update
+[33m3ac4a2c[m update
+[33m14fe271[m Update index.html
+[33mb5c1607[m Update baixart.css
+[33m1a57db4[m Update baixart.css
+[33m04a318c[m Update baixart.css
+[33m8696db5[m Set theme jekyll-theme-cayman
+[33m64ae149[m Initial commit
