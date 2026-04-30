@@ -307,6 +307,17 @@ body::before {
     transform: translateY(-1px);
 }
 
+.weather-refresh-btn {
+    opacity: 0.5;
+    transition: all 0.3s ease !important;
+}
+
+.weather-refresh-btn:hover {
+    opacity: 1;
+    color: var(--color-primary) !important;
+    transform: rotate(180deg);
+}
+
 .weather-temp {
     font-weight: 700;
     font-size: 0.8rem;

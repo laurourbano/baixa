@@ -882,6 +882,9 @@ const MainApp = (function () {
                         <div class="d-none d-lg-block ms-1 ps-2 border-start border-secondary border-opacity-25 text-center">
                             <div class="text-muted" style="font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.5px;">${formattedDate}</div>
                         </div>
+                        <button class="btn btn-link btn-sm p-0 ms-1 text-muted weather-refresh-btn" onclick="MainApp.refreshWeather(event)" title="Atualizar clima">
+                            <i class="fas fa-sync-alt" style="font-size: 0.65rem;"></i>
+                        </button>
                     </div>
                 `;
             } catch (e) {
@@ -1011,6 +1014,19 @@ const MainApp = (function () {
         }
     }
 
+    async function refreshWeather(e) {
+        if (e) {
+            e.stopPropagation();
+            const btn = e.currentTarget;
+            if (btn) {
+                const icon = btn.querySelector('i');
+                if (icon) icon.classList.add('fa-spin');
+            }
+        }
+        await initWeather();
+        showToast('Clima atualizado!', 'info', 2000);
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 
     return {
@@ -1027,6 +1043,7 @@ const MainApp = (function () {
         logout,
         changeLocation,
         saveLocationManual,
+        refreshWeather,
         openCreate: () => {
             document.getElementById('m-id').value = '';
             document.getElementById('m-title').value = '';
