@@ -465,36 +465,38 @@ body::before {
 .card-head { 
     display: flex; 
     justify-content: space-between; 
+    align-items: center;
     color: var(--color-text-muted); 
     font-size: 0.75rem; 
-    margin-bottom: 4px;
+    margin-bottom: 10px;
+    gap: 8px;
 }
 
-.card legend { 
-    font-size: 0.8rem; 
-    font-weight: 700; 
-    padding: 0; 
-    margin: 4px 0;
-    width: 100%; 
-    color: var(--color-text); 
-    text-align: center; 
-    border: none;
+.card-title-header {
+    flex: 1;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
     letter-spacing: -0.01em;
 }
+
+
 
 
 .card .content-display {
     font-size: 0.7rem !important;
     color: var(--color-text-muted) !important; 
-    height: 60px !important; 
-    overflow-y: hidden; 
-    padding: 4px 0 !important;
+    height: 110px !important; 
+    overflow-y: auto !important; 
+    padding: 4px 4px !important;
     width: 100%;
     white-space: pre-wrap;
     line-height: 1.4;
     margin-bottom: 8px;
-    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 
 
@@ -742,6 +744,12 @@ body::before {
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
     color: var(--color-text);
     outline: none;
+}
+
+textarea.form-control {
+    overflow-y: auto !important;
+    resize: vertical;
+    min-height: 100px;
 }
 
 .form-control::placeholder {

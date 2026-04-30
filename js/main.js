@@ -154,6 +154,20 @@ const MainApp = (function () {
             });
         }
 
+        // Eventos de Focus Automático nos Modais
+        document.getElementById('cardModal').addEventListener('shown.bs.modal', () => {
+            document.getElementById('m-title').focus();
+        });
+
+        document.getElementById('settingsModal').addEventListener('shown.bs.modal', () => {
+            document.getElementById('new-password').focus();
+        });
+
+        document.getElementById('locationModal').addEventListener('shown.bs.modal', () => {
+            const filter = document.getElementById('weather-city-filter');
+            if (filter) filter.focus();
+        });
+
         window.saveCard = saveCard;
 
         const savedToken = localStorage.getItem('gh_token');
@@ -188,16 +202,16 @@ const MainApp = (function () {
                 const bootstrapColor = color === 'light' ? 'secondary' : color;
 
                 return `
-                <div class="col-6 col-md-4 col-lg-2 mb-2">
+                <div class="col-6 col-md-6 col-lg-3 mb-3">
                     <div class="card h-100 border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
                         <div class="card-head" onclick="event.stopPropagation()">
                             <span class="handle">⠿</span>
+                            <span class="card-title-header">${card.title}</span>
                             <div class="actions">
                                 <i class="fa fa-pen" onclick="MainApp.edit('${card.id}')"></i>
                                 <i class="fa fa-trash" onclick="MainApp.del('${card.id}')"></i>
                             </div>
                         </div>
-                        <legend>${card.title}</legend>
                         ${card.local || card.sit || card.julgamento ? `
                             <div class="info-line">
                                 <span>L: <b>${card.local || ''}</b></span>
