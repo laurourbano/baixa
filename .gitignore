@@ -1,2 +1,33 @@
-.vercel
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+coverage/
+
+# Environment
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build/Deploy
+.vercel
+dist/
+build/
+.netlify
+
+# OS/IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local data
+cards_backup.json

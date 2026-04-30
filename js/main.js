@@ -223,14 +223,16 @@ const MainApp = (function () {
             })
             .map(card => {
                 const isLink = card.type === 'link' || card.type === 'pdf';
+                const isInfo = card.type === 'info';
                 const icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
                 const btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
                 const color = card.color || 'light';
                 const bootstrapColor = color === 'light' ? 'secondary' : color;
+                const canCopy = !isLink && !isInfo;
 
                 return `
                 <div class="col-6 col-md-6 col-lg-3 mb-3">
-                    <div class="card h-100 border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
+                    <div class="card h-100 border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${canCopy ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
                         <div class="card-head" onclick="event.stopPropagation()">
                             <span class="handle">⠿</span>
                             <span class="card-title-header">${card.title}</span>
@@ -253,6 +255,9 @@ const MainApp = (function () {
                                     <i class="fas ${icon} me-1"></i>${btnLabel}
                                 </a>
                             </div>
+                        ` : (isInfo ? `
+                            <div class="content-display">${card.content}</div>
+                            <div class="info-card-badge"><i class="fas fa-info-circle me-1"></i> Informativo</div>
                         ` : `
                             <div class="content-display">${card.showDate !== false ? formattedDate + ' - ' : ''}${card.content.replace(/\[\s*00\/00\/0000\s*\]/g, `<span class="date-highlight">${formattedDate}</span>`)}</div>
                             <div class="card-copy-hint"><i class="fas fa-mouse-pointer me-1"></i> Clique no card para copiar</div>
@@ -260,7 +265,7 @@ const MainApp = (function () {
                             <button class="btn-copy-mini btn-outline-success" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')" title="Copiar conteúdo">
                                 <i class="fas fa-copy"></i>
                             </button>
-                        `}
+                        `)}
                     </div>
                 </div>
             `}).join('');
@@ -350,9 +355,11 @@ const MainApp = (function () {
 
     async function copy(el, id) {
         if (_copying) return;
-        _copying = true;
-
+        
         const card = document.querySelector(`[data-id="${id}"]`);
+        if (card && card.querySelector('.info-card-badge')) return; // Não copia cards informativos
+
+        _copying = true;
         const contentEl = card && (card.querySelector('.content-display') || card.querySelector('textarea'));
         if (!contentEl) { _copying = false; return; }
 
@@ -523,6 +530,9 @@ const MainApp = (function () {
 
         if (type === 'link' || type === 'pdf') {
             group.classList.remove('d-none');
+            showDateGroup.classList.add('d-none');
+        } else if (type === 'info') {
+            group.classList.add('d-none');
             showDateGroup.classList.add('d-none');
         } else {
             group.classList.add('d-none');

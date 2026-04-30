@@ -546,6 +546,19 @@ body::before {
     transform: translateX(-50%) translateY(0);
 }
 
+.info-card-badge {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    pointer-events: none;
+}
+
 .card-copy-hint.hidden {
     opacity: 0 !important;
 }

@@ -4,5 +4,18 @@
   "description": "Ferramenta para agilizar a criação de pareceres de baixa",
   "engines": {
     "node": "22.x"
+  },
+  "scripts": {
+    "test:unit": "vitest run",
+    "test:integration": "playwright test",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:watch": "vitest",
+    "test:related": "vitest related"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.5"
   }
 }
