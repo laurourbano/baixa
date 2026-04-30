@@ -280,7 +280,7 @@ body::before {
 
 .content-wrapper {
     flex: 1;
-    padding: 32px;
+    padding: 16px;
     overflow-y: auto;
 }
 
@@ -337,17 +337,15 @@ body::before {
     transition: background 0.3s ease;
 }
 
-/* Grid de Cards Integrado */
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 16px;
+/* Grid de Cards Integrado (Agora via Bootstrap Row/Col) */
+.cards-container {
+    width: 100%;
 }
 
 .card {
     background: var(--color-card-bg) !important; 
-    border-radius: var(--radius-lg) !important; 
-    padding: 20px !important;
+    border-radius: var(--radius-md) !important; 
+    padding: 12px 14px !important;
     display: flex; 
     flex-direction: column; 
     cursor: grab; 
@@ -388,10 +386,10 @@ body::before {
 }
 
 .card legend { 
-    font-size: 0.85rem; 
+    font-size: 0.8rem; 
     font-weight: 700; 
     padding: 0; 
-    margin: 8px 0;
+    margin: 4px 0;
     width: 100%; 
     color: var(--color-text); 
     text-align: center; 
@@ -672,7 +670,7 @@ body::before {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.cards-grid > * {
+#dynamic-cards > div {
     animation: fadeIn 0.4s ease-out forwards;
 }
 

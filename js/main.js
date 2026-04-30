@@ -88,6 +88,15 @@ const MainApp = (function () {
         // Verifica Autenticação
         const isAuth = localStorage.getItem('baixa_rt_auth') === 'true';
         if (isAuth) {
+            const email = localStorage.getItem('baixa_rt_user_email') || 'usuario@portal.com';
+            document.getElementById('user-display-email').textContent = email;
+            document.getElementById('modal-email').textContent = email;
+            
+            // Iniciais para o avatar
+            const initials = email.split('@')[0].substring(0, 2).toUpperCase();
+            document.getElementById('user-avatar').textContent = initials;
+            document.getElementById('modal-avatar').textContent = initials;
+
             document.getElementById('login-overlay').classList.add('hidden');
         } else {
             // Focar no campo de e-mail se não estiver logado
@@ -161,35 +170,37 @@ const MainApp = (function () {
                 const bootstrapColor = color === 'light' ? 'secondary' : color;
 
                 return `
-                <div class="card border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
-                    <div class="card-head" onclick="event.stopPropagation()">
-                        <span class="handle">⠿</span>
-                        <div class="actions">
-                            <i class="fa fa-pen" onclick="MainApp.edit('${card.id}')"></i>
-                            <i class="fa fa-trash" onclick="MainApp.del('${card.id}')"></i>
+                <div class="col-6 col-md-4 col-lg-2 mb-2">
+                    <div class="card h-100 border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${!isLink ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
+                        <div class="card-head" onclick="event.stopPropagation()">
+                            <span class="handle">⠿</span>
+                            <div class="actions">
+                                <i class="fa fa-pen" onclick="MainApp.edit('${card.id}')"></i>
+                                <i class="fa fa-trash" onclick="MainApp.del('${card.id}')"></i>
+                            </div>
                         </div>
+                        <legend>${card.title}</legend>
+                        ${card.local || card.sit || card.julgamento ? `
+                            <div class="info-line">
+                                <span>L: <b>${card.local || ''}</b></span>
+                                <span>S: <b>${card.sit || ''}</b></span>
+                                <span>J: <b>${card.julgamento || ''}</b></span>
+                            </div>` : ''}
+                        
+                        ${isLink ? `
+                            <div class="link-card-body text-center mt-2">
+                                <p class="x-small mb-2">${card.content || 'Acesso rápido'}</p>
+                                <a href="${card.link}" target="_blank" class="btn btn-outline-${bootstrapColor} btn-sm-compact" onclick="event.stopPropagation()">
+                                    <i class="fas ${icon} me-1"></i>${btnLabel}
+                                </a>
+                            </div>
+                        ` : `
+                            <div class="content-display">${card.showDate !== false ? formattedDate + ' - ' : ''}${card.content.replace(/\[\s*00\/00\/0000\s*\]/g, `<span class="date-highlight">${formattedDate}</span>`)}</div>
+                            <button class="btn btn-outline-success btn-sm-compact" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
+                                <i class="fas fa-copy me-1"></i>Copiar
+                            </button>
+                        `}
                     </div>
-                    <legend>${card.title}</legend>
-                    ${card.local || card.sit || card.julgamento ? `
-                        <div class="info-line">
-                            <span>Local: <b>${card.local || ''}</b></span>
-                            <span>Situação: <b>${card.sit || ''}</b></span>
-                            <span>Julgamento: <b>${card.julgamento || ''}</b></span>
-                        </div>` : ''}
-                    
-                    ${isLink ? `
-                        <div class="link-card-body text-center mt-2">
-                            <p>${card.content || 'Acesso rápido'}</p>
-                            <a href="${card.link}" target="_blank" class="btn btn-outline-${bootstrapColor} btn-sm-compact" onclick="event.stopPropagation()">
-                                <i class="fas ${icon} me-1"></i>${btnLabel}
-                            </a>
-                        </div>
-                    ` : `
-                        <div class="content-display">${card.showDate !== false ? formattedDate + ' - ' : ''}${card.content.replace(/\[\s*00\/00\/0000\s*\]/g, `<span class="date-highlight">${formattedDate}</span>`)}</div>
-                        <button class="btn btn-outline-success btn-sm-compact" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
-                            <i class="fas fa-copy me-1"></i>Copiar Texto
-                        </button>
-                    `}
                 </div>
             `}).join('');
 
@@ -375,7 +386,7 @@ const MainApp = (function () {
 
     /* ── Drag & Drop ─────────────────────────────────────── */
     function setupDragAndDrop() {
-        const grid = document.getElementById('main-grid');
+        const grid = document.getElementById('dynamic-cards');
         grid.ondragover = e => e.preventDefault();
         grid.ondrop = e => {
             e.preventDefault();
@@ -529,6 +540,15 @@ const MainApp = (function () {
         if (emailInput.value.includes('@') && passInput.value === savedPass) {
             localStorage.setItem('baixa_rt_auth', 'true');
             localStorage.setItem('baixa_rt_user_email', emailInput.value);
+            
+            // Atualiza UI da barra superior e do Modal
+            document.getElementById('user-display-email').textContent = emailInput.value;
+            document.getElementById('modal-email').textContent = emailInput.value;
+            
+            const initials = emailInput.value.split('@')[0].substring(0, 2).toUpperCase();
+            document.getElementById('user-avatar').textContent = initials;
+            document.getElementById('modal-avatar').textContent = initials;
+
             document.getElementById('login-overlay').classList.add('hidden');
             showToast(`Bem-vindo, ${emailInput.value.split('@')[0]}!`, 'success');
         } else {
