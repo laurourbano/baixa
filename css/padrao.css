@@ -434,7 +434,7 @@ body::before {
     display: flex; 
     flex-direction: column; 
     cursor: grab; 
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s ease;
     border: 1px solid var(--color-glass-border) !important;
     min-height: 180px;
     position: relative;
@@ -447,15 +447,13 @@ body::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; height: 4px;
-    background: var(--color-primary);
+    background: currentColor;
     opacity: 0;
     transition: opacity 0.3s;
 }
 
 .card:hover { 
-    transform: translateY(-6px) scale(1.02); 
     box-shadow: var(--shadow-premium); 
-    border-color: rgba(255,255,255,0.15) !important;
 }
 
 .card:hover::before { opacity: 1; }
@@ -536,11 +534,11 @@ body::before {
 
 
 /* Alinhamento de Bordas e Fundos Bootstrap com o Tema */
-.border-light { border-color: var(--color-border) !important; background-color: rgba(55, 65, 81, 0.1) !important; }
-.border-danger { border-color: var(--color-danger) !important; background-color: rgba(239, 68, 68, 0.08) !important; }
-.border-warning { border-color: var(--color-warning) !important; background-color: rgba(245, 158, 11, 0.08) !important; }
-.border-info { border-color: var(--color-info) !important; background-color: rgba(14, 165, 233, 0.08) !important; }
-.border-success { border-color: var(--color-success) !important; background-color: rgba(16, 185, 129, 0.08) !important; }
+.border-light { border-color: var(--color-border) !important; background-color: rgba(55, 65, 81, 0.1) !important; color: var(--color-text-muted); }
+.border-danger { border-color: var(--color-danger) !important; background-color: rgba(239, 68, 68, 0.08) !important; color: var(--color-danger); }
+.border-warning { border-color: var(--color-warning) !important; background-color: rgba(245, 158, 11, 0.08) !important; color: var(--color-warning); }
+.border-info { border-color: var(--color-info) !important; background-color: rgba(14, 165, 233, 0.08) !important; color: var(--color-info); }
+.border-success { border-color: var(--color-success) !important; background-color: rgba(16, 185, 129, 0.08) !important; color: var(--color-success); }
 
 /* Modal Styles - Glassmorphism applied to all modals */
 .modal-content { 
@@ -570,32 +568,41 @@ body::before {
 .card.dragging { opacity: 0.5; transform: scale(0.98); border-style: dashed !important; cursor: grabbing; }
 .actions i { 
     cursor: pointer; 
-    margin-left: 4px; 
-    font-size: 1.2rem; 
-    padding: 12px;
-    border-radius: 12px;
+    margin-left: 6px; 
+    font-size: 0.85rem; 
+    padding: 0;
+    border-radius: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--color-text-muted);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
 }
 
 .actions i:hover {
-    background: var(--color-glass-border);
     color: var(--color-text);
 }
 
-.actions .fa-trash:hover {
+.actions .fa-trash {
     color: var(--color-danger) !important;
-    background: rgba(239, 68, 68, 0.15);
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.actions .fa-trash:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+    transform: scale(1.1);
+}
+
+.actions .fa-pen {
+    color: var(--color-info) !important;
+    background: rgba(14, 165, 233, 0.12);
 }
 
 .actions .fa-pen:hover {
-    color: var(--color-info) !important;
-    background: rgba(14, 165, 233, 0.15);
+    background: rgba(14, 165, 233, 0.25) !important;
+    transform: scale(1.1);
 }
 
 .info-line {
