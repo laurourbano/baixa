@@ -278,6 +278,51 @@ body::before {
     backdrop-filter: blur(8px);
 }
 
+.top-bar-left, .top-bar-right {
+    flex: 1;
+}
+
+.top-bar-right {
+    justify-content: flex-end;
+}
+
+.top-bar-center {
+    flex: 2;
+    justify-content: center;
+}
+
+#weather-widget {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--color-glass-border);
+    transition: all 0.3s ease;
+    cursor: default;
+    user-select: none;
+}
+
+#weather-widget:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+.weather-temp {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-primary);
+}
+
+.weather-city {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.weather-icon {
+    font-size: 1.1rem;
+    color: var(--color-warning);
+}
+
 .content-wrapper {
     flex: 1;
     padding: 16px;

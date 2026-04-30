@@ -82,8 +82,9 @@ const MainApp = (function () {
     // Os dados agora vêm exclusivamente do arquivo cards_backup.json
 
     async function init() {
-        // Inicializa o modal do Bootstrap
+        // Inicializa os modais do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
+        window.locModal = new bootstrap.Modal(document.getElementById('locationModal'));
 
         // Verifica Autenticação
         const isAuth = localStorage.getItem('baixa_rt_auth') === 'true';
@@ -136,6 +137,13 @@ const MainApp = (function () {
         initFiscalSearch();
         initCalculator();
         initPlanoInspection();
+        initWeather();
+
+        // Listener para Enter no modal de localização
+        document.getElementById('input-city-name').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') saveLocationManual();
+        });
+
         window.saveCard = saveCard;
 
         const savedToken = localStorage.getItem('gh_token');
@@ -606,6 +614,133 @@ const MainApp = (function () {
         location.reload();
     }
 
+    async function initWeather() {
+        const widget = document.getElementById('weather-widget');
+        if (!widget) return;
+
+        async function fetchWeather(lat, lon, cityName) {
+            try {
+                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=auto`);
+                const weatherData = await weatherRes.json();
+                const { temperature, weathercode } = weatherData.current_weather;
+                const tempMax = weatherData.daily.temperature_2m_max[0];
+                const tempMin = weatherData.daily.temperature_2m_min[0];
+
+                const iconMap = {
+                    0: 'fa-sun', 1: 'fa-cloud-sun', 2: 'fa-cloud-sun', 3: 'fa-cloud',
+                    45: 'fa-smog', 48: 'fa-smog', 51: 'fa-cloud-rain', 53: 'fa-cloud-rain', 55: 'fa-cloud-rain',
+                    61: 'fa-cloud-showers-heavy', 63: 'fa-cloud-showers-heavy', 65: 'fa-cloud-showers-heavy',
+                    71: 'fa-snowflake', 73: 'fa-snowflake', 75: 'fa-snowflake',
+                    80: 'fa-cloud-rain', 81: 'fa-cloud-rain', 82: 'fa-cloud-rain',
+                    95: 'fa-bolt', 96: 'fa-bolt', 99: 'fa-bolt'
+                };
+                const iconClass = iconMap[weathercode] || 'fa-cloud';
+
+                widget.innerHTML = `
+                    <div class="d-flex align-items-center gap-3 px-1">
+                        <i class="fas ${iconClass} weather-icon fa-lg"></i>
+                        <div class="d-flex flex-column" onclick="MainApp.changeLocation()" style="cursor: pointer;" title="Clique para mudar a localização">
+                            <span class="fw-bold" style="font-size: 1.1rem; line-height: 1;">${Math.round(temperature)}°C</span>
+                            <span class="text-muted" style="font-size: 0.65rem; margin-top: 2px;">
+                                <i class="fas fa-map-marker-alt me-1"></i>${cityName}
+                            </span>
+                        </div>
+                        <div class="vr mx-1 opacity-25" style="height: 24px;"></div>
+                        <div class="d-flex flex-column justify-content-center" style="font-size: 0.7rem; line-height: 1.2;">
+                            <span class="text-danger fw-bold"><i class="fas fa-arrow-up me-1" style="font-size: 0.6rem;"></i>${Math.round(tempMax)}°</span>
+                            <span class="text-info fw-bold"><i class="fas fa-arrow-down me-1" style="font-size: 0.6rem;"></i>${Math.round(tempMin)}°</span>
+                        </div>
+                        <div class="d-none d-lg-block ms-2 ps-2 border-start border-secondary border-opacity-25 text-center">
+                            <div class="text-muted" style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px;">${formattedDate}</div>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                widget.innerHTML = '<span class="x-small text-muted" onclick="MainApp.changeLocation()" style="cursor:pointer">Erro ao carregar clima. Clique aqui.</span>';
+            }
+        }
+
+        // Tentar carregar localização salva
+        const savedLoc = JSON.parse(localStorage.getItem('portal_weather_loc'));
+        if (savedLoc) {
+            await fetchWeather(savedLoc.lat, savedLoc.lon, savedLoc.city);
+            return;
+        }
+
+        try {
+            // 1. Tentar Geolocalização
+            const pos = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+            });
+            const { latitude, longitude } = pos.coords;
+            let city = 'Local';
+            try {
+                const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                if (geoRes.ok) {
+                    const geoData = await geoRes.json();
+                    city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || 'Local';
+                }
+            } catch (e) {}
+            await fetchWeather(latitude, longitude, city);
+        } catch (err) {
+            // 2. Fallback: IP-API (mais preciso que ipapi.co em alguns casos)
+            try {
+                const ipRes = await fetch('http://ip-api.com/json/'); // Nota: pode falhar se estiver em HTTPS e o site for HTTP, mas vale tentar
+                const ipData = await ipRes.json();
+                if (ipData.status === 'success') {
+                    await fetchWeather(ipData.lat, ipData.lon, ipData.city);
+                } else { throw new Error(); }
+            } catch (e) {
+                try {
+                    const ipRes2 = await fetch('https://ipapi.co/json/');
+                    const ipData2 = await ipRes2.json();
+                    await fetchWeather(ipData2.latitude, ipData2.longitude, ipData2.city);
+                } catch (e2) {
+                    await fetchWeather(-25.4296, -49.2719, 'Curitiba');
+                }
+            }
+        }
+    }
+
+    function changeLocation() {
+        window.locModal.show();
+        setTimeout(() => document.getElementById('input-city-name').focus(), 500);
+    }
+
+    async function saveLocationManual() {
+        const city = document.getElementById('input-city-name').value;
+        if (!city) return;
+
+        try {
+            const btn = document.querySelector('#locationModal .btn-primary');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}&limit=1`);
+            const data = await res.json();
+            
+            if (data && data.length > 0) {
+                const loc = {
+                    lat: data[0].lat,
+                    lon: data[0].lon,
+                    city: data[0].display_name.split(',')[0]
+                };
+                localStorage.setItem('portal_weather_loc', JSON.stringify(loc));
+                window.locModal.hide();
+                initWeather();
+                showToast('Localização atualizada!', 'success');
+            } else {
+                showToast('Cidade não encontrada.', 'danger');
+            }
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        } catch (e) {
+            showToast('Erro ao buscar cidade.', 'danger');
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 
     return {
@@ -620,6 +755,8 @@ const MainApp = (function () {
         forgotPassword,
         updatePassword,
         logout,
+        changeLocation,
+        saveLocationManual,
         openCreate: () => {
             document.getElementById('m-id').value = '';
             document.getElementById('m-title').value = '';
