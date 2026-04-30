@@ -19,6 +19,10 @@ const MainApp = (function () {
         const container = document.getElementById('toast-container');
         if (!container) return;
 
+        // Evitar duplicidade de mensagens idênticas
+        const existingMessages = Array.from(container.querySelectorAll('.toast-message'));
+        if (existingMessages.some(m => m.textContent === message)) return;
+
         const toast = document.createElement('div');
         toast.className = `custom-toast toast-${type}`;
 
@@ -38,7 +42,7 @@ const MainApp = (function () {
 
         setTimeout(() => {
             toast.style.opacity = '0';
-            toast.style.transform = 'translateY(-20px) scale(0.9)';
+            toast.style.transform = 'translateY(20px) scale(0.9)';
             toast.style.transition = '0.3s ease-out';
             setTimeout(() => toast.remove(), 300);
         }, duration);
@@ -741,21 +745,21 @@ const MainApp = (function () {
                 const iconClass = iconMap[weathercode] || 'fa-cloud';
 
                 widget.innerHTML = `
-                    <div class="d-flex align-items-center gap-3 px-1">
-                        <i class="fas ${iconClass} weather-icon fa-lg"></i>
+                    <div class="d-flex align-items-center gap-1 px-0">
+                        <i class="fas ${iconClass} weather-icon" style="font-size: 0.8rem;"></i>
                         <div class="d-flex flex-column" onclick="MainApp.changeLocation()" style="cursor: pointer;" title="Clique para mudar a localização">
-                            <span class="fw-bold" style="font-size: 1.1rem; line-height: 1;">${Math.round(temperature)}°C</span>
-                            <span class="text-muted" style="font-size: 0.65rem; margin-top: 2px;">
+                            <span class="fw-bold" style="font-size: 0.75rem; line-height: 1;">${Math.round(temperature)}°C</span>
+                            <span class="text-muted" style="font-size: 0.5rem; margin-top: 1px;">
                                 <i class="fas fa-map-marker-alt me-1"></i>${cityName}
                             </span>
                         </div>
-                        <div class="vr mx-1 opacity-25" style="height: 24px;"></div>
-                        <div class="d-flex flex-column justify-content-center" style="font-size: 0.7rem; line-height: 1.2;">
-                            <span class="text-danger fw-bold"><i class="fas fa-arrow-up me-1" style="font-size: 0.6rem;"></i>${Math.round(tempMax)}°</span>
-                            <span class="text-info fw-bold"><i class="fas fa-arrow-down me-1" style="font-size: 0.6rem;"></i>${Math.round(tempMin)}°</span>
+                        <div class="vr mx-1 opacity-25" style="height: 16px;"></div>
+                        <div class="d-flex flex-column justify-content-center" style="font-size: 0.5rem; line-height: 1.1;">
+                            <span class="text-danger fw-bold"><i class="fas fa-arrow-up me-1" style="font-size: 0.45rem;"></i>${Math.round(tempMax)}°</span>
+                            <span class="text-info fw-bold"><i class="fas fa-arrow-down me-1" style="font-size: 0.45rem;"></i>${Math.round(tempMin)}°</span>
                         </div>
-                        <div class="d-none d-lg-block ms-2 ps-2 border-start border-secondary border-opacity-25 text-center">
-                            <div class="text-muted" style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px;">${formattedDate}</div>
+                        <div class="d-none d-lg-block ms-1 ps-2 border-start border-secondary border-opacity-25 text-center">
+                            <div class="text-muted" style="font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.5px;">${formattedDate}</div>
                         </div>
                     </div>
                 `;

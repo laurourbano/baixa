@@ -139,33 +139,43 @@ body::before {
 .sidebar.expanded {
     width: 280px;
     min-width: 280px;
-    padding: 24px;
+    padding: 24px 16px;
     cursor: default;
 }
-
 
 .sidebar-header {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
+    height: 48px;
+    transition: all 0.3s ease;
+}
+
+.sidebar.expanded .sidebar-header {
+    justify-content: flex-start;
+    padding: 0 12px;
 }
 
 .logo-wrapper {
-    width: 32px;
-    height: 32px;
-    background: var(--color-primary);
-    border-radius: 8px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--color-primary);
+    font-size: 1.2rem;
 }
 
 .logo-text {
-    font-weight: 700;
-    font-size: 1.15rem;
-    letter-spacing: -0.03em;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, var(--color-primary), #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .logo-text, .nav-item span, .logout-btn span {
@@ -203,7 +213,7 @@ body::before {
 
 .sidebar.expanded .nav-item {
     justify-content: flex-start;
-    padding: 10px 16px;
+    padding: 10px 12px;
 }
 
 .nav-item i {
@@ -250,7 +260,7 @@ body::before {
 
 .sidebar.expanded .logout-btn {
     justify-content: flex-start;
-    padding: 12px 16px;
+    padding: 12px 12px;
 }
 
 .logout-btn:hover {
@@ -278,27 +288,34 @@ body::before {
     backdrop-filter: blur(8px);
 }
 
-.top-bar-left, .top-bar-right {
+.top-bar-left {
     flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .top-bar-right {
+    flex: 1;
+    display: flex;
     justify-content: flex-end;
 }
 
 .top-bar-center {
-    flex: 2;
+    flex: 0 1 auto;
+    display: flex;
     justify-content: center;
 }
 
 #weather-widget {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 16px;
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 8px 6px;
+    border-radius: 12px;
     border: 1px solid var(--color-glass-border);
     transition: all 0.3s ease;
     cursor: default;
     user-select: none;
+    width: fit-content;
 }
 
 #weather-widget:hover {
@@ -308,19 +325,42 @@ body::before {
 
 .weather-temp {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: var(--color-primary);
 }
 
 .weather-city {
-    font-size: 0.75rem;
+    font-size: 0.6rem;
     color: var(--color-text-muted);
     font-weight: 500;
 }
 
 .weather-icon {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--color-warning);
+}
+
+#page-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.top-bar-left .badge {
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: var(--color-primary) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    font-size: 0.65rem;
+    padding: 4px 10px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
 }
 
 .content-wrapper {
@@ -599,7 +639,7 @@ body::before {
 }
 
 @keyframes toast-in {
-    from { transform: translateY(-100%) scale(0.9); opacity: 0; }
+    from { transform: translateY(100%) scale(0.9); opacity: 0; }
     to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
