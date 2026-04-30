@@ -113,6 +113,9 @@ const MainApp = (function () {
     // Os dados agora vêm exclusivamente do arquivo cards_backup.json
 
     async function init() {
+        // Opcional: Disparar a ponte de automação local (Desativado temporariamente)
+        // dispararAutomacaoPonte(dadosParaPonte);
+
         // Inicializa os modais do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
         window.locModal = new bootstrap.Modal(document.getElementById('locationModal'));
@@ -385,6 +388,35 @@ const MainApp = (function () {
 
                 contentEl.classList.add('fw-bold');
                 card.classList.add('shadow-lg', 'copied-active');
+
+                // Automação Sagicon
+                const cardData = { ...state.customs.find(c => c.id === id), ...state.edits[id] };
+                if (cardData.local || cardData.sit || cardData.julgamento) {
+                    const isPendencia = cardData.title.toLowerCase().includes('pendência') || cardData.sit === '25';
+                    
+                    console.log('Solicitando automação Sagicon para:', cardData.title);
+                    fetch('http://127.0.0.1:3002/automate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            local: cardData.local,
+                            sit: cardData.sit,
+                            julgamento: cardData.julgamento,
+                            isPendencia: isPendencia
+                        })
+                    }).then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('Comando enviado ao Sagicon!', 'success');
+                        } else {
+                            console.error('Erro na resposta da ponte:', data.error);
+                            showToast('Ponte respondeu com erro.', 'danger');
+                        }
+                    }).catch(err => {
+                        console.error('Falha ao conectar na ponte Sagicon:', err);
+                        showToast('Erro de conexão: Verifique se o terminal "bridge" está rodando.', 'danger');
+                    });
+                }
 
                 setTimeout(() => {
                     if (successEl) successEl.classList.remove('visible');

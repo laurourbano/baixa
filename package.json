@@ -10,12 +10,17 @@
     "test:integration": "playwright test",
     "test": "npm run test:unit && npm run test:integration",
     "test:watch": "vitest",
-    "test:related": "vitest related"
+    "test:related": "vitest related",
+    "bridge": "node bridge/server.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@types/node": "^25.6.0",
     "jsdom": "^29.1.1",
     "vitest": "^4.1.5"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
   }
 }
