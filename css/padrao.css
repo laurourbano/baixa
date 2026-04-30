@@ -59,6 +59,7 @@
 [data-theme="light"] .btn-close-white { filter: invert(1) grayscale(100%) brightness(50%); }
 
 
+html { font-size: 95%; }
 html, body { height: 100dvh; overflow: hidden; position: relative; }
 body { 
     background: var(--color-bg); 
@@ -78,6 +79,7 @@ body {
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight: 700;
     letter-spacing: -0.02em;
+    font-size: 0.95em; /* Reduz ligeiramente em relação ao herdado do Bootstrap */
 }
 
 
@@ -156,7 +158,7 @@ body::before {
 
 .logo-text {
     font-weight: 800;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     letter-spacing: -0.04em;
     color: var(--color-primary);
 }
@@ -200,7 +202,7 @@ body::before {
 }
 
 .nav-item i {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     min-width: 24px;
     text-align: center;
 }
@@ -217,7 +219,7 @@ body::before {
 }
 
 .sidebar-section-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 700;
@@ -307,23 +309,23 @@ body::before {
 
 .weather-temp {
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--color-primary);
 }
 
 .weather-city {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: var(--color-text-muted);
     font-weight: 500;
 }
 
 .weather-icon {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--color-warning);
 }
 
 #page-title {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--color-text);
@@ -334,7 +336,7 @@ body::before {
     background: rgba(13, 110, 253, 0.1) !important;
     color: var(--color-primary) !important;
     border: 1px solid rgba(13, 110, 253, 0.2) !important;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     padding: 4px 10px !important;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -366,7 +368,7 @@ body::before {
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: white;
 }
 
@@ -446,14 +448,14 @@ body::before {
     justify-content: space-between; 
     align-items: center;
     color: var(--color-text-muted); 
-    font-size: 0.85rem; 
+    font-size: 0.8rem; 
     margin-bottom: 12px;
     gap: 8px;
 }
 
 .card-title-header {
     flex: 1;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--color-text);
     text-align: left;
@@ -467,7 +469,7 @@ body::before {
 
 
 .card .content-display {
-    font-size: 0.8rem !important;
+    font-size: 0.75rem !important;
     color: var(--color-text-muted) !important; 
     height: 110px !important; 
     overflow-y: auto !important; 
@@ -476,6 +478,12 @@ body::before {
     white-space: pre-wrap;
     line-height: 1.5;
     margin-bottom: 8px;
+}
+
+.card.card-info-type .content-display {
+    flex: 1;
+    height: auto !important;
+    min-height: 110px;
 }
 
 
@@ -489,7 +497,7 @@ body::before {
 
 /* Botões Customizados via Classes Bootstrap */
 .btn-sm-compact {
-    font-size: 0.75rem !important;
+    font-size: 0.7rem !important;
     padding: 6px 10px !important;
     width: 100%;
     margin-top: auto;
@@ -511,7 +519,7 @@ body::before {
     color: var(--color-success);
     transition: all 0.3s ease;
     z-index: 5;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .btn-copy-mini:hover {
@@ -529,7 +537,7 @@ body::before {
     bottom: 14px;
     left: 50%;
     transform: translateX(-50%) translateY(10px);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: var(--color-success);
     background: rgba(16, 185, 129, 0.1);
     padding: 2px 8px;
@@ -548,15 +556,22 @@ body::before {
 
 .info-card-badge {
     position: absolute;
-    bottom: 14px;
-    left: 14px;
-    font-size: 0.65rem;
-    color: var(--color-text-muted);
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 600;
+    bottom: 12px;
+    right: 12px;
+    font-size: 0.6rem;
+    color: var(--color-info);
+    background: rgba(13, 202, 240, 0.1);
+    border: 1px solid rgba(13, 202, 240, 0.2);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .card-copy-hint.hidden {
@@ -572,7 +587,7 @@ body::before {
     color: white;
     padding: 8px 16px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     z-index: 10;
     opacity: 0;
@@ -733,7 +748,7 @@ body::before {
 }
 
 .info-line {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--color-text-muted);
     margin: 6px 0;
     background: rgba(0,0,0,0.15);
@@ -746,12 +761,12 @@ body::before {
 }
 .info-line b { color: var(--color-text); font-weight: 600; }
 
-.x-small { font-size: 0.75rem; }
-.btn-xs { padding: 3px 8px; font-size: 0.75rem; }
+.x-small { font-size: 0.7rem; }
+.btn-xs { padding: 3px 8px; font-size: 0.7rem; }
 
 /* Links */
 .link-card-body { padding-top: 4px; flex-grow: 1; display: flex; flex-direction: column; }
-.link-card-body p { font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 8px; flex-grow: 1; }
+.link-card-body p { font-size: 0.65rem; color: var(--color-text-muted); margin-bottom: 8px; flex-grow: 1; }
 
 
 
@@ -855,7 +870,7 @@ body::before {
 .form-control, .form-select {
     border-radius: var(--radius-md);
     padding: 10px 14px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     background-color: rgba(0, 0, 0, 0.25);
     border: 1px solid var(--color-border);
     color: var(--color-text);

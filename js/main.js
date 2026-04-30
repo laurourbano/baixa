@@ -232,7 +232,7 @@ const MainApp = (function () {
 
                 return `
                 <div class="col-6 col-md-6 col-lg-3 mb-3">
-                    <div class="card h-100 border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${canCopy ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
+                    <div class="card h-100 border-${color} ${isInfo ? 'card-info-type' : ''}" data-id="${card.id}" data-color="${color}" draggable="true" ${canCopy ? `onclick="MainApp.copy(this.querySelector('.content-display'), '${card.id}')"` : ''}>
                         <div class="card-head" onclick="event.stopPropagation()">
                             <span class="handle">⠿</span>
                             <span class="card-title-header">${card.title}</span>
