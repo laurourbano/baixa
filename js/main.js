@@ -187,7 +187,7 @@ const MainApp = (function () {
         });
 
         document.getElementById('settingsModal').addEventListener('shown.bs.modal', () => {
-            document.getElementById('new-password').focus();
+            document.getElementById('old-password').focus();
         });
 
         document.getElementById('locationModal').addEventListener('shown.bs.modal', () => {
@@ -678,16 +678,28 @@ const MainApp = (function () {
     }
 
     function updatePassword() {
+        const oldPass = document.getElementById('old-password').value;
         const p1 = document.getElementById('new-password').value;
         const p2 = document.getElementById('confirm-new-password').value;
+        const savedPass = localStorage.getItem('baixa_rt_password') || '1234';
+
+        if (oldPass !== savedPass) {
+            showToast('A senha anterior está incorreta!', 'danger');
+            return;
+        }
 
         if (!p1 || p1.length < 4) {
-            showToast('A senha deve ter pelo menos 4 dígitos', 'warning');
+            showToast('A nova senha deve ter pelo menos 4 dígitos', 'warning');
+            return;
+        }
+
+        if (p1 === oldPass) {
+            showToast('A nova senha não pode ser igual à anterior!', 'warning');
             return;
         }
 
         if (p1 !== p2) {
-            showToast('As senhas não coincidem!', 'danger');
+            showToast('As novas senhas não coincidem!', 'danger');
             return;
         }
 
@@ -696,6 +708,7 @@ const MainApp = (function () {
         bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide();
 
         // Limpa os campos
+        document.getElementById('old-password').value = '';
         document.getElementById('new-password').value = '';
         document.getElementById('confirm-new-password').value = '';
     }

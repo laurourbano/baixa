@@ -254,7 +254,8 @@
                     <!-- Alterar Senha -->
                     <div class="mb-3">
                         <label class="x-small fw-bold text-uppercase letter-spacing text-muted mb-2"><i class="fas fa-lock me-1"></i> Alterar Senha</label>
-                        <p class="x-small text-muted mb-2">A senha deve conter 4 dígitos numéricos.</p>
+                        <p class="x-small text-muted mb-2">Digite a senha anterior para validar a alteração.</p>
+                        <input type="password" id="old-password" class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-2" placeholder="Senha Anterior" maxlength="4">
                         <input type="password" id="new-password" class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-2" placeholder="Nova Senha" maxlength="4">
                         <input type="password" id="confirm-new-password" class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-3" placeholder="Confirmar Senha" maxlength="4">
                         <button onclick="MainApp.updatePassword()" class="btn btn-sm btn-success w-100 fw-bold">Salvar Nova Senha</button>
