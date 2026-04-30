@@ -142,6 +142,7 @@
                         <div class="col-md-6 col-lg-4">
                             <div class="workspace-tool">
                                 <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i class="fas fa-search me-2"></i> Fiscal</h6>
+                                <input type="text" id="fiscal-filter" class="form-control form-control-sm mb-2" placeholder="Filtrar cidade..." autocomplete="off">
                                 <select id="fiscal-select" class="form-select mb-3" disabled>
                                     <option>Carregando...</option>
                                 </select>
@@ -151,7 +152,7 @@
 
                         <!-- Ferramenta: Nuvem -->
                         <div class="col-md-6 col-lg-4">
-                            <div class="workspace-tool">
+                            <div class="workspace-tool h-100">
                                 <h6 class="fw-bold text-success mb-3 text-uppercase letter-spacing"><i class="fas fa-cloud me-2"></i> Cloud</h6>
                                 <div class="d-flex flex-column gap-3">
                                     <input id="gh-repo" type="text" placeholder="Repositório (ex: user/repo)" class="form-control">
@@ -163,6 +164,8 @@
                                     <span id="gh-status" class="small text-muted text-center p-2 bg-dark bg-opacity-25 rounded border border-secondary">Status: Off</span>
                                 </div>
                             </div>
+                        </div>
+
                         </div>
                     </div>
                 </div>
@@ -360,9 +363,13 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
-                    <p class="x-small text-muted mb-3">Digite o nome da sua cidade para atualizar o clima local.</p>
+                    <div class="mb-2">
+                        <input type="text" id="weather-city-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Filtrar cidade..." autocomplete="off">
+                    </div>
                     <div class="mb-3">
-                        <input type="text" id="input-city-name" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: Curitiba, PR">
+                        <select id="weather-city-select" class="form-select form-select-sm bg-dark text-light border-secondary" size="5">
+                            <option value="">Carregando cidades...</option>
+                        </select>
                     </div>
                     <div class="d-flex gap-2">
                         <button type="button" class="btn btn-sm btn-secondary w-100" data-bs-dismiss="modal">Cancelar</button>

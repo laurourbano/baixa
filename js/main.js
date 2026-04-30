@@ -140,9 +140,15 @@ const MainApp = (function () {
         initWeather();
 
         // Listener para Enter no modal de localização
-        document.getElementById('input-city-name').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') saveLocationManual();
-        });
+        const weatherFilter = document.getElementById('weather-city-filter');
+        if (weatherFilter) {
+            weatherFilter.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const select = document.getElementById('weather-city-select');
+                    if (select.value) saveLocationManual(select.value);
+                }
+            });
+        }
 
         window.saveCard = saveCard;
 
@@ -327,6 +333,11 @@ const MainApp = (function () {
     let fiscalData = [];
     function initFiscalSearch() {
         const select = document.getElementById('fiscal-select');
+        const filter = document.getElementById('fiscal-filter');
+        const res = document.getElementById('fiscal-res');
+
+        const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
         fetch('assets/dados.ods').then(r => r.arrayBuffer()).then(buf => {
             const _warn = console.warn;
             const _error = console.error;
@@ -343,23 +354,40 @@ const MainApp = (function () {
                     code: l[3]
                 }));
 
-                select.innerHTML = '<option value="">Selecione a cidade</option>' +
-                    fiscalData.map(d => `<option value="${d.cidade}">${d.cidade}</option>`).join('');
+                const updateOptions = (data) => {
+                    select.innerHTML = '<option value="">Selecione a cidade (' + data.length + ')</option>' +
+                        data.map(d => `<option value="${d.cidade}">${d.cidade}</option>`).join('');
+                };
+
+                updateOptions(fiscalData);
                 select.disabled = false;
+
+                filter.oninput = (e) => {
+                    const term = normalize(e.target.value);
+                    const filtered = fiscalData.filter(d => normalize(d.cidade).includes(term));
+                    updateOptions(filtered);
+                    
+                    if (filtered.length === 1 && term.length > 2) {
+                        select.value = filtered[0].cidade;
+                        select.dispatchEvent(new Event('change'));
+                    }
+                };
             } catch (err) {
                 console.warn = _warn;
                 console.error = _error;
                 throw err;
             }
         }).catch(() => {
-            const res = document.getElementById('fiscal-res');
             if (res) res.textContent = 'Planilha não encontrada.';
         });
 
         select.onchange = (e) => {
             const d = fiscalData.find(x => x.cidade === e.target.value);
-            document.getElementById('fiscal-res').innerHTML = d
-                ? `<div class="d-flex justify-content-between"><span>Código: <b>${d.code}</b></span><span>Região: <b>${d.region}</b></span></div>`
+            res.innerHTML = d
+                ? `<div class="d-flex flex-column gap-1">
+                    <div class="d-flex justify-content-between"><span>Código: <b class="text-info">${d.code}</b></span><span>Região: <b class="text-warning">${d.region}</b></span></div>
+                    <div class="text-center mt-1 border-top border-secondary border-opacity-25 pt-1">Fiscal: <b class="text-success">${d.fiscal}</b></div>
+                   </div>`
                 : 'Aguardando seleção...';
         };
     }
@@ -614,9 +642,85 @@ const MainApp = (function () {
         location.reload();
     }
 
+    let allCities = [];
+    let filteredCities = [];
+    let displayIndex = 0;
+    const displayBatchSize = 50;
+    let isFetchingCities = false;
+    const fallbackCities = [
+        "Curitiba, PR", "São Paulo, SP", "Rio de Janeiro, RJ", "Belo Horizonte, MG", 
+        "Brasília, DF", "Porto Alegre, RS", "Salvador, BA", "Fortaleza, CE", 
+        "Recife, PE", "Manaus, AM", "Goiânia, GO", "Belém, PA", "Guarulhos, SP", 
+        "Campinas, SP", "São Luís, MA", "Maceió, AL", "Campo Grande, MS", "Natal, RN"
+    ];
+
     async function initWeather() {
         const widget = document.getElementById('weather-widget');
         if (!widget) return;
+
+        // Mostrar estado de carregamento no select se o modal estiver aberto
+        const select = document.getElementById('weather-city-select');
+        if (select && allCities.length === 0) {
+            select.innerHTML = '<option value="">Carregando cidades do Brasil...</option>';
+        }
+
+        if (allCities.length === 0 && !isFetchingCities) {
+            isFetchingCities = true;
+            
+            const tryFetch = async () => {
+                const sources = [
+                    'https://servicodados.ibge.gov.br/api/v1/localidades/municipios?orderBy=nome',
+                    'https://raw.githubusercontent.com/kelvins/municipios-brasileiros/main/json/municipios.json'
+                ];
+
+                const ufMap = {
+                    11: "RO", 12: "AC", 13: "AM", 14: "RR", 15: "PA", 16: "AP", 17: "TO",
+                    21: "MA", 22: "PI", 23: "CE", 24: "RN", 25: "PB", 26: "PE", 27: "AL", 28: "SE", 29: "BA",
+                    31: "MG", 32: "ES", 33: "RJ", 35: "SP",
+                    41: "PR", 42: "SC", 43: "RS",
+                    50: "MS", 51: "MT", 52: "GO", 53: "DF"
+                };
+
+                for (const url of sources) {
+                    try {
+                        console.log(`Tentando carregar cidades de: ${url}`);
+                        const r = await fetch(url);
+                        if (!r.ok) throw new Error(`Erro na rede: ${r.status}`);
+                        const data = await r.json();
+                        
+                        if (url.includes('ibge')) {
+                            allCities = data.map(m => `${m.nome}, ${m.microrregiao.mesorregiao.UF.sigla}`);
+                        } else {
+                            // Formato da kelvins/municipios-brasileiros: {codigo_ibge, nome, codigo_uf}
+                            allCities = data.map(m => {
+                                const uf = ufMap[m.codigo_uf] || 'BR';
+                                return `${m.nome}, ${uf}`;
+                            });
+                        }
+                        
+                        if (allCities.length > 0) {
+                            // Ordenar alfabeticamente se vier da fonte secundária
+                            if (!url.includes('ibge')) allCities.sort();
+                            console.log(`${allCities.length} cidades carregadas com sucesso.`);
+                            break; 
+                        }
+                    } catch (e) {
+                        console.error(`Falha ao carregar de ${url}:`, e);
+                    }
+                }
+
+                if (allCities.length === 0) {
+                    console.warn("Todas as fontes falharam, usando fallback de capitais.");
+                    allCities = fallbackCities;
+                }
+
+                filteredCities = [...allCities];
+                isFetchingCities = false;
+                setupWeatherFilter();
+            };
+            
+            tryFetch();
+        }
 
         async function fetchWeather(lat, lon, cityName) {
             try {
@@ -660,7 +764,6 @@ const MainApp = (function () {
             }
         }
 
-        // Tentar carregar localização salva
         const savedLoc = JSON.parse(localStorage.getItem('portal_weather_loc'));
         if (savedLoc) {
             await fetchWeather(savedLoc.lat, savedLoc.lon, savedLoc.city);
@@ -668,7 +771,6 @@ const MainApp = (function () {
         }
 
         try {
-            // 1. Tentar Geolocalização
             const pos = await new Promise((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
             });
@@ -683,39 +785,75 @@ const MainApp = (function () {
             } catch (e) {}
             await fetchWeather(latitude, longitude, city);
         } catch (err) {
-            // 2. Fallback: IP-API (mais preciso que ipapi.co em alguns casos)
             try {
-                const ipRes = await fetch('http://ip-api.com/json/'); // Nota: pode falhar se estiver em HTTPS e o site for HTTP, mas vale tentar
-                const ipData = await ipRes.json();
-                if (ipData.status === 'success') {
-                    await fetchWeather(ipData.lat, ipData.lon, ipData.city);
-                } else { throw new Error(); }
-            } catch (e) {
-                try {
-                    const ipRes2 = await fetch('https://ipapi.co/json/');
-                    const ipData2 = await ipRes2.json();
-                    await fetchWeather(ipData2.latitude, ipData2.longitude, ipData2.city);
-                } catch (e2) {
-                    await fetchWeather(-25.4296, -49.2719, 'Curitiba');
-                }
+                const ipRes2 = await fetch('https://ipapi.co/json/');
+                const ipData2 = await ipRes2.json();
+                await fetchWeather(ipData2.latitude, ipData2.longitude, ipData2.city);
+            } catch (e2) {
+                await fetchWeather(-25.4296, -49.2719, 'Curitiba');
             }
         }
     }
 
-    function changeLocation() {
-        window.locModal.show();
-        setTimeout(() => document.getElementById('input-city-name').focus(), 500);
+    function setupWeatherFilter() {
+        const filter = document.getElementById('weather-city-filter');
+        const select = document.getElementById('weather-city-select');
+        if (!filter || !select) return;
+
+        const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+        const renderAll = (data) => {
+            if (data.length === 0) {
+                select.innerHTML = '<option value="">Nenhuma cidade encontrada</option>';
+                return;
+            }
+            select.innerHTML = '<option value="">Selecione a cidade (' + data.length + ')</option>' +
+                data.map(c => `<option value="${c}">${c}</option>`).join('');
+        };
+
+        renderAll(allCities);
+
+        filter.oninput = (e) => {
+            const term = normalize(e.target.value);
+            const filtered = allCities.filter(c => normalize(c).includes(term));
+            renderAll(filtered);
+            
+            if (filtered.length === 1 && term.length > 2) {
+                select.value = filtered[0];
+                select.dispatchEvent(new Event('change'));
+            }
+        };
+
+        select.onclick = (e) => {
+            if (e.target.tagName === 'OPTION' && e.target.value) {
+                saveLocationManual(e.target.value);
+            }
+        };
+
+        select.onchange = (e) => {
+            if (e.target.value) {
+                saveLocationManual(e.target.value);
+            }
+        };
     }
 
-    async function saveLocationManual() {
-        const city = document.getElementById('input-city-name').value;
+    function changeLocation() {
+        window.locModal.show();
+        setupWeatherFilter();
+        setTimeout(() => document.getElementById('weather-city-filter').focus(), 500);
+    }
+
+    async function saveLocationManual(cityName) {
+        const city = cityName || document.getElementById('weather-city-select').value;
         if (!city) return;
 
         try {
             const btn = document.querySelector('#locationModal .btn-primary');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+            }
 
             const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}&limit=1`);
             const data = await res.json();
@@ -724,7 +862,7 @@ const MainApp = (function () {
                 const loc = {
                     lat: data[0].lat,
                     lon: data[0].lon,
-                    city: data[0].display_name.split(',')[0]
+                    city: city.split(',')[0]
                 };
                 localStorage.setItem('portal_weather_loc', JSON.stringify(loc));
                 window.locModal.hide();
@@ -734,10 +872,17 @@ const MainApp = (function () {
                 showToast('Cidade não encontrada.', 'danger');
             }
             
-            btn.innerHTML = originalText;
-            btn.disabled = false;
+            if (btn) {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         } catch (e) {
-            showToast('Erro ao buscar cidade.', 'danger');
+            showToast('Erro ao buscar coordenadas.', 'danger');
+            const btn = document.querySelector('#locationModal .btn-primary');
+            if (btn) {
+                btn.innerHTML = 'Salvar';
+                btn.disabled = false;
+            }
         }
     }
 
