@@ -389,7 +389,8 @@ const MainApp = (function () {
                 contentEl.classList.add('fw-bold');
                 card.classList.add('shadow-lg', 'copied-active');
 
-                // Automação Sagicon
+                /* 
+                // Automação Sagicon - Inativado para uso futuro
                 const cardData = { ...state.customs.find(c => c.id === id), ...state.edits[id] };
                 if (cardData.local || cardData.sit || cardData.julgamento) {
                     const isPendencia = cardData.title.toLowerCase().includes('pendência') || cardData.sit === '25';
@@ -417,6 +418,7 @@ const MainApp = (function () {
                         showToast('Erro de conexão: Verifique se o terminal "bridge" está rodando.', 'danger');
                     });
                 }
+                */
 
                 setTimeout(() => {
                     if (successEl) successEl.classList.remove('visible');
