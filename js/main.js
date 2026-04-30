@@ -764,14 +764,19 @@ const MainApp = (function () {
                         if (!r.ok) throw new Error(`Erro na rede: ${r.status}`);
                         const data = await r.json();
                         
-                        if (url.includes('ibge')) {
-                            allCities = data.map(m => `${m.nome}, ${m.microrregiao.mesorregiao.UF.sigla}`);
-                        } else {
-                            // Formato da kelvins/municipios-brasileiros: {codigo_ibge, nome, codigo_uf}
-                            allCities = data.map(m => {
-                                const uf = ufMap[m.codigo_uf] || 'BR';
-                                return `${m.nome}, ${uf}`;
-                            });
+                        if (Array.isArray(data)) {
+                            if (url.includes('ibge')) {
+                                allCities = data.map(m => {
+                                    const uf = m.microrregiao?.mesorregiao?.UF?.sigla || '??';
+                                    return `${m.nome}, ${uf}`;
+                                });
+                            } else {
+                                // Formato da kelvins/municipios-brasileiros: {codigo_ibge, nome, codigo_uf}
+                                allCities = data.map(m => {
+                                    const uf = ufMap[m.codigo_uf] || 'BR';
+                                    return `${m.nome}, ${uf}`;
+                                });
+                            }
                         }
                         
                         if (allCities.length > 0) {
