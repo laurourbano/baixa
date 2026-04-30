@@ -13,6 +13,33 @@ const MainApp = (function () {
     };
     const actualDate = new Date();
     const formattedDate = actualDate.toLocaleDateString('pt-BR');
+    
+    let lastCopiedId = null;
+    let _copying = false;
+
+    function resetCardHighlight(id) {
+        if (!id) return;
+        const card = document.querySelector(`[data-id="${id}"]`);
+        if (!card) return;
+
+        const contentEl = card.querySelector('.content-display');
+        const originalColor = card.getAttribute('data-color') || 'light';
+        
+        if (contentEl) contentEl.classList.remove('fw-bold');
+        card.classList.remove('shadow-lg', 'copied-active');
+
+        const btn = card.querySelector('.btn-copy-mini');
+        if (btn) {
+            btn.classList.remove('btn-active');
+            btn.innerHTML = '<i class="fas fa-copy"></i>';
+        }
+        
+        if (originalColor !== 'success') {
+            card.classList.remove('border-success');
+            card.classList.add(`border-${originalColor}`);
+        }
+    }
+
 
     /* ── UI Helpers (Standardized Popups) ────────────────── */
     function showToast(message, type = 'success', duration = 3000) {
@@ -228,8 +255,10 @@ const MainApp = (function () {
                             </div>
                         ` : `
                             <div class="content-display">${card.showDate !== false ? formattedDate + ' - ' : ''}${card.content.replace(/\[\s*00\/00\/0000\s*\]/g, `<span class="date-highlight">${formattedDate}</span>`)}</div>
-                            <button class="btn btn-outline-success btn-sm-compact" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')">
-                                <i class="fas fa-copy me-1"></i>Copiar
+                            <div class="card-copy-hint"><i class="fas fa-mouse-pointer me-1"></i> Clique no card para copiar</div>
+                            <div class="card-copy-success"><i class="fas fa-check-circle me-1"></i> Conteúdo Copiado!</div>
+                            <button class="btn-copy-mini btn-outline-success" onclick="event.stopPropagation(); MainApp.copy(this, '${card.id}')" title="Copiar conteúdo">
+                                <i class="fas fa-copy"></i>
                             </button>
                         `}
                     </div>
@@ -237,7 +266,24 @@ const MainApp = (function () {
             `}).join('');
 
         save();
+
+        // Restaurar destaque se houver um ID copiado
+        if (lastCopiedId) {
+            const card = document.querySelector(`[data-id="${lastCopiedId}"]`);
+            if (card) {
+                card.classList.add('shadow-lg', 'copied-active');
+                const contentEl = card.querySelector('.content-display');
+                if (contentEl) contentEl.classList.add('fw-bold');
+                
+                const btn = card.querySelector('.btn-copy-mini');
+                if (btn) {
+                    btn.classList.add('btn-active');
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
+                }
+            }
+        }
     }
+
 
     /* ── Ações de Card ───────────────────────────────────── */
     function saveCard() {
@@ -302,7 +348,6 @@ const MainApp = (function () {
         }
     }
 
-    let _copying = false;
     async function copy(el, id) {
         if (_copying) return;
         _copying = true;
@@ -314,29 +359,29 @@ const MainApp = (function () {
         const text = contentEl.innerText || contentEl.value;
         try {
             await navigator.clipboard.writeText(text);
-            const btn = card.querySelector('.btn-sm-compact');
+            const btn = card.querySelector('.btn-copy-mini') || card.querySelector('.btn-sm-compact');
+            const successEl = card.querySelector('.card-copy-success');
+            const hintEl = card.querySelector('.card-copy-hint');
+
             if (btn) {
-                const originalHTML = btn.innerHTML;
+                btn.classList.add('btn-active');
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                
+                // Limpar destaque do card anterior se houver
+                if (lastCopiedId && lastCopiedId !== id) {
+                    resetCardHighlight(lastCopiedId);
+                }
+                lastCopiedId = id;
 
-                // Aplicar classes de destaque do Bootstrap
-                btn.classList.replace('btn-outline-success', 'btn-success');
-                btn.innerHTML = '<i class="fas fa-check me-1"></i>Copiado!';
+                if (successEl) successEl.classList.add('visible');
+                if (hintEl) hintEl.classList.add('hidden');
 
-                contentEl.classList.add('text-success', 'fw-bold');
-                card.classList.add('border-success', 'shadow-lg');
+                contentEl.classList.add('fw-bold');
+                card.classList.add('shadow-lg', 'copied-active');
 
                 setTimeout(() => {
-                    btn.classList.replace('btn-success', 'btn-outline-success');
-                    btn.innerHTML = originalHTML;
-
-                    contentEl.classList.remove('text-success', 'fw-bold');
-                    card.classList.remove('shadow-lg');
-
-                    const originalColor = card.getAttribute('data-color') || 'light';
-                    if (originalColor !== 'success') {
-                        card.classList.remove('border-success');
-                        card.classList.add(`border-${originalColor}`);
-                    }
+                    if (successEl) successEl.classList.remove('visible');
+                    if (hintEl) hintEl.classList.remove('hidden');
 
                     _copying = false;
                 }, 1200);
