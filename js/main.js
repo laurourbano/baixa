@@ -214,9 +214,9 @@ const MainApp = (function () {
                         </div>
                         ${card.local || card.sit || card.julgamento ? `
                             <div class="info-line">
-                                <span>L: <b>${card.local || ''}</b></span>
-                                <span>S: <b>${card.sit || ''}</b></span>
-                                <span>J: <b>${card.julgamento || ''}</b></span>
+                                <span>Local: <b>${card.local || ''}</b></span>
+                                <span>Situação: <b>${card.sit || ''}</b></span>
+                                <span>Julgamento: <b>${card.julgamento || ''}</b></span>
                             </div>` : ''}
                         
                         ${isLink ? `

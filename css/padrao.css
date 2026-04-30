@@ -474,21 +474,21 @@ body::before {
 
 .card-title-header {
     flex: 1;
-    font-size: 0.8rem;
+    font-size: 0.68rem;
     font-weight: 700;
     color: var(--color-text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
+    text-align: left;
     letter-spacing: -0.01em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.2;
 }
 
 
-
-
 .card .content-display {
-    font-size: 0.7rem !important;
+    font-size: 0.6rem !important;
     color: var(--color-text-muted) !important; 
     height: 110px !important; 
     overflow-y: auto !important; 
