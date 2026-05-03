@@ -80,4 +80,4 @@ Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 
 ---
 
-<p align="center">Desenvolvido com ❤️ para agilizar processos jurídicos.</p>
+<p align="center">Desenvolvido com ❤️ para agilizar processos administrativos.</p>
