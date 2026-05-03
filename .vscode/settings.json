@@ -1,9 +1,5 @@
 {
   "cSpell.language": "en,pt-BR,pt",
-  "cSpell.words": [
-    "Glassmorphism",
-    "julg",
-    "Morifarma"
-  ],
-  "geminicodeassist.inlineSuggestions.enableAuto": false
+  "cSpell.words": ["Glassmorphism", "julg", "Morifarma"],
+  "geminicodeassist.inlineSuggestions.enableAuto": true
 }
