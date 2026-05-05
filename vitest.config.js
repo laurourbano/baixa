@@ -5,5 +5,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     exclude: ['**/node_modules/**', '**/tests/integration/**'],
+    coverage: {
+      provider: 'v8',
+      include: ['js/**/*.js'],
+      reporter: ['text', 'json', 'html'],
+    },
   },
 })

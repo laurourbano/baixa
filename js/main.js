@@ -1057,6 +1057,23 @@ const MainApp = (function () {
             document.getElementById('m-showDate').checked = true;
             toggleLinkField();
             window.bsModal.show();
+        },
+        init,
+        initFiscalSearch,
+        initCalculator,
+        render,
+        showToast,
+        get __state() { return state; },
+        __resetState: () => {
+            state.order = [];
+            state.customs = [];
+            state.edits = {};
+            state.deleted = [];
+            save();
         }
     };
 })();
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MainApp;
+}
