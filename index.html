@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-br" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portal de Pareceres - Baixa RT - acesso seguro e rápido aos pareceres.">
     <title>Portal de Pareceres - Baixa RT</title>
-<meta name="description" content="Portal de Pareceres - Baixa RT - acesso seguro e rápido aos pareceres.">
+    <meta name="author" content="Lauro Urbano">
+    <meta name="keywords" content="Portal de Pareceres, Baixa RT">
+    <meta name="robots" content="index, follow">
+    <meta name="msapplication-navbuttoncolor" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbuttoncolor" content="#000000">
 
-    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="./assets/img/logo.png">
-    
+
     <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/padrao.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
 
 </head>
+
 <body>
     <!-- Background Blobs for Premium Feel -->
     <div class="blob blob-1"></div>
@@ -37,25 +47,30 @@
                 <h4 class="fw-bold mb-1">Acesso ao Portal</h4>
                 <p class="text-muted small">Entre com suas credenciais</p>
             </div>
-            
+
             <div class="mb-3 text-start">
                 <label class="x-small text-muted mb-1">E-mail</label>
-                <input type="email" id="login-email" class="form-control bg-dark text-light border-secondary mb-2" placeholder="seu@email.com">
-                
+                <input type="email" id="login-email" class="form-control bg-dark text-light border-secondary mb-2"
+                    placeholder="seu@email.com">
+
                 <label class="x-small text-muted mb-1">Senha</label>
-                <input type="password" id="login-password" class="form-control bg-dark text-light border-secondary text-center" placeholder="••••" maxlength="4">
-                
-                <div id="login-error" class="text-danger x-small mt-2 d-none">Credenciais incorretas! Tente novamente.</div>
+                <input type="password" id="login-password"
+                    class="form-control bg-dark text-light border-secondary text-center" placeholder="••••"
+                    maxlength="4">
+
+                <div id="login-error" class="text-danger x-small mt-2 d-none">Credenciais incorretas! Tente novamente.
+                </div>
             </div>
-            
+
             <button onclick="MainApp.checkLogin()" class="btn btn-success w-100 py-2 fw-bold">
                 Entrar <i class="fas fa-sign-in-alt ms-1"></i>
             </button>
 
             <div class="mt-3">
-                <a href="#" onclick="MainApp.forgotPassword(event)" class="x-small text-info text-decoration-none">Esqueceu a senha?</a>
+                <a href="#" onclick="MainApp.forgotPassword(event)"
+                    class="x-small text-info text-decoration-none">Esqueceu a senha?</a>
             </div>
-            
+
             <div class="mt-4 pt-3 border-top border-secondary">
                 <p class="x-small text-muted mb-0">Portal de Pareceres © 2026</p>
             </div>
@@ -71,11 +86,14 @@
                 </div>
                 <span class="logo-text">Portal RT</span>
             </div>
-            
+
             <nav class="sidebar-nav">
-                <a href="#" id="nav-dashboard" class="nav-item active" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
-                <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i class="fas fa-tools"></i> <span>Ferramentas</span></a>
-                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fas fa-cog"></i> <span>Configurações</span></a>
+                <a href="#" id="nav-dashboard" class="nav-item active" onclick="switchView('dashboard')"><i
+                        class="fas fa-th-large"></i> <span>Dashboard</span></a>
+                <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i
+                        class="fas fa-tools"></i> <span>Ferramentas</span></a>
+                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i
+                        class="fas fa-cog"></i> <span>Configurações</span></a>
             </nav>
 
             <div class="sidebar-footer mt-auto">
@@ -98,7 +116,7 @@
                         <i class="fas fa-spinner fa-spin me-1"></i> Carregando clima...
                     </div>
                 </div>
-                
+
                 <div class="top-bar-right d-flex align-items-center gap-2">
                     <button class="btn btn-link text-muted p-2" onclick="toggleTheme()" aria-label="Alternar Tema">
                         <i id="theme-icon" class="fas fa-moon"></i>
@@ -107,7 +125,8 @@
                         <span class="x-small text-muted" style="line-height: 1;">Conectado como:</span>
                         <span id="user-display-email" class="small fw-bold text-primary">carregando...</span>
                     </div>
-                    <div class="user-profile" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#settingsModal" title="Meu Perfil">
+                    <div class="user-profile" style="cursor: pointer;" data-bs-toggle="modal"
+                        data-bs-target="#settingsModal" title="Meu Perfil">
                         <div class="avatar" id="user-avatar">RT</div>
                     </div>
                 </div>
@@ -126,12 +145,15 @@
                         <!-- Ferramenta: Calculadora -->
                         <div class="col-md-6 col-lg-4">
                             <div class="workspace-tool">
-                                <h6 class="fw-bold text-info mb-3 text-uppercase letter-spacing"><i class="fas fa-calculator me-2"></i> Calculadora</h6>
+                                <h6 class="fw-bold text-info mb-3 text-uppercase letter-spacing"><i
+                                        class="fas fa-calculator me-2"></i> Calculadora</h6>
                                 <div class="d-flex gap-2 mb-3">
                                     <input id="piso" type="number" placeholder="Valor" class="form-control">
-                                    <input id="horas" type="number" placeholder="Hrs" class="form-control" style="max-width: 80px;">
+                                    <input id="horas" type="number" placeholder="Hrs" class="form-control"
+                                        style="max-width: 80px;">
                                 </div>
-                                <div class="small text-muted d-flex justify-content-between p-2 bg-dark bg-opacity-25 rounded border border-secondary">
+                                <div
+                                    class="small text-muted d-flex justify-content-between p-2 bg-dark bg-opacity-25 rounded border border-secondary">
                                     <span>Total: <b id="res-total" class="text-success">0</b></span>
                                     <span>Hora: <b id="res-hora" class="text-info">0</b></span>
                                 </div>
@@ -141,36 +163,47 @@
                         <!-- Ferramenta: Busca Fiscal -->
                         <div class="col-md-6 col-lg-4">
                             <div class="workspace-tool">
-                                <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i class="fas fa-search me-2"></i> Fiscal</h6>
-                                <input type="text" id="fiscal-filter" class="form-control form-control-sm mb-2" placeholder="Filtrar cidade..." autocomplete="off">
+                                <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i
+                                        class="fas fa-search me-2"></i> Fiscal</h6>
+                                <input type="text" id="fiscal-filter" class="form-control form-control-sm mb-2"
+                                    placeholder="Filtrar cidade..." autocomplete="off">
                                 <select id="fiscal-select" class="form-select mb-3" disabled>
                                     <option>Carregando...</option>
                                 </select>
-                                <div id="fiscal-res" class="small text-muted p-2 bg-dark bg-opacity-25 rounded border border-secondary">Selecione uma cidade</div>
+                                <div id="fiscal-res"
+                                    class="small text-muted p-2 bg-dark bg-opacity-25 rounded border border-secondary">
+                                    Selecione uma cidade</div>
                             </div>
                         </div>
 
                         <!-- Ferramenta: Nuvem -->
                         <div class="col-md-6 col-lg-4">
                             <div class="workspace-tool h-100">
-                                <h6 class="fw-bold text-success mb-3 text-uppercase letter-spacing"><i class="fas fa-cloud me-2"></i> Cloud</h6>
+                                <h6 class="fw-bold text-success mb-3 text-uppercase letter-spacing"><i
+                                        class="fas fa-cloud me-2"></i> Cloud</h6>
                                 <div class="d-flex flex-column gap-3">
-                                    <input id="gh-repo" type="text" placeholder="Repositório (ex: user/repo)" class="form-control">
-                                    <input id="gh-token" type="password" placeholder="GitHub Token" class="form-control">
+                                    <input id="gh-repo" type="text" placeholder="Repositório (ex: user/repo)"
+                                        class="form-control">
+                                    <input id="gh-token" type="password" placeholder="GitHub Token"
+                                        class="form-control">
                                     <div class="d-flex gap-2">
-                                        <button onclick="MainApp.cloudBackup()" class="btn btn-success flex-grow-1">Fazer Backup</button>
-                                        <button onclick="MainApp.cloudRestore()" class="btn btn-outline-success flex-grow-1">Sincronizar</button>
+                                        <button onclick="MainApp.cloudBackup()"
+                                            class="btn btn-success flex-grow-1">Fazer Backup</button>
+                                        <button onclick="MainApp.cloudRestore()"
+                                            class="btn btn-outline-success flex-grow-1">Sincronizar</button>
                                     </div>
-                                    <span id="gh-status" class="small text-muted text-center p-2 bg-dark bg-opacity-25 rounded border border-secondary">Status: Off</span>
+                                    <span id="gh-status"
+                                        class="small text-muted text-center p-2 bg-dark bg-opacity-25 rounded border border-secondary">Status:
+                                        Off</span>
                                 </div>
                             </div>
                         </div>
 
-                        </div>
                     </div>
                 </div>
-            </section>
-        </main>
+    </div>
+    </section>
+    </main>
     </div>
 
 
@@ -182,15 +215,18 @@
             <div class="modal-content bg-dark border-secondary">
                 <div class="modal-header py-2 border-secondary">
                     <h6 class="modal-title small fw-bold">Editar Card</h6>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
                     <input id="m-id" type="hidden">
-                    <input id="m-title" type="text" placeholder="Título" class="form-control form-control-sm bg-dark text-light border-secondary mb-2">
-                    
+                    <input id="m-title" type="text" placeholder="Título"
+                        class="form-control form-control-sm bg-dark text-light border-secondary mb-2">
+
                     <div class="row g-2 mb-2">
                         <div class="col-6">
-                            <select id="m-type" class="form-select form-select-sm bg-dark text-light border-secondary" onchange="MainApp.toggleLinkField()">
+                            <select id="m-type" class="form-select form-select-sm bg-dark text-light border-secondary"
+                                onchange="MainApp.toggleLinkField()">
                                 <option value="copy">Copiável (Texto)</option>
                                 <option value="info">Somente Informação</option>
                                 <option value="link">Link Externo</option>
@@ -209,22 +245,29 @@
                     </div>
 
                     <div id="link-field-group" class="d-none mb-2">
-                        <input id="m-link" type="text" placeholder="URL do Link ou Caminho do PDF" class="form-control form-control-sm bg-dark text-light border-secondary">
+                        <input id="m-link" type="text" placeholder="URL do Link ou Caminho do PDF"
+                            class="form-control form-control-sm bg-dark text-light border-secondary">
                     </div>
 
                     <div class="row g-1 mb-2">
-                        <div class="col-4"><input id="m-local" type="text" placeholder="Local" class="form-control form-control-sm bg-dark text-light border-secondary"></div>
-                        <div class="col-4"><input id="m-sit" type="text" placeholder="Situação" class="form-control form-control-sm bg-dark text-light border-secondary"></div>
-                        <div class="col-4"><input id="m-julgamento" type="text" placeholder="Julgamento" class="form-control form-control-sm bg-dark text-light border-secondary"></div>
+                        <div class="col-4"><input id="m-local" type="text" placeholder="Local"
+                                class="form-control form-control-sm bg-dark text-light border-secondary"></div>
+                        <div class="col-4"><input id="m-sit" type="text" placeholder="Situação"
+                                class="form-control form-control-sm bg-dark text-light border-secondary"></div>
+                        <div class="col-4"><input id="m-julgamento" type="text" placeholder="Julgamento"
+                                class="form-control form-control-sm bg-dark text-light border-secondary"></div>
                     </div>
 
-                    <textarea id="m-content" rows="4" placeholder="Conteúdo" class="form-control form-control-sm bg-dark text-light border-secondary mb-2"></textarea>
-                    
+                    <textarea id="m-content" rows="4" placeholder="Conteúdo"
+                        class="form-control form-control-sm bg-dark text-light border-secondary mb-2"></textarea>
+
                     <div class="form-check form-switch mb-2">
-                        <input class="form-check-input bg-dark border-secondary" type="checkbox" id="m-showDate" checked>
-                        <label class="form-check-label x-small text-muted" for="m-showDate">Incluir data automática ao copiar</label>
+                        <input class="form-check-input bg-dark border-secondary" type="checkbox" id="m-showDate"
+                            checked>
+                        <label class="form-check-label x-small text-muted" for="m-showDate">Incluir data automática ao
+                            copiar</label>
                     </div>
-                    
+
                     <div class="d-flex justify-content-end gap-2 mt-3">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" onclick="saveCard()" class="btn btn-sm btn-success px-3">Salvar</button>
@@ -240,12 +283,14 @@
             <div class="modal-content bg-dark border-secondary">
                 <div class="modal-header py-2 border-secondary">
                     <h6 class="modal-title small fw-bold"><i class="fas fa-cog me-2 text-success"></i>Configurações</h6>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
                     <!-- Seção de Perfil -->
                     <div class="text-center mb-4">
-                        <div class="avatar mx-auto mb-2" style="width: 60px; height: 60px; font-size: 1.2rem;" id="modal-avatar">RT</div>
+                        <div class="avatar mx-auto mb-2" style="width: 60px; height: 60px; font-size: 1.2rem;"
+                            id="modal-avatar">RT</div>
                         <h6 class="mb-1 fw-bold">Meu Perfil</h6>
                         <p id="modal-email" class="x-small text-muted mb-0">usuario@portal.com</p>
                     </div>
@@ -254,12 +299,20 @@
 
                     <!-- Alterar Senha -->
                     <div class="mb-3">
-                        <label class="x-small fw-bold text-uppercase letter-spacing text-muted mb-2"><i class="fas fa-lock me-1"></i> Alterar Senha</label>
+                        <label class="x-small fw-bold text-uppercase letter-spacing text-muted mb-2"><i
+                                class="fas fa-lock me-1"></i> Alterar Senha</label>
                         <p class="x-small text-muted mb-2">Digite a senha anterior para validar a alteração.</p>
-                        <input type="password" id="old-password" class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-2" placeholder="Senha Anterior" maxlength="4">
-                        <input type="password" id="new-password" class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-2" placeholder="Nova Senha" maxlength="4">
-                        <input type="password" id="confirm-new-password" class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-3" placeholder="Confirmar Senha" maxlength="4">
-                        <button onclick="MainApp.updatePassword()" class="btn btn-sm btn-success w-100 fw-bold">Salvar Nova Senha</button>
+                        <input type="password" id="old-password"
+                            class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-2"
+                            placeholder="Senha Anterior" maxlength="4">
+                        <input type="password" id="new-password"
+                            class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-2"
+                            placeholder="Nova Senha" maxlength="4">
+                        <input type="password" id="confirm-new-password"
+                            class="form-control form-control-sm bg-dark text-light border-secondary text-center mb-3"
+                            placeholder="Confirmar Senha" maxlength="4">
+                        <button onclick="MainApp.updatePassword()" class="btn btn-sm btn-success w-100 fw-bold">Salvar
+                            Nova Senha</button>
                     </div>
                     <hr class="border-secondary my-3">
                     <button onclick="MainApp.logout()" class="btn btn-sm btn-outline-danger w-100">
@@ -287,7 +340,7 @@
             localStorage.setItem('portal_theme', newTheme);
             updateThemeIcon(newTheme);
         }
-        
+
         function updateThemeIcon(theme) {
             const icon = document.getElementById('theme-icon');
             if (icon) {
@@ -308,16 +361,16 @@
 
             // Hide all views
             document.querySelectorAll('.app-view').forEach(el => el.classList.add('d-none'));
-            
+
             // Show selected view
             document.getElementById('view-' + viewName).classList.remove('d-none');
 
             // Update title
             const titleEl = document.getElementById('page-title');
-            if(viewName === 'dashboard') {
+            if (viewName === 'dashboard') {
                 titleEl.textContent = 'Dashboard de Pareceres';
                 document.querySelector('.btn-add').classList.remove('d-none');
-            } else if(viewName === 'ferramentas') {
+            } else if (viewName === 'ferramentas') {
                 titleEl.textContent = 'Ferramentas Secundárias';
                 document.querySelector('.btn-add').classList.add('d-none');
             }
@@ -338,7 +391,8 @@
     <script defer src="js/main.js"></script>
 
     <!-- Container para Toasts/Notificações -->
-    <div id="toast-container" class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" style="z-index: 3000;"></div>
+    <div id="toast-container" class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3"
+        style="z-index: 3000;"></div>
 
     <!-- Modal de Confirmação Genérico -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
@@ -347,10 +401,12 @@
                 <div class="modal-body p-4 text-center">
                     <div id="confirm-icon" class="mb-3"><i class="fas fa-question-circle fa-3x text-warning"></i></div>
                     <h6 id="confirm-title" class="fw-bold mb-2">Confirmar Ação</h6>
-                    <p id="confirm-message" class="small text-muted mb-4">Você tem certeza que deseja realizar esta operação?</p>
+                    <p id="confirm-message" class="small text-muted mb-4">Você tem certeza que deseja realizar esta
+                        operação?</p>
                     <div class="d-flex gap-2 justify-content-center">
                         <button type="button" class="btn btn-sm btn-secondary px-3" data-bs-dismiss="modal">Não</button>
-                        <button id="confirm-btn-yes" type="button" class="btn btn-sm btn-primary px-3">Sim, Confirmar</button>
+                        <button id="confirm-btn-yes" type="button" class="btn btn-sm btn-primary px-3">Sim,
+                            Confirmar</button>
                     </div>
                 </div>
             </div>
@@ -361,26 +417,33 @@
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content bg-dark border-secondary">
                 <div class="modal-header py-2 border-secondary">
-                    <h6 class="modal-title small fw-bold"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Alterar Localização</h6>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h6 class="modal-title small fw-bold"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Alterar
+                        Localização</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
                     <div class="mb-2">
-                        <input type="text" id="weather-city-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Filtrar cidade..." autocomplete="off">
+                        <input type="text" id="weather-city-filter"
+                            class="form-control form-control-sm bg-dark text-light border-secondary"
+                            placeholder="Filtrar cidade..." autocomplete="off">
                     </div>
                     <div class="mb-3">
-                        <select id="weather-city-select" class="form-select form-select-sm bg-dark text-light border-secondary" size="5">
+                        <select id="weather-city-select"
+                            class="form-select form-select-sm bg-dark text-light border-secondary" size="5">
                             <option value="">Carregando cidades...</option>
                         </select>
                     </div>
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" onclick="MainApp.saveLocationManual()" class="btn btn-sm btn-primary w-100">Salvar</button>
+                        <button type="button" class="btn btn-sm btn-secondary w-100"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" onclick="MainApp.saveLocationManual()"
+                            class="btn btn-sm btn-primary w-100">Salvar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-</html>
 
+</html>
