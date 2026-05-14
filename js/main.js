@@ -4,8 +4,8 @@
 const MainApp = (function () {
     'use strict';
 
-    const STORAGE_KEY = 'baixa_rt_data';
-    const state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    const API_URL = 'http://127.0.0.1:3002/api/data';
+    let state = {
         order: [],
         customs: [],
         edits: {},
@@ -147,9 +147,9 @@ const MainApp = (function () {
             emailInput.focus();
         }
 
-        // Carrega dados do backup local (arquivo cards_backup.json é a fonte da verdade)
+        // Carrega dados do Servidor (Ponte Local)
         try {
-            const response = await fetch('cards_backup.json');
+            const response = await fetch(API_URL);
             if (response.ok) {
                 const backupData = await response.json();
 
@@ -554,7 +554,7 @@ const MainApp = (function () {
         };
     }
 
-    const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    const save = async () => { try { await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) }); } catch (e) { console.error('Erro ao salvar:', e); } };
     const closeModal = () => window.bsModal.hide();
 
     function toggleLinkField() {
@@ -1077,3 +1077,5 @@ const MainApp = (function () {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = MainApp;
 }
+
+

@@ -1,5 +1,17 @@
 {
   "cSpell.language": "en,pt-BR,pt",
-  "cSpell.words": ["Glassmorphism", "julg", "Morifarma"],
+  "cSpell.words": [
+    "Automacao",
+    "codigo",
+    "Glassmorphism",
+    "ibge",
+    "julg",
+    "mesorregiao",
+    "microrregiao",
+    "Morifarma",
+    "municipios",
+    "sagicon",
+    "weathercode"
+  ],
   "geminicodeassist.inlineSuggestions.enableAuto": true
 }
