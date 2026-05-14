@@ -112,6 +112,46 @@ const MainApp = (function () {
 
     // Os dados agora vêm exclusivamente do arquivo cards_backup.json
 
+            async function loadDataFromServer() {
+        // Carrega dados do Servidor (Ponte Local)
+        try {
+            console.log("Buscando dados no servidor...");
+            const response = await fetch(API_URL);
+            if (response.ok) {
+                const serverData = await response.json();
+                state.order = serverData.order || [];
+                state.customs = serverData.customs || [];
+                state.edits = serverData.edits || {};
+                state.deleted = serverData.deleted || [];
+                console.log("Dados carregados do servidor com sucesso.");
+            } else {
+                console.warn("Servidor offline ou vazio, carregando backup local...");
+                const backupRes = await fetch('cards_backup.json');
+                if (backupRes.ok) {
+                    const backupData = await backupRes.json();
+                    state.order = backupData.order || [];
+                    state.customs = backupData.customs || [];
+                    state.edits = backupData.edits || {};
+                    state.deleted = backupData.deleted || [];
+                }
+            }
+        } catch (e) {
+            showToast("Aviso: Servidor local não detectado. Verifique se o terminal está rodando.", "warning", 5000);
+            console.error("Erro ao conectar ao servidor:", e);
+            try {
+                const backupRes = await fetch('cards_backup.json');
+                if (backupRes.ok) {
+                    const backupData = await backupRes.json();
+                    state.order = backupData.order || [];
+                    state.customs = backupData.customs || [];
+                    state.edits = backupData.edits || {};
+                    state.deleted = backupData.deleted || [];
+                }
+            } catch (err) {}
+        }
+        render();
+    }
+
     async function init() {
         // Opcional: Disparar a ponte de automação local (Desativado temporariamente)
         // dispararAutomacaoPonte(dadosParaPonte);
@@ -147,26 +187,7 @@ const MainApp = (function () {
             emailInput.focus();
         }
 
-        // Carrega dados do Servidor (Ponte Local)
-        try {
-            const response = await fetch(API_URL);
-            if (response.ok) {
-                const backupData = await response.json();
-
-                // Sobrescreve o estado local com o backup de forma estrita
-                state.order = backupData.order || [];
-                state.customs = backupData.customs || [];
-                state.edits = backupData.edits || {};
-                state.deleted = backupData.deleted || [];
-
-                save();
-            }
-        } catch (e) {
-            console.error("Erro ao carregar backup:", e);
-            // Se falhar o fetch, mantém o que está no localStorage como fallback
-        }
-
-        render();
+        await loadDataFromServer();
         setupDragAndDrop();
         initFiscalSearch();
         initCalculator();
@@ -694,6 +715,7 @@ const MainApp = (function () {
 
             document.getElementById('login-overlay').classList.add('hidden');
             showToast(`Bem-vindo, ${emailInput.value.split('@')[0]}!`, 'success');
+            loadDataFromServer();
         } else {
             errorMsg.classList.remove('d-none');
             passInput.value = '';
@@ -1077,5 +1099,8 @@ const MainApp = (function () {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = MainApp;
 }
+
+
+
 
 
