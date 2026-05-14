@@ -4,7 +4,7 @@
 const MainApp = (function () {
     'use strict';
 
-    const API_URL = 'http://127.0.0.1:3002/api/data';
+    const API_URL = 'https://escalai-backend.onrender.com/api/baixa';
     let state = {
         order: [],
         customs: [],
@@ -136,7 +136,7 @@ const MainApp = (function () {
                 }
             }
         } catch (e) {
-            showToast("Aviso: Servidor local não detectado. Verifique se o terminal está rodando.", "warning", 5000);
+            showToast("Aviso: Servidor na nuvem indisponível. Usando backup local.", "warning", 5000);
             console.error("Erro ao conectar ao servidor:", e);
             try {
                 const backupRes = await fetch('cards_backup.json');
@@ -575,7 +575,16 @@ const MainApp = (function () {
         };
     }
 
-    const save = async () => { try { await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) }); } catch (e) { console.error('Erro ao salvar:', e); } };
+    const save = async () => {
+        const status = document.getElementById('gh-status');
+        try {
+            await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) });
+            if (status) status.textContent = 'Sincronizado na nuvem às ' + new Date().toLocaleTimeString('pt-BR');
+        } catch (e) {
+            console.error('Erro ao salvar:', e);
+            if (status) status.textContent = 'Erro ao sincronizar na nuvem';
+        }
+    };
     const closeModal = () => window.bsModal.hide();
 
     function toggleLinkField() {
