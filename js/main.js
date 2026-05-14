@@ -341,11 +341,7 @@ const MainApp = (function () {
     }
 
     function notifyChange() {
-        const status = document.getElementById('gh-status');
-        if (status) {
-            status.innerHTML = '<span class="text-warning fw-bold"><i class="fas fa-exclamation-triangle me-1"></i>Alterações pendentes! Faça backup.</span>';
-        }
-        showToast('Alteração detectada! Não esqueça do backup.', 'warning', 4000);
+        // O salvamento agora é automático via nuvem
     }
 
     function edit(id) {
