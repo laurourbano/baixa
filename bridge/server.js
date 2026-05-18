@@ -64,7 +64,7 @@ const githubFileUrl = () => `https://api.github.com/repos/${GITHUB_REPOSITORY}/c
 
 const readGitHubBackup = async () => {
     if (!GITHUB_TOKEN) {
-        return { success: false, skipped: true, message: 'GITHUB_TOKEN não configurado' };
+        return { success: false, skipped: true, message: 'GITHUB_TOKEN não configurado no backend' };
     }
 
     const response = await fetch(githubFileUrl(), { headers: githubHeaders() });
@@ -92,7 +92,7 @@ const readGitHubBackup = async () => {
 
 const syncGitHubBackup = async (data) => {
     if (!GITHUB_TOKEN) {
-        return { success: false, skipped: true, message: 'GITHUB_TOKEN não configurado' };
+        return { success: false, skipped: true, message: 'GITHUB_TOKEN não configurado no backend' };
     }
 
     const headers = githubHeaders();
@@ -100,7 +100,7 @@ const syncGitHubBackup = async (data) => {
     const fileRes = await fetch(fileUrl, { headers });
 
     if (fileRes.status === 401 || fileRes.status === 403) {
-        return { success: false, message: 'Token do GitHub inválido ou sem permissão' };
+        return { success: false, message: 'GITHUB_TOKEN inválido ou sem permissão de escrita' };
     }
 
     if (fileRes.status === 404) {
@@ -131,7 +131,7 @@ const syncGitHubBackup = async (data) => {
 
     if (!saveRes.ok) {
         const error = await saveRes.json().catch(() => ({}));
-        return { success: false, message: error.message || 'Falha ao sincronizar GitHub' };
+        return { success: false, message: error.message || 'Falha ao sincronizar com o GitHub' };
     }
 
     return { success: true };
@@ -155,7 +155,7 @@ const checkGitHubAccess = async () => {
             const repo = await response.json();
             return {
                 status: 'valid',
-                message: 'Token do GitHub configurado e com acesso ao repositório',
+                message: 'GITHUB_TOKEN configurado e com acesso ao repositório',
                 canPush: Boolean(repo.permissions?.push || repo.permissions?.admin || repo.permissions?.maintain)
             };
         }
@@ -169,7 +169,7 @@ const checkGitHubAccess = async () => {
         }
 
         if (response.status === 404) {
-            return { status: 'repo_not_found', message: 'Repositório não encontrado ou token sem acesso ao repositório' };
+        return { status: 'repo_not_found', message: 'Repositório não encontrado ou GITHUB_TOKEN sem acesso ao repositório' };
         }
 
         return { status: 'error', message: `GitHub respondeu HTTP ${response.status}` };

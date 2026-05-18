@@ -129,13 +129,13 @@ const MainApp = (function () {
                 const backupSource = response.headers.get('X-Backup-Source');
                 const githubError = response.headers.get('X-GitHub-Error');
                 if (backupSource === 'local-fallback') {
-                    showCloudStatus('Servidor online, mas não conseguiu ler o GitHub: ' + (githubError || 'erro desconhecido'));
+                    showCloudStatus('Backend Baixa online, mas não conseguiu ler o backup no GitHub: ' + (githubError || 'erro desconhecido'));
                 } else {
                     await checkBackendHealth();
                 }
             } else {
                 console.warn("Servidor offline ou vazio, carregando backup local...");
-                showCloudStatus('Servidor na nuvem respondeu com erro. Usando backup local.');
+                showCloudStatus('Backend Baixa respondeu com erro. Usando backup local.');
                 const backupRes = await fetch('cards_backup.json');
                 if (backupRes.ok) {
                     const backupData = await backupRes.json();
@@ -146,8 +146,7 @@ const MainApp = (function () {
                 }
             }
         } catch (e) {
-            showToast("Aviso: Servidor na nuvem indisponível. Usando backup local.", "warning", 5000);
-            showCloudStatus('Servidor na nuvem indisponível. Verifique o backend no Render.');
+            showCloudStatus('Backend Baixa indisponível. Usando backup local.');
             console.error("Erro ao conectar ao servidor:", e);
             try {
                 const backupRes = await fetch('cards_backup.json');
@@ -181,7 +180,7 @@ const MainApp = (function () {
             const health = await response.json().catch(() => ({}));
 
             if (!response.ok) {
-                showCloudStatus('Servidor na nuvem respondeu com erro ao validar configuração.');
+                showCloudStatus('Backend Baixa respondeu com erro ao validar a configuração.');
                 return;
             }
 
@@ -191,25 +190,25 @@ const MainApp = (function () {
                 if (health.backup?.readable) {
                     showCloudStatus('GitHub configurado. Dados carregados direto do backup no GitHub.');
                 } else {
-                    showCloudStatus('GitHub configurado, mas não leu o backup: ' + (health.backup?.message || 'erro desconhecido'));
+                    showCloudStatus('GitHub configurado, mas o backup não foi lido: ' + (health.backup?.message || 'erro desconhecido'));
                 }
             } else if (github.status === 'valid') {
-                showCloudStatus('Chave GitHub válida, mas sem permissão de escrita no repositório.');
+                showCloudStatus('Chave do GitHub válida, mas sem permissão de escrita no repositório.');
             } else if (github.status === 'missing') {
-                showCloudStatus('Chave GitHub não configurada no Render (GITHUB_TOKEN ausente).');
+                showCloudStatus('Chave do GitHub não configurada no backend (GITHUB_TOKEN ausente).');
             } else if (github.status === 'invalid') {
-                showCloudStatus('Chave GitHub inválida ou expirada no Render.');
+                showCloudStatus('Chave do GitHub inválida ou expirada no backend.');
             } else if (github.status === 'forbidden') {
-                showCloudStatus('Chave GitHub sem permissão para gravar neste repositório.');
+                showCloudStatus('Chave do GitHub sem permissão para gravar neste repositório.');
             } else if (github.status === 'repo_not_found') {
                 showCloudStatus('Repositório não encontrado ou chave sem acesso ao repositório.');
             } else if (github.message) {
                 showCloudStatus('GitHub: ' + github.message);
             } else {
-                showCloudStatus('Backend online. Validação do GitHub indisponível.');
+                showCloudStatus('Backend Baixa online. Validação do GitHub indisponível.');
             }
         } catch (error) {
-            showCloudStatus('Não foi possível validar a chave no backend do Render.');
+            showCloudStatus('Não foi possível validar a chave no backend Baixa.');
         }
     }
 
@@ -635,7 +634,7 @@ const MainApp = (function () {
                 if (result.cloudSync?.success) {
                     status.textContent = 'Sincronizado na nuvem às ' + new Date().toLocaleTimeString('pt-BR');
                 } else if (result.cloudSync?.skipped) {
-                    status.textContent = 'Salvo no backend. Chave GitHub não configurada no Render.';
+                    status.textContent = 'Salvo no backend, mas não sincronizou no GitHub: chave não configurada.';
                 } else if (result.cloudSync?.message) {
                     status.textContent = 'Salvo no backend, mas não sincronizou no GitHub: ' + result.cloudSync.message;
                 } else {
@@ -644,7 +643,7 @@ const MainApp = (function () {
             }
         } catch (e) {
             console.error('Erro ao salvar:', e);
-            if (status) status.textContent = 'Erro ao sincronizar na nuvem';
+            if (status) status.textContent = 'Erro ao salvar no backend Baixa.';
         }
     };
     const closeModal = () => window.bsModal.hide();
