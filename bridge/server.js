@@ -12,7 +12,12 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_BACKUP_PATH = process.env.GITHUB_BACKUP_PATH || 'cards_backup.json';
 let githubSyncQueue = Promise.resolve();
 
-app.use(cors());
+app.use(cors({
+    origin: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.options(/.*/, cors());
 app.use(express.json({ limit: '10mb' }));
 
 // Helper para ler dados
