@@ -166,6 +166,13 @@ const MainApp = (function () {
     function showCloudStatus(message) {
         const status = document.getElementById('gh-status');
         if (status) status.textContent = message;
+
+        const type = /corretamente|Sincronizado|configurado\. Dados/.test(message)
+            ? 'success'
+            : /online|backend/.test(message)
+                ? 'info'
+                : 'warning';
+        showToast(message, type, 6000);
     }
 
     async function checkBackendHealth() {
