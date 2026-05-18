@@ -38,18 +38,57 @@ const readData = () => {
     return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 };
 
+const emptyData = () => ({
+    order: [],
+    customs: [],
+    edits: {},
+    deleted: []
+});
+
+const githubHeaders = () => ({
+    'Authorization': `Bearer ${GITHUB_TOKEN}`,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+    'X-GitHub-Api-Version': '2022-11-28'
+});
+
+const githubFileUrl = () => `https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${GITHUB_BACKUP_PATH}`;
+
+const readGitHubBackup = async () => {
+    if (!GITHUB_TOKEN) {
+        return { success: false, skipped: true, message: 'GITHUB_TOKEN não configurado' };
+    }
+
+    const response = await fetch(githubFileUrl(), { headers: githubHeaders() });
+
+    if (response.status === 401) {
+        return { success: false, message: 'GITHUB_TOKEN inválido ou expirado' };
+    }
+
+    if (response.status === 403) {
+        return { success: false, message: 'GITHUB_TOKEN sem permissão para ler o repositório' };
+    }
+
+    if (response.status === 404) {
+        return { success: false, notFound: true, message: 'Backup não encontrado no GitHub' };
+    }
+
+    if (!response.ok) {
+        return { success: false, message: `GitHub respondeu HTTP ${response.status}` };
+    }
+
+    const fileData = await response.json();
+    const content = Buffer.from(fileData.content, 'base64').toString('utf8');
+    return { success: true, data: JSON.parse(content), sha: fileData.sha };
+};
+
 const syncGitHubBackup = async (data) => {
     if (!GITHUB_TOKEN) {
         return { success: false, skipped: true, message: 'GITHUB_TOKEN não configurado' };
     }
 
-    const headers = {
-        'Authorization': `Bearer ${GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github+json',
-        'Content-Type': 'application/json',
-        'X-GitHub-Api-Version': '2022-11-28'
-    };
-    const fileUrl = `https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${GITHUB_BACKUP_PATH}`;
+    const headers = githubHeaders();
+    const fileUrl = githubFileUrl();
     const fileRes = await fetch(fileUrl, { headers });
 
     if (fileRes.status === 401 || fileRes.status === 403) {
@@ -139,10 +178,23 @@ const enqueueGitHubBackup = (data) => {
     return githubSyncQueue;
 };
 
-const getDataHandler = (req, res) => {
+const getDataHandler = async (req, res) => {
     try {
-        const data = readData();
-        res.json(data);
+        const githubBackup = await readGitHubBackup();
+
+        if (githubBackup.success) {
+            fs.writeFileSync(DATA_FILE, JSON.stringify(githubBackup.data, null, 2));
+            return res.json(githubBackup.data);
+        }
+
+        if (githubBackup.notFound) {
+            return res.json(emptyData());
+        }
+
+        const fallback = readData();
+        res.setHeader('X-Backup-Source', 'local-fallback');
+        res.setHeader('X-GitHub-Error', githubBackup.message || 'Falha ao ler backup no GitHub');
+        res.json(fallback);
     } catch (error) {
         res.status(500).json({ error: 'Erro ao ler dados' });
     }
@@ -162,13 +214,18 @@ const postDataHandler = async (req, res) => {
 // Endpoints de Persistência
 app.get('/api/health', async (req, res) => {
     const github = await checkGitHubAccess();
+    const backup = await readGitHubBackup();
 
     res.json({
         success: true,
         githubTokenConfigured: Boolean(GITHUB_TOKEN),
         githubRepository: GITHUB_REPOSITORY,
         githubBackupPath: GITHUB_BACKUP_PATH,
-        github
+        github,
+        backup: {
+            readable: Boolean(backup.success),
+            message: backup.success ? 'Backup lido direto do GitHub' : backup.message
+        }
     });
 });
 

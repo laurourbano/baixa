@@ -125,7 +125,13 @@ const MainApp = (function () {
                 state.edits = serverData.edits || {};
                 state.deleted = serverData.deleted || [];
                 console.log("Dados carregados do servidor com sucesso.");
-                await checkBackendHealth();
+                const backupSource = response.headers.get('X-Backup-Source');
+                const githubError = response.headers.get('X-GitHub-Error');
+                if (backupSource === 'local-fallback') {
+                    showCloudStatus('Servidor online, mas não conseguiu ler o GitHub: ' + (githubError || 'erro desconhecido'));
+                } else {
+                    await checkBackendHealth();
+                }
             } else {
                 console.warn("Servidor offline ou vazio, carregando backup local...");
                 showCloudStatus('Servidor na nuvem respondeu com erro. Usando backup local.');
@@ -174,7 +180,11 @@ const MainApp = (function () {
             const github = health.github || {};
 
             if (github.status === 'valid' && github.canPush) {
-                showCloudStatus('GitHub configurado corretamente no backend.');
+                if (health.backup?.readable) {
+                    showCloudStatus('GitHub configurado. Dados carregados direto do backup no GitHub.');
+                } else {
+                    showCloudStatus('GitHub configurado, mas não leu o backup: ' + (health.backup?.message || 'erro desconhecido'));
+                }
             } else if (github.status === 'valid') {
                 showCloudStatus('Chave GitHub válida, mas sem permissão de escrita no repositório.');
             } else if (github.status === 'missing') {
