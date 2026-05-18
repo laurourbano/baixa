@@ -25,6 +25,14 @@ app.use((req, res, next) => {
 });
 app.use(express.json({ limit: '10mb' }));
 
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        service: 'baixa-backend',
+        endpoints: ['/api/health', '/api/baixa', '/api/data']
+    });
+});
+
 // Helper para ler dados
 const readData = () => {
     if (!fs.existsSync(DATA_FILE)) {

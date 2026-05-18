@@ -4,8 +4,9 @@
 const MainApp = (function () {
     'use strict';
 
-    const API_URL = 'https://escalai-backend.onrender.com/api/baixa';
-    const API_HEALTH_URL = 'https://escalai-backend.onrender.com/api/health';
+    const API_BASE_URL = 'https://baixa-backend.onrender.com';
+    const API_URL = `${API_BASE_URL}/api/baixa`;
+    const API_HEALTH_URL = `${API_BASE_URL}/api/health`;
     let state = {
         order: [],
         customs: [],
