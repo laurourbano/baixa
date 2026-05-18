@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -12,12 +11,18 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_BACKUP_PATH = process.env.GITHUB_BACKUP_PATH || 'cards_backup.json';
 let githubSyncQueue = Promise.resolve();
 
-app.use(cors({
-    origin: true,
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.options(/.*/, cors());
+app.use((req, res, next) => {
+    const origin = req.headers.origin || '*';
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(204);
+    }
+
+    next();
+});
 app.use(express.json({ limit: '10mb' }));
 
 // Helper para ler dados
@@ -114,6 +119,15 @@ const postDataHandler = async (req, res) => {
 };
 
 // Endpoints de Persistência
+app.get('/api/health', (req, res) => {
+    res.json({
+        success: true,
+        githubTokenConfigured: Boolean(GITHUB_TOKEN),
+        githubRepository: GITHUB_REPOSITORY,
+        githubBackupPath: GITHUB_BACKUP_PATH
+    });
+});
+
 app.get('/api/data', getDataHandler);
 app.post('/api/data', postDataHandler);
 app.get('/api/baixa', getDataHandler);
