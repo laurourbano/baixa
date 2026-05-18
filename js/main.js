@@ -5,6 +5,7 @@ const MainApp = (function () {
     'use strict';
 
     const API_URL = 'https://escalai-backend.onrender.com/api/baixa';
+    const API_HEALTH_URL = 'https://escalai-backend.onrender.com/api/health';
     let state = {
         order: [],
         customs: [],
@@ -124,8 +125,10 @@ const MainApp = (function () {
                 state.edits = serverData.edits || {};
                 state.deleted = serverData.deleted || [];
                 console.log("Dados carregados do servidor com sucesso.");
+                await checkBackendHealth();
             } else {
                 console.warn("Servidor offline ou vazio, carregando backup local...");
+                showCloudStatus('Servidor na nuvem respondeu com erro. Usando backup local.');
                 const backupRes = await fetch('cards_backup.json');
                 if (backupRes.ok) {
                     const backupData = await backupRes.json();
@@ -137,6 +140,7 @@ const MainApp = (function () {
             }
         } catch (e) {
             showToast("Aviso: Servidor na nuvem indisponível. Usando backup local.", "warning", 5000);
+            showCloudStatus('Servidor na nuvem indisponível. Verifique o backend no Render.');
             console.error("Erro ao conectar ao servidor:", e);
             try {
                 const backupRes = await fetch('cards_backup.json');
@@ -150,6 +154,45 @@ const MainApp = (function () {
             } catch (err) {}
         }
         render();
+    }
+
+    function showCloudStatus(message) {
+        const status = document.getElementById('gh-status');
+        if (status) status.textContent = message;
+    }
+
+    async function checkBackendHealth() {
+        try {
+            const response = await fetch(API_HEALTH_URL);
+            const health = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                showCloudStatus('Servidor na nuvem respondeu com erro ao validar configuração.');
+                return;
+            }
+
+            const github = health.github || {};
+
+            if (github.status === 'valid' && github.canPush) {
+                showCloudStatus('GitHub configurado corretamente no backend.');
+            } else if (github.status === 'valid') {
+                showCloudStatus('Chave GitHub válida, mas sem permissão de escrita no repositório.');
+            } else if (github.status === 'missing') {
+                showCloudStatus('Chave GitHub não configurada no Render (GITHUB_TOKEN ausente).');
+            } else if (github.status === 'invalid') {
+                showCloudStatus('Chave GitHub inválida ou expirada no Render.');
+            } else if (github.status === 'forbidden') {
+                showCloudStatus('Chave GitHub sem permissão para gravar neste repositório.');
+            } else if (github.status === 'repo_not_found') {
+                showCloudStatus('Repositório não encontrado ou chave sem acesso ao repositório.');
+            } else if (github.message) {
+                showCloudStatus('GitHub: ' + github.message);
+            } else {
+                showCloudStatus('Backend online. Validação do GitHub indisponível.');
+            }
+        } catch (error) {
+            showCloudStatus('Não foi possível validar a chave no backend do Render.');
+        }
     }
 
     async function init() {
@@ -574,9 +617,9 @@ const MainApp = (function () {
                 if (result.cloudSync?.success) {
                     status.textContent = 'Sincronizado na nuvem às ' + new Date().toLocaleTimeString('pt-BR');
                 } else if (result.cloudSync?.skipped) {
-                    status.textContent = 'Salvo no backend. Configure GITHUB_TOKEN para sincronizar GitHub.';
+                    status.textContent = 'Salvo no backend. Chave GitHub não configurada no Render.';
                 } else if (result.cloudSync?.message) {
-                    status.textContent = 'Salvo no backend. GitHub: ' + result.cloudSync.message;
+                    status.textContent = 'Salvo no backend, mas não sincronizou no GitHub: ' + result.cloudSync.message;
                 } else {
                     status.textContent = 'Salvo no backend às ' + new Date().toLocaleTimeString('pt-BR');
                 }

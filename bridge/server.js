@@ -90,6 +90,47 @@ const syncGitHubBackup = async (data) => {
     return { success: true };
 };
 
+const checkGitHubAccess = async () => {
+    if (!GITHUB_TOKEN) {
+        return { status: 'missing', message: 'GITHUB_TOKEN não configurado no backend' };
+    }
+
+    try {
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPOSITORY}`, {
+            headers: {
+                'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github+json',
+                'X-GitHub-Api-Version': '2022-11-28'
+            }
+        });
+
+        if (response.ok) {
+            const repo = await response.json();
+            return {
+                status: 'valid',
+                message: 'Token do GitHub configurado e com acesso ao repositório',
+                canPush: Boolean(repo.permissions?.push || repo.permissions?.admin || repo.permissions?.maintain)
+            };
+        }
+
+        if (response.status === 401) {
+            return { status: 'invalid', message: 'GITHUB_TOKEN inválido ou expirado' };
+        }
+
+        if (response.status === 403) {
+            return { status: 'forbidden', message: 'GITHUB_TOKEN sem permissão suficiente para este repositório' };
+        }
+
+        if (response.status === 404) {
+            return { status: 'repo_not_found', message: 'Repositório não encontrado ou token sem acesso ao repositório' };
+        }
+
+        return { status: 'error', message: `GitHub respondeu HTTP ${response.status}` };
+    } catch (error) {
+        return { status: 'error', message: 'Falha ao validar GITHUB_TOKEN no GitHub' };
+    }
+};
+
 const enqueueGitHubBackup = (data) => {
     githubSyncQueue = githubSyncQueue
         .catch(() => {})
@@ -119,12 +160,15 @@ const postDataHandler = async (req, res) => {
 };
 
 // Endpoints de Persistência
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+    const github = await checkGitHubAccess();
+
     res.json({
         success: true,
         githubTokenConfigured: Boolean(GITHUB_TOKEN),
         githubRepository: GITHUB_REPOSITORY,
-        githubBackupPath: GITHUB_BACKUP_PATH
+        githubBackupPath: GITHUB_BACKUP_PATH,
+        github
     });
 });
 
