@@ -4,7 +4,7 @@
 const MainApp = (function () {
     'use strict';
 
-    const API_URL = 'http://127.0.0.1:3002/api/baixa';
+    const API_URL = 'https://escalai-backend.onrender.com/api/baixa';
     let state = {
         order: [],
         customs: [],
