@@ -6,6 +6,7 @@
     "node": "22.x"
   },
   "scripts": {
+    "start": "node bridge/server.js",
     "test:unit": "vitest run",
     "test:integration": "playwright test",
     "test": "npm run test:unit && npm run test:integration",

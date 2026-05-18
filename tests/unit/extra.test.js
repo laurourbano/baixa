@@ -45,8 +45,6 @@ describe('MainApp extended unit tests', () => {
       <input id="m-type" />
       <input id="m-link" />
       <input id="m-showDate" type="checkbox" />
-      <input id="gh-token" />
-      <input id="gh-repo" />
       <div id="gh-status"></div>
       <input id="piso" value="0" />
       <input id="horas" value="0" />
@@ -126,53 +124,21 @@ describe('MainApp extended unit tests', () => {
     expect(horaEl.textContent).toBe('10,00'); // 2200/220 = 10
   });
 
-  /*** 3. Cloud backup – GitHub interaction ***/
-  it('performs cloud backup and updates status', async () => {
-    // Fill token & repo fields
-    document.getElementById('gh-token').value = 'FAKE_TOKEN';
-    document.getElementById('gh-repo').value = 'my-repo';
+  /*** 3. Automatic backend sync ***/
+  it('saves changes through the backend and updates status', async () => {
+    mockFetch.mockReset();
+    mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: true, cloudSync: { success: true } }) });
 
-    // Mock user endpoint to return a username
-    mockFetch
-      .mockImplementationOnce(() => Promise.resolve({ status: 200, json: () => Promise.resolve({ login: 'myuser' }) })) // user request
-      .mockImplementationOnce(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ sha: 'oldsha' }) })) // file exists (optional)
-      .mockImplementationOnce(() => Promise.resolve({ ok: true })); // PUT request
-
-    await MainApp.cloudBackup();
+    MainApp.__resetState();
+    await Promise.resolve();
+    await Promise.resolve();
 
     const statusEl = document.getElementById('gh-status');
-    expect(statusEl.textContent).toContain('Backup ok!');
-    // Verify fetch calls use proper URL pattern
-    const putCall = mockFetch.mock.calls[2];
-    expect(putCall[0]).toMatch(/https:\/\/api\.github\.com\/repos\/myuser\/my-repo\/contents\/cards_backup\.json/);
-    // LocalStorage should now hold token/repo
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('gh_token', 'FAKE_TOKEN');
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('gh_repo', 'my-repo');
+    expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('/api/baixa'), expect.objectContaining({ method: 'POST' }));
+    expect(statusEl.textContent).toMatch(/Sincronizado na nuvem|Salvo no backend/);
   });
 
-  /*** 4. Cloud restore – resolves confirm and updates state ***/
-  it('restores backup from GitHub when user confirms', async () => {
-    document.getElementById('gh-token').value = 'FAKE_TOKEN';
-    document.getElementById('gh-repo').value = 'my-repo';
-
-    // Mock confirmation dialog to resolve true
-    const confirmPromise = Promise.resolve(true);
-    global.showConfirm = vi.fn(() => confirmPromise);
-
-    // Mock user request and file fetch
-    mockFetch
-      .mockImplementationOnce(() => Promise.resolve({ status: 200, json: () => Promise.resolve({ login: 'myuser' }) })) // user request
-      .mockImplementationOnce(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ content: btoa(JSON.stringify({ order: ['x'], customs: [], edits: {}, deleted: [] })) }) })); // GET file
-
-    await MainApp.cloudRestore();
-
-    // After restore, internal state should reflect the fetched JSON
-    expect(MainApp.__state.order).toEqual(['x']);
-    const statusEl = document.getElementById('gh-status');
-    expect(statusEl.textContent).toContain('Sincronizado!');
-  });
-
-  /*** 5. Delete card flow ***/
+  /*** 4. Delete card flow ***/
   it('deletes a card after user confirmation', async () => {
     // Add a dummy card to state
     MainApp.__state.customs.push({ id: 'card-1', title: 'Teste', content: 'abc' });

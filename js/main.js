@@ -221,12 +221,6 @@ const MainApp = (function () {
 
         window.saveCard = saveCard;
 
-        const savedToken = localStorage.getItem('gh_token');
-        if (savedToken) document.getElementById('gh-token').value = savedToken;
-
-        const savedRepo = localStorage.getItem('gh_repo');
-        if (savedRepo) document.getElementById('gh-repo').value = savedRepo;
-
         save();
     }
 
@@ -294,8 +288,6 @@ const MainApp = (function () {
                 </div>
             `}).join('');
 
-        save();
-
         // Restaurar destaque se houver um ID copiado
         if (lastCopiedId) {
             const card = document.querySelector(`[data-id="${lastCopiedId}"]`);
@@ -341,7 +333,7 @@ const MainApp = (function () {
     }
 
     function notifyChange() {
-        // O salvamento agora é automático via nuvem
+        save();
     }
 
     function edit(id) {
@@ -574,8 +566,21 @@ const MainApp = (function () {
     const save = async () => {
         const status = document.getElementById('gh-status');
         try {
-            await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) });
-            if (status) status.textContent = 'Sincronizado na nuvem às ' + new Date().toLocaleTimeString('pt-BR');
+            const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(result.error || 'Falha ao salvar');
+
+            if (status) {
+                if (result.cloudSync?.success) {
+                    status.textContent = 'Sincronizado na nuvem às ' + new Date().toLocaleTimeString('pt-BR');
+                } else if (result.cloudSync?.skipped) {
+                    status.textContent = 'Salvo no backend. Configure GITHUB_TOKEN para sincronizar GitHub.';
+                } else if (result.cloudSync?.message) {
+                    status.textContent = 'Salvo no backend. GitHub: ' + result.cloudSync.message;
+                } else {
+                    status.textContent = 'Salvo no backend às ' + new Date().toLocaleTimeString('pt-BR');
+                }
+            }
         } catch (e) {
             console.error('Erro ao salvar:', e);
             if (status) status.textContent = 'Erro ao sincronizar na nuvem';
@@ -606,97 +611,6 @@ const MainApp = (function () {
         } else {
             contentLabel.placeholder = "Conteúdo";
             contentLabel.rows = 4;
-        }
-    }
-
-
-    async function cloudBackup() {
-        const token = document.getElementById('gh-token').value;
-        const repo = document.getElementById('gh-repo').value;
-        const status = document.getElementById('gh-status');
-        if (!token || !repo) { status.textContent = 'Erro: Preencha Token e Repo'; return; }
-
-        status.textContent = 'Enviando...';
-        try {
-            const path = 'cards_backup.json';
-            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
-            if (userRes.status === 401) { status.textContent = 'Token Inválido'; return; }
-            const userData = await userRes.json();
-            const username = userData.login;
-
-            let sha = null;
-            const fileRes = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
-
-            if (fileRes.status === 404 && (await fetch(`https://api.github.com/repos/${username}/${repo}`, { headers: { 'Authorization': `token ${token}` } })).status === 404) {
-                status.textContent = 'Repositório não encontrado';
-                return;
-            }
-
-            if (fileRes.ok) {
-                const fileData = await fileRes.json();
-                sha = fileData.sha;
-            }
-
-            const content = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
-            const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `Backup ${new Date().toLocaleString()}`,
-                    content: content,
-                    sha: sha
-                })
-            });
-
-            if (res.ok) {
-                status.textContent = 'Backup ok! ' + new Date().toLocaleTimeString();
-                showToast('Backup realizado com sucesso no GitHub!', 'success');
-                localStorage.setItem('gh_token', token);
-                localStorage.setItem('gh_repo', repo);
-            } else {
-                const err = await res.json();
-                status.textContent = 'Erro: ' + (err.message || 'Falha no envio');
-            }
-        } catch (e) {
-            status.textContent = 'Erro de Rede.';
-        }
-    }
-
-    async function cloudRestore() {
-        const token = document.getElementById('gh-token').value;
-        const repo = document.getElementById('gh-repo').value;
-        const status = document.getElementById('gh-status');
-        if (!token || !repo) { status.textContent = 'Erro: Preencha Token e Repo'; return; }
-
-        status.textContent = 'Sincronizando...';
-        try {
-            const path = 'cards_backup.json';
-            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
-            if (userRes.status === 401) { status.textContent = 'Token Inválido'; return; }
-            const userData = await userRes.json();
-            const username = userData.login;
-
-            const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
-            if (res.ok) {
-                const data = await res.json();
-                const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-
-                const confirmed = await showConfirm('Restaurar Backup', 'Isso irá substituir todos os seus cards locais pelos da nuvem. Continuar?', 'info');
-                if (confirmed) {
-                    Object.assign(state, json);
-                    render();
-                    status.textContent = 'Sincronizado! ' + new Date().toLocaleTimeString();
-                    showToast('Dados sincronizados com sucesso!', 'success');
-                    localStorage.setItem('gh_token', token);
-                    localStorage.setItem('gh_repo', repo);
-                } else {
-                    status.textContent = 'Cancelado.';
-                }
-            } else {
-                status.textContent = 'Backup não encontrado.';
-            }
-        } catch (e) {
-            status.textContent = 'Erro de Rede.';
         }
     }
 
@@ -1062,8 +976,6 @@ const MainApp = (function () {
         copy,
         closeModal,
         toggleLinkField,
-        cloudBackup,
-        cloudRestore,
         checkLogin,
         forgotPassword,
         updatePassword,
