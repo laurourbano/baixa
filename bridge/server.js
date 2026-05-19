@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { exec } = require('child_process');
+const fs = require('fs');
 const path = require('path');
 
 const app = express();
@@ -31,6 +32,33 @@ app.post('/automate', (req, res) => {
     });
 
     res.json({ success: true });
+});
+
+// Dev endpoint: servir dados do backup/local
+app.get('/api/data', (req, res) => {
+    const dataFile = path.join(__dirname, 'data.json');
+    const projectBackup = path.join(__dirname, '..', 'cards_backup.json');
+
+    try {
+        if (fs.existsSync(dataFile)) {
+            const content = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
+            return res.json(content);
+        }
+
+        if (fs.existsSync(projectBackup)) {
+            const content = JSON.parse(fs.readFileSync(projectBackup, 'utf8'));
+            return res.json(content);
+        }
+
+        return res.json({ order: [], customs: [], edits: {}, deleted: [] });
+    } catch (err) {
+        console.error('[ERRO /api/data]:', err);
+        return res.status(500).json({ error: 'Erro ao ler dados' });
+    }
+});
+
+app.get('/api/health', (req, res) => {
+    res.json({ success: true, service: 'baixa-backend', dataFile: fs.existsSync(path.join(__dirname, 'data.json')), projectBackup: fs.existsSync(path.join(__dirname, '..', 'cards_backup.json')) });
 });
 
 app.listen(port, '127.0.0.1', () => {
