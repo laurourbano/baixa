@@ -15,7 +15,7 @@ const MainApp = (function () {
     };
     const actualDate = new Date();
     const formattedDate = actualDate.toLocaleDateString('pt-BR');
-    
+
     let lastCopiedId = null;
     let _copying = false;
 
@@ -26,7 +26,7 @@ const MainApp = (function () {
 
         const contentEl = card.querySelector('.content-display');
         const originalColor = card.getAttribute('data-color') || 'light';
-        
+
         if (contentEl) contentEl.classList.remove('fw-bold');
         card.classList.remove('shadow-lg', 'copied-active');
 
@@ -35,7 +35,7 @@ const MainApp = (function () {
             btn.classList.remove('btn-active');
             btn.innerHTML = '<i class="fas fa-copy"></i>';
         }
-        
+
         if (originalColor !== 'success') {
             card.classList.remove('border-success');
             card.classList.add(`border-${originalColor}`);
@@ -143,26 +143,18 @@ const MainApp = (function () {
             const health = await response.json().catch(() => ({}));
             const github = health.github || {};
             if (github.status === 'valid') showCloudStatus('GitHub configurado e ativo.');
-        } catch (error) {}
+        } catch (error) { }
     }
 
     async function init() {
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
         window.locModal = new bootstrap.Modal(document.getElementById('locationModal'));
 
-<<<<<<< HEAD
-        // Login desabilitado temporariamente
-        const overlay = document.getElementById('login-overlay');
-        if (overlay) {
-            overlay.style.display = 'none';
-            overlay.classList.remove('d-flex');
-            overlay.classList.add('d-none');
-=======
         const isAuth = localStorage.getItem('baixa_rt_auth') === 'true';
         if (isAuth) {
             const email = localStorage.getItem('baixa_rt_user_email') || 'usuario@portal.com';
             document.getElementById('user-display-email').textContent = email;
-            
+
             const initials = email.split('@')[0].substring(0, 2).toUpperCase();
             document.getElementById('user-avatar').textContent = initials;
 
@@ -187,39 +179,38 @@ const MainApp = (function () {
                 });
                 emailInput.focus();
             }
->>>>>>> f03a48a33c52e14674e9aabca5043eedbdcbd9fb
         }
-        
+
         localStorage.setItem('baixa_rt_auth', 'true');
         localStorage.setItem('baixa_rt_user_email', 'usuario@portal.com');
-        
+
         await loadDataFromServer();
         initFiscalSearch();
         initCalculator();
         initWeather();
     }
 
-        setupDragAndDrop();
-        initPlanoInspection();
-    }
+    setupDragAndDrop();
+    initPlanoInspection();
+}
 
     function render() {
-        const grid = document.getElementById('dynamic-cards');
-        if (!grid) return;
+    const grid = document.getElementById('dynamic-cards');
+    if (!grid) return;
 
-        grid.innerHTML = state.customs
-            .filter(c => !state.deleted.includes(c.id))
-            .map(c => ({ ...c, ...state.edits[c.id] }))
-            .sort((a, b) => {
-                let ia = state.order.indexOf(a.id);
-                let ib = state.order.indexOf(b.id);
-                return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
-            })
-            .map(card => {
-                const color = card.color || 'light';
-                const canCopy = card.type !== 'link' && card.type !== 'info';
+    grid.innerHTML = state.customs
+        .filter(c => !state.deleted.includes(c.id))
+        .map(c => ({ ...c, ...state.edits[c.id] }))
+        .sort((a, b) => {
+            let ia = state.order.indexOf(a.id);
+            let ib = state.order.indexOf(b.id);
+            return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+        })
+        .map(card => {
+            const color = card.color || 'light';
+            const canCopy = card.type !== 'link' && card.type !== 'info';
 
-                return `
+            return `
                 <div class="col-6 col-md-6 col-lg-3 mb-3">
                     <div class="card h-100 border-${color}" data-id="${card.id}" data-color="${color}" draggable="true" ${canCopy ? `onclick="MainApp.copy(this, '${card.id}')"` : ''}>
                         <div class="card-head" onclick="event.stopPropagation()">
@@ -233,88 +224,75 @@ const MainApp = (function () {
                         <div class="content-display">${card.content}</div>
                     </div>
                 </div>`;
-            }).join('');
-    }
+        }).join('');
+}
 
-    function checkLogin() {
-        const emailInput = document.getElementById('login-email');
-        const passInput = document.getElementById('login-password');
-        const errorMsg = document.getElementById('login-error');
-        const savedPass = localStorage.getItem('baixa_rt_password') || '1234';
+function checkLogin() {
+    const emailInput = document.getElementById('login-email');
+    const passInput = document.getElementById('login-password');
+    const errorMsg = document.getElementById('login-error');
+    const savedPass = localStorage.getItem('baixa_rt_password') || '1234';
 
-        if (emailInput.value.includes('@') && passInput.value === savedPass) {
-            localStorage.setItem('baixa_rt_auth', 'true');
-            localStorage.setItem('baixa_rt_user_email', emailInput.value);
-            location.reload(); // Recarrega para inicializar o app logado
-        } else {
-            if (errorMsg) errorMsg.classList.remove('d-none');
-            if (passInput) {
-                passInput.value = '';
-                passInput.focus();
-            }
+    if (emailInput.value.includes('@') && passInput.value === savedPass) {
+        localStorage.setItem('baixa_rt_auth', 'true');
+        localStorage.setItem('baixa_rt_user_email', emailInput.value);
+        location.reload(); // Recarrega para inicializar o app logado
+    } else {
+        if (errorMsg) errorMsg.classList.remove('d-none');
+        if (passInput) {
+            passInput.value = '';
+            passInput.focus();
         }
     }
+}
 
-    function edit(id) {
-        const card = { ...state.customs.find(c => c.id === id), ...state.edits[id] };
-        document.getElementById('m-id').value = id;
-        document.getElementById('m-title').value = card.title;
-        document.getElementById('m-content').value = card.content;
-        window.bsModal.show();
+function edit(id) {
+    const card = { ...state.customs.find(c => c.id === id), ...state.edits[id] };
+    document.getElementById('m-id').value = id;
+    document.getElementById('m-title').value = card.title;
+    document.getElementById('m-content').value = card.content;
+    window.bsModal.show();
+}
+
+async function del(id) {
+    if (await showConfirm('Excluir', 'Deseja excluir este card?', 'danger')) {
+        state.deleted.push(id);
+        render();
+        save();
     }
+}
 
-    async function del(id) {
-        if (await showConfirm('Excluir', 'Deseja excluir este card?', 'danger')) {
-            state.deleted.push(id);
-            render();
-            save();
-        }
-    }
+async function copy(el, id) {
+    if (_copying) return;
+    _copying = true;
+    const card = document.querySelector(`[data-id="${id}"]`);
+    const contentEl = card.querySelector('.content-display');
+    await navigator.clipboard.writeText(contentEl.innerText);
+    showToast('Copiado!');
+    _copying = false;
+}
 
-    async function copy(el, id) {
-        if (_copying) return;
-        _copying = true;
-        const card = document.querySelector(`[data-id="${id}"]`);
-        const contentEl = card.querySelector('.content-display');
-        await navigator.clipboard.writeText(contentEl.innerText);
-        showToast('Copiado!');
-        _copying = false;
-    }
+function initFiscalSearch() { }
+function initCalculator() { }
+function initWeather() { }
+function initPlanoInspection() { }
+function setupDragAndDrop() { }
+function toggleLinkField() { }
+function save() { }
+function closeModal() { window.bsModal.hide(); }
+function logout() {
+    localStorage.removeItem('baixa_rt_auth');
+    location.reload();
+}
 
-    function initFiscalSearch() {}
-    function initCalculator() {}
-    function initWeather() {}
-    function initPlanoInspection() {}
-    function setupDragAndDrop() {}
-    function toggleLinkField() {}
-    function save() {}
-    function closeModal() { window.bsModal.hide(); }
-    function logout() {
-        localStorage.removeItem('baixa_rt_auth');
-        location.reload();
-    }
+document.addEventListener('DOMContentLoaded', init);
 
-    document.addEventListener('DOMContentLoaded', init);
-
-    // Exportação Global
-    const instance = {
-        edit, del, copy, closeModal, toggleLinkField,
-        checkLogin, logout, init, render
-    };
-<<<<<<< HEAD
-    })();
-    window.MainApp = MainApp;
-
-    if (typeof module !== 'undefined' && module.exports) {
-        module.exports = MainApp;
-    }
+// Exportação Global
+const instance = {
+    edit, del, copy, closeModal, toggleLinkField,
+    checkLogin, logout, init, render
+};
+window.MainApp = instance;
+return instance;
 
 
-
-
-
-=======
-    window.MainApp = instance;
-    return instance;
-})();
->>>>>>> f03a48a33c52e14674e9aabca5043eedbdcbd9fb
