@@ -34,6 +34,55 @@ app.post('/automate', (req, res) => {
     res.json({ success: true });
 });
 
+// Save backup to backend (data.json) and keep timestamped copies
+app.post('/api/backup', (req, res) => {
+    const data = req.body;
+    const dataFile = path.join(__dirname, 'data.json');
+    const backupsDir = path.join(__dirname, 'backups');
+
+    try {
+        if (!fs.existsSync(backupsDir)) fs.mkdirSync(backupsDir, { recursive: true });
+        const ts = new Date().toISOString().replace(/[:.]/g, '-');
+        const backupName = `backup-${ts}.json`;
+
+        fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), 'utf8');
+        fs.writeFileSync(path.join(backupsDir, backupName), JSON.stringify(data, null, 2), 'utf8');
+
+        return res.json({ success: true, dataFile: 'data.json', backup: backupName });
+    } catch (err) {
+        console.error('[ERRO /api/backup]:', err);
+        return res.status(500).json({ error: 'Erro ao salvar backup', detail: err.message });
+    }
+});
+
+// List available backups
+app.get('/api/backups', (req, res) => {
+    const backupsDir = path.join(__dirname, 'backups');
+    try {
+        if (!fs.existsSync(backupsDir)) return res.json({ backups: [] });
+        const files = fs.readdirSync(backupsDir).filter(f => f.endsWith('.json')).sort().reverse();
+        return res.json({ backups: files });
+    } catch (err) {
+        console.error('[ERRO /api/backups]:', err);
+        return res.status(500).json({ error: 'Erro ao listar backups' });
+    }
+});
+
+// Serve a specific backup file
+app.get('/api/backup/:name', (req, res) => {
+    const backupsDir = path.join(__dirname, 'backups');
+    const name = req.params.name;
+    const filePath = path.join(backupsDir, name);
+    try {
+        if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'Backup não encontrado' });
+        const content = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        return res.json(content);
+    } catch (err) {
+        console.error('[ERRO /api/backup/:name]:', err);
+        return res.status(500).json({ error: 'Erro ao ler backup' });
+    }
+});
+
 // Dev endpoint: servir dados do backup/local
 app.get('/api/data', (req, res) => {
     const dataFile = path.join(__dirname, 'data.json');
