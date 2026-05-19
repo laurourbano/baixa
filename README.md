@@ -25,6 +25,7 @@ O **Portal de Pareceres - Baixa RT** é uma solução centralizada e inteligente
 - **🧮 Calculadora de Piso**: Ferramenta integrada para cálculo rápido de valores baseados em horas de trabalho.
 - **🔍 Busca de Fiscal**: Localização rápida de fiscais por cidade.
 - **☁️ Sincronização Cloud**: Backup e restauração via GitHub API para nunca perder seus dados.
+- **🔄 Sync automático**: cada alteração é salva no backend e sincronizada no GitHub sem formulário no frontend.
 - **📊 Exportação**: Gere relatórios em Excel (.xlsx) de todos os seus pareceres cadastrados.
 
 ---
@@ -71,6 +72,16 @@ Para hospedar este projeto na Vercel de forma gratuita e profissional:
    - Build Command: (Deixe em branco ou `npm run build` se houver)
    - Output Directory: `.` (Diretório raiz)
 4. **Pronto!** A Vercel fornecerá um link `.vercel.app` com SSL automático.
+
+## ☁️ Backend e Sync GitHub
+
+O backend sincroniza automaticamente o arquivo `cards_backup.json` a cada `POST /api/baixa` ou `POST /api/data`.
+
+Variáveis de ambiente do backend:
+
+- `GITHUB_TOKEN`: token do GitHub com permissão de escrita no repositório.
+- `GITHUB_REPOSITORY`: repositório no formato `dono/repositorio`. Padrão: `laurourbano/baixa`.
+- `GITHUB_BACKUP_PATH`: caminho do arquivo de backup. Padrão: `cards_backup.json`.
 
 ---
 

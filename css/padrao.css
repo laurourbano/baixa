@@ -149,7 +149,32 @@ body::before {
 /* Decorative Blobs */
 /* Decorative Blobs disabled for a cleaner Bootstrap appearance */
 .blob {
-    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg);
+    opacity: 0.2;
+    pointer-events: none;
+    animation: blobPulse 3s infinite ease-in-out;
+    z-index: -1;
+}
+
+@keyframes blobPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.15;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
 }
 
 @keyframes move {
@@ -1092,6 +1117,7 @@ body::before {
 .login-overlay.hidden {
     opacity: 0;
     visibility: hidden;
+    display: none;
 }
 
 /* Form Controls Modernization */
@@ -1148,4 +1174,8 @@ textarea.form-control {
 
 #dynamic-cards>div {
     animation: fadeIn 0.4s ease-out forwards;
+}
+
+#login-overlay {
+    display: none !important;
 }
