@@ -5,7 +5,7 @@
 const MainApp = (function () {
     'use strict';
 
-    const API_BASE_URL = 'https://baixa-backend.onrender.com';
+    const API_BASE_URL = (typeof window !== 'undefined' && window.__API_BASE_URL__) ? window.__API_BASE_URL__ : 'https://baixa-backend.onrender.com';
     const API_URL = `${API_BASE_URL}/api/baixa`;
     const API_HEALTH_URL = `${API_BASE_URL}/api/health`;
 

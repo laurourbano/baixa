@@ -1,6 +1,9 @@
 [build]
   publish = "."
-  command = "echo 'Static site deploy - skipping build'"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
 
 [context.production.environment]
   NODE_VERSION = "22"
