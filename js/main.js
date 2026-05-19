@@ -213,39 +213,25 @@ const MainApp = (function () {
     }
 
     async function init() {
-        // Opcional: Disparar a ponte de automação local (Desativado temporariamente)
-        // dispararAutomacaoPonte(dadosParaPonte);
-
-        // Inicializa os modais do Bootstrap
         window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
         window.locModal = new bootstrap.Modal(document.getElementById('locationModal'));
 
-        // Verifica Autenticação
-        const isAuth = localStorage.getItem('baixa_rt_auth') === 'true';
-        if (isAuth) {
-            const email = localStorage.getItem('baixa_rt_user_email') || 'usuario@portal.com';
-            document.getElementById('user-display-email').textContent = email;
-            document.getElementById('modal-email').textContent = email;
-            
-            // Iniciais para o avatar
-            const initials = email.split('@')[0].substring(0, 2).toUpperCase();
-            document.getElementById('user-avatar').textContent = initials;
-            document.getElementById('modal-avatar').textContent = initials;
-
-            document.getElementById('login-overlay').classList.add('hidden');
-        } else {
-            // Focar no campo de e-mail se não estiver logado
-            const emailInput = document.getElementById('login-email');
-            const passInput = document.getElementById('login-password');
-
-            [emailInput, passInput].forEach(el => {
-                el.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') checkLogin();
-                });
-            });
-
-            emailInput.focus();
+        // Login desabilitado temporariamente
+        const overlay = document.getElementById('login-overlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+            overlay.classList.remove('d-flex');
+            overlay.classList.add('d-none');
         }
+        
+        localStorage.setItem('baixa_rt_auth', 'true');
+        localStorage.setItem('baixa_rt_user_email', 'usuario@portal.com');
+        
+        await loadDataFromServer();
+        initFiscalSearch();
+        initCalculator();
+        initWeather();
+    }
 
         await loadDataFromServer();
         setupDragAndDrop();
@@ -1071,11 +1057,12 @@ const MainApp = (function () {
             save();
         }
     };
-})();
+    })();
+    window.MainApp = MainApp;
 
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = MainApp;
-}
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = MainApp;
+    }
 
 
 
