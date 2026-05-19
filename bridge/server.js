@@ -198,8 +198,26 @@ const getDataHandler = async (req, res) => {
         if (githubBackup.notFound) {
             return res.json(emptyData());
         }
-
+        // If GitHub backup isn't available, try local data file; if missing, try project's cards_backup.json
         const fallback = readData();
+        if (fallback && Array.isArray(fallback.customs) && fallback.customs.length > 0) {
+            res.setHeader('X-Backup-Source', 'local-datajson');
+            res.setHeader('X-GitHub-Error', githubBackup.message || 'Falha ao ler backup no GitHub');
+            return res.json(fallback);
+        }
+
+        // try project's root cards_backup.json
+        const projectBackup = path.join(__dirname, '..', 'cards_backup.json');
+        if (fs.existsSync(projectBackup)) {
+            try {
+                const content = JSON.parse(fs.readFileSync(projectBackup, 'utf8'));
+                res.setHeader('X-Backup-Source', 'project-root-backup');
+                return res.json(content);
+            } catch (err) {
+                // fallthrough to return empty
+            }
+        }
+
         res.setHeader('X-Backup-Source', 'local-fallback');
         res.setHeader('X-GitHub-Error', githubBackup.message || 'Falha ao ler backup no GitHub');
         res.json(fallback);
@@ -218,6 +236,22 @@ const postDataHandler = async (req, res) => {
         res.status(500).json({ error: 'Erro ao salvar dados' });
     }
 };
+
+// Importar um backup JSON para o data store local (útil para recuperação rápida em dev)
+app.post('/api/import', (req, res) => {
+    try {
+        const payload = req.body;
+        if (!payload || typeof payload !== 'object') {
+            return res.status(400).json({ success: false, message: 'Payload inválido' });
+        }
+
+        fs.writeFileSync(DATA_FILE, JSON.stringify(payload, null, 2));
+        return res.json({ success: true, message: 'Importado para data.json' });
+    } catch (err) {
+        console.error('[ERRO IMPORT]:', err);
+        return res.status(500).json({ success: false, message: 'Erro ao importar' });
+    }
+});
 
 // Endpoints de Persistência
 app.get('/api/health', async (req, res) => {

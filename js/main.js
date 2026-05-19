@@ -81,10 +81,27 @@ const MainApp = (function () {
             const response = await fetch(API_URL);
             if (response.ok) {
                 const serverData = await response.json();
-                state.order = serverData.order || [];
-                state.customs = serverData.customs || [];
-                state.edits = serverData.edits || {};
-                state.deleted = serverData.deleted || [];
+                // If server returned no cards, try local backup
+                if (Array.isArray(serverData.customs) && serverData.customs.length === 0) {
+                    const backupRes = await fetch('cards_backup.json').catch(() => ({ ok: false }));
+                    if (backupRes && backupRes.ok) {
+                        const backupData = await backupRes.json();
+                        state.order = backupData.order || [];
+                        state.customs = backupData.customs || [];
+                        state.edits = backupData.edits || {};
+                        state.deleted = backupData.deleted || [];
+                    } else {
+                        state.order = serverData.order || [];
+                        state.customs = serverData.customs || [];
+                        state.edits = serverData.edits || {};
+                        state.deleted = serverData.deleted || [];
+                    }
+                } else {
+                    state.order = serverData.order || [];
+                    state.customs = serverData.customs || [];
+                    state.edits = serverData.edits || {};
+                    state.deleted = serverData.deleted || [];
+                }
             } else {
                 // fallback local
                 const backupRes = await fetch('cards_backup.json');
