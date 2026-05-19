@@ -232,7 +232,7 @@ const MainApp = (function () {
             document.getElementById('user-avatar').textContent = initials;
             document.getElementById('modal-avatar').textContent = initials;
 
-            document.getElementById('login-overlay').classList.add('hidden');
+            document.getElementById('login-overlay').classList.add('d-none');
         } else {
             // Focar no campo de e-mail se não estiver logado
             const emailInput = document.getElementById('login-email');
@@ -692,7 +692,7 @@ const MainApp = (function () {
             document.getElementById('user-avatar').textContent = initials;
             document.getElementById('modal-avatar').textContent = initials;
 
-            document.getElementById('login-overlay').classList.add('hidden');
+            document.getElementById('login-overlay').classList.add('d-none');
             showToast(`Bem-vindo, ${emailInput.value.split('@')[0]}!`, 'success');
             loadDataFromServer();
         } else {
