@@ -1103,9 +1103,10 @@ body::before {
     }
 }
 
-.login-overlay.hidden {
+ .login-overlay.hidden {
     opacity: 0;
     visibility: hidden;
+    display: none;
 }
 
 /* Form Controls Modernization */
