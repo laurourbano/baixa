@@ -585,51 +585,20 @@ const MainApp = (function () {
 
 
     async function cloudBackup() {
-        const token = document.getElementById('gh-token').value;
-        const repo = document.getElementById('gh-repo').value;
         const status = document.getElementById('gh-status');
-        if (!token || !repo) { status.textContent = 'Erro: Preencha Token e Repo'; return; }
-
-        status.textContent = 'Enviando...';
+        status.textContent = 'Enviando ao backend...';
         try {
-            const path = 'cards_backup.json';
-            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
-            if (userRes.status === 401) { status.textContent = 'Token Inválido'; return; }
-            const userData = await userRes.json();
-            const username = userData.login;
-
-            let sha = null;
-            const fileRes = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
-
-            if (fileRes.status === 404 && (await fetch(`https://api.github.com/repos/${username}/${repo}`, { headers: { 'Authorization': `token ${token}` } })).status === 404) {
-                status.textContent = 'Repositório não encontrado';
-                return;
-            }
-
-            if (fileRes.ok) {
-                const fileData = await fileRes.json();
-                sha = fileData.sha;
-            }
-
-            const content = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
-            const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `Backup ${new Date().toLocaleString()}`,
-                    content: content,
-                    sha: sha
-                })
+            const res = await fetch('/api/backup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(state)
             });
-
+            const json = await res.json();
             if (res.ok) {
-                status.textContent = 'Backup ok! ' + new Date().toLocaleTimeString();
-                showToast('Backup realizado com sucesso no GitHub!', 'success');
-                localStorage.setItem('gh_token', token);
-                localStorage.setItem('gh_repo', repo);
+                status.textContent = 'Backup salvo no backend: ' + (json.backup || json.dataFile);
+                showToast('Backup salvo no backend com sucesso!', 'success');
             } else {
-                const err = await res.json();
-                status.textContent = 'Erro: ' + (err.message || 'Falha no envio');
+                status.textContent = 'Erro: ' + (json.error || 'Falha ao salvar');
             }
         } catch (e) {
             status.textContent = 'Erro de Rede.';
@@ -637,38 +606,26 @@ const MainApp = (function () {
     }
 
     async function cloudRestore() {
-        const token = document.getElementById('gh-token').value;
-        const repo = document.getElementById('gh-repo').value;
         const status = document.getElementById('gh-status');
-        if (!token || !repo) { status.textContent = 'Erro: Preencha Token e Repo'; return; }
-
-        status.textContent = 'Sincronizando...';
+        status.textContent = 'Sincronizando com backend...';
         try {
-            const path = 'cards_backup.json';
-            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
-            if (userRes.status === 401) { status.textContent = 'Token Inválido'; return; }
-            const userData = await userRes.json();
-            const username = userData.login;
+            const listRes = await fetch('/api/backups');
+            if (!listRes.ok) { status.textContent = 'Erro ao listar backups'; return; }
+            const listJson = await listRes.json();
+            const backups = listJson.backups || [];
+            if (backups.length === 0) { status.textContent = 'Nenhum backup disponível no backend'; return; }
 
-            const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
-            if (res.ok) {
-                const data = await res.json();
-                const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+            const latest = backups[0];
+            const confirmed = await showConfirm('Restaurar Backup', `Deseja restaurar o backup ${latest}? Isso substituirá os cards locais.`, 'info');
+            if (!confirmed) { status.textContent = 'Cancelado.'; return; }
 
-                const confirmed = await showConfirm('Restaurar Backup', 'Isso irá substituir todos os seus cards locais pelos da nuvem. Continuar?', 'info');
-                if (confirmed) {
-                    Object.assign(state, json);
-                    render();
-                    status.textContent = 'Sincronizado! ' + new Date().toLocaleTimeString();
-                    showToast('Dados sincronizados com sucesso!', 'success');
-                    localStorage.setItem('gh_token', token);
-                    localStorage.setItem('gh_repo', repo);
-                } else {
-                    status.textContent = 'Cancelado.';
-                }
-            } else {
-                status.textContent = 'Backup não encontrado.';
-            }
+            const res = await fetch(`/api/backup/${encodeURIComponent(latest)}`);
+            if (!res.ok) { status.textContent = 'Erro ao baixar backup'; return; }
+            const json = await res.json();
+            Object.assign(state, json);
+            render();
+            status.textContent = 'Sincronizado com backend: ' + latest;
+            showToast('Dados sincronizados com backend com sucesso!', 'success');
         } catch (e) {
             status.textContent = 'Erro de Rede.';
         }
