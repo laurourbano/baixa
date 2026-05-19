@@ -5,7 +5,8 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const port = 3002;
+const port = process.env.PORT || 3002;
+const host = process.env.HOST || '0.0.0.0';
 
 app.use(cors());
 app.use(express.json());
@@ -61,7 +62,7 @@ app.get('/api/health', (req, res) => {
     res.json({ success: true, service: 'baixa-backend', dataFile: fs.existsSync(path.join(__dirname, 'data.json')), projectBackup: fs.existsSync(path.join(__dirname, '..', 'cards_backup.json')) });
 });
 
-app.listen(port, '127.0.0.1', () => {
+app.listen(port, host, () => {
     console.log(`\n=========================================`);
     console.log(` PONTE ON-LINE NA PORTA ${port}`);
     console.log(`=========================================\n`);
