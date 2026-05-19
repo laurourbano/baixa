@@ -325,6 +325,20 @@ const MainApp = (function () {
             status.innerHTML = '<span class="text-warning fw-bold"><i class="fas fa-exclamation-triangle me-1"></i>Alterações pendentes! Faça backup.</span>';
         }
         showToast('Alteração detectada! Não esqueça do backup.', 'warning', 4000);
+        // Persist changes via backend autosave
+        try {
+            fetch('/api/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) })
+                .then(r => r.json())
+                .then(j => {
+                    if (j && j.backup) {
+                        if (status) status.textContent = 'Salvo no backend: ' + j.backup;
+                    }
+                }).catch(() => {
+                    if (status) status.textContent = 'Falha ao salvar no backend';
+                });
+        } catch (e) {
+            if (status) status.textContent = 'Erro de rede ao salvar';
+        }
     }
 
     function edit(id) {

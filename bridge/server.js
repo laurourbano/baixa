@@ -55,6 +55,27 @@ app.post('/api/backup', (req, res) => {
     }
 });
 
+// Save current state and create a timestamped backup (used by frontend autosave)
+app.post('/api/save', (req, res) => {
+    const data = req.body;
+    const dataFile = path.join(__dirname, 'data.json');
+    const backupsDir = path.join(__dirname, 'backups');
+
+    try {
+        if (!fs.existsSync(backupsDir)) fs.mkdirSync(backupsDir, { recursive: true });
+        const ts = new Date().toISOString().replace(/[:.]/g, '-');
+        const backupName = `save-${ts}.json`;
+
+        fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), 'utf8');
+        fs.writeFileSync(path.join(backupsDir, backupName), JSON.stringify(data, null, 2), 'utf8');
+
+        return res.json({ success: true, saved: dataFile, backup: backupName });
+    } catch (err) {
+        console.error('[ERRO /api/save]:', err);
+        return res.status(500).json({ error: 'Erro ao salvar data', detail: err.message });
+    }
+});
+
 // List available backups
 app.get('/api/backups', (req, res) => {
     const backupsDir = path.join(__dirname, 'backups');
