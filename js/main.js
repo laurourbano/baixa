@@ -235,6 +235,7 @@ const MainApp = (function () {
             const overlay = document.getElementById('login-overlay');
             overlay.classList.remove('d-flex');
             overlay.classList.add('d-none');
+            await loadDataFromServer();
         } else {
             // Focar no campo de e-mail se não estiver logado
             const emailInput = document.getElementById('login-email');
@@ -249,7 +250,7 @@ const MainApp = (function () {
             emailInput.focus();
         }
 
-        await loadDataFromServer();
+
         setupDragAndDrop();
         initFiscalSearch();
         initCalculator();
