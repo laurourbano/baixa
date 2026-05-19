@@ -63,7 +63,19 @@ const githubHeaders = () => ({
 const githubFileUrl = () => `https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${GITHUB_BACKUP_PATH}`;
 
 const readGitHubBackup = async () => {
+    // If token not provided, try raw.githubusercontent for public repos as a fallback
     if (!GITHUB_TOKEN) {
+        try {
+            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/${GITHUB_BACKUP_PATH}`;
+            const rawRes = await fetch(rawUrl);
+            if (rawRes.ok) {
+                const text = await rawRes.text();
+                return { success: true, data: JSON.parse(text) };
+            }
+        } catch (err) {
+            // continue to API path below which will report missing token
+        }
+
         return { success: false, skipped: true, message: 'GITHUB_TOKEN não configurado no backend' };
     }
 
