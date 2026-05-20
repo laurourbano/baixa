@@ -17,6 +17,33 @@ const MainApp = (function () {
     let lastCopiedId = null;
     let _copying = false;
 
+    /* Helper para chamadas ao backend
+       Ordem de tentativa:
+       1) `window.BAIXA_API_URL` (se definido)
+       2) rota relativa (ex: /api/...)
+       3) ponte local `http://127.0.0.1:3002`
+    */
+    async function callApi(path, options = {}) {
+        const bases = [];
+        if (window.BAIXA_API_URL) bases.push(window.BAIXA_API_URL.replace(/\/$/, ''));
+        bases.push(''); // rota relativa
+        bases.push('http://127.0.0.1:3002'); // bridge local
+
+        let lastError = null;
+        for (const base of bases) {
+            const url = base ? (base + path) : path;
+            try {
+                const res = await fetch(url, options);
+                if (res.ok) return res;
+                // se não OK, guardar erro e tentar próximo
+                lastError = new Error(`Status ${res.status} for ${url}`);
+            } catch (err) {
+                lastError = err;
+            }
+        }
+        throw lastError;
+    }
+
     function resetCardHighlight(id) {
         if (!id) return;
         const card = document.querySelector(`[data-id="${id}"]`);
@@ -147,22 +174,31 @@ const MainApp = (function () {
             emailInput.focus();
         }
 
-        // Carrega dados do backup local (arquivo cards_backup.json é a fonte da verdade)
+        // Carrega dados primeiro do backend (`/api/data`) e faz fallback para
+        // `cards_backup.json` e, por fim, para o localStorage existente.
         try {
-            const response = await fetch('cards_backup.json');
-            if (response.ok) {
-                const backupData = await response.json();
-
-                // Sobrescreve o estado local com o backup de forma estrita
-                state.order = backupData.order || [];
-                state.customs = backupData.customs || [];
-                state.edits = backupData.edits || {};
-                state.deleted = backupData.deleted || [];
-
+            const res = await callApi('/api/data');
+            const backend = await res.json().catch(() => null);
+            if (backend) {
+                state.order = backend.order || state.order || [];
+                state.customs = backend.customs || state.customs || [];
+                state.edits = backend.edits || state.edits || {};
+                state.deleted = backend.deleted || state.deleted || [];
                 save();
+            } else {
+                // fallback para arquivo local do projeto
+                const response = await fetch('cards_backup.json');
+                if (response.ok) {
+                    const backupData = await response.json();
+                    state.order = backupData.order || state.order || [];
+                    state.customs = backupData.customs || state.customs || [];
+                    state.edits = backupData.edits || state.edits || {};
+                    state.deleted = backupData.deleted || state.deleted || [];
+                    save();
+                }
             }
         } catch (e) {
-            console.error("Erro ao carregar backup:", e);
+            console.error('Erro ao carregar dados do backend ou backup local:', e);
             // Se falhar o fetch, mantém o que está no localStorage como fallback
         }
 
@@ -326,19 +362,19 @@ const MainApp = (function () {
         }
         showToast('Alteração detectada! Não esqueça do backup.', 'warning', 4000);
         // Persist changes via backend autosave
-        try {
-            fetch('/api/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) })
-                .then(r => r.json())
-                .then(j => {
-                    if (j && j.backup) {
-                        if (status) status.textContent = 'Salvo no backend: ' + j.backup;
-                    }
-                }).catch(() => {
-                    if (status) status.textContent = 'Falha ao salvar no backend';
-                });
-        } catch (e) {
-            if (status) status.textContent = 'Erro de rede ao salvar';
-        }
+        (async () => {
+            const payload = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) };
+            try {
+                const r = await callApi('/api/save', payload);
+                const j = await r.json().catch(() => null);
+                if (r.ok && j && status) {
+                    status.textContent = 'Salvo no backend: ' + (j.backup || j.saved || 'ok');
+                    return;
+                }
+            } catch (e) {
+                if (status) status.textContent = 'Falha ao salvar no backend';
+            }
+        })();
     }
 
     function edit(id) {
@@ -602,18 +638,10 @@ const MainApp = (function () {
         const status = document.getElementById('gh-status');
         status.textContent = 'Enviando ao backend...';
         try {
-            const res = await fetch('/api/backup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(state)
-            });
-            const json = await res.json();
-            if (res.ok) {
-                status.textContent = 'Backup salvo no backend: ' + (json.backup || json.dataFile);
-                showToast('Backup salvo no backend com sucesso!', 'success');
-            } else {
-                status.textContent = 'Erro: ' + (json.error || 'Falha ao salvar');
-            }
+            const res = await callApi('/api/backup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) });
+            const json = await res.json().catch(() => ({}));
+            status.textContent = 'Backup salvo no backend: ' + (json.backup || json.dataFile || 'ok');
+            showToast('Backup salvo no backend com sucesso!', 'success');
         } catch (e) {
             status.textContent = 'Erro de Rede.';
         }
@@ -623,9 +651,14 @@ const MainApp = (function () {
         const status = document.getElementById('gh-status');
         status.textContent = 'Sincronizando com backend...';
         try {
-            const listRes = await fetch('/api/backups');
-            if (!listRes.ok) { status.textContent = 'Erro ao listar backups'; return; }
-            const listJson = await listRes.json();
+            let listJson;
+            try {
+                const listRes = await callApi('/api/backups');
+                listJson = await listRes.json().catch(() => ({}));
+            } catch (err) {
+                status.textContent = 'Erro ao listar backups';
+                return;
+            }
             const backups = listJson.backups || [];
             if (backups.length === 0) { status.textContent = 'Nenhum backup disponível no backend'; return; }
 
@@ -633,13 +666,19 @@ const MainApp = (function () {
             const confirmed = await showConfirm('Restaurar Backup', `Deseja restaurar o backup ${latest}? Isso substituirá os cards locais.`, 'info');
             if (!confirmed) { status.textContent = 'Cancelado.'; return; }
 
-            const res = await fetch(`/api/backup/${encodeURIComponent(latest)}`);
-            if (!res.ok) { status.textContent = 'Erro ao baixar backup'; return; }
-            const json = await res.json();
-            Object.assign(state, json);
-            render();
-            status.textContent = 'Sincronizado com backend: ' + latest;
-            showToast('Dados sincronizados com backend com sucesso!', 'success');
+            try {
+                const res = await callApi(`/api/backup/${encodeURIComponent(latest)}`);
+                const json = await res.json();
+                Object.assign(state, json);
+                render();
+                status.textContent = 'Sincronizado com backend: ' + latest;
+                showToast('Dados sincronizados com backend com sucesso!', 'success');
+                return;
+            } catch (err) {
+                status.textContent = 'Erro ao baixar backup';
+                return;
+            }
+            
         } catch (e) {
             status.textContent = 'Erro de Rede.';
         }
