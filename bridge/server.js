@@ -3,9 +3,22 @@ const cors = require('cors');
 const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+// Optional AWS S3 integration
+let s3Client = null;
+let S3Bucket = process.env.S3_BUCKET_NAME || process.env.S3_BUCKET;
+try {
+    if (process.env.S3_BUCKET_NAME || process.env.S3_BUCKET) {
+        const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+        s3Client = new S3Client({ region: process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION });
+        // attach to exports for use in upload function via closure
+        global.__PutObjectCommand = PutObjectCommand;
+    }
+} catch (e) {
+    console.warn('AWS SDK not configured or not installed:', e.message);
+}
 
 const app = express();
-const port = 3002;
+const port = process.env.PORT || 3002;
 
 app.use(cors());
 app.use(express.json());
@@ -45,8 +58,19 @@ app.post('/api/backup', (req, res) => {
         const ts = new Date().toISOString().replace(/[:.]/g, '-');
         const backupName = `backup-${ts}.json`;
 
-        fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), 'utf8');
-        fs.writeFileSync(path.join(backupsDir, backupName), JSON.stringify(data, null, 2), 'utf8');
+        const payload = JSON.stringify(data, null, 2);
+        fs.writeFileSync(dataFile, payload, 'utf8');
+        const backupPath = path.join(backupsDir, backupName);
+        fs.writeFileSync(backupPath, payload, 'utf8');
+
+        // Upload to S3 if configured
+        if (s3Client && S3Bucket) {
+            const key = `backups/${backupName}`;
+            const PutObjectCommand = global.__PutObjectCommand;
+            s3Client.send(new PutObjectCommand({ Bucket: S3Bucket, Key: key, Body: payload, ContentType: 'application/json' }))
+                .then(() => console.log('[S3] Backup enviado para:', key))
+                .catch(err => console.error('[S3] Falha ao enviar backup:', err.message));
+        }
 
         return res.json({ success: true, dataFile: 'data.json', backup: backupName });
     } catch (err) {
@@ -66,8 +90,18 @@ app.post('/api/save', (req, res) => {
         const ts = new Date().toISOString().replace(/[:.]/g, '-');
         const backupName = `save-${ts}.json`;
 
-        fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), 'utf8');
-        fs.writeFileSync(path.join(backupsDir, backupName), JSON.stringify(data, null, 2), 'utf8');
+        const payload = JSON.stringify(data, null, 2);
+        fs.writeFileSync(dataFile, payload, 'utf8');
+        const savePath = path.join(backupsDir, backupName);
+        fs.writeFileSync(savePath, payload, 'utf8');
+
+        if (s3Client && S3Bucket) {
+            const key = `backups/${backupName}`;
+            const PutObjectCommand = global.__PutObjectCommand;
+            s3Client.send(new PutObjectCommand({ Bucket: S3Bucket, Key: key, Body: payload, ContentType: 'application/json' }))
+                .then(() => console.log('[S3] Save enviado para:', key))
+                .catch(err => console.error('[S3] Falha ao enviar save:', err.message));
+        }
 
         return res.json({ success: true, saved: dataFile, backup: backupName });
     } catch (err) {
@@ -131,7 +165,7 @@ app.get('/api/health', (req, res) => {
     res.json({ success: true, service: 'baixa-backend', dataFile: fs.existsSync(path.join(__dirname, 'data.json')), projectBackup: fs.existsSync(path.join(__dirname, '..', 'cards_backup.json')) });
 });
 
-app.listen(port, '127.0.0.1', () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`\n=========================================`);
     console.log(` PONTE ON-LINE NA PORTA ${port}`);
     console.log(`=========================================\n`);
