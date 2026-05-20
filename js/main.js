@@ -398,6 +398,21 @@ const MainApp = (function () {
                 const j = await r.json().catch(() => null);
                 if (r.ok && j && status) {
                     status.textContent = 'Salvo no backend: ' + (j.backup || j.saved || 'ok');
+
+                    // Após salvar, solicitar criação de backup centralizado no backend
+                    try {
+                        const b = await callApi('/api/backup', payload);
+                        const bj = await b.json().catch(() => null);
+                        if (b.ok && bj) {
+                            if (status) status.textContent = 'Backup criado: ' + (bj.backup || bj.dataFile || 'ok');
+                            showToast('Backup salvo no backend com sucesso!', 'success', 2500);
+                        } else {
+                            if (status) status.textContent = 'Erro ao criar backup';
+                        }
+                    } catch (err) {
+                        if (status) status.textContent = 'Erro ao criar backup: falha de rede';
+                    }
+
                     return;
                 }
             } catch (e) {
