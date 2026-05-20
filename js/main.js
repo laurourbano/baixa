@@ -661,55 +661,7 @@ const MainApp = (function () {
     }
 
 
-    async function cloudBackup() {
-        const status = document.getElementById('gh-status');
-        status.textContent = 'Enviando ao backend...';
-        try {
-            const res = await callApi('/api/backup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) });
-            const json = await res.json().catch(() => ({}));
-            status.textContent = 'Backup salvo no backend: ' + (json.backup || json.dataFile || 'ok');
-            showToast('Backup salvo no backend com sucesso!', 'success');
-        } catch (e) {
-            status.textContent = 'Erro de Rede.';
-        }
-    }
-
-    async function cloudRestore() {
-        const status = document.getElementById('gh-status');
-        status.textContent = 'Sincronizando com backend...';
-        try {
-            let listJson;
-            try {
-                const listRes = await callApi('/api/backups');
-                listJson = await listRes.json().catch(() => ({}));
-            } catch (err) {
-                status.textContent = 'Erro ao listar backups';
-                return;
-            }
-            const backups = listJson.backups || [];
-            if (backups.length === 0) { status.textContent = 'Nenhum backup disponível no backend'; return; }
-
-            const latest = backups[0];
-            const confirmed = await showConfirm('Restaurar Backup', `Deseja restaurar o backup ${latest}? Isso substituirá os cards locais.`, 'info');
-            if (!confirmed) { status.textContent = 'Cancelado.'; return; }
-
-            try {
-                const res = await callApi(`/api/backup/${encodeURIComponent(latest)}`);
-                const json = await res.json();
-                Object.assign(state, json);
-                render();
-                status.textContent = 'Sincronizado com backend: ' + latest;
-                showToast('Dados sincronizados com backend com sucesso!', 'success');
-                return;
-            } catch (err) {
-                status.textContent = 'Erro ao baixar backup';
-                return;
-            }
-            
-        } catch (e) {
-            status.textContent = 'Erro de Rede.';
-        }
-    }
+    // Observação: funções de backup/restauração via UI removidas — salvamento agora é automático via `notifyChange()`
 
     function checkLogin() {
         const emailInput = document.getElementById('login-email');
