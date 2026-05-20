@@ -256,10 +256,12 @@ const MainApp = (function () {
         window.saveCard = saveCard;
 
         const savedToken = localStorage.getItem('gh_token');
-        if (savedToken) document.getElementById('gh-token').value = savedToken;
+        const ghTokenEl = document.getElementById('gh-token');
+        if (savedToken && ghTokenEl) ghTokenEl.value = savedToken;
 
         const savedRepo = localStorage.getItem('gh_repo');
-        if (savedRepo) document.getElementById('gh-repo').value = savedRepo;
+        const ghRepoEl = document.getElementById('gh-repo');
+        if (savedRepo && ghRepoEl) ghRepoEl.value = savedRepo;
 
         save();
     }
