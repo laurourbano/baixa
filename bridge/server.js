@@ -144,39 +144,20 @@ app.get('/api/data', (req, res) => {
     const projectBackup = path.join(__dirname, '..', 'cards_backup.json');
 
     try {
-        // Tentar ler data.json
         if (fs.existsSync(dataFile)) {
-            const content = fs.readFileSync(dataFile, 'utf8');
-            const data = JSON.parse(content);
-            return res.json(data);
+            const content = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
+            return res.json(content);
         }
 
-        // Tentar ler cards_backup.json
         if (fs.existsSync(projectBackup)) {
-            const content = fs.readFileSync(projectBackup, 'utf8');
-            const data = JSON.parse(content);
-            return res.json(data);
+            const content = JSON.parse(fs.readFileSync(projectBackup, 'utf8'));
+            return res.json(content);
         }
 
-        // Retornar dados default se nenhum arquivo existir
-        console.log('[/api/data] Nenhum arquivo de dados encontrado, retornando default');
-        return res.json({ 
-            order: [], 
-            customs: [], 
-            edits: {}, 
-            deleted: [] 
-        });
-        
+        return res.json({ order: [], customs: [], edits: {}, deleted: [] });
     } catch (err) {
-        console.error('[ERRO /api/data]:', err.message);
-        // Retornar default em vez de erro para não quebrar o front-end
-        return res.json({ 
-            order: [], 
-            customs: [], 
-            edits: {}, 
-            deleted: [],
-            warning: 'Dados não encontrados, usar default'
-        });
+        console.error('[ERRO /api/data]:', err);
+        return res.status(500).json({ error: 'Erro ao ler dados' });
     }
 });
 
