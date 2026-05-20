@@ -139,26 +139,40 @@ app.get('/api/backup/:name', (req, res) => {
 });
 
 // Dev endpoint: servir dados do backup/local
+// Dev endpoint: servir dados do backup/local
 app.get('/api/data', (req, res) => {
     const dataFile = path.join(__dirname, 'data.json');
     const projectBackup = path.join(__dirname, '..', 'cards_backup.json');
 
-    try {
-        if (fs.existsSync(dataFile)) {
-            const content = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-            return res.json(content);
+    // Tentar ler data.json
+    if (fs.existsSync(dataFile)) {
+        try {
+            const content = fs.readFileSync(dataFile, 'utf8');
+            const data = JSON.parse(content);
+            return res.json(data);
+        } catch (err) {
+            console.error('[ERRO lendo data.json]:', err.message);
         }
-
-        if (fs.existsSync(projectBackup)) {
-            const content = JSON.parse(fs.readFileSync(projectBackup, 'utf8'));
-            return res.json(content);
-        }
-
-        return res.json({ order: [], customs: [], edits: {}, deleted: [] });
-    } catch (err) {
-        console.error('[ERRO /api/data]:', err);
-        return res.status(500).json({ error: 'Erro ao ler dados' });
     }
+
+    // Tentar ler cards_backup.json
+    if (fs.existsSync(projectBackup)) {
+        try {
+            const content = fs.readFileSync(projectBackup, 'utf8');
+            const data = JSON.parse(content);
+            return res.json(data);
+        } catch (err) {
+            console.error('[ERRO lendo cards_backup.json]:', err.message);
+        }
+    }
+
+    // Retornar dados default se nenhum arquivo existir
+    return res.json({ 
+        order: [], 
+        customs: [], 
+        edits: {}, 
+        deleted: [] 
+    });
 });
 
 app.get('/api/health', (req, res) => {
