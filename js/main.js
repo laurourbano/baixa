@@ -1026,8 +1026,6 @@ const MainApp = (function () {
         copy,
         closeModal,
         toggleLinkField,
-        cloudBackup,
-        cloudRestore,
         checkLogin,
         forgotPassword,
         updatePassword,
