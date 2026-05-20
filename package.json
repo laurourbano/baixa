@@ -12,17 +12,20 @@
     "test:watch": "vitest",
     "test:related": "vitest related",
     "bridge": "node bridge/server.js",
-    "start": "node bridge/server.js"
+    "start": "node bridge/server.js",
+    "dev": "http-server -p 8000"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^4.1.5",
     "jsdom": "^29.1.1",
+    "http-server": "^14.1.1",
     "vitest": "^4.1.5"
   },
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "@aws-sdk/client-s3": "^3.500.0"
   }
 }
