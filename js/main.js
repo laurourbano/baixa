@@ -102,6 +102,21 @@ const MainApp = (function () {
         }, duration);
     }
 
+    /* Loading overlay helpers */
+    function showLoading(message = 'Carregando...') {
+        const overlay = document.getElementById('loading-overlay');
+        if (!overlay) return;
+        const txt = overlay.querySelector('.loading-text');
+        if (txt) txt.textContent = message;
+        overlay.classList.remove('d-none');
+    }
+
+    function hideLoading() {
+        const overlay = document.getElementById('loading-overlay');
+        if (!overlay) return;
+        overlay.classList.add('d-none');
+    }
+
     function showConfirm(title, message, type = 'warning') {
         return new Promise((resolve) => {
             const modalEl = document.getElementById('confirmModal');
@@ -174,8 +189,8 @@ const MainApp = (function () {
             emailInput.focus();
         }
 
-        // Carrega dados primeiro do backend (`/api/data`) e faz fallback para
-        // `cards_backup.json` e, por fim, para o localStorage existente.
+        // Carrega dados do backend (`/api/data`) — não usa arquivo estático local
+        showLoading('Carregando dados...');
         try {
             const res = await callApi('/api/data');
             const backend = await res.json().catch(() => null);
@@ -185,21 +200,13 @@ const MainApp = (function () {
                 state.edits = backend.edits || state.edits || {};
                 state.deleted = backend.deleted || state.deleted || [];
                 save();
-            } else {
-                // fallback para arquivo local do projeto
-                const response = await fetch('cards_backup.json');
-                if (response.ok) {
-                    const backupData = await response.json();
-                    state.order = backupData.order || state.order || [];
-                    state.customs = backupData.customs || state.customs || [];
-                    state.edits = backupData.edits || state.edits || {};
-                    state.deleted = backupData.deleted || state.deleted || [];
-                    save();
-                }
             }
         } catch (e) {
-            console.error('Erro ao carregar dados do backend ou backup local:', e);
-            // Se falhar o fetch, mantém o que está no localStorage como fallback
+            console.error('Erro ao carregar dados do backend:', e);
+            showToast('Falha ao carregar dados do backend. Usando dados locais.', 'warning', 4000);
+            // Mantém localStorage como fallback
+        } finally {
+            hideLoading();
         }
 
         render();
