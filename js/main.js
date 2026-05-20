@@ -103,18 +103,28 @@ const MainApp = (function () {
     }
 
     /* Loading overlay helpers */
+    let _loadingShownAt = 0;
+    const MIN_LOADING_MS = 600; // tempo mínimo para ver o skeleton (ms)
+
     function showLoading(message = 'Carregando...') {
         const overlay = document.getElementById('loading-overlay');
         if (!overlay) return;
         const txt = overlay.querySelector('.loading-text');
         if (txt) txt.textContent = message;
         overlay.classList.remove('d-none');
+        _loadingShownAt = Date.now();
     }
 
-    function hideLoading() {
+    function hideLoading(loaded = true) {
         const overlay = document.getElementById('loading-overlay');
         if (!overlay) return;
-        overlay.classList.add('d-none');
+        const elapsed = Date.now() - (_loadingShownAt || 0);
+        const minMs = window.MIN_LOADING_MS || MIN_LOADING_MS;
+        const wait = Math.max(0, minMs - elapsed);
+        setTimeout(() => {
+            overlay.classList.add('d-none');
+            if (loaded) showToast('Dados carregados com sucesso.', 'success', 1800);
+        }, wait);
     }
 
     function showConfirm(title, message, type = 'warning') {
@@ -191,6 +201,7 @@ const MainApp = (function () {
 
         // Carrega dados do backend (`/api/data`) — não usa arquivo estático local
         showLoading('Carregando dados...');
+        let loadedOk = false;
         try {
             const res = await callApi('/api/data');
             const backend = await res.json().catch(() => null);
@@ -200,13 +211,14 @@ const MainApp = (function () {
                 state.edits = backend.edits || state.edits || {};
                 state.deleted = backend.deleted || state.deleted || [];
                 save();
+                loadedOk = true;
             }
         } catch (e) {
             console.error('Erro ao carregar dados do backend:', e);
             showToast('Falha ao carregar dados do backend. Usando dados locais.', 'warning', 4000);
             // Mantém localStorage como fallback
         } finally {
-            hideLoading();
+            hideLoading(loadedOk);
         }
 
         render();
@@ -351,15 +363,23 @@ const MainApp = (function () {
             showDate: document.getElementById('m-showDate').checked
         };
 
-        if (id) {
-            state.edits[id] = data;
-        } else {
-            state.customs.push({ id: 'custom-' + Date.now(), ...data });
-        }
+        (async () => {
+            if (id) {
+                const confirmed = await showConfirm('Salvar Edição', 'Deseja salvar as alterações deste card?', 'info');
+                if (!confirmed) {
+                    showToast('Edição cancelada.', 'info');
+                    return;
+                }
+                state.edits[id] = data;
+            } else {
+                state.customs.push({ id: 'custom-' + Date.now(), ...data });
+            }
 
-        closeModal();
-        render();
-        notifyChange();
+            closeModal();
+            render();
+            notifyChange();
+            showToast('Card salvo com sucesso.', 'success');
+        })();
     }
 
     function notifyChange() {
