@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main, experimento]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Start static server
+        run: npx http-server -p 8000 &
+      - name: Run tests
+        run: npm test
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+      - name: Upload vitest coverage (if exists)
+        if: always()
+        run: echo "CI finished"
