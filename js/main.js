@@ -202,6 +202,7 @@ const MainApp = (function () {
         // Carrega dados do backend (`/api/data`) — não usa arquivo estático local
         showLoading('Carregando dados...');
         let loadedOk = false;
+        let dataSource = 'localStorage';
         try {
             const res = await callApi('/api/data');
             const backend = await res.json().catch(() => null);
@@ -212,6 +213,7 @@ const MainApp = (function () {
                 state.deleted = backend.deleted || state.deleted || [];
                 save();
                 loadedOk = true;
+                dataSource = 'api';
             }
         } catch (e) {
             console.error('Erro ao carregar dados do backend:', e);
@@ -219,6 +221,7 @@ const MainApp = (function () {
             // Mantém localStorage como fallback
         } finally {
             hideLoading(loadedOk);
+            updateStatusIndicator(dataSource);
         }
 
         render();
@@ -384,12 +387,43 @@ const MainApp = (function () {
         })();
     }
 
+    function updateStatusIndicator(source) {
+        const status = document.getElementById('gh-status');
+        if (!status) return;
+        status.classList.remove('d-none');
+        const apiUrl = window.BAIXA_API_URL || 'http://127.0.0.1:3002';
+        if (source === 'api') {
+            status.className = 'badge bg-transparent border border-success x-small text-success';
+            status.innerHTML = `<i class="fas fa-cloud me-1"></i>API (Render)`;
+            status.title = `Dados carregados do backend via ${apiUrl} → banco SQLite`;
+        } else if (source === 'saved') {
+            status.className = 'badge bg-transparent border border-success x-small text-success';
+            status.innerHTML = `<i class="fas fa-check-circle me-1"></i>Salvo na API`;
+            status.title = `Dados salvos no backend via ${apiUrl} → banco SQLite`;
+        } else if (source === 'backup') {
+            status.className = 'badge bg-transparent border border-info x-small text-info';
+            status.innerHTML = `<i class="fas fa-archive me-1"></i>Backup feito`;
+            status.title = `Backup criado no backend via ${apiUrl}`;
+        } else if (source === 'save-error') {
+            status.className = 'badge bg-transparent border border-danger x-small text-danger';
+            status.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i>Offline`;
+            status.title = `Falha ao salvar no backend (${apiUrl}). Dados apenas no navegador.`;
+        } else {
+            status.className = 'badge bg-transparent border border-warning x-small text-warning';
+            status.innerHTML = `<i class="fas fa-hdd me-1"></i>Local`;
+            status.title = `Dados carregados do armazenamento local do navegador (offline)`;
+        }
+    }
+
     function notifyChange() {
         const status = document.getElementById('gh-status');
         if (status) {
-            status.innerHTML = '<span class="text-warning fw-bold"><i class="fas fa-exclamation-triangle me-1"></i>Alterações pendentes! Faça backup.</span>';
+            status.classList.remove('d-none');
+            status.className = 'badge bg-transparent border border-warning x-small text-warning';
+            status.innerHTML = '<span class="text-warning"><i class="fas fa-sync-alt fa-spin me-1"></i>Salvando...</span>';
+            status.title = 'Enviando alterações para o backend...';
         }
-        showToast('Alteração detectada! Não esqueça do backup.', 'warning', 4000);
+        showToast('Alteração detectada! Salvando no backend...', 'warning', 4000);
         // Persist changes via backend autosave
         (async () => {
             const payload = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) };
@@ -397,26 +431,39 @@ const MainApp = (function () {
                 const r = await callApi('/api/save', payload);
                 const j = await r.json().catch(() => null);
                 if (r.ok && j && status) {
-                    status.textContent = 'Salvo no backend: ' + (j.backup || j.saved || 'ok');
+                    status.className = 'badge bg-transparent border border-success x-small text-success';
+                    status.innerHTML = '<i class="fas fa-check-circle me-1"></i>Salvo (API)';
+                    status.title = `Salvo no backend: ${j.backup || j.saved || 'ok'} → banco SQLite`;
 
                     // Após salvar, solicitar criação de backup centralizado no backend
                     try {
                         const b = await callApi('/api/backup', payload);
                         const bj = await b.json().catch(() => null);
                         if (b.ok && bj) {
-                            if (status) status.textContent = 'Backup criado: ' + (bj.backup || bj.dataFile || 'ok');
+                            status.className = 'badge bg-transparent border border-info x-small text-info';
+                            status.innerHTML = '<i class="fas fa-archive me-1"></i>Backup (API)';
+                            status.title = `Backup criado no backend: ${bj.backup || bj.dataFile || 'ok'}`;
                             showToast('Backup salvo no backend com sucesso!', 'success', 2500);
                         } else {
-                            if (status) status.textContent = 'Erro ao criar backup';
+                            status.className = 'badge bg-transparent border border-warning x-small text-warning';
+                            status.innerHTML = '<i class="fas fa-check-circle me-1"></i>Salvo (sem backup)';
+                            status.title = 'Salvo no backend, mas backup falhou';
                         }
                     } catch (err) {
-                        if (status) status.textContent = 'Erro ao criar backup: falha de rede';
+                        status.className = 'badge bg-transparent border border-warning x-small text-warning';
+                        status.innerHTML = '<i class="fas fa-check-circle me-1"></i>Salvo (sem backup)';
+                        status.title = 'Salvo no backend, mas backup falhou: erro de rede';
                     }
 
                     return;
                 }
+                if (status) {
+                    updateStatusIndicator('save-error');
+                }
             } catch (e) {
-                if (status) status.textContent = 'Falha ao salvar no backend';
+                if (status) {
+                    updateStatusIndicator('save-error');
+                }
             }
         })();
     }
