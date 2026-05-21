@@ -31,3 +31,7 @@ Thumbs.db
 
 # Local data
 cards_backup.json
+bridge/baixa.db
+bridge/baixa.db-shm
+bridge/baixa.db-wal
+bridge/baixa.db-wal2
