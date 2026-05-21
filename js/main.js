@@ -809,7 +809,7 @@ const MainApp = (function () {
 
                 for (const url of sources) {
                     try {
-                        console.log(`Tentando carregar cidades de: ${url}`);
+
                         const r = await fetch(url);
                         if (!r.ok) throw new Error(`Erro na rede: ${r.status}`);
                         const data = await r.json();
@@ -832,7 +832,7 @@ const MainApp = (function () {
                         if (allCities.length > 0) {
                             // Ordenar alfabeticamente se vier da fonte secundária
                             if (!url.includes('ibge')) allCities.sort();
-                            console.log(`${allCities.length} cidades carregadas com sucesso.`);
+
                             break; 
                         }
                     } catch (e) {
