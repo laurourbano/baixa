@@ -350,8 +350,12 @@
     <script defer src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <!-- Configurar URL do backend (detecta ambiente automaticamente) -->
     <script>
-        // URL relativa — frontend e backend no mesmo servidor (Render)
-        window.BAIXA_API_URL = '';
+        // Detecta ambiente: Render (mesma origem) ou local (aberto como arquivo)
+        const host = window.location.hostname;
+        const isLocal = !host || host === 'localhost' || host === '127.0.0.1';
+        window.BAIXA_API_URL = isLocal
+            ? 'https://baixa-backend.onrender.com'
+            : '';
     </script>
     <!-- Main JS -->
     <script defer src="js/ui.js"></script>
