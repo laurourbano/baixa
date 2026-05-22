@@ -161,6 +161,13 @@ app.get('/api/data', (req, res) => {
             return res.json(JSON.parse(content));
         }
 
+        // Fallback: bridge/data.json (commitado no repositório, sempre disponível)
+        const bridgeData = path.join(__dirname, 'data.json');
+        if (fs.existsSync(bridgeData)) {
+            const content = fs.readFileSync(bridgeData, 'utf8');
+            return res.json(JSON.parse(content));
+        }
+
         return res.json({
             order: [],
             customs: [],
