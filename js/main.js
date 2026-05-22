@@ -17,10 +17,20 @@ const MainApp = (function () {
     let lastCopiedId = null;
     let _copying = false;
 
-    async function callApi(path, options = {}) {
+    async function callApi(path, options = {}, timeoutMs = 5000) {
         const base = window.BAIXA_API_URL ? window.BAIXA_API_URL.replace(/\/$/, '') : '';
         const url = base ? (base + path) : path;
-        return fetch(url, options);
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            const res = await fetch(url, { ...options, signal: controller.signal });
+            clearTimeout(timer);
+            return res;
+        } catch (err) {
+            clearTimeout(timer);
+            throw err;
+        }
+    }
     }
 
     function resetCardHighlight(id) {
@@ -186,13 +196,18 @@ const MainApp = (function () {
             const res = await callApi('/api/data');
             const backend = await res.json().catch(() => null);
             if (backend) {
-                state.order = backend.order || state.order || [];
-                state.customs = backend.customs || state.customs || [];
-                state.edits = backend.edits || state.edits || {};
-                state.deleted = backend.deleted || state.deleted || [];
-                save();
-                loadedOk = true;
-                dataSource = 'api';
+                // Só sobrescreve o estado se o backend tiver dados reais
+                // (arrays vazios são truthy em JS, então checamos length)
+                const hasData = (backend.order?.length > 0) || (backend.customs?.length > 0);
+                if (hasData) {
+                    state.order = backend.order || [];
+                    state.customs = backend.customs || [];
+                    state.edits = backend.edits || {};
+                    state.deleted = backend.deleted || [];
+                    save();
+                    loadedOk = true;
+                    dataSource = 'api';
+                }
             }
         } catch (e) {
             console.error('Erro ao carregar dados do backend:', e);
