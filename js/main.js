@@ -31,7 +31,6 @@ const MainApp = (function () {
             throw err;
         }
     }
-    }
 
     function resetCardHighlight(id) {
         if (!id) return;
@@ -388,24 +387,24 @@ const MainApp = (function () {
         const apiUrl = window.BAIXA_API_URL || window.location.origin;
         if (source === 'api') {
             status.className = 'badge bg-transparent border border-success x-small text-success';
-            status.innerHTML = `<i class="fas fa-cloud me-1"></i>API (Render)`;
-            status.title = `Dados carregados do backend via ${apiUrl} → banco SQLite`;
+            status.innerHTML = `<i class="fas fa-cloud me-1"></i>Dados via API`;
+            status.title = `Carregado do backend (${apiUrl}) → banco SQLite`;
         } else if (source === 'saved') {
             status.className = 'badge bg-transparent border border-success x-small text-success';
-            status.innerHTML = `<i class="fas fa-check-circle me-1"></i>Salvo na API`;
-            status.title = `Dados salvos no backend via ${apiUrl} → banco SQLite`;
+            status.innerHTML = `<i class="fas fa-check-circle me-1"></i>Salvo (API)`;
+            status.title = `Dados salvos no backend (${apiUrl}) → banco SQLite`;
         } else if (source === 'backup') {
             status.className = 'badge bg-transparent border border-info x-small text-info';
-            status.innerHTML = `<i class="fas fa-archive me-1"></i>Backup feito`;
-            status.title = `Backup criado no backend via ${apiUrl}`;
+            status.innerHTML = `<i class="fas fa-archive me-1"></i>Backup (API)`;
+            status.title = `Backup criado no backend (${apiUrl})`;
         } else if (source === 'save-error') {
             status.className = 'badge bg-transparent border border-danger x-small text-danger';
-            status.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i>Offline`;
-            status.title = `Falha ao salvar no backend (${apiUrl}). Dados apenas no navegador.`;
+            status.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i>Dados via localStorage`;
+            status.title = `Falha ao salvar no backend (${apiUrl}). Dados salvos apenas no navegador (localStorage).`;
         } else {
             status.className = 'badge bg-transparent border border-warning x-small text-warning';
-            status.innerHTML = `<i class="fas fa-hdd me-1"></i>Local`;
-            status.title = `Dados carregados do armazenamento local do navegador (offline)`;
+            status.innerHTML = `<i class="fas fa-hdd me-1"></i>Dados via localStorage`;
+            status.title = `Carregado do armazenamento local do navegador (localStorage) — backend indisponível`;
         }
     }
 
