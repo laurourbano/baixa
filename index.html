@@ -350,9 +350,10 @@
     <script defer src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <!-- Configurar URL do backend (detecta ambiente automaticamente) -->
     <script>
-        // Em dev local (localhost) → backend local na porta 3002
+        // Em dev local (localhost ou arquivo local) → backend local na porta 3002
         // Em produção (Netlify) → backend no Render
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const host = window.location.hostname;
+        const isLocal = !host || host === 'localhost' || host === '127.0.0.1';
         window.BAIXA_API_URL = isLocal
             ? 'http://127.0.0.1:3002'
             : 'https://baixa-backend.onrender.com';
