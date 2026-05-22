@@ -23,6 +23,10 @@ const port = process.env.PORT || 3002;
 app.use(cors());
 app.use(express.json());
 
+const PUBLIC_DIR = path.join(__dirname, '..');
+app.use(express.static(PUBLIC_DIR));
+app.get('/', (req, res) => res.sendFile(path.join(PUBLIC_DIR, 'index.html')));
+
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const DB_PATH = path.join(DATA_DIR, 'baixa.db');
 const db = new Database(DB_PATH);

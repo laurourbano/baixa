@@ -17,31 +17,10 @@ const MainApp = (function () {
     let lastCopiedId = null;
     let _copying = false;
 
-    /* Helper para chamadas ao backend
-       Ordem de tentativa:
-       1) `window.BAIXA_API_URL` (se definido)
-       2) rota relativa (ex: /api/...)
-       3) ponte local `http://127.0.0.1:3002`
-    */
     async function callApi(path, options = {}) {
-        const bases = [];
-        if (window.BAIXA_API_URL) bases.push(window.BAIXA_API_URL.replace(/\/$/, ''));
-        bases.push(''); // rota relativa
-        bases.push('http://127.0.0.1:3002'); // bridge local
-
-        let lastError = null;
-        for (const base of bases) {
-            const url = base ? (base + path) : path;
-            try {
-                const res = await fetch(url, options);
-                if (res.ok) return res;
-                // se não OK, guardar erro e tentar próximo
-                lastError = new Error(`Status ${res.status} for ${url}`);
-            } catch (err) {
-                lastError = err;
-            }
-        }
-        throw lastError;
+        const base = window.BAIXA_API_URL ? window.BAIXA_API_URL.replace(/\/$/, '') : '';
+        const url = base ? (base + path) : path;
+        return fetch(url, options);
     }
 
     function resetCardHighlight(id) {
@@ -391,7 +370,7 @@ const MainApp = (function () {
         const status = document.getElementById('gh-status');
         if (!status) return;
         status.classList.remove('d-none');
-        const apiUrl = window.BAIXA_API_URL || 'http://127.0.0.1:3002';
+        const apiUrl = window.BAIXA_API_URL || window.location.origin;
         if (source === 'api') {
             status.className = 'badge bg-transparent border border-success x-small text-success';
             status.innerHTML = `<i class="fas fa-cloud me-1"></i>API (Render)`;
@@ -537,7 +516,7 @@ const MainApp = (function () {
                     const isPendencia = cardData.title.toLowerCase().includes('pendência') || cardData.sit === '25';
                     
                     console.log('Solicitando automação Sagicon para:', cardData.title);
-                    fetch('http://127.0.0.1:3002/automate', {
+                    fetch('/automate', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
