@@ -23,7 +23,7 @@ const MainApp = (function () {
        2) rota relativa (ex: /api/...)
        3) ponte local `http://127.0.0.1:3002`
     */
-    async function callApi(path, options = {}) {
+    async function callApi(path, options = {}, timeoutMs = 5000) {
         const bases = [];
         if (window.BAIXA_API_URL) bases.push(window.BAIXA_API_URL.replace(/\/$/, ''));
         bases.push(''); // rota relativa
@@ -32,12 +32,17 @@ const MainApp = (function () {
         let lastError = null;
         for (const base of bases) {
             const url = base ? (base + path) : path;
+            let timer;
             try {
-                const res = await fetch(url, options);
+                const controller = new AbortController();
+                timer = setTimeout(() => controller.abort(), timeoutMs);
+                const res = await fetch(url, { ...options, signal: controller.signal });
+                clearTimeout(timer);
                 if (res.ok) return res;
                 // se não OK, guardar erro e tentar próximo
                 lastError = new Error(`Status ${res.status} for ${url}`);
             } catch (err) {
+                clearTimeout(timer);
                 lastError = err;
             }
         }
