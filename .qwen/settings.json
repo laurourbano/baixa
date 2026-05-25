@@ -9,7 +9,8 @@
       "Bash(timeout *)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(echo.)"
+      "Bash(echo.)",
+      "Bash(git push *)"
     ]
   },
   "$version": 4
