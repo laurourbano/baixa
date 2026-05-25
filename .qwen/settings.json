@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(del *)",
+      "Bash(npx *)",
+      "Bash(.tobe)",
+      "Bash(})",
+      "Bash(git stash)",
+      "Bash(timeout *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  },
+  "$version": 4
+}
