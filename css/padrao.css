@@ -138,27 +138,6 @@ h6,
   /* Reduz ligeiramente em relação ao herdado do Bootstrap */
 }
 
-/* Background effects removed to follow standard Bootstrap look */
-body::before {
-  display: none;
-}
-
-/* Decorative Blobs */
-/* Decorative Blobs disabled for a cleaner Bootstrap appearance */
-.blob {
-  display: none;
-}
-
-@keyframes move {
-  from {
-    transform: translate(0, 0) scale(1);
-  }
-
-  to {
-    transform: translate(50px, 100px) scale(1.1);
-  }
-}
-
 /* Dashboard Layout */
 .app-layout {
   display: flex;
