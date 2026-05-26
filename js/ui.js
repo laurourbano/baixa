@@ -48,6 +48,9 @@ function switchView(viewName) {
     } else if (viewName === 'ferramentas') {
         titleEl.textContent = 'Ferramentas Secundárias';
         document.querySelector('.btn-add').classList.add('d-none');
+    } else if (viewName === 'instrucoes') {
+        titleEl.textContent = 'Instruções de Engenharia';
+        document.querySelector('.btn-add').classList.add('d-none');
     }
 }
 

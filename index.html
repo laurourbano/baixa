@@ -91,6 +91,8 @@
                         class="fas fa-th-large"></i> <span>Dashboard</span></a>
                 <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i
                         class="fas fa-tools"></i> <span>Ferramentas</span></a>
+                <a href="#" id="nav-instrucoes" class="nav-item" onclick="switchView('instrucoes')"><i
+                        class="fas fa-book"></i> <span>Instruções</span></a>
                 <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i
                         class="fas fa-cog"></i> <span>Configurações</span></a>
             </nav>
@@ -214,6 +216,153 @@
 
                         <!-- Ferramenta: Nuvem removida (salvamento é feito automaticamente no backend) -->
 
+                    </div>
+                </div>
+
+                <!-- VIEW: INSTRUÇÕES -->
+                <div id="view-instrucoes" class="app-view d-none">
+                    <div class="instrucoes-grid">
+                        <!-- Card 1: Prompt Modelo -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">1</span>
+                                <h3>Prompt Modelo (Setup do Projeto)</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <p class="instrucao-desc">Antes de gerar código, preencha:</p>
+                                <ul class="instrucao-list">
+                                    <li><strong>STACK:</strong> [Linguagem/Framework/Banco/Versões]</li>
+                                    <li><strong>ESCOPO:</strong> [O que faz, público-alvo, dispositivos em 3 frases]</li>
+                                    <li><strong>REGRAS DE NEGÓCIO:</strong> [2-5 regras críticas impeditivas]</li>
+                                    <li><strong>ACESSIBILIDADE:</strong> [WCAG AA/AAA | axe-core]</li>
+                                    <li><strong>OFFLINE-FIRST:</strong> [Sim/Não]</li>
+                                    <li><strong>TELEMETRIA:</strong> [Sim/Não]</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Regras de Código -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">2</span>
+                                <h3>Regras de Código & Frugalidade</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <ul class="instrucao-list">
+                                    <li><strong>Variáveis descritivas completas:</strong> Proibido siglas/abreviações obscuras (ex: <code>userSubscriptionStatus</code> e não <code>subStat</code>).</li>
+                                    <li><strong>Web APIs nativas primeiro:</strong> Preferência absoluta por APIs nativas estáveis (<code>structuredClone</code>, <code>Intl</code>, <code>AbortController</code>, <code>fetch</code>, <code>URLSearchParams</code>) antes de instalar dependências NPM.</li>
+                                    <li><strong>NPM:</strong> Instalar pacotes de terceiros apenas com justificativa detalhada de no mínimo 50 caracteres.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Estado e Reatividade -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">3</span>
+                                <h3>Estado, Reatividade & Imutabilidade</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <ul class="instrucao-list">
+                                    <li><strong>Fluxo unidirecional:</strong> Estado estritamente imutável. Toda alteração deve criar novas referências de dados.</li>
+                                    <li><strong>Reatividade nativa:</strong> Use primitivos nativos da stack escolhida (ex: Signals, Hooks, Stores). Jamais use reatividade bidirecional.</li>
+                                    <li><strong>Estado global mínimo:</strong> Comece com estado local; só eleve se múltiplos componentes distantes precisarem.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Desenvolvimento Paralelo -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">4</span>
+                                <h3>Desenvolvimento Paralelo (Mocking MSW)</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <ul class="instrucao-list">
+                                    <li><strong>Offline-First:</strong> Interceptação obrigatória de requisições no nível de rede usando padrões como MSW (Mock Service Worker).</li>
+                                    <li>Desacoplamento total de deploys de back-end. Testes de integração devem usar os mesmos mocks.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Telemetria -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">5</span>
+                                <h3>Telemetria e Observabilidade</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <ul class="instrucao-list">
+                                    <li><strong>ErrorHandler global:</strong> Captura e formatação de exceções não tratadas em segundo plano.</li>
+                                    <li><strong>Web Vitals assíncronos:</strong> Captura de LCP, FID, CLS via <code>requestIdleCallback</code> ou <code>PerformanceObserver</code> sem impactar a thread de renderização principal.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 6: Arquitetura Evolutiva -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">6</span>
+                                <h3>Arquitetura Evolutiva em 3 Camadas</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <p class="instrucao-desc">A simplicidade do MVP não deve gerar barreiras físicas para o crescimento futuro:</p>
+                                <ol class="instrucao-list">
+                                    <li><strong>UI (Apresentação):</strong> Componentes visuais puros, sem lógica de estado ou chamadas externas.</li>
+                                    <li><strong>Lógica (Orquestração):</strong> Estado, hooks, reatividade e regras de fluxo de UI.</li>
+                                    <li><strong>Serviço (Infraestrutura):</strong> Chamadas de API, cache, adapters de dados e transformações.</li>
+                                </ol>
+                                <p class="instrucao-note"><em>Permite migração suave para Feature-Sliced Design (FSD) ou Domain-Driven Design (DDD).</em></p>
+                            </div>
+                        </div>
+
+                        <!-- Card 7: Testes -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">7</span>
+                                <h3>Testes & Controle de Dívida Técnica</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <ul class="instrucao-list">
+                                    <li><strong>Pirâmide de testes:</strong> Unitários (&gt;80%) → Integração (MSW) → E2E (Playwright/Cypress).</li>
+                                    <li><strong>Boy Scout Rule:</strong> Sempre deixe o código melhor e mais testado do que encontrou.</li>
+                                    <li><strong>Marcação explícita:</strong> Rastreie débitos com <code>// [DEBT: descrição]</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 8: Git & CI -->
+                        <div class="instrucao-card">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">8</span>
+                                <h3>Git, CI & Automation</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <ul class="instrucao-list">
+                                    <li><strong>Conventional Commits:</strong> <code>feat:</code>, <code>fix:</code>, <code>refactor:</code>, <code>test:</code>, <code>chore:</code>.</li>
+                                    <li><strong>Commits atômicos e reversíveis:</strong> 1 commit = 1 alteração lógica testada.</li>
+                                    <li><strong>CI Gates:</strong> Linter, testes unitários, cobertura e acessibilidade (axe-core) obrigatórios.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 9: Regra Final -->
+                        <div class="instrucao-card instrucao-card-destaque">
+                            <div class="instrucao-card-header">
+                                <span class="instrucao-num">9</span>
+                                <h3>Regra Final - Saída da IA</h3>
+                            </div>
+                            <div class="instrucao-card-body">
+                                <p class="instrucao-desc">A IA deve retornar apenas:</p>
+                                <ol class="instrucao-list">
+                                    <li>Código limpo, pronto para produção.</li>
+                                    <li>Referências numeradas a este Cheat Sheet (ex: <code>[3] Estado unidirecional</code>).</li>
+                                    <li>Confiança técnica: <em>"Código pronto para produção, sem dívida."</em></li>
+                                    <li>Estimativa de tokens consumidos na resposta.</li>
+                                </ol>
+                                <p class="instrucao-note"><strong>Zero explicações teóricas, introduções ou conversas genéricas.</strong></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
     </div>
