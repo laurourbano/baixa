@@ -70,7 +70,7 @@ window.MainApp = window.MainApp || {};
 
         var clickHandler = canCopy ? ' onclick="MainApp.copy(this.querySelector(\'.content-display\'), \'' + card.id + '\')"' : '';
 
-        return '<div class="col-6 col-md-6 col-lg-3 mb-3">' +
+        return '<div class="col-12 col-md-6 col-lg-3 mb-3">' +
           '<div class="card h-100 border-' + color + (isInfo ? ' card-info-type' : '') + '" data-id="' + card.id + '" data-color="' + color + '" draggable="true"' + clickHandler + '>' +
           '<div class="card-head" onclick="event.stopPropagation()">' +
           '<span class="handle">⠿</span>' +
