@@ -21,6 +21,43 @@ window.MainApp = window.MainApp || {};
     }
   }
 
+  /**
+   * callApiWithRetry — chamada com retry e backoff exponencial.
+   * Útil para backends com cold start (ex: Render free tier).
+   * @param {string} path - caminho da API (ex: '/api/data')
+   * @param {object} [options] - opções do fetch
+   * @param {object} [retryOpts]
+   * @param {number} [retryOpts.maxRetries=3] - número máximo de tentativas
+   * @param {number} [retryOpts.baseTimeout=30000] - timeout por tentativa (ms)
+   * @param {number} [retryOpts.delayMs=2000] - delay inicial entre tentativas (ms)
+   * @param {function} [retryOpts.onRetry] - callback(attempt, maxRetries, delay)
+   */
+  async function callApiWithRetry(path, options, retryOpts) {
+    var opts = retryOpts || {};
+    var maxRetries = opts.maxRetries || 3;
+    var baseTimeout = opts.baseTimeout || 30000;
+    var delayMs = opts.delayMs || 2000;
+    var onRetry = opts.onRetry || null;
+
+    var lastError = null;
+
+    for (var attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        var res = await callApi(path, options, baseTimeout);
+        return res;
+      } catch (err) {
+        lastError = err;
+        if (attempt < maxRetries) {
+          var delay = delayMs * Math.pow(2, attempt); // backoff exponencial
+          if (onRetry) onRetry(attempt + 1, maxRetries, delay);
+          await new Promise(function (r) { setTimeout(r, delay); });
+        }
+      }
+    }
+
+    throw lastError;
+  }
+
   function notifyChange() {
     var status = document.getElementById('gh-status');
     if (status) {
@@ -67,5 +104,6 @@ window.MainApp = window.MainApp || {};
   }
 
   app.callApi = callApi;
+  app.callApiWithRetry = callApiWithRetry;
   app.notifyChange = notifyChange;
 }(window.MainApp));

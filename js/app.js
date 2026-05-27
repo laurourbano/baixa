@@ -37,13 +37,28 @@
       emailInput.focus();
     }
 
-    // Carrega dados do backend
-    app.showLoading('Carregando dados...');
+    // Carrega dados do backend (com retry para cold start do Render)
+    app.showLoading('Conectando ao servidor...');
     var loadedOk = false;
     var dataSource = 'localStorage';
 
     try {
-      var res = await app.callApi('/api/data');
+      // Ping de aquecimento — acorda o backend (Render cold start)
+      try {
+        await app.callApi('/api/health', {}, 10000);
+      } catch (_) {
+        // Ignora falha no ping, tenta /api/data mesmo assim
+      }
+
+      app.showLoading('Carregando dados...');
+      var res = await app.callApiWithRetry('/api/data', {}, {
+        maxRetries: 3,
+        baseTimeout: 30000,
+        delayMs: 2000,
+        onRetry: function (attempt, maxRetries) {
+          app.showLoading('Aguardando servidor... (tentativa ' + attempt + '/' + maxRetries + ')');
+        }
+      });
       var backend = await res.json().catch(function () { return null; });
       if (backend) {
         var hasData = (backend.order && backend.order.length > 0) || (backend.customs && backend.customs.length > 0);
