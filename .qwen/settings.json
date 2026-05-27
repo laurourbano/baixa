@@ -12,7 +12,10 @@
       "Bash(echo.)",
       "Bash(git push *)",
       "Agent(Explore)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git merge *)"
     ]
   },
   "$version": 4
