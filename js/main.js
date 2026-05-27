@@ -18,6 +18,7 @@ if (typeof module !== 'undefined' && module.exports) {
   require('./weather.js');
   require('./fiscal.js');
   require('./calculator.js');
+  require('./dashboards.js');
   require('./app.js');
   module.exports = window.MainApp;
 }

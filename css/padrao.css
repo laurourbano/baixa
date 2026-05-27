@@ -163,25 +163,38 @@ h6,
 }
 
 .sidebar.expanded {
-  width: 280px;
-  min-width: 280px;
+  width: 320px;
+  min-width: 320px;
   padding: 24px 16px;
   cursor: default;
 }
 
 .sidebar-header {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.sidebar-brand {
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 32px;
-  height: 48px;
-  transition: all 0.3s ease;
 }
 
 .sidebar.expanded .sidebar-header {
+  flex-direction: row;
+  align-items: center;
   justify-content: flex-start;
   padding: 0 12px;
+}
+
+.sidebar.expanded .sidebar-brand {
+  justify-content: flex-start;
 }
 
 .logo-wrapper {
@@ -222,6 +235,42 @@ h6,
 .sidebar.expanded .logout-btn span {
   display: inline;
   opacity: 1;
+}
+
+/* Botão toggle da sidebar */
+.sidebar-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-text);
+}
+
+.sidebar-toggle-btn i {
+  transition: transform 0.3s ease;
+}
+
+.sidebar.expanded .sidebar-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+}
+
+.sidebar.expanded .sidebar-toggle-btn i {
+  transform: rotate(180deg);
 }
 
 .sidebar-nav {
@@ -1325,5 +1374,254 @@ textarea.form-control {
 @media (min-width: 768px) and (max-width: 991px) {
   .content-wrapper {
     padding: 16px 24px;
+  }
+}
+
+/* ── Sidebar: Divisor ──────────────────── */
+.sidebar-divider {
+  height: 1px;
+  background: var(--color-border, rgba(255, 255, 255, 0.08));
+  margin: 8px 16px;
+}
+
+/* ── Toolbar do dashboard ──────────────── */
+.dash-toolbar {
+  margin-bottom: 16px;
+}
+
+.dash-toolbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  border-radius: 10px;
+}
+
+.dash-toolbar-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.dash-toolbar-label i {
+  color: var(--color-primary);
+}
+
+.dash-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 480px) {
+  .dash-toolbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dash-toolbar-actions {
+    width: 100%;
+  }
+
+  .dash-toolbar-actions .btn {
+    flex: 1;
+    font-size: 0.72rem;
+  }
+}
+
+/* ── Sidebar: Dashboards dinâmicos ─────── */
+#sidebar-dashboards {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-nav-row {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  margin: 0 4px;
+  transition: background 0.15s ease;
+}
+
+.dash-nav-row.active {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dash-nav-item {
+  flex: 1;
+  min-width: 0;
+}
+
+.dash-nav-actions {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  padding-right: 6px;
+}
+
+.dash-nav-row:hover .dash-nav-actions,
+.dash-nav-row.active .dash-nav-actions {
+  display: flex;
+}
+
+.dash-action-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-muted, #6b7280);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.dash-action-btn:hover {
+  opacity: 1;
+  color: var(--color-text);
+}
+
+.dash-action-del:hover {
+  color: var(--color-danger, #ef4444);
+}
+
+/* Botão Nova Página na sidebar */
+.add-dashboard-btn {
+  width: calc(100% - 8px);
+  margin: 0 4px;
+  padding: 10px 12px;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px dashed rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
+  color: var(--color-primary, #3b82f6);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  justify-content: flex-start;
+}
+
+.add-dashboard-btn:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.add-dashboard-btn i {
+  width: 20px;
+  text-align: center;
+  margin-right: 8px;
+}
+
+/* Botão Ordenar dashboards */
+.sort-dash-btn {
+  width: calc(100% - 8px);
+  margin: 0 4px 4px 4px;
+  padding: 7px 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  color: var(--color-text-muted, #6b7280);
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  justify-content: flex-start;
+}
+
+.sort-dash-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text);
+}
+
+.sort-dash-btn i {
+  width: 20px;
+  text-align: center;
+  margin-right: 8px;
+}
+
+/* Drag handle dos dashboards */
+.dash-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  min-width: 18px;
+  color: var(--color-text-muted, #6b7280);
+  cursor: grab;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  user-select: none;
+}
+
+.dash-nav-row:hover .dash-drag-handle {
+  opacity: 0.5;
+}
+
+.dash-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Estados de drag */
+.dash-nav-row.dragging {
+  opacity: 0.4;
+}
+
+.dash-nav-row.drag-over {
+  border-top: 2px solid var(--color-primary, #3b82f6);
+  margin-top: -2px;
+}
+
+/* ── Modal de Dashboard ────────────────── */
+.dash-modal-dialog {
+  max-width: 420px;
+}
+
+/* ── Seletor de ícones no modal ────────── */
+.icon-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.icon-option {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--color-text-muted, #6b7280);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.icon-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.icon-option.selected {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: var(--color-primary, #3b82f6);
+  color: var(--color-primary, #3b82f6);
+}
+
+@media (max-width: 480px) {
+  .icon-picker-grid {
+    grid-template-columns: repeat(6, 1fr);
   }
 }

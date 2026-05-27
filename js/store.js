@@ -1,33 +1,176 @@
 /**
- * store.js — Gerenciamento de estado centralizado
+ * store.js — Gerenciamento de estado centralizado (multi-dashboard)
  */
 window.MainApp = window.MainApp || {};
 
 (function (app) {
   'use strict';
 
-  const STORAGE_KEY = 'baixa_rt_data';
+  var STORAGE_KEY = 'baixa_rt_data';
 
-  const state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-    order: [],
-    customs: [],
-    edits: {},
-    deleted: []
-  };
+  /* ── Dashboards padrão pré-criados ────── */
+  var DEFAULT_DASHBOARDS = [
+    { id: 'default',          name: 'Dashboard de Pareceres', icon: 'fa-file-alt' },
+    { id: 'dash-ingresso-pj', name: 'Ingresso PJ',            icon: 'fa-door-open' },
+    { id: 'dash-inscricao-pf',name: 'Inscrição PF',           icon: 'fa-id-card' },
+    { id: 'dash-contratos',   name: 'Controle de Contratos',  icon: 'fa-file-contract' },
+    { id: 'dash-conf-pf',     name: 'Conferência PF',         icon: 'fa-clipboard-check' },
+    { id: 'dash-conf-pj',     name: 'Conferência PJ',         icon: 'fa-file-circle-check' }
+  ];
+
+  function createDashFromTemplate(tmpl) {
+    return {
+      id: tmpl.id,
+      name: tmpl.name,
+      icon: tmpl.icon || 'fa-file-alt',
+      order: [],
+      customs: [],
+      edits: {},
+      deleted: []
+    };
+  }
+
+  function ensureDefaultDashboards(dashboards) {
+    DEFAULT_DASHBOARDS.forEach(function (tmpl) {
+      var exists = dashboards.some(function (d) { return d.id === tmpl.id; });
+      if (!exists) {
+        dashboards.push(createDashFromTemplate(tmpl));
+      } else {
+        // Garante ícone nos dashboards existentes que não têm
+        var existing = dashboards.find(function (d) { return d.id === tmpl.id; });
+        if (existing && !existing.icon) {
+          existing.icon = tmpl.icon;
+        }
+      }
+    });
+  }
+
+  /* ── Carregar / Migrar ────────────────── */
+  var raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || null;
+  var state;
+
+  if (raw && raw.dashboards) {
+    ensureDefaultDashboards(raw.dashboards);
+    if (!raw.dashSortMode) raw.dashSortMode = 'custom';
+    state = raw;
+  } else if (raw && (raw.order || raw.customs)) {
+    var migratedDash = {
+      id: 'default',
+      name: 'Dashboard de Pareceres',
+      icon: 'fa-file-alt',
+      order: raw.order || [],
+      customs: raw.customs || [],
+      edits: raw.edits || {},
+      deleted: raw.deleted || []
+    };
+    state = {
+      dashboards: [migratedDash],
+      activeDashboard: 'default',
+      dashSortMode: 'custom',
+      servicos: raw.servicos || {}
+    };
+    ensureDefaultDashboards(state.dashboards);
+  } else {
+    state = {
+      dashboards: DEFAULT_DASHBOARDS.map(createDashFromTemplate),
+      activeDashboard: 'default',
+      dashSortMode: 'custom',
+      servicos: {}
+    };
+  }
+
+  /* ── Helpers ──────────────────────────── */
+  function getActiveDash() {
+    var activeId = state.activeDashboard || 'default';
+    var dash = state.dashboards.find(function (d) { return d.id === activeId; });
+    if (!dash) {
+      dash = state.dashboards[0];
+      state.activeDashboard = dash.id;
+    }
+    return dash;
+  }
+
+  function setActiveDashboard(id) {
+    state.activeDashboard = id;
+    save();
+  }
+
+  function addDashboard(name, icon) {
+    var id = 'dash-' + Date.now();
+    state.dashboards.push({
+      id: id,
+      name: name,
+      icon: icon || 'fa-file-alt',
+      order: [],
+      customs: [],
+      edits: {},
+      deleted: []
+    });
+    save();
+    return id;
+  }
+
+  function renameDashboard(id, newName, newIcon) {
+    var dash = state.dashboards.find(function (d) { return d.id === id; });
+    if (dash) {
+      dash.name = newName;
+      if (newIcon) dash.icon = newIcon;
+      save();
+    }
+  }
+
+  function removeDashboard(id) {
+    if (state.dashboards.length <= 1) return false;
+    var idx = state.dashboards.findIndex(function (d) { return d.id === id; });
+    if (idx === -1) return false;
+    state.dashboards.splice(idx, 1);
+    if (state.activeDashboard === id) {
+      state.activeDashboard = state.dashboards[0].id;
+    }
+    save();
+    return true;
+  }
+
+  function reorderDashboards(fromIdx, toIdx) {
+    if (state.dashSortMode !== 'custom') return;
+    var item = state.dashboards.splice(fromIdx, 1)[0];
+    state.dashboards.splice(toIdx, 0, item);
+    save();
+  }
+
+  function setDashSortMode(mode) {
+    state.dashSortMode = mode;
+    if (mode === 'alpha') {
+      state.dashboards.sort(function (a, b) {
+        return (a.name || '').localeCompare(b.name || '', 'pt-BR');
+      });
+    }
+    save();
+  }
 
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
   function resetState() {
-    state.order = [];
-    state.customs = [];
-    state.edits = {};
-    state.deleted = [];
+    state.dashboards = DEFAULT_DASHBOARDS.map(createDashFromTemplate);
+    state.activeDashboard = 'default';
+    state.servicos = {};
     save();
   }
 
+  /* ── Expor API ────────────────────────── */
   Object.defineProperty(app, '__state', { get: function () { return state; } });
-  app.__resetState = resetState;
+
   app._save = save;
+  app.__resetState = resetState;
+  app.getActiveDash = getActiveDash;
+  app.setActiveDashboard = setActiveDashboard;
+  app.addDashboard = addDashboard;
+  app.renameDashboard = renameDashboard;
+  app.removeDashboard = removeDashboard;
+  app.reorderDashboards = reorderDashboards;
+  app.setDashSortMode = setDashSortMode;
+  app.ensureDefaultDashboards = function () { ensureDefaultDashboards(state.dashboards); };
+
 }(window.MainApp));

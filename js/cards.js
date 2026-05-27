@@ -1,5 +1,5 @@
 /**
- * cards.js — Renderização, CRUD, cópia e drag-and-drop de cards
+ * cards.js — Renderização, CRUD, cópia e drag-and-drop de cards (multi-dashboard)
  */
 window.MainApp = window.MainApp || {};
 
@@ -13,20 +13,27 @@ window.MainApp = window.MainApp || {};
     return new Date().toLocaleDateString('pt-BR');
   }
 
+  /* ── Helper: dashboard ativo ──────────── */
+  function dash() {
+    return app.getActiveDash();
+  }
+
   /* ── Render ────────────────────────────── */
   function render() {
     var grid = document.getElementById('dynamic-cards');
     if (!grid) return;
 
-    var state = app.__state;
+    var d = dash();
+    if (!d) return;
+
     var date = formattedDate();
 
-    grid.innerHTML = state.customs
-      .filter(function (c) { return state.deleted.indexOf(c.id) === -1; })
-      .map(function (c) { return Object.assign({}, c, state.edits[c.id]); })
+    grid.innerHTML = d.customs
+      .filter(function (c) { return d.deleted.indexOf(c.id) === -1; })
+      .map(function (c) { return Object.assign({}, c, d.edits[c.id]); })
       .sort(function (a, b) {
-        var ia = state.order.indexOf(a.id);
-        var ib = state.order.indexOf(b.id);
+        var ia = d.order.indexOf(a.id);
+        var ib = d.order.indexOf(b.id);
         if (ia === -1) ia = 999;
         if (ib === -1) ib = 999;
         return ia - ib;
@@ -162,6 +169,7 @@ window.MainApp = window.MainApp || {};
 
   function saveCard() {
     var id = document.getElementById('m-id').value;
+    var d = dash();
     var data = {
       title: document.getElementById('m-title').value,
       content: document.getElementById('m-content').value,
@@ -174,33 +182,31 @@ window.MainApp = window.MainApp || {};
       showDate: document.getElementById('m-showDate').checked
     };
 
-    (function () {
-      if (id) {
-        app.showConfirm('Salvar Edição', 'Deseja salvar as alterações deste card?', 'info').then(function (confirmed) {
-          if (!confirmed) {
-            app.showToast('Edição cancelada.', 'info');
-            return;
-          }
-          app.__state.edits[id] = data;
-          closeModal();
-          render();
-          app.notifyChange();
-          app.showToast('Card salvo com sucesso.', 'success');
-        });
-      } else {
-        app.__state.customs.push({ id: 'custom-' + Date.now() });
-        Object.assign(app.__state.customs[app.__state.customs.length - 1], data);
+    if (id) {
+      app.showConfirm('Salvar Edição', 'Deseja salvar as alterações deste card?', 'info').then(function (confirmed) {
+        if (!confirmed) {
+          app.showToast('Edição cancelada.', 'info');
+          return;
+        }
+        d.edits[id] = data;
         closeModal();
         render();
         app.notifyChange();
         app.showToast('Card salvo com sucesso.', 'success');
-      }
-    })();
+      });
+    } else {
+      d.customs.push({ id: 'custom-' + Date.now() });
+      Object.assign(d.customs[d.customs.length - 1], data);
+      closeModal();
+      render();
+      app.notifyChange();
+      app.showToast('Card salvo com sucesso.', 'success');
+    }
   }
 
   function edit(id) {
-    var all = app.__state.customs;
-    var card = Object.assign({}, all.find(function (c) { return c.id === id; }), app.__state.edits[id]);
+    var d = dash();
+    var card = Object.assign({}, d.customs.find(function (c) { return c.id === id; }), d.edits[id]);
 
     document.getElementById('m-id').value = id;
     document.getElementById('m-title').value = card.title;
@@ -220,7 +226,8 @@ window.MainApp = window.MainApp || {};
   function del(id) {
     app.showConfirm('Excluir Card', 'Deseja excluir este card permanentemente?', 'danger').then(function (confirmed) {
       if (confirmed) {
-        app.__state.deleted.push(id);
+        var d = dash();
+        d.deleted.push(id);
         render();
         app.notifyChange();
         app.showToast('Card removido com sucesso.', 'info');
@@ -274,6 +281,7 @@ window.MainApp = window.MainApp || {};
   /* ── Drag & Drop ───────────────────────── */
   function setupDragAndDrop() {
     var grid = document.getElementById('dynamic-cards');
+    if (!grid) return;
     grid.ondragover = function (e) { e.preventDefault(); };
     grid.ondrop = function (e) {
       e.preventDefault();
@@ -285,7 +293,7 @@ window.MainApp = window.MainApp || {};
         var fromIdx = currentIds.indexOf(draggedId);
         var toIdx = currentIds.indexOf(target.dataset.id);
         currentIds.splice(toIdx, 0, currentIds.splice(fromIdx, 1)[0]);
-        app.__state.order = currentIds;
+        dash().order = currentIds;
         render();
         app.notifyChange();
       }

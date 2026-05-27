@@ -46,12 +46,32 @@
       var res = await app.callApi('/api/data');
       var backend = await res.json().catch(function () { return null; });
       if (backend) {
-        var hasData = (backend.order && backend.order.length > 0) || (backend.customs && backend.customs.length > 0);
+        var hasData = false;
+        // Detecta formato: multi-dashboard vs flat antigo
+        if (backend.dashboards && backend.dashboards.length > 0) {
+          // Formato multi-dashboard
+          app.__state.dashboards = backend.dashboards;
+          app.__state.activeDashboard = backend.activeDashboard || backend.dashboards[0].id;
+          app.__state.dashSortMode = backend.dashSortMode || 'custom';
+          app.__state.servicos = backend.servicos || {};
+          app.ensureDefaultDashboards();
+          hasData = true;
+        } else if (backend.order && backend.order.length > 0 || backend.customs && backend.customs.length > 0) {
+          // Formato antigo (flat) — migrar
+          app.__state.dashboards = [{
+            id: 'default',
+            name: 'Dashboard de Pareceres',
+            order: backend.order || [],
+            customs: backend.customs || [],
+            edits: backend.edits || {},
+            deleted: backend.deleted || []
+          }];
+          app.__state.activeDashboard = 'default';
+          app.__state.servicos = backend.servicos || {};
+          app.ensureDefaultDashboards();
+          hasData = true;
+        }
         if (hasData) {
-          app.__state.order = backend.order || [];
-          app.__state.customs = backend.customs || [];
-          app.__state.edits = backend.edits || {};
-          app.__state.deleted = backend.deleted || [];
           app._save();
           loadedOk = true;
           dataSource = 'api';
@@ -65,8 +85,12 @@
     app.hideLoading(loadedOk);
     app._updateStatusIndicator(dataSource);
 
+    // Inicializa dashboards e renderiza sidebar
+    app.initDashboards();
     app.render();
     app.setupDragAndDrop();
+    app.updatePageTitle();
+
     app.initFiscalSearch();
     app.initCalculator();
     initPlanoInspection();
