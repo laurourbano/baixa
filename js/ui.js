@@ -67,21 +67,21 @@ function switchView(viewName) {
         viewEl.classList.remove('d-none');
     }
 
-    // Update title & toggle "+" button
-    var titleEl = document.getElementById('page-title');
+    // Update badge & toggle "+" button (título sempre "Pareceres")
+    var badgeEl = document.getElementById('badge-view');
     var btnAdd = document.querySelector('.btn-add');
 
-    var titles = {
-        'ferramentas': 'Ferramentas Secundárias',
-        'instrucoes': 'Instruções de Engenharia'
+    var badges = {
+        'ferramentas': 'Ferramentas',
+        'instrucoes': 'Instruções'
     };
 
     // Para dashboard, usa o nome do dashboard ativo
     if (viewName === 'dashboard' && window.MainApp && window.MainApp.getActiveDash) {
         var d = window.MainApp.getActiveDash();
-        titleEl.textContent = d ? d.name : 'Dashboard';
+        if (badgeEl) badgeEl.textContent = d ? d.name : 'Baixa RT';
     } else {
-        titleEl.textContent = titles[viewName] || 'Portal de Pareceres';
+        if (badgeEl) badgeEl.textContent = badges[viewName] || 'Baixa RT';
     }
 
     // Botão "+" só aparece no dashboard
