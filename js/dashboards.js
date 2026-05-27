@@ -396,10 +396,9 @@ window.MainApp = window.MainApp || {};
   }
 
   function updatePageTitle() {
-    var dash = app.getActiveDash();
     var titleEl = document.getElementById('page-title');
-    if (titleEl && dash) {
-      titleEl.textContent = dash.name || 'Dashboard';
+    if (titleEl) {
+      titleEl.textContent = 'Parecer';
     }
     renderDashboardToolbar();
   }

@@ -17,7 +17,7 @@ test.describe('Portal de Pareceres', () => {
 
     // O overlay de login deve ser ocultado (classe hidden é adicionada)
     await expect(page.locator('#login-overlay')).toHaveClass(/hidden/);
-    await expect(page.locator('#page-title')).toContainText('Dashboard de Pareceres');
+    await expect(page.locator('#page-title')).toContainText('Parecer');
   });
 
   test('deve exibir erro com credenciais inválidas', async ({ page }) => {

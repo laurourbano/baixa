@@ -28,7 +28,7 @@ app.get('/', (_req, res) => res.sendFile(path.join(PUBLIC_DIR, 'index.html')));
 // Inicia servidor
 app.listen(port, '0.0.0.0', () => {
   console.log(`\n=========================================`);
-  console.log(` PONTE ON-LINE NA PORTA ${port}`);
+  console.log(` PONTE ON-LINE NA PORTA http://localhost:${port}`);
   console.log(` SQLite: ${db.getDb().name}`);
   console.log(`=========================================\n`);
 });
