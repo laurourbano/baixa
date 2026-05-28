@@ -14,7 +14,8 @@
       "Agent(Explore)",
       "Bash(node *)",
       "Bash(git branch *)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(git merge *)"
     ]
   },
   "$version": 4
