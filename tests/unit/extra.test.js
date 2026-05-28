@@ -100,6 +100,8 @@ describe('MainApp extended unit tests', () => {
     // Mock the fetch that retrieves the .ods file – return an ArrayBuffer placeholder
     const arrayBuffer = new Uint8Array([1, 2, 3]).buffer;
     mockFetch.mockImplementationOnce(() => Promise.resolve({ arrayBuffer: () => Promise.resolve(arrayBuffer) }));
+    // Mock XLSX.read to return a valid workbook object
+    mockXLSX.read.mockReturnValue({ Sheets: { 'Sheet1': [] }, SheetNames: ['Sheet1'] });
 
     // Call the actual function (exposed via MainApp)
     await MainApp.initFiscalSearch();
@@ -136,6 +138,9 @@ describe('MainApp extended unit tests', () => {
     // Fill token & repo fields
     document.getElementById('gh-token').value = 'FAKE_TOKEN';
     document.getElementById('gh-repo').value = 'my-repo';
+
+    // Clear call history from init() so mock.calls only reflects cloudBackup fetches
+    mockFetch.mockClear();
 
     // Mock user endpoint to return a username
     mockFetch
