@@ -44,6 +44,17 @@ function validateDataPayload(body) {
   return null;
 }
 
+/* ── Helpers ───────────────────────────── */
+function updateLocalDataFile(payload) {
+  const dataPath = path.join(__dirname, 'data.json');
+  try {
+    fs.writeFileSync(dataPath, payload, 'utf8');
+    console.log('[data.json] Atualizado em disco');
+  } catch (err) {
+    console.error('[data.json] Erro ao atualizar:', err.message);
+  }
+}
+
 /* ── Rotas ──────────────────────────────── */
 function registerRoutes(app) {
   /* POST /automate */
@@ -86,6 +97,7 @@ function registerRoutes(app) {
     try {
       db.saveState(payload, ts.toISOString());
       db.insertBackup(backupName, payload, ts.toISOString());
+      updateLocalDataFile(payload);
       uploadToS3(`backups/${backupName}`, payload);
       return res.json({ success: true, dataFile: 'baixa.db', backup: backupName });
     } catch (err) {
@@ -107,6 +119,7 @@ function registerRoutes(app) {
     try {
       db.saveState(payload, ts.toISOString());
       db.insertBackup(backupName, payload, ts.toISOString());
+      updateLocalDataFile(payload);
       uploadToS3(`backups/${backupName}`, payload);
       return res.json({ success: true, saved: 'baixa.db', backup: backupName });
     } catch (err) {

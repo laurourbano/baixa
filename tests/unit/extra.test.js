@@ -13,7 +13,7 @@ describe('MainApp extended unit tests', () => {
   let mockFetch;
   let mockXLSX;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Setup DOM elements needed for many functions
     document.body.innerHTML = `
       <div id="dynamic-cards"></div>
@@ -84,7 +84,7 @@ describe('MainApp extended unit tests', () => {
 
     // Load fresh MainApp instance and initialise it to set up internal state.
     MainApp = loadMainApp();
-    MainApp.init();
+    await MainApp.init();
   });
 
   /*** 1. Fiscal search integration ***/
@@ -95,8 +95,7 @@ describe('MainApp extended unit tests', () => {
       ['Curitiba', 'Fiscal A', 'Sul', '123'],
       ['São Paulo', 'Fiscal B', 'Sudeste', '456']
     ];
-    const fakeJson = fakeData.map(row => ({ cidade: row[0], fiscal: row[1], region: row[2], code: row[3] }));
-    mockXLSX.utils.sheet_to_json.mockReturnValue(fakeJson);
+    mockXLSX.utils.sheet_to_json.mockReturnValue(fakeData);
     // Mock the fetch that retrieves the .ods file – return an ArrayBuffer placeholder
     const arrayBuffer = new Uint8Array([1, 2, 3]).buffer;
     mockFetch.mockImplementationOnce(() => Promise.resolve({ arrayBuffer: () => Promise.resolve(arrayBuffer) }));

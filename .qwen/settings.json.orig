@@ -16,7 +16,16 @@
       "Bash(git branch *)",
       "Bash(git checkout *)",
       "Bash(git merge *)",
-      "Bash(powershell *)"
+      "Bash(powershell *)",
+      "Bash(npx.cmd *)",
+      "Bash(git rm *)",
+      "Bash(npm run *)",
+      "Bash(npm ls *)",
+      "Bash(findstr *)",
+      "Bash(dir *)",
+      "Bash(set *)",
+      "Bash(npm view *)",
+      "Bash(ren *)"
     ]
   },
   "$version": 4

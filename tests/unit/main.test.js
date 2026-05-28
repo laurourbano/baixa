@@ -15,7 +15,7 @@ describe('MainApp unit tests', () => {
   let mockXLSX;
   let mockFetch;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Reset DOM
     document.body.innerHTML = `
       <div id="dynamic-cards"></div>
@@ -89,7 +89,7 @@ describe('MainApp unit tests', () => {
     // Load fresh instance of MainApp
     MainApp = loadMainApp();
     // Initialise the app – this will populate internal state
-    MainApp.init();
+    await MainApp.init();
   });
 
   it('initialises with empty state', () => {
