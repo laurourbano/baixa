@@ -1,10 +1,10 @@
-# 🏛️ Portal de Pareceres - Baixa RT
+# ⚡ WorkDash
 
 [![Vercel Deploy](https://img.shields.io/badge/Vercel-Deploy-000?style=for-the-badge&logo=vercel)](https://vercel.com/)
 [![Licença MIT](https://img.shields.io/badge/Licença-MIT-green.svg?style=for-the-badge)](LICENSE)
 [![Status do Projeto](https://img.shields.io/badge/Status-Ativo-success?style=for-the-badge)](https://baixaparecer.netlify.app/)
 
-O **Portal de Pareceres - Baixa RT** é uma solução centralizada e inteligente desenvolvida para otimizar o fluxo de trabalho jurídico-administrativo. A ferramenta permite a gestão dinâmica de modelos de pareceres, cálculos automatizados e sincronização em nuvem, garantindo agilidade e precisão nas atividades diárias.
+O **WorkDash** é um painel de produtividade para fiscais, reunindo pareceres, contratos, conferências, busca de fiscais, calculadora e links úteis em um só lugar — com sincronização em nuvem e múltiplos dashboards personalizáveis.
 
 ---
 

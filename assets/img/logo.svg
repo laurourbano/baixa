@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Fundo: escudo/hexágono arredondado -->
+  <defs>
+    <linearGradient id="wdGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="wdAccent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Círculo externo sutil -->
+  <circle cx="256" cy="256" r="240" fill="#1E1E2E" opacity="0"/>
+  <circle cx="256" cy="256" r="240" stroke="url(#wdGrad)" stroke-width="2" opacity="0.15"/>
+
+  <!-- Monitor / Dashboard -->
+  <rect x="96" y="120" width="320" height="220" rx="24" fill="url(#wdGrad)" opacity="0.12"/>
+  <rect x="96" y="120" width="320" height="220" rx="24" stroke="url(#wdGrad)" stroke-width="4"/>
+
+  <!-- Suporte do monitor -->
+  <rect x="216" y="340" width="80" height="24" rx="6" fill="url(#wdGrad)" opacity="0.3"/>
+  <rect x="236" y="364" width="40" height="28" rx="4" fill="url(#wdGrad)" opacity="0.2"/>
+
+  <!-- Barras do dashboard (crescendo) -->
+  <rect x="148" y="260" width="48" height="48" rx="8" fill="url(#wdAccent)" opacity="0.7"/>
+  <rect x="212" y="220" width="48" height="88" rx="8" fill="url(#wdAccent)" opacity="0.8"/>
+  <rect x="276" y="180" width="48" height="128" rx="8" fill="url(#wdAccent)"/>
+  <rect x="340" y="240" width="48" height="68" rx="8" fill="url(#wdAccent)" opacity="0.6"/>
+
+  <!-- Linha base -->
+  <line x1="140" y1="316" x2="396" y2="316" stroke="url(#wdGrad)" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+
+  <!-- Ponto de destaque na barra maior -->
+  <circle cx="300" cy="200" r="6" fill="#06B6D4"/>
+</svg>

@@ -1,7 +1,7 @@
 {
-  "name": "baixa-rt",
+  "name": "workdash",
   "version": "1.0.0",
-  "description": "Ferramenta para agilizar a criação de pareceres de baixa",
+  "description": "Painel de produtividade para fiscais — pareceres, contratos, conferências e mais",
   "engines": {
     "node": "22.x"
   },
