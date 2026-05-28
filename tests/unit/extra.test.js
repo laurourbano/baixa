@@ -77,6 +77,11 @@ describe('MainApp extended unit tests', () => {
     mockFetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ customs: [] }) }));
     global.fetch = mockFetch;
 
+    // Mock navigator.geolocation (used by initWeather, called during init)
+    global.navigator.geolocation = {
+      getCurrentPosition: vi.fn()
+    };
+
     // Load fresh MainApp instance and initialise it to set up internal state.
     MainApp = loadMainApp();
     MainApp.init();
@@ -167,7 +172,7 @@ describe('MainApp extended unit tests', () => {
     await MainApp.cloudRestore();
 
     // After restore, internal state should reflect the fetched JSON
-    expect(MainApp.__state.order).toEqual(['x']);
+    expect(MainApp.getActiveDash().order).toEqual(['x']);
     const statusEl = document.getElementById('gh-status');
     expect(statusEl.textContent).toContain('Sincronizado!');
   });
@@ -175,20 +180,20 @@ describe('MainApp extended unit tests', () => {
   /*** 5. Delete card flow ***/
   it('deletes a card after user confirmation', async () => {
     // Add a dummy card to state
-    MainApp.__state.customs.push({ id: 'card-1', title: 'Teste', content: 'abc' });
+    MainApp.getActiveDash().customs.push({ id: 'card-1', title: 'Teste', content: 'abc' });
     MainApp.render();
     // Mock confirmation to true
     global.showConfirm = vi.fn(() => Promise.resolve(true));
 
     await MainApp.del('card-1');
-    expect(MainApp.__state.deleted).toContain('card-1');
+    expect(MainApp.getActiveDash().deleted).toContain('card-1');
   });
 
   /*** 6. Edit flow populates modal fields ***/
   it('loads a card into the edit modal', () => {
     // Create a card and ensure it's in the custom list
     const card = { id: 'c1', title: 'Title', content: 'Conteúdo', color: 'light', local: '', sit: '', julgamento: '', type: 'copy', link: '' };
-    MainApp.__state.customs.push(card);
+    MainApp.getActiveDash().customs.push(card);
     // Simulate edit call
     MainApp.edit('c1');
     // Verify modal fields contain the card data

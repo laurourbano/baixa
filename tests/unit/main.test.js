@@ -81,6 +81,11 @@ describe('MainApp unit tests', () => {
     mockFetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ customs: [] }) }));
     global.fetch = mockFetch;
 
+    // Mock navigator.geolocation (used by initWeather, called during init)
+    global.navigator.geolocation = {
+      getCurrentPosition: vi.fn()
+    };
+
     // Load fresh instance of MainApp
     MainApp = loadMainApp();
     // Initialise the app – this will populate internal state
@@ -88,22 +93,25 @@ describe('MainApp unit tests', () => {
   });
 
   it('initialises with empty state', () => {
-    expect(MainApp.__state.order).toEqual([]);
-    expect(MainApp.__state.customs).toEqual([]);
-    expect(MainApp.__state.edits).toEqual({});
-    expect(MainApp.__state.deleted).toEqual([]);
+    var dash = MainApp.getActiveDash();
+    expect(dash.order).toEqual([]);
+    expect(dash.customs).toEqual([]);
+    expect(dash.edits).toEqual({});
+    expect(dash.deleted).toEqual([]);
   });
 
   it('can reset internal state via __resetState', () => {
     // Simulate a change in state
-    MainApp.__state.order.push('temp-id');
-    MainApp.__state.customs.push({ id: 'c1', title: 'test' });
+    var dash = MainApp.getActiveDash();
+    dash.order.push('temp-id');
+    dash.customs.push({ id: 'c1', title: 'test' });
     // Reset
     MainApp.__resetState();
-    expect(MainApp.__state.order).toEqual([]);
-    expect(MainApp.__state.customs).toEqual([]);
-    expect(MainApp.__state.edits).toEqual({});
-    expect(MainApp.__state.deleted).toEqual([]);
+    var newDash = MainApp.getActiveDash();
+    expect(newDash.order).toEqual([]);
+    expect(newDash.customs).toEqual([]);
+    expect(newDash.edits).toEqual({});
+    expect(newDash.deleted).toEqual([]);
   });
 
   it('showToast creates a toast element with proper content', () => {

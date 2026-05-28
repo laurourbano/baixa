@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Portal de Pareceres', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('/');
   });
 
   test('deve exibir a tela de login inicialmente', async ({ page }) => {
