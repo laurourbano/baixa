@@ -46,7 +46,7 @@ describe('MainApp unit tests', () => {
       <input id="m-julgamento" />
       <input id="m-type" />
       <input id="m-link" />
-      <input id="m-showDate" type="checkbox" />
+      <div class="form-check"><input id="m-showDate" type="checkbox" /></div>
       <input id="gh-token" />
       <input id="gh-repo" />
       <div id="gh-status"></div>

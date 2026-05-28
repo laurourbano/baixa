@@ -224,7 +224,7 @@ window.MainApp = window.MainApp || {};
   }
 
   function del(id) {
-    app.showConfirm('Excluir Card', 'Deseja excluir este card permanentemente?', 'danger').then(function (confirmed) {
+    return app.showConfirm('Excluir Card', 'Deseja excluir este card permanentemente?', 'danger').then(function (confirmed) {
       if (confirmed) {
         var d = dash();
         d.deleted.push(id);
@@ -245,8 +245,8 @@ window.MainApp = window.MainApp || {};
     var contentEl = card && (card.querySelector('.content-display') || card.querySelector('textarea'));
     if (!contentEl) { _copying = false; return; }
 
-    var text = contentEl.innerText || contentEl.value;
-    navigator.clipboard.writeText(text).then(function () {
+    var text = contentEl.textContent || contentEl.value;
+    return navigator.clipboard.writeText(text).then(function () {
       var btn = card.querySelector('.btn-copy-mini') || card.querySelector('.btn-sm-compact');
       var successEl = card.querySelector('.card-copy-success');
       var hintEl = card.querySelector('.card-copy-hint');

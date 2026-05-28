@@ -19,6 +19,7 @@ if (typeof module !== 'undefined' && module.exports) {
   require('./fiscal.js');
   require('./calculator.js');
   require('./dashboards.js');
+  require('./gh-backup.js');
   require('./app.js');
   module.exports = window.MainApp;
 }

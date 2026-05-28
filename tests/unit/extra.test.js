@@ -44,7 +44,7 @@ describe('MainApp extended unit tests', () => {
       <input id="m-julgamento" />
       <input id="m-type" />
       <input id="m-link" />
-      <input id="m-showDate" type="checkbox" />
+      <div class="form-check"><input id="m-showDate" type="checkbox" /></div>
       <input id="gh-token" />
       <input id="gh-repo" />
       <div id="gh-status"></div>
@@ -127,7 +127,7 @@ describe('MainApp extended unit tests', () => {
     pisoEl.dispatchEvent(inputEvent);
     horasEl.dispatchEvent(inputEvent);
 
-    expect(totalEl.textContent).toBe('2200,00'); // 2200*44/44 = 2200
+    expect(totalEl.textContent).toBe('2.200,00'); // 2200*44/44 = 2200
     expect(horaEl.textContent).toBe('10,00'); // 2200/220 = 10
   });
 
@@ -162,7 +162,7 @@ describe('MainApp extended unit tests', () => {
 
     // Mock confirmation dialog to resolve true
     const confirmPromise = Promise.resolve(true);
-    global.showConfirm = vi.fn(() => confirmPromise);
+    MainApp.showConfirm = vi.fn(() => confirmPromise);
 
     // Mock user request and file fetch
     mockFetch
@@ -183,7 +183,7 @@ describe('MainApp extended unit tests', () => {
     MainApp.getActiveDash().customs.push({ id: 'card-1', title: 'Teste', content: 'abc' });
     MainApp.render();
     // Mock confirmation to true
-    global.showConfirm = vi.fn(() => Promise.resolve(true));
+    MainApp.showConfirm = vi.fn(() => Promise.resolve(true));
 
     await MainApp.del('card-1');
     expect(MainApp.getActiveDash().deleted).toContain('card-1');
