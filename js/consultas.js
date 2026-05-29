@@ -1,0 +1,1448 @@
+/**
+ * consultas.js v3 — Base de Conhecimento completa.
+ * 6 painéis accordion com lazy loading + dropdowns internos.
+ * CRUD completo em todas as seções (FAQ, Normas, Protocolos, Piso, Orientações, Listas).
+ */
+window.MainApp = window.MainApp || {};
+
+(function (app) {
+  'use strict';
+
+  var loaded = {};
+  var store = {};    // { faq:[], normas:[], protocolos:[], piso:{}, orientacoes:{}, listas:{} }
+  var STORE_KEY = 'baixa_consultas_data';
+  var FAQ_PAGE = 10, faqPage = 1, faqFiltered = [];
+
+  /* ── Init ──────────────────────────────── */
+  function initConsultas() {
+    loadStore();
+    var acc = document.getElementById('consultasAccordion');
+    if (!acc) return;
+    acc.addEventListener('shown.bs.collapse', function (e) {
+      var btn = document.querySelector('[data-bs-target="#' + e.target.id + '"]');
+      if (!btn) return;
+      var section = btn.getAttribute('data-section');
+      if (!section || loaded[section]) return;
+      loaded[section] = true;
+      initSection(section);
+    });
+  }
+
+  function loadStore() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (raw) store = JSON.parse(raw);
+    } catch (e) { store = {}; }
+  }
+  function saveStore() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {}
+  }
+
+  /* ── Roteador ─────────────────────────── */
+  function initSection(s) {
+    switch (s) {
+      case 'faq':          initFaq(); break;
+      case 'normas':       initCrudSection('normas', 'Normas e Legislação', 'assets/normas.json', renderNormas, cfgNormas); break;
+      case 'protocolos':   initCrudSection('protocolos', 'Protocolos', 'assets/protocolos-base.json', renderProtocolos, cfgProtocolos); break;
+      case 'piso':         initPiso(); break;
+      case 'orientacoes':  initOrientacoes(); break;
+      case 'listas':       initListas(); break;
+      case 'protDetalhados': initProtDetalhados(); break;
+      case 'respostasPadrao': initRespostasPadrao(); break;
+      case 'nomesEmpresariais': initNomesEmpresariais(); break;
+      case 'calcHoras':    initCalcHoras(); break;
+    }
+  }
+
+  /* ═══════════════════════════════════════════
+     CRUD GENÉRICO (Normas, Protocolos, etc.)
+     ═══════════════════════════════════════ */
+  function initCrudSection(key, title, jsonUrl, renderFn, cfg) {
+    var ph = document.querySelector('.c-placeholder[data-section="' + key + '"]');
+    if (!ph) return;
+    var panelId = 'c-data-' + key;
+
+    ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2">' +
+        '<select id="' + panelId + '-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
+          '<option value="">Todos</option>' +
+        '</select>' +
+        '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off">' +
+        '<button id="' + panelId + '-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+      '</div>' +
+      '<div id="' + panelId + '-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
+
+    // Wire events
+    var dropdown = document.getElementById(panelId + '-dropdown');
+    var filter = document.getElementById(panelId + '-filter');
+    var addBtn = document.getElementById(panelId + '-add');
+
+    filter.addEventListener('input', function () { applyFilter(key, cfg); });
+    dropdown.addEventListener('change', function () { applyFilter(key, cfg); });
+    addBtn.addEventListener('click', function () { openEditor(key, null, cfg); });
+
+    // Carrega dados
+    loadSectionData(key, jsonUrl, cfg.defaultItem, function (data) {
+      populateDropdown(dropdown, data, cfg.dropdownKey);
+      store[key] = data;
+      saveStore();
+      applyFilter(key, cfg);
+    });
+  }
+
+  function loadSectionData(key, jsonUrl, defaultItem, callback) {
+    // Prefere localStorage, fallback JSON
+    if (store[key] && store[key].length) return callback(store[key]);
+
+    fetch(jsonUrl)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        data = data.map(function (item, i) { item._id = item._id || (key + '_' + i); return item; });
+        callback(data);
+      })
+      .catch(function () {
+        callback(store[key] || []);
+      });
+  }
+
+  function populateDropdown(dd, data, keyFn) {
+    if (!keyFn) { dd.parentElement.style.display = 'none'; return; }
+    var vals = [];
+    var seen = {};
+    data.forEach(function (item) {
+      var v = keyFn(item);
+      if (v && !seen[v]) { seen[v] = true; vals.push(v); }
+    });
+    vals.sort();
+    dd.innerHTML = '<option value="">Todos</option>' + vals.map(function (v) { return '<option value="' + escapeHtml(v) + '">' + escapeHtml(v) + '</option>'; }).join('');
+  }
+
+  function applyFilter(key, cfg) {
+    var panelId = 'c-data-' + key;
+    var dropdown = document.getElementById(panelId + '-dropdown');
+    var filter = document.getElementById(panelId + '-filter');
+    var listEl = document.getElementById(panelId + '-list');
+    if (!listEl) return;
+
+    var data = store[key] || [];
+    var ddVal = dropdown ? dropdown.value : '';
+    var term = normalize(filter ? filter.value || '' : '');
+
+    var filtered = data.filter(function (item) {
+      if (ddVal && cfg.dropdownKey && cfg.dropdownKey(item) !== ddVal) return false;
+      if (term && cfg.searchKeys) {
+        var match = false;
+        cfg.searchKeys.forEach(function (k) {
+          if (normalize(item[k] || '').indexOf(term) > -1) match = true;
+        });
+        if (!match) return false;
+      }
+      return true;
+    });
+
+    if (!filtered.length) {
+      listEl.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item encontrado.</p>';
+    } else {
+      listEl.innerHTML = cfg.renderList(filtered, key);
+      wireCrudButtons(listEl, key, cfg);
+    }
+  }
+
+  function wireCrudButtons(container, key, cfg) {
+    container.querySelectorAll('[data-c-edit]').forEach(function (btn) {
+      btn.addEventListener('click', function () { openEditor(key, this.getAttribute('data-c-edit'), cfg); });
+    });
+    container.querySelectorAll('[data-c-del]').forEach(function (btn) {
+      btn.addEventListener('click', function () { deleteItem(key, this.getAttribute('data-c-del'), cfg); });
+    });
+  }
+
+  function openEditor(key, id, cfg) {
+    var data = store[key] || [];
+    var item = id ? data.find(function (x) { return x._id === id; }) : null;
+
+    var modal = new bootstrap.Modal(document.getElementById('faqEditorModal'));
+    document.getElementById('faq-editor-title').textContent = id ? 'Editar ' + cfg.itemLabel : 'Novo ' + cfg.itemLabel;
+    document.getElementById('faq-edit-id').value = id || '';
+
+    // Esconde campos não usados e ajusta labels
+    var tipoGroup = document.getElementById('faq-edit-tipo').closest('.col-md-4');
+    var perguntaGroup = document.getElementById('faq-edit-pergunta').closest('.col-md-8');
+    var respostaLabel = document.querySelector('label[for="faq-edit-resposta"]');
+    var complementoLabel = document.querySelector('label[for="faq-edit-complemento"]');
+
+    // Configura campos conforme cfg.fields
+    if (cfg.fields) {
+      // Campo tipo (dropdown)
+      if (cfg.fields.tipo) {
+        tipoGroup.style.display = '';
+        var tipoEl = document.getElementById('faq-edit-tipo');
+        tipoEl.innerHTML = cfg.fields.tipo.options.map(function (o) {
+          return '<option value="' + o + '">' + o + '</option>';
+        }).join('');
+        tipoEl.value = item ? (item.tipo || item.orgao || '') : cfg.fields.tipo.options[0];
+      } else {
+        tipoGroup.style.display = 'none';
+      }
+
+      // Campo pergunta/nome
+      if (cfg.fields.pergunta) {
+        perguntaGroup.style.display = '';
+        document.querySelector('label[for="faq-edit-pergunta"]').textContent = cfg.fields.pergunta.label;
+        document.getElementById('faq-edit-pergunta').value = item ? (item[cfg.fields.pergunta.key] || '') : '';
+      } else {
+        perguntaGroup.style.display = 'none';
+      }
+
+      // Campo resposta
+      if (cfg.fields.resposta) {
+        document.getElementById('faq-edit-resposta').closest('.mb-2').style.display = '';
+        respostaLabel.textContent = cfg.fields.resposta.label;
+        document.getElementById('faq-edit-resposta').value = item ? (item[cfg.fields.resposta.key] || '') : '';
+      } else {
+        document.getElementById('faq-edit-resposta').closest('.mb-2').style.display = 'none';
+      }
+
+      // Campo complemento
+      if (cfg.fields.complemento) {
+        document.getElementById('faq-edit-complemento').closest('.mb-3').style.display = '';
+        complementoLabel.textContent = cfg.fields.complemento.label;
+        document.getElementById('faq-edit-complemento').value = item ? (item[cfg.fields.complemento.key] || '') : '';
+      } else {
+        document.getElementById('faq-edit-complemento').closest('.mb-3').style.display = 'none';
+      }
+    }
+
+    // Salva o key atual para o save button
+    document.getElementById('faqEditorModal')._sectionKey = key;
+    document.getElementById('faqEditorModal')._sectionCfg = cfg;
+
+    // Override do save button
+    var saveBtn = document.getElementById('faq-save-btn');
+    var newSaveBtn = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    newSaveBtn.addEventListener('click', function () { saveCrudItem(key, cfg); });
+
+    modal.show();
+  }
+
+  function saveCrudItem(key, cfg) {
+    var id = document.getElementById('faq-edit-id').value;
+    var data = store[key] || [];
+
+    var newItem = {};
+    if (cfg.fields.tipo) {
+      newItem[cfg.fields.tipo.key || 'tipo'] = document.getElementById('faq-edit-tipo').value;
+    }
+    if (cfg.fields.pergunta) {
+      newItem[cfg.fields.pergunta.key] = document.getElementById('faq-edit-pergunta').value.trim();
+    }
+    if (cfg.fields.resposta) {
+      newItem[cfg.fields.resposta.key] = document.getElementById('faq-edit-resposta').value.trim();
+    }
+    if (cfg.fields.complemento) {
+      newItem[cfg.fields.complemento.key] = document.getElementById('faq-edit-complemento').value.trim();
+    }
+
+    if (id) {
+      var idx = data.findIndex(function (x) { return x._id === id; });
+      if (idx >= 0) {
+        Object.keys(newItem).forEach(function (k) { data[idx][k] = newItem[k]; });
+      }
+    } else {
+      newItem._id = key + '_' + Date.now();
+      data.push(newItem);
+    }
+
+    store[key] = data;
+    saveStore();
+    applyFilter(key, cfg);
+    bootstrap.Modal.getInstance(document.getElementById('faqEditorModal')).hide();
+    app.showToast(id ? 'Item atualizado!' : 'Novo item adicionado!', 'success', 2000);
+  }
+
+  function deleteItem(key, id, cfg) {
+    showConfirm('Excluir ' + cfg.itemLabel,
+      'Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.',
+      'fa-trash-alt',
+      function () {
+        store[key] = (store[key] || []).filter(function (x) { return x._id !== id; });
+        saveStore();
+        applyFilter(key, cfg);
+        app.showToast(cfg.itemLabel + ' excluído!', 'success', 2000);
+      });
+  }
+
+  /* ── Configurações por seção ──────────── */
+  var cfgNormas = {
+    itemLabel: 'Norma',
+    dropdownKey: function (item) { return item.orgao; },
+    searchKeys: ['norma', 'assunto', 'orgao'],
+    fields: {
+      tipo:       { key: 'orgao', options: ['ANVISA','CFF','CRF','STJ','CFQ','PLANALTO','CURITIBA','SESA'] },
+      pergunta:   { key: 'norma', label: 'Nome da Norma' },
+      resposta:   { key: 'assunto', label: 'Assunto' },
+      complemento:{ key: 'link', label: 'Link' }
+    },
+    renderList: function (data, key) {
+      return data.map(function (n) {
+        var linkHtml = n.link && !/^(ANVISA|CRF|STJ|CFQ|CFF|LEI|CURITIBA|PLANALTO|SESA)$/.test(n.link)
+          ? '<a href="' + escapeHtml(n.link) + '" target="_blank" rel="noopener" class="x-small text-info ms-2"><i class="fas fa-external-link-alt"></i></a>' : '';
+        return '<div class="c-item mb-2 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+          '<div class="d-flex justify-content-between align-items-start">' +
+          '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(n.norma) + linkHtml + '</div>' +
+          '<div class="x-small text-muted">' + escapeHtml(n.assunto) + '</div></div>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+          '<span class="badge bg-secondary me-1">' + escapeHtml(n.orgao) + '</span>' +
+          '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + n._id + '" title="Editar"><i class="fas fa-edit x-small"></i></button>' +
+          '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + n._id + '" title="Excluir"><i class="fas fa-trash x-small"></i></button>' +
+          '</div></div></div>';
+      }).join('');
+    }
+  };
+
+  var cfgProtocolos = {
+    itemLabel: 'Protocolo',
+    dropdownKey: function (item) { return item.protocolo; },
+    searchKeys: ['protocolo', 'estabelecimento', 'status'],
+    fields: {
+      tipo:       { key: 'estabelecimento', options: [] }, // populado dinamicamente
+      pergunta:   { key: 'protocolo', label: 'Nome do Protocolo' },
+      resposta:   { key: 'status', label: 'Status' },
+      complemento:{ key: 'estabelecimento', label: 'Tipo de Estabelecimento' }
+    },
+    renderList: function (data, key) {
+      return data.map(function (p) {
+        var badge = p.status ? '<span class="badge bg-' + getStatusColor(p.status) + ' x-small me-1">' + escapeHtml(p.status) + '</span>' : '';
+        return '<div class="c-item mb-2 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+          '<div class="d-flex justify-content-between align-items-start">' +
+          '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(p.protocolo) + '</div>' +
+          '<div class="x-small text-muted">' + escapeHtml(p.estabelecimento) + '</div></div>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' + badge +
+          '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + p._id + '" title="Editar"><i class="fas fa-edit x-small"></i></button>' +
+          '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + p._id + '" title="Excluir"><i class="fas fa-trash x-small"></i></button>' +
+          '</div></div></div>';
+      }).join('');
+    }
+  };
+
+  function renderNormas(data, key) { return cfgNormas.renderList(data, key); }
+  function renderProtocolos(data, key) { return cfgProtocolos.renderList(data, key); }
+
+  /* ═══════════════════════════════════════════
+     FAQ (especial: paginação + tipo PF/PJ)
+     ═══════════════════════════════════════ */
+  function initFaq() {
+    var ph = document.querySelector('.c-placeholder[data-section="faq"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="row g-2 mb-2">' +
+        '<div class="col-md-3"><select id="faq-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary">' +
+          '<option value="">Todos os tipos</option><option value="PF">PF</option><option value="PJ">PJ</option><option value="PJ/PF">PJ/PF</option></select></div>' +
+        '<div class="col-md-4"><input type="text" id="faq-filter" class="form-control form-control-sm" placeholder="Buscar pergunta ou palavra-chave..." autocomplete="off"></div>' +
+        '<div class="col-md-3"><button id="faq-add" class="btn btn-sm btn-success w-100"><i class="fas fa-plus me-1"></i> Nova Resposta</button></div>' +
+        '<div class="col-md-2"><button id="faq-copyall" class="btn btn-sm btn-outline-info w-100"><i class="fas fa-copy me-1"></i> Copiar</button></div>' +
+      '</div>' +
+      '<div id="faq-list" class="c-list" style="max-height:460px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>' +
+      '<div id="faq-pagination" class="d-none d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary">' +
+        '<small id="faq-page-info" class="text-muted"></small>' +
+        '<div class="btn-group btn-group-sm">' +
+          '<button id="faq-prev" class="btn btn-outline-secondary"><i class="fas fa-chevron-left"></i></button>' +
+          '<button id="faq-next" class="btn btn-outline-secondary"><i class="fas fa-chevron-right"></i></button>' +
+        '</div></div>';
+
+    document.getElementById('faq-dropdown').addEventListener('change', faqRefresh);
+    document.getElementById('faq-filter').addEventListener('input', faqRefresh);
+    document.getElementById('faq-add').addEventListener('click', function () { openFaqEditor(); });
+    document.getElementById('faq-copyall').addEventListener('click', copyAllFaq);
+    document.getElementById('faq-prev').addEventListener('click', function () { if (faqPage > 1) { faqPage--; faqRender(); } });
+    document.getElementById('faq-next').addEventListener('click', function () {
+      var t = Math.ceil(faqFiltered.length / FAQ_PAGE) || 1;
+      if (faqPage < t) { faqPage++; faqRender(); }
+    });
+
+    loadSectionData('faq', 'assets/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
+      store.faq = data;
+      saveStore();
+      faqRefresh();
+    });
+  }
+
+  function faqRefresh() {
+    faqPage = 1;
+    var tipo = document.getElementById('faq-dropdown').value;
+    var term = normalize(document.getElementById('faq-filter').value || '');
+    faqFiltered = (store.faq || []).filter(function (r) {
+      return (!tipo || r.tipo === tipo) && (!term || normalize(r.pergunta).indexOf(term) > -1 || normalize(r.resposta).indexOf(term) > -1);
+    });
+    faqRender();
+    faqRenderPagination();
+  }
+
+  function faqRender() {
+    var el = document.getElementById('faq-list');
+    if (!el) return;
+    if (!faqFiltered.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum resultado.</p>'; return; }
+    var start = (faqPage - 1) * FAQ_PAGE, end = Math.min(start + FAQ_PAGE, faqFiltered.length);
+    var page = faqFiltered.slice(start, end);
+
+    el.innerHTML = page.map(function (r) {
+      var comp = r.complemento ? '<div class="faq-complemento mt-1 p-2 border-start border-info border-2 bg-dark bg-opacity-25 small text-muted">' +
+        escapeHtml(r.complemento).replace(/\r\n/g,'<br>').replace(/\n/g,'<br>') + '</div>' : '';
+      return '<div class="faq-item mb-2 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+        '<div class="d-flex justify-content-between align-items-start mb-1">' +
+        '<span class="badge bg-' + (r.tipo==='PF'?'primary':r.tipo==='PJ'?'success':'info') + ' me-2">' + escapeHtml(r.tipo) + '</span>' +
+        '<small class="text-muted flex-grow-1 fw-bold">' + escapeHtml(r.pergunta) + '</small>' +
+        '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + r._id + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + r._id + '"><i class="fas fa-trash x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-faq-copy="' + r._id + '"><i class="fas fa-copy x-small"></i></button>' +
+        '</div></div><div class="small text-light mt-1">' + autoLink(r.resposta).replace(/\r\n/g,'<br>').replace(/\n/g,'<br>') + '</div>' + comp + '</div>';
+    }).join('');
+
+    el.querySelectorAll('[data-c-edit]').forEach(function (b) { b.addEventListener('click', function () { openFaqEditor(this.getAttribute('data-c-edit')); }); });
+    el.querySelectorAll('[data-c-del]').forEach(function (b) { b.addEventListener('click', function () { deleteFaqItem(this.getAttribute('data-c-del')); }); });
+    el.querySelectorAll('[data-faq-copy]').forEach(function (b) { b.addEventListener('click', function () { copyFaqById(this.getAttribute('data-faq-copy')); }); });
+    el.scrollTop = 0;
+  }
+
+  function faqRenderPagination() {
+    var pag = document.getElementById('faq-pagination'), info = document.getElementById('faq-page-info');
+    if (!pag) return;
+    var t = Math.ceil(faqFiltered.length / FAQ_PAGE) || 1;
+    if (faqFiltered.length <= FAQ_PAGE) { pag.classList.add('d-none'); return; }
+    pag.classList.remove('d-none');
+    info.textContent = 'Página ' + faqPage + ' de ' + t + ' (' + faqFiltered.length + ' itens)';
+    document.getElementById('faq-prev').disabled = faqPage <= 1;
+    document.getElementById('faq-next').disabled = faqPage >= t;
+  }
+
+  function openFaqEditor(id) {
+    var data = store.faq || [];
+    var item = id ? data.find(function (x) { return x._id === id; }) : null;
+    var modal = new bootstrap.Modal(document.getElementById('faqEditorModal'));
+
+    // Restaura campos para modo FAQ
+    document.getElementById('faq-edit-tipo').closest('.col-md-4').style.display = '';
+    document.getElementById('faq-edit-pergunta').closest('.col-md-8').style.display = '';
+    document.getElementById('faq-edit-resposta').closest('.mb-2').style.display = '';
+    document.getElementById('faq-edit-complemento').closest('.mb-3').style.display = '';
+
+    document.getElementById('faq-editor-title').textContent = id ? 'Editar Resposta' : 'Nova Resposta';
+    document.getElementById('faq-edit-id').value = id || '';
+    document.getElementById('faq-edit-tipo').innerHTML = '<option value="PF">PF</option><option value="PJ">PJ</option><option value="PJ/PF">PJ/PF</option>';
+    document.getElementById('faq-edit-tipo').value = item ? item.tipo : 'PF';
+    document.querySelector('label[for="faq-edit-pergunta"]').textContent = 'Pergunta';
+    document.getElementById('faq-edit-pergunta').value = item ? item.pergunta : '';
+    document.querySelector('label[for="faq-edit-resposta"]').textContent = 'Resposta';
+    document.getElementById('faq-edit-resposta').value = item ? item.resposta : '';
+    document.querySelector('label[for="faq-edit-complemento"]').textContent = 'Complemento (opcional)';
+    document.getElementById('faq-edit-complemento').value = item ? (item.complemento || '') : '';
+
+    var saveBtn = document.getElementById('faq-save-btn');
+    var newSaveBtn = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    newSaveBtn.addEventListener('click', saveFaqItem);
+
+    modal.show();
+    setTimeout(function () { document.getElementById('faq-edit-pergunta').focus(); }, 400);
+  }
+
+  function saveFaqItem() {
+    var id = document.getElementById('faq-edit-id').value;
+    var item = {
+      tipo: document.getElementById('faq-edit-tipo').value,
+      pergunta: document.getElementById('faq-edit-pergunta').value.trim(),
+      resposta: document.getElementById('faq-edit-resposta').value.trim(),
+      complemento: document.getElementById('faq-edit-complemento').value.trim()
+    };
+    if (!item.pergunta) { app.showToast('Pergunta obrigatória.', 'warning', 2000); return; }
+    if (!item.resposta) { app.showToast('Resposta obrigatória.', 'warning', 2000); return; }
+
+    var data = store.faq || [];
+    if (id) {
+      var idx = data.findIndex(function (x) { return x._id === id; });
+      if (idx >= 0) { data[idx].tipo = item.tipo; data[idx].pergunta = item.pergunta; data[idx].resposta = item.resposta; data[idx].complemento = item.complemento; }
+    } else {
+      item._id = 'faq_' + Date.now();
+      data.push(item);
+    }
+    store.faq = data;
+    saveStore();
+    faqRefresh();
+    bootstrap.Modal.getInstance(document.getElementById('faqEditorModal')).hide();
+    app.showToast(id ? 'Resposta atualizada!' : 'Nova resposta adicionada!', 'success', 2000);
+  }
+
+  function deleteFaqItem(id) {
+    showConfirm('Excluir Resposta', 'Tem certeza que deseja excluir esta resposta?', 'fa-trash-alt', function () {
+      store.faq = (store.faq || []).filter(function (x) { return x._id !== id; });
+      saveStore();
+      faqRefresh();
+      app.showToast('Resposta excluída!', 'success', 2000);
+    });
+  }
+
+  function copyFaqById(id) {
+    var item = (store.faq || []).find(function (x) { return x._id === id; });
+    if (!item) return;
+    copyToClipboard(item.resposta + (item.complemento ? '\n\n' + item.complemento : ''));
+    app.showToast('Resposta copiada!', 'success', 1500);
+  }
+
+  function copyAllFaq() {
+    if (!faqFiltered.length) { app.showToast('Nenhuma resposta.', 'warning', 2000); return; }
+    var text = faqFiltered.map(function (r) { return '[' + r.tipo + '] ' + r.pergunta + '\n' + r.resposta + (r.complemento ? '\n\n' + r.complemento : ''); }).join('\n\n---\n\n');
+    copyToClipboard(text);
+    app.showToast(faqFiltered.length + ' resposta(s) copiada(s)!', 'success', 2000);
+  }
+
+  /* ═══════════════════════════════════════════
+     PISO (calculadora + cidades Paraná + alerta acordo)
+     ═══════════════════════════════════════ */
+
+  function initPiso() {
+    var ph = document.querySelector('.c-placeholder[data-section="piso"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="row g-2 mb-2">' +
+        '<div class="col-md-4"><label class="x-small text-muted">Cidade</label>' +
+          '<input type="text" id="piso-cidade-search" class="form-control form-control-sm bg-dark text-light border-secondary" ' +
+            'placeholder="Digite o nome da cidade..." autocomplete="off" list="piso-cidade-list">' +
+          '<datalist id="piso-cidade-list"></datalist></div>' +
+        '<div class="col-md-2"><label class="x-small text-muted">Região</label>' +
+          '<input type="text" id="piso-regiao-display" class="form-control form-control-sm bg-dark text-light border-secondary" readonly></div>' +
+        '<div class="col-md-2"><label class="x-small text-muted">Categoria</label>' +
+          '<select id="piso-categoria" class="form-select form-select-sm bg-dark text-light border-secondary">' +
+            '<option value="varejista">Varejista</option><option value="hospitalar">Hospitalar</option>' +
+            '<option value="distribuidora">Distribuidora</option><option value="laboratorios">Laboratórios</option>' +
+            '<option value="industrias">Indústrias</option></select></div>' +
+        '<div class="col-md-2"><label class="x-small text-muted">Piso Base R$</label>' +
+          '<input id="piso-base" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary"></div>' +
+        '<div class="col-md-2"><label class="x-small text-muted">Hrs Semana</label>' +
+          '<input id="piso-horas" type="number" value="44" min="1" max="44" class="form-control form-control-sm bg-dark text-light border-secondary"></div>' +
+      '</div>' +
+      '<div class="d-flex flex-wrap gap-2 mb-2 align-items-center">' +
+        '<button id="piso-calc" class="btn btn-sm btn-danger"><i class="fas fa-calculator me-1"></i> Calcular</button>' +
+        '<button id="piso-save-val" class="btn btn-sm btn-outline-success"><i class="fas fa-save me-1"></i> Salvar valor</button>' +
+        '<button id="piso-add-cidade" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus me-1"></i> Add Cidade</button>' +
+        '<button id="piso-del-cidade" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash me-1"></i> Remover</button>' +
+        '<span id="piso-acordo-badge" class="badge bg-success ms-2 d-none">ACT Vigente</span>' +
+        '<span id="piso-acordo-alerta" class="badge bg-warning text-dark ms-2 d-none">Sem ACT - piso geral</span>' +
+      '</div>' +
+      '<div id="piso-result" class="small d-flex flex-wrap gap-2 p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2">' +
+        '<span>Piso Proporcional: <b id="piso-prop" class="text-success">—</b></span>' +
+        '<span class="ms-3">Valor/Hora: <b id="piso-hora" class="text-info">—</b></span>' +
+        '<span class="ms-3">Ref. 30h: <b id="piso-30h" class="text-warning">—</b></span>' +
+      '</div>' +
+      '<div id="piso-tabela" class="c-list" style="max-height:250px;overflow-y:auto"></div>';
+
+    // Carrega cidades e piso em paralelo
+    var cidadesLoaded = false, pisoLoaded = false;
+    var cidadesData = [];
+
+    fetch('assets/cidades-parana.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        cidadesData = data.cidades || [];
+        store._cidadesPR = data;
+        saveStore();
+        cidadesLoaded = true;
+        if (pisoLoaded) initPisoReady();
+      })
+      .catch(function () {
+        cidadesData = [];
+        cidadesLoaded = true;
+        if (pisoLoaded) initPisoReady();
+      });
+
+    loadSectionDataPiso(function () {
+      pisoLoaded = true;
+      if (cidadesLoaded) initPisoReady();
+    });
+
+    function initPisoReady() {
+      // Popula datalist com todas as cidades
+      var dl = document.getElementById('piso-cidade-list');
+      if (dl && cidadesData.length) {
+        dl.innerHTML = cidadesData.map(function (c) {
+          return '<option value="' + c.label + '">' + c.regiao + '</option>';
+        }).join('');
+      }
+
+      renderPisoTabelaTodas();
+
+      document.getElementById('piso-calc').addEventListener('click', calcularPiso);
+      document.getElementById('piso-save-val').addEventListener('click', savePisoValue);
+      document.getElementById('piso-add-cidade').addEventListener('click', addPisoCidade);
+      document.getElementById('piso-del-cidade').addEventListener('click', delPisoCidade);
+      document.getElementById('piso-categoria').addEventListener('change', onPisoCategoriaChange);
+
+      // Auto-complete: ao digitar cidade, busca região
+      var searchEl = document.getElementById('piso-cidade-search');
+      searchEl.addEventListener('input', onCidadeSearchInput);
+      searchEl.addEventListener('change', onCidadeSearchChange);
+
+      // Se já tem valor, dispara
+      if (searchEl.value) onCidadeSearchChange();
+    }
+  }
+
+  function onCidadeSearchInput() {
+    // Esconde alertas enquanto digita
+    document.getElementById('piso-acordo-badge').classList.add('d-none');
+    document.getElementById('piso-acordo-alerta').classList.add('d-none');
+    document.getElementById('piso-regiao-display').value = '';
+  }
+
+  function onCidadeSearchChange() {
+    var nome = document.getElementById('piso-cidade-search').value.trim();
+    if (!nome) return;
+
+    // Busca na lista de cidades
+    var cidades = (store._cidadesPR && store._cidadesPR.cidades) || [];
+    var found = cidades.find(function (c) {
+      return c.label.toLowerCase() === nome.toLowerCase();
+    });
+
+    var regiaoNome = '';
+    if (found) {
+      regiaoNome = found.regiao;
+    } else {
+      // Fallback: procura por substring
+      var partial = cidades.find(function (c) {
+        return normalize(c.label).indexOf(normalize(nome)) > -1;
+      });
+      if (partial) {
+        regiaoNome = partial.regiao;
+        document.getElementById('piso-cidade-search').value = partial.label;
+      }
+    }
+
+    document.getElementById('piso-regiao-display').value = regiaoNome || 'Não encontrada';
+
+    if (regiaoNome && store.piso && store.piso.regioes) {
+      // Verifica se a região tem dados
+      var regData = store.piso.regioes[regiaoNome];
+      var cat = document.getElementById('piso-categoria').value;
+
+      if (regData && regData._actVigente) {
+        document.getElementById('piso-acordo-badge').classList.remove('d-none');
+        document.getElementById('piso-acordo-alerta').classList.add('d-none');
+      } else {
+        document.getElementById('piso-acordo-badge').classList.add('d-none');
+        document.getElementById('piso-acordo-alerta').classList.remove('d-none');
+      }
+
+      // Busca valor da primeira cidade da região ou fallback
+      var primeiraCidade = regData && regData.cidades ? Object.values(regData.cidades)[0] : null;
+      if (!primeiraCidade && store.piso.regioes["Curitiba e RMC"]) {
+        primeiraCidade = Object.values(store.piso.regioes["Curitiba e RMC"].cidades)[0];
+        document.getElementById('piso-acordo-alerta').classList.remove('d-none');
+      }
+      var val = primeiraCidade ? (primeiraCidade[cat] || 0) : 0;
+      document.getElementById('piso-base').value = val.toFixed(2);
+
+      if (regData) {
+        // Mostra tabela da região
+        var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        renderPisoTabela(regiaoNome, cidadeKey);
+      }
+    }
+
+    calcularPiso();
+  }
+
+  function onPisoCategoriaChange() {
+    var nome = document.getElementById('piso-cidade-search').value.trim();
+    if (nome) onCidadeSearchChange();
+  }
+
+  function defaultPisoData() {
+    return {
+      regioes: {
+        "Curitiba e RMC": {
+          _actVigente: true,
+          cidades: {
+            "curitiba": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+          }
+        },
+        "Londrina e Norte Central": {
+          _actVigente: false,
+          cidades: {
+            "londrina": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+          }
+        },
+        "Maringá e Noroeste": {
+          _actVigente: false,
+          cidades: {
+            "maringa": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+          }
+        },
+        "Ponta Grossa e Campos Gerais": {
+          _actVigente: false,
+          cidades: {
+            "ponta_grossa": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+          }
+        },
+        "Cascavel e Oeste": {
+          _actVigente: false,
+          cidades: {
+            "cascavel": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+          }
+        },
+        "Francisco Beltrão e Sudoeste": {
+          _actVigente: false,
+          cidades: {
+            "francisco_beltrao": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+          }
+        },
+        "Guarapuava e Centro-Sul": {
+          _actVigente: false,
+          cidades: {
+            "guarapuava": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+          }
+        }
+      }
+    };
+  }
+
+  function loadSectionDataPiso(cb) {
+    if (store.piso && store.piso.regioes) return cb();
+    fetch('assets/piso.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.regioes) {
+          var novo = defaultPisoData();
+          var outrasCidades = {};
+          Object.keys(data).forEach(function (k) {
+            if (k !== 'default' && k !== 'horasSemana' && k !== 'valorHora' && k !== 'proporcional10h' && typeof data[k] === 'object') {
+              outrasCidades[k] = data[k];
+            }
+          });
+          if (Object.keys(outrasCidades).length > 0) {
+            novo.regioes["Outras"] = { _actVigente: false, cidades: outrasCidades };
+          }
+          store.piso = novo;
+        } else {
+          store.piso = data;
+        }
+        saveStore();
+        cb();
+      })
+      .catch(function () {
+        store.piso = defaultPisoData();
+        saveStore();
+        cb();
+      });
+  }
+
+  function renderPisoTabelaTodas() {
+    if (!store.piso || !store.piso.regioes) return;
+    var el = document.getElementById('piso-tabela');
+    if (!el) return;
+
+    var cats = ['varejista', 'hospitalar', 'distribuidora', 'laboratorios', 'industrias'];
+    var catLabels = { varejista: 'Varejista', hospitalar: 'Hospitalar', distribuidora: 'Distribuidora', laboratorios: 'Laboratórios', industrias: 'Indústrias' };
+
+    var html = '<table class="table table-sm table-dark table-borderless mb-0 x-small">';
+    html += '<thead><tr><th>Região</th><th>ACT</th>';
+    cats.forEach(function (c) { html += '<th class="text-end">' + catLabels[c] + '</th>'; });
+    html += '</tr></thead><tbody>';
+
+    Object.keys(store.piso.regioes).sort().forEach(function (regiao) {
+      var rd = store.piso.regioes[regiao];
+      var primeira = rd.cidades ? Object.values(rd.cidades)[0] : null;
+      if (!primeira) return;
+      var actBadge = rd._actVigente ? '<span class="badge bg-success x-small">Sim</span>' : '<span class="badge bg-warning text-dark x-small">Não</span>';
+      html += '<tr><td>' + escapeHtml(regiao) + '</td><td>' + actBadge + '</td>';
+      cats.forEach(function (cat) {
+        html += '<td class="text-end text-success">' + (primeira[cat] || 0).toFixed(2) + '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+  function renderPisoTabela(regiao, cidadeKey) {
+    var el = document.getElementById('piso-tabela');
+    if (!el) return;
+    var regData = store.piso.regioes[regiao];
+    if (!regData || !regData.cidades) { el.innerHTML = ''; return; }
+
+    var cidades = Object.keys(regData.cidades).sort();
+    var cats = ['varejista', 'hospitalar', 'distribuidora', 'laboratorios', 'industrias'];
+    var catLabels = { varejista: 'Varejista', hospitalar: 'Hospitalar', distribuidora: 'Distribuidora', laboratorios: 'Laboratórios', industrias: 'Indústrias' };
+
+    var actBadge = regData._actVigente ? '<span class="badge bg-success x-small">ACT Vigente</span>' : '<span class="badge bg-warning text-dark x-small">Geral</span>';
+
+    var html = '<div class="d-flex justify-content-between align-items-center mb-1"><small class="fw-bold text-light">' + escapeHtml(regiao) + '</small>' + actBadge + '</div>';
+    html += '<table class="table table-sm table-dark table-borderless mb-0 x-small">';
+    html += '<thead><tr><th>Cidade</th>';
+    cats.forEach(function (c) { html += '<th class="text-end">' + catLabels[c] + '</th>'; });
+    html += '</tr></thead><tbody>';
+
+    cidades.forEach(function (cid) {
+      var cd = regData.cidades[cid];
+      var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+      var highlight = cid === cidadeKey ? ' class="table-active"' : '';
+      html += '<tr' + highlight + '><td>' + label + '</td>';
+      cats.forEach(function (cat) {
+        html += '<td class="text-end text-success">' + (cd[cat] || 0).toFixed(2) + '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+  function savePisoValue() {
+    var regiao = document.getElementById('piso-regiao-display').value;
+    var nomeCidade = document.getElementById('piso-cidade-search').value.trim();
+    var cat = document.getElementById('piso-categoria').value;
+    var val = parseFloat(document.getElementById('piso-base').value) || 0;
+    if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
+
+    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
+    if (!store.piso.regioes[regiao].cidades[cidadeKey]) store.piso.regioes[regiao].cidades[cidadeKey] = {};
+    store.piso.regioes[regiao].cidades[cidadeKey][cat] = val;
+    saveStore();
+    renderPisoTabela(regiao, cidadeKey);
+    app.showToast('Valor salvo!', 'success', 2000);
+  }
+
+  function addPisoCidade() {
+    var regiao = document.getElementById('piso-regiao-display').value;
+    if (!regiao) { app.showToast('Digite o nome de uma cidade existente para usar sua região.', 'warning', 2500); return; }
+    var nome = prompt('Nome da nova cidade (ex: Sao Jose dos Pinhais):');
+    if (!nome || !nome.trim()) return;
+    var cidadeKey = nome.trim().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
+    if (store.piso.regioes[regiao].cidades[cidadeKey]) { app.showToast('Cidade já existe nesta região!', 'warning', 2000); return; }
+    var primeira = Object.values(store.piso.regioes[regiao].cidades)[0] || { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 };
+    store.piso.regioes[regiao].cidades[cidadeKey] = Object.assign({}, primeira);
+    saveStore();
+    document.getElementById('piso-cidade-search').value = nome.trim();
+    onCidadeSearchChange();
+    app.showToast('Cidade adicionada!', 'success', 2000);
+  }
+
+  function delPisoCidade() {
+    var regiao = document.getElementById('piso-regiao-display').value;
+    var nomeCidade = document.getElementById('piso-cidade-search').value.trim();
+    if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
+    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (!store.piso.regioes[regiao] || !store.piso.regioes[regiao].cidades[cidadeKey]) {
+      app.showToast('Cidade não encontrada na região.', 'warning', 2000); return;
+    }
+    var cidades = Object.keys(store.piso.regioes[regiao].cidades);
+    if (cidades.length <= 1) { app.showToast('Não é possível remover a única cidade da região.', 'warning', 3000); return; }
+    showConfirm('Remover Cidade',
+      'Tem certeza que deseja remover ' + nomeCidade + ' da região ' + regiao + '?',
+      'fa-trash-alt',
+      function () {
+        delete store.piso.regioes[regiao].cidades[cidadeKey];
+        saveStore();
+        document.getElementById('piso-cidade-search').value = '';
+        document.getElementById('piso-regiao-display').value = '';
+        renderPisoTabelaTodas();
+        app.showToast('Cidade removida!', 'success', 2000);
+      });
+  }
+
+  function calcularPiso() {
+    var pisoBase = parseFloat(document.getElementById('piso-base').value) || 0;
+    var horas = parseFloat(document.getElementById('piso-horas').value) || 44;
+    horas = Math.min(44, Math.max(1, horas));
+    document.getElementById('piso-horas').value = horas;
+    var prop = pisoBase * (horas / 44);
+    var hora = pisoBase / 44;
+    var ref30 = pisoBase * (30 / 44);
+    document.getElementById('piso-prop').textContent = 'R$ ' + prop.toFixed(2);
+    document.getElementById('piso-hora').textContent = 'R$ ' + hora.toFixed(2);
+    document.getElementById('piso-30h').textContent = 'R$ ' + ref30.toFixed(2);
+  }
+
+  /* ═══════════════════════════════════════════
+     ORIENTAÇÕES
+     ═══════════════════════════════════════ */
+
+  function initOrientacoes() {
+    var ph = document.querySelector('.c-placeholder[data-section="orientacoes"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2">' +
+        '<select id="orient-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
+          '<option value="documentos">Documentos</option><option value="situacoes">Situações Específicas</option>' +
+          '<option value="checklist">Checklist (SAGICON/GED)</option></select>' +
+        '<button id="orient-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+      '</div>' +
+      '<div id="orient-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
+
+    document.getElementById('orient-dropdown').addEventListener('change', renderOrientacoes);
+    document.getElementById('orient-add').addEventListener('click', addOrientacaoItem);
+
+    loadSectionDataGeneric('orientacoes', 'assets/orientacoes.json', function (data) {
+      store.orientacoes = data;
+      saveStore();
+      renderOrientacoes();
+    });
+  }
+
+  function loadSectionDataGeneric(key, url, cb) {
+    if (store[key]) return cb(store[key]);
+    fetch(url)
+      .then(function (r) { return r.json(); })
+      .then(cb)
+      .catch(function () { cb(store[key] || { documentos: [], situacoes: [], checklist: [] }); });
+  }
+
+  function renderOrientacoes() {
+    var key = document.getElementById('orient-dropdown').value;
+    var data = (store.orientacoes || {})[key] || [];
+    var el = document.getElementById('orient-list');
+    if (!el) return;
+
+    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = data.map(function (item, i) {
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
+        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
+        '<div class="btn-group btn-group-sm ms-2">' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('[data-orient-edit]').forEach(function (b) {
+      b.addEventListener('click', function () { editOrientacaoItem(this.getAttribute('data-orient-edit'), parseInt(this.getAttribute('data-idx'))); });
+    });
+    el.querySelectorAll('[data-orient-del]').forEach(function (b) {
+      b.addEventListener('click', function () { deleteOrientacaoItem(this.getAttribute('data-orient-del'), parseInt(this.getAttribute('data-idx'))); });
+    });
+  }
+
+  function addOrientacaoItem() {
+    var key = document.getElementById('orient-dropdown').value;
+    var text = prompt('Digite o novo item para ' + key + ':');
+    if (!text || !text.trim()) return;
+    if (!store.orientacoes) store.orientacoes = { documentos: [], situacoes: [], checklist: [] };
+    if (!store.orientacoes[key]) store.orientacoes[key] = [];
+    store.orientacoes[key].push(text.trim());
+    saveStore();
+    renderOrientacoes();
+    app.showToast('Item adicionado!', 'success', 2000);
+  }
+
+  function editOrientacaoItem(key, idx) {
+    var data = (store.orientacoes || {})[key] || [];
+    if (idx < 0 || idx >= data.length) return;
+    var text = prompt('Editar item:', data[idx]);
+    if (text === null) return;
+    data[idx] = text.trim();
+    saveStore();
+    renderOrientacoes();
+    app.showToast('Item atualizado!', 'success', 2000);
+  }
+
+  function deleteOrientacaoItem(key, idx) {
+    showConfirm('Excluir Item', 'Tem certeza que deseja excluir este item?', 'fa-trash-alt', function () {
+      var data = (store.orientacoes || {})[key] || [];
+      data.splice(idx, 1);
+      saveStore();
+      renderOrientacoes();
+      app.showToast('Item excluído!', 'success', 2000);
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     LISTAS AUXILIARES
+     ═══════════════════════════════════════ */
+
+  function initListas() {
+    var ph = document.querySelector('.c-placeholder[data-section="listas"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2">' +
+        '<select id="listas-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px">' +
+          '<option value="documentos">Documentos</option><option value="tiposEstabelecimento">Tipos de Estabelecimento</option>' +
+          '<option value="respostasPadrao">Respostas Padrão</option><option value="prazosAssistencia">Prazos e Assistência</option></select>' +
+        '<button id="listas-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+      '</div>' +
+      '<div id="listas-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
+
+    document.getElementById('listas-dropdown').addEventListener('change', renderListas);
+    document.getElementById('listas-add').addEventListener('click', addListasItem);
+
+    loadSectionDataGeneric('listas', 'assets/listas.json', function (data) {
+      store.listas = data;
+      saveStore();
+      renderListas();
+    });
+  }
+
+  function renderListas() {
+    var key = document.getElementById('listas-dropdown').value;
+    var data = (store.listas || {})[key] || [];
+    var el = document.getElementById('listas-list');
+    if (!el) return;
+    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = data.map(function (item, i) {
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
+        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
+        '<div class="btn-group btn-group-sm ms-2">' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('[data-listas-edit]').forEach(function (b) {
+      b.addEventListener('click', function () { editListasItem(this.getAttribute('data-listas-edit'), parseInt(this.getAttribute('data-idx'))); });
+    });
+    el.querySelectorAll('[data-listas-del]').forEach(function (b) {
+      b.addEventListener('click', function () { deleteListasItem(this.getAttribute('data-listas-del'), parseInt(this.getAttribute('data-idx'))); });
+    });
+  }
+
+  function addListasItem() {
+    var key = document.getElementById('listas-dropdown').value;
+    var text = prompt('Digite o novo item:');
+    if (!text || !text.trim()) return;
+    if (!store.listas) store.listas = { documentos: [], tiposEstabelecimento: [], respostasPadrao: [], prazosAssistencia: [] };
+    if (!store.listas[key]) store.listas[key] = [];
+    store.listas[key].push(text.trim());
+    saveStore();
+    renderListas();
+    app.showToast('Item adicionado!', 'success', 2000);
+  }
+
+  function editListasItem(key, idx) {
+    var data = (store.listas || {})[key] || [];
+    if (idx < 0 || idx >= data.length) return;
+    var text = prompt('Editar item:', data[idx]);
+    if (text === null) return;
+    data[idx] = text.trim();
+    saveStore();
+    renderListas();
+    app.showToast('Item atualizado!', 'success', 2000);
+  }
+
+  function deleteListasItem(key, idx) {
+    showConfirm('Excluir Item', 'Tem certeza que deseja excluir este item?', 'fa-trash-alt', function () {
+      var data = (store.listas || {})[key] || [];
+      data.splice(idx, 1);
+      saveStore();
+      renderListas();
+      app.showToast('Item excluído!', 'success', 2000);
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     PROTOCOLOS DETALHADOS (527 registros)
+     ═══════════════════════════════════════ */
+
+  function initProtDetalhados() {
+    var ph = document.querySelector('.c-placeholder[data-section="protDetalhados"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="row g-2 mb-2">' +
+        '<div class="col-md-3"><input type="text" id="protd-filtro" class="form-control form-control-sm" placeholder="Buscar por nome, protocolo, obs..." autocomplete="off"></div>' +
+        '<div class="col-md-2"><select id="protd-situacao" class="form-select form-select-sm bg-dark text-light border-secondary">' +
+          '<option value="">Todas situações</option></select></div>' +
+        '<div class="col-md-2"><select id="protd-ocorrencia" class="form-select form-select-sm bg-dark text-light border-secondary">' +
+          '<option value="">Todas ocorrências</option></select></div>' +
+        '<div class="col-md-2"><select id="protd-tipo" class="form-select form-select-sm bg-dark text-light border-secondary">' +
+          '<option value="">Todos tipos</option></select></div>' +
+        '<div class="col-md-3"><small id="protd-info" class="text-muted"></small></div>' +
+      '</div>' +
+      '<div id="protd-list" class="c-list" style="max-height:450px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>' +
+      '<div id="protd-pagination" class="d-none d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary">' +
+        '<small id="protd-page-info" class="text-muted"></small>' +
+        '<div class="btn-group btn-group-sm">' +
+          '<button id="protd-prev" class="btn btn-outline-secondary"><i class="fas fa-chevron-left"></i></button>' +
+          '<button id="protd-next" class="btn btn-outline-secondary"><i class="fas fa-chevron-right"></i></button>' +
+        '</div></div>';
+
+    var pageSize = 25, currentPage = 1, filtered = [];
+
+    function refresh() {
+      var term = normalize(document.getElementById('protd-filtro').value || '');
+      var sit = document.getElementById('protd-situacao').value;
+      var oco = document.getElementById('protd-ocorrencia').value;
+      var tip = document.getElementById('protd-tipo').value;
+
+      filtered = (store.protDetalhados || []).filter(function (r) {
+        if (term && normalize(r.nomeEstabelecimento + ' ' + r.numProtocolo + ' ' + r.obs + ' ' + r.situacao).indexOf(term) === -1) return false;
+        if (sit && r.situacao !== sit) return false;
+        if (oco && r.ocorrencia !== oco) return false;
+        if (tip && r.tipoEstabelecimento !== tip) return false;
+        return true;
+      });
+      currentPage = 1;
+      renderPage();
+    }
+
+    function renderPage() {
+      var el = document.getElementById('protd-list');
+      var info = document.getElementById('protd-info');
+      if (!el) return;
+      var total = Math.ceil(filtered.length / pageSize) || 1;
+      if (currentPage > total) currentPage = total;
+      var start = (currentPage - 1) * pageSize, end = Math.min(start + pageSize, filtered.length);
+      var page = filtered.slice(start, end);
+
+      if (info) info.textContent = filtered.length + ' registro(s)';
+      if (!page.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum registro encontrado.</p>'; return; }
+
+      el.innerHTML = page.map(function (r) {
+        var badge = r.situacao ? '<span class="badge bg-' + getStatusColor(r.situacao) + ' x-small me-1">' + escapeHtml(r.situacao) + '</span>' : '';
+        return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+          '<div class="d-flex justify-content-between align-items-start">' +
+          '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(r.nomeEstabelecimento || '—') + '</div>' +
+          '<div class="d-flex gap-2 x-small text-muted">' +
+          '<span>Prot: ' + escapeHtml(r.numProtocolo || '—') + '</span>' +
+          '<span>Insc: ' + escapeHtml(r.inscricao || '—') + '</span>' +
+          '<span>Data: ' + escapeHtml(r.data || '—') + '</span>' +
+          '<span>Tipo: ' + escapeHtml(r.tipoEstabelecimento || '—') + '</span>' +
+          '</div>' +
+          (r.obs ? '<div class="x-small text-warning mt-1">Obs: ' + escapeHtml(r.obs) + '</div>' : '') +
+          '</div><div class="ms-2">' + badge +
+          '<span class="badge bg-secondary x-small">' + escapeHtml(r.ocorrencia || '') + '</span></div>' +
+          '</div></div>';
+      }).join('');
+
+      el.scrollTop = 0;
+      renderPagination();
+    }
+
+    function renderPagination() {
+      var pag = document.getElementById('protd-pagination');
+      var info = document.getElementById('protd-page-info');
+      if (!pag) return;
+      var t = Math.ceil(filtered.length / pageSize) || 1;
+      if (filtered.length <= pageSize) { pag.classList.add('d-none'); return; }
+      pag.classList.remove('d-none');
+      info.textContent = 'Página ' + currentPage + ' de ' + t;
+      document.getElementById('protd-prev').disabled = currentPage <= 1;
+      document.getElementById('protd-next').disabled = currentPage >= t;
+    }
+
+    // Wire events
+    document.getElementById('protd-filtro').addEventListener('input', refresh);
+    document.getElementById('protd-situacao').addEventListener('change', refresh);
+    document.getElementById('protd-ocorrencia').addEventListener('change', refresh);
+    document.getElementById('protd-tipo').addEventListener('change', refresh);
+    document.getElementById('protd-prev').addEventListener('click', function () { if (currentPage > 1) { currentPage--; renderPage(); } });
+    document.getElementById('protd-next').addEventListener('click', function () {
+      var t = Math.ceil(filtered.length / pageSize) || 1;
+      if (currentPage < t) { currentPage++; renderPage(); }
+    });
+
+    // Load data
+    loadSectionDataGeneric('protDetalhados', 'assets/protocolos-detalhados.json', function (data) {
+      store.protDetalhados = data;
+      saveStore();
+      // Populate dropdowns
+      populateSet('protd-situacao', data, 'situacao');
+      populateSet('protd-ocorrencia', data, 'ocorrencia');
+      populateSet('protd-tipo', data, 'tipoEstabelecimento');
+      refresh();
+    });
+  }
+
+  function populateSet(ddId, data, key) {
+    var dd = document.getElementById(ddId);
+    if (!dd) return;
+    var vals = new Set();
+    data.forEach(function (r) { if (r[key]) vals.add(r[key]); });
+    var sorted = Array.from(vals).sort();
+    dd.innerHTML = '<option value="">' + (dd.options[0] ? dd.options[0].text : 'Todos') + '</option>' +
+      sorted.map(function (v) { return '<option value="' + escapeHtml(v) + '">' + escapeHtml(v) + '</option>'; }).join('');
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPOSTAS PADRÃO
+     ═══════════════════════════════════════ */
+
+  function initRespostasPadrao() {
+    var ph = document.querySelector('.c-placeholder[data-section="respostasPadrao"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2">' +
+        '<select id="rp-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px"></select>' +
+        '<button id="rp-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="rp-copy" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar selecionada</button>' +
+      '</div>' +
+      '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
+
+    loadSectionDataGeneric('respostasPadrao', 'assets/respostas-padrao.json', function (data) {
+      // Migra formato antigo {titulo, instrucao, texto} para dicionário {titulo: texto}
+      if (data && data.titulo && data.texto && !data[data.titulo]) {
+        var novo = {};
+        novo[data.titulo] = data.texto;
+        data = novo;
+      }
+      store.respostasPadrao = data;
+      saveStore();
+      renderRespostasPadrao();
+    });
+
+    document.getElementById('rp-dropdown').addEventListener('change', function () {
+      var key = this.value;
+      var items = store.respostasPadrao || {};
+      document.getElementById('rp-preview').innerHTML = autoLink(items[key] || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+    });
+    document.getElementById('rp-add').addEventListener('click', function () {
+      var nome = prompt('Nome da resposta padrão:');
+      if (!nome || !nome.trim()) return;
+      var texto = prompt('Texto da resposta:');
+      if (texto === null) return;
+      if (!store.respostasPadrao) store.respostasPadrao = {};
+      store.respostasPadrao[nome.trim()] = texto || '';
+      saveStore();
+      renderRespostasPadrao();
+      app.showToast('Resposta adicionada!', 'success', 2000);
+    });
+    document.getElementById('rp-copy').addEventListener('click', function () {
+      var key = document.getElementById('rp-dropdown').value;
+      var text = (store.respostasPadrao || {})[key] || '';
+      if (!text) { app.showToast('Selecione uma resposta primeiro.', 'warning', 2000); return; }
+      copyToClipboard(text);
+      app.showToast('Copiada!', 'success', 1500);
+    });
+  }
+
+  function renderRespostasPadrao() {
+    var dd = document.getElementById('rp-dropdown');
+    if (!dd) return;
+    var items = store.respostasPadrao || {};
+    var keys = Object.keys(items).sort();
+    if (!keys.length) {
+      dd.innerHTML = '<option value="">Nenhuma resposta cadastrada</option>';
+      return;
+    }
+    dd.innerHTML = '<option value="">Selecione...</option>' + keys.map(function (k) {
+      return '<option value="' + escapeHtml(k) + '">' + escapeHtml(k) + '</option>';
+    }).join('');
+
+    // Botão excluir inline
+    var existing = document.getElementById('rp-del');
+    if (existing) existing.remove();
+    var delBtn = document.createElement('button');
+    delBtn.id = 'rp-del';
+    delBtn.className = 'btn btn-sm btn-outline-danger flex-shrink-0';
+    delBtn.innerHTML = '<i class="fas fa-trash"></i>';
+    delBtn.addEventListener('click', function () {
+      var key = document.getElementById('rp-dropdown').value;
+      if (!key) return;
+      showConfirm('Excluir', 'Excluir resposta "' + key + '"?', 'fa-trash-alt', function () {
+        delete store.respostasPadrao[key];
+        saveStore();
+        renderRespostasPadrao();
+        document.getElementById('rp-preview').innerHTML = '<span class="text-muted">Selecione uma resposta padrão para visualizar.</span>';
+        app.showToast('Resposta excluída!', 'success', 2000);
+      });
+    });
+    document.getElementById('rp-copy').after(delBtn);
+  }
+
+  /* ═══════════════════════════════════════════
+     NOMES EMPRESARIAIS
+     ═══════════════════════════════════════ */
+
+  function initNomesEmpresariais() {
+    var ph = document.querySelector('.c-placeholder[data-section="nomesEmpresariais"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div id="ne-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>' +
+      '<button id="ne-add" class="btn btn-sm btn-success mt-2"><i class="fas fa-plus me-1"></i> Adicionar</button>';
+
+    loadSectionDataGeneric('nomesEmpresariais', 'assets/nomes-empresariais.json', function (data) {
+      store.nomesEmpresariais = data;
+      saveStore();
+      renderNomesEmpresariais();
+    });
+
+    document.getElementById('ne-add').addEventListener('click', function () {
+      var texto = prompt('Novo padrão de nome empresarial:');
+      if (!texto || !texto.trim()) return;
+      if (!store.nomesEmpresariais) store.nomesEmpresariais = [];
+      store.nomesEmpresariais.push(texto.trim());
+      saveStore();
+      renderNomesEmpresariais();
+      app.showToast('Adicionado!', 'success', 2000);
+    });
+  }
+
+  function renderNomesEmpresariais() {
+    var el = document.getElementById('ne-list');
+    if (!el) return;
+    var data = store.nomesEmpresariais || [];
+    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = data.map(function (item, i) {
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
+        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
+        '<div class="btn-group btn-group-sm ms-2">' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-ne-edit="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-ne-del="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('[data-ne-edit]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-ne-edit'));
+        var texto = prompt('Editar:', store.nomesEmpresariais[idx]);
+        if (texto === null) return;
+        store.nomesEmpresariais[idx] = texto.trim();
+        saveStore();
+        renderNomesEmpresariais();
+        app.showToast('Atualizado!', 'success', 2000);
+      });
+    });
+    el.querySelectorAll('[data-ne-del]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-ne-del'));
+        showConfirm('Excluir', 'Excluir este padrão?', 'fa-trash-alt', function () {
+          store.nomesEmpresariais.splice(idx, 1);
+          saveStore();
+          renderNomesEmpresariais();
+          app.showToast('Excluído!', 'success', 2000);
+        });
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     CALCULADORA DE HORAS
+     ═══════════════════════════════════════ */
+
+  function initCalcHoras() {
+    var ph = document.querySelector('.c-placeholder[data-section="calcHoras"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<p class="x-small text-muted mb-2">Preencha os horários de cada turno por dia da semana.</p>' +
+      '<div class="table-responsive mb-2">' +
+        '<table class="table table-sm table-dark table-borderless x-small" id="calc-horas-tabela">' +
+          '<thead><tr><th>Dia</th><th>1º Turno (início—fim)</th><th>2º Turno (início—fim)</th><th>Intervalo (min)</th><th>Total</th></tr></thead>' +
+          '<tbody id="calc-horas-body"></tbody>' +
+          '<tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td colspan="3"></td><td id="calc-horas-total" class="text-success">0h</td></tr></tfoot>' +
+        '</table>' +
+      '</div>' +
+      '<div class="x-small text-muted">' +
+        '<p>Preencha os campos de horário (ex: 08:00 - 12:00). O cálculo é automático.</p>' +
+      '</div>';
+
+    var dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    var tbody = document.getElementById('calc-horas-body');
+
+    dias.forEach(function (dia) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="fw-bold">' + dia + '</td>' +
+        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary calc-hora-input" data-dia="' + dia + '" data-turno="1" placeholder="08:00-12:00"></td>' +
+        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary calc-hora-input" data-dia="' + dia + '" data-turno="2" placeholder="13:00-18:00"></td>' +
+        '<td><input type="number" class="form-control form-control-sm bg-dark text-light border-secondary calc-int-input" data-dia="' + dia + '" value="0" min="0" max="120" style="max-width:70px"></td>' +
+        '<td class="calc-dia-total text-info" id="calc-total-' + dia + '">0h</td>';
+      tbody.appendChild(tr);
+    });
+
+    document.querySelectorAll('.calc-hora-input, .calc-int-input').forEach(function (input) {
+      input.addEventListener('input', calcularHorasTotal);
+    });
+  }
+
+  function calcularHorasTotal() {
+    var dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    var totalSemana = 0;
+
+    dias.forEach(function (dia) {
+      var t1 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="1"]');
+      var t2 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="2"]');
+      var intervalo = document.querySelector('.calc-int-input[data-dia="' + dia + '"]');
+      var totalEl = document.getElementById('calc-total-' + dia);
+
+      var horas1 = parseHoraRange(t1 ? t1.value : '');
+      var horas2 = parseHoraRange(t2 ? t2.value : '');
+      var intMin = parseFloat(intervalo ? intervalo.value : 0) || 0;
+      var total = horas1 + horas2 - (intMin / 60);
+      if (total < 0) total = 0;
+      totalSemana += total;
+      if (totalEl) totalEl.textContent = total.toFixed(2) + 'h';
+    });
+
+    var totalEl = document.getElementById('calc-horas-total');
+    if (totalEl) totalEl.textContent = totalSemana.toFixed(2) + 'h';
+  }
+
+  function parseHoraRange(str) {
+    if (!str || !str.trim()) return 0;
+    var parts = str.split('-');
+    if (parts.length !== 2) return 0;
+    var h1 = parseHora(parts[0].trim());
+    var h2 = parseHora(parts[1].trim());
+    if (isNaN(h1) || isNaN(h2)) return 0;
+    var diff = h2 - h1;
+    if (diff < 0) diff += 24; // atravessa meia-noite
+    return diff;
+  }
+
+  function parseHora(hhmm) {
+    var parts = hhmm.split(':');
+    var h = parseInt(parts[0]) || 0;
+    var m = parseInt(parts[1]) || 0;
+    return h + m / 60;
+  }
+
+  /* ═══════════════════════════════════════════
+     HELPERS
+     ═══════════════════════════════════════ */
+
+  function autoLink(text) {
+    if (!text) return '';
+    // Detecta URLs e as torna clicáveis
+    var urlRegex = /(https?:\/\/[^\s<>"]+[^\s<>".,;:!?)])/gi;
+    return escapeHtml(text).replace(urlRegex, function (url) {
+      return '<a href="' + url + '" target="_blank" rel="noopener" class="text-info">' + url + '</a>';
+    });
+  }
+
+  function showConfirm(title, msg, icon, cb) {
+    document.getElementById('confirm-title').textContent = title;
+    document.getElementById('confirm-message').textContent = msg;
+    document.getElementById('confirm-icon').innerHTML = '<i class="fas ' + icon + ' fa-3x text-warning"></i>';
+    var yes = document.getElementById('confirm-btn-yes'), n = yes.cloneNode(true);
+    yes.parentNode.replaceChild(n, yes);
+    n.onclick = function () { bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide(); cb(); };
+    new bootstrap.Modal(document.getElementById('confirmModal')).show();
+  }
+
+  function normalize(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+  function escapeHtml(t) { var m = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }; return String(t).replace(/[&<>"']/g, function (c) { return m[c]; }); }
+  function getStatusColor(s) { s = normalize(s); if (s.indexOf('indeferido')>-1) return 'danger'; if (s.indexOf('finalizado')>-1) return 'success'; if (s.indexOf('arquivado')>-1) return 'secondary'; if (s.indexOf('pendência')>-1||s.indexOf('pendencia')>-1) return 'warning'; if (s.indexOf('aguarda')>-1) return 'info'; if (s.indexOf('atenção')>-1||s.indexOf('atencao')>-1) return 'warning'; if (s.indexOf('correção')>-1||s.indexOf('correcao')>-1) return 'warning'; return 'secondary'; }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(function () {}); return; }
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+
+  /* ── Exports ──────────────────────────── */
+  app.initConsultas = initConsultas;
+  app.openFaqEditor = openFaqEditor;
+  app.saveFaqItem = saveFaqItem;
+  app.deleteFaqItem = deleteFaqItem;
+  app.copyAllFaq = copyAllFaq;
+  app.calcularPiso = calcularPiso;
+}(window.MainApp));

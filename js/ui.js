@@ -73,6 +73,7 @@ function switchView(viewName) {
 
     var badges = {
         'ferramentas': 'Ferramentas',
+        'consultas': 'Consultas',
         'instrucoes': 'Instruções'
     };
 

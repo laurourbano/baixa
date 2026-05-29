@@ -18,6 +18,7 @@ if (typeof module !== 'undefined' && module.exports) {
   require('./weather.js');
   require('./fiscal.js');
   require('./calculator.js');
+  require('./consultas.js');
   require('./dashboards.js');
   require('./gh-backup.js');
   require('./app.js');

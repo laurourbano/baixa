@@ -106,6 +106,8 @@
                 <div class="sidebar-divider"></div>
                 <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i
                         class="fas fa-tools"></i> <span>Ferramentas</span></a>
+                <a href="#" id="nav-consultas" class="nav-item" onclick="switchView('consultas')"><i
+                        class="fas fa-book"></i> <span>Consultas</span></a>
                 <div class="sidebar-divider"></div>
                 <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i
                         class="fas fa-cog"></i> <span>Configurações</span></a>
@@ -231,6 +233,183 @@
                         </div>
 
                         <!-- Ferramenta: Nuvem removida (salvamento é feito automaticamente no backend) -->
+
+                    </div>
+                </div>
+
+                <!-- VIEW: CONSULTAS (Base de Conhecimento) -->
+                <div id="view-consultas" class="app-view d-none">
+                    <div class="accordion consultas-accordion" id="consultasAccordion">
+
+                        <!-- Painel 0: FAQ — Respostas Rápidas -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-faq" data-section="faq">
+                                    <i class="fas fa-question-circle me-2 text-info"></i> FAQ — Respostas Rápidas
+                                </button>
+                            </h2>
+                            <div id="c-painel-faq" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="faq">
+                                        <div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 1: Normas e Legislação -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-normas" data-section="normas">
+                                    <i class="fas fa-balance-scale me-2 text-warning"></i> Normas e Legislação
+                                </button>
+                            </h2>
+                            <div id="c-painel-normas" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="normas">
+                                        <div class="spinner-border spinner-border-sm text-warning me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 2: Protocolos -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-protocolos" data-section="protocolos">
+                                    <i class="fas fa-list-check me-2 text-success"></i> Protocolos
+                                </button>
+                            </h2>
+                            <div id="c-painel-protocolos" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="protocolos">
+                                        <div class="spinner-border spinner-border-sm text-success me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 3: Piso Salarial -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-piso" data-section="piso">
+                                    <i class="fas fa-dollar-sign me-2 text-danger"></i> Piso Salarial
+                                </button>
+                            </h2>
+                            <div id="c-painel-piso" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="piso">
+                                        <div class="spinner-border spinner-border-sm text-danger me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 4: Orientações e Documentos -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-orientacoes" data-section="orientacoes">
+                                    <i class="fas fa-clipboard-list me-2 text-primary"></i> Orientações e Documentos
+                                </button>
+                            </h2>
+                            <div id="c-painel-orientacoes" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="orientacoes">
+                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 5: Listas (Tipos, Respostas, Documentos) -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-listas" data-section="listas">
+                                    <i class="fas fa-layer-group me-2 text-info"></i> Listas Auxiliares
+                                </button>
+                            </h2>
+                            <div id="c-painel-listas" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="listas">
+                                        <div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 6: Protocolos Detalhados -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-prot-detalhados" data-section="protDetalhados">
+                                    <i class="fas fa-table me-2 text-success"></i> Protocolos Detalhados (527)
+                                </button>
+                            </h2>
+                            <div id="c-painel-prot-detalhados" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="protDetalhados">
+                                        <div class="spinner-border spinner-border-sm text-success me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 7: Respostas Padrão -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-respostas-padrao" data-section="respostasPadrao">
+                                    <i class="fas fa-reply me-2 text-warning"></i> Respostas Padrão
+                                </button>
+                            </h2>
+                            <div id="c-painel-respostas-padrao" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="respostasPadrao">
+                                        <div class="spinner-border spinner-border-sm text-warning me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 8: Nomes Empresariais -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-nomes-empresariais" data-section="nomesEmpresariais">
+                                    <i class="fas fa-tag me-2 text-primary"></i> Nomes Empresariais
+                                </button>
+                            </h2>
+                            <div id="c-painel-nomes-empresariais" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="nomesEmpresariais">
+                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel 9: Calculadora de Horas -->
+                        <div class="accordion-item bg-transparent border-secondary mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-light fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#c-painel-calc-horas" data-section="calcHoras">
+                                    <i class="fas fa-clock me-2 text-info"></i> Calculadora de Horas
+                                </button>
+                            </h2>
+                            <div id="c-painel-calc-horas" class="accordion-collapse collapse" data-bs-parent="#consultasAccordion">
+                                <div class="accordion-body bg-dark bg-opacity-50">
+                                    <div class="c-placeholder text-center py-3" data-section="calcHoras">
+                                        <div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -521,6 +700,7 @@
     <script defer src="js/weather.js"></script>
     <script defer src="js/fiscal.js"></script>
     <script defer src="js/calculator.js"></script>
+    <script defer src="js/consultas.js"></script>
     <script defer src="js/dashboards.js"></script>
     <script defer src="js/app.js"></script>
     <script defer src="js/main.js"></script>
@@ -550,6 +730,52 @@
                     <div class="d-flex justify-content-end gap-2 mt-3">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" id="dash-save-btn" class="btn btn-sm btn-success px-3">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de Edição/Inclusão de FAQ -->
+    <div class="modal fade" id="faqEditorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header py-2 border-secondary">
+                    <h6 id="faq-editor-title" class="modal-title small fw-bold">Nova Resposta</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <input type="hidden" id="faq-edit-id">
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <label class="x-small text-muted">Tipo</label>
+                            <select id="faq-edit-tipo" class="form-select form-select-sm bg-dark text-light border-secondary">
+                                <option value="PF">PF</option>
+                                <option value="PJ">PJ</option>
+                                <option value="PJ/PF">PJ/PF</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="x-small text-muted">Pergunta</label>
+                            <input type="text" id="faq-edit-pergunta" class="form-control form-control-sm bg-dark text-light border-secondary"
+                                placeholder="Digite a pergunta..." maxlength="300">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="x-small text-muted">Resposta</label>
+                        <textarea id="faq-edit-resposta" class="form-control form-control-sm bg-dark text-light border-secondary"
+                            rows="6" placeholder="Digite a resposta..." maxlength="5000"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="x-small text-muted">Complemento (opcional)</label>
+                        <textarea id="faq-edit-complemento" class="form-control form-control-sm bg-dark text-light border-secondary"
+                            rows="3" placeholder="Informação complementar..." maxlength="3000"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" id="faq-save-btn" class="btn btn-sm btn-success px-3" onclick="MainApp.saveFaqItem()">
+                            <i class="fas fa-save me-1"></i> Salvar
+                        </button>
                     </div>
                 </div>
             </div>

@@ -108,6 +108,7 @@
 
     app.initFiscalSearch();
     app.initCalculator();
+    app.initConsultas();
     initPlanoInspection();
     app.initWeather();
 
