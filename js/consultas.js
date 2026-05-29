@@ -399,10 +399,10 @@ window.MainApp = window.MainApp || {};
     document.getElementById('faq-filter').addEventListener('input', faqRefresh);
     document.getElementById('faq-add').addEventListener('click', function () { openFaqEditor(); });
     document.getElementById('faq-copyall').addEventListener('click', copyAllFaq);
-    document.getElementById('faq-prev').addEventListener('click', function () { if (faqPage > 1) { faqPage--; faqRender(); } });
+    document.getElementById('faq-prev').addEventListener('click', function () { if (faqPage > 1) { faqPage--; faqRender(); faqRenderPagination(); } });
     document.getElementById('faq-next').addEventListener('click', function () {
       var t = Math.ceil(faqFiltered.length / FAQ_PAGE) || 1;
-      if (faqPage < t) { faqPage++; faqRender(); }
+      if (faqPage < t) { faqPage++; faqRender(); faqRenderPagination(); }
     });
 
     loadSectionData('faq', 'assets/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
@@ -606,7 +606,17 @@ window.MainApp = window.MainApp || {};
         if (pisoLoaded) initPisoReady();
       })
       .catch(function () {
+        // Fallback: cria lista básica a partir do piso.json
         cidadesData = [];
+        if (store.piso && store.piso.regioes) {
+          Object.keys(store.piso.regioes).forEach(function (regiao) {
+            var cids = store.piso.regioes[regiao].cidades || {};
+            Object.keys(cids).forEach(function (cid) {
+              var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+              cidadesData.push({ cidade: cid, regiao: regiao, label: label });
+            });
+          });
+        }
         cidadesLoaded = true;
         if (pisoLoaded) initPisoReady();
       });
@@ -617,10 +627,22 @@ window.MainApp = window.MainApp || {};
     });
 
     function initPisoReady() {
-      // Popula select com todas as cidades
       var selectEl = document.getElementById('piso-cidade-select');
       var filterEl = document.getElementById('piso-cidade-filter');
-      if (selectEl && cidadesData.length) {
+
+      // Se não tem cidades do JSON, extrai do store.piso
+      if (!cidadesData.length && store.piso && store.piso.regioes) {
+        Object.keys(store.piso.regioes).forEach(function (regiao) {
+          var cids = store.piso.regioes[regiao].cidades || {};
+          Object.keys(cids).forEach(function (cid) {
+            var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+            cidadesData.push({ cidade: cid, regiao: regiao, label: label });
+          });
+        });
+      }
+
+      // Popula select com todas as cidades
+      if (selectEl) {
         selectEl.innerHTML = cidadesData.map(function (c) {
           return '<option value="' + c.label + '" data-regiao="' + c.regiao + '">' + c.label + '</option>';
         }).join('');
