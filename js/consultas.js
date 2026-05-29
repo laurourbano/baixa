@@ -614,7 +614,7 @@ window.MainApp = window.MainApp || {};
             var wb = XLSX.read(buf, { type: 'array', cellNF: false });
             var json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true });
             cidadesData = json.slice(1).filter(function (l) { return l[0]; }).map(function (l) {
-              return { cidade: l[0].toString().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, ''), regiao: l[2] || 'Outras', label: l[0].toString().trim() };
+              return { cidade: l[0].toString().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, ''), label: l[0].toString().trim() };
             });
             store._cidadesPR = { cidades: cidadesData };
             saveStore();
@@ -686,13 +686,27 @@ window.MainApp = window.MainApp || {};
     var nome = selectEl.value;
     if (!nome) return;
 
-    // Pega a região do atributo data
-    var selectedOption = selectEl.selectedOptions[0];
-    var regiaoNome = selectedOption ? selectedOption.getAttribute('data-regiao') : '';
-
-    document.getElementById('piso-regiao-display').value = regiaoNome || 'Não encontrada';
-
     var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    // Busca a qual região do piso essa cidade pertence (nos dados carregados)
+    var regiaoNome = '';
+    if (store.piso && store.piso.regioes) {
+      Object.keys(store.piso.regioes).forEach(function (r) {
+        var cids = store.piso.regioes[r].cidades || {};
+        if (cids[cidadeKey]) regiaoNome = r;
+      });
+    }
+    // Se não encontrou, tenta pelo data-regiao (JSON dedicado)
+    if (!regiaoNome) {
+      var selectedOption = selectEl.selectedOptions[0];
+      regiaoNome = selectedOption ? selectedOption.getAttribute('data-regiao') : '';
+    }
+    // Fallback: primeira região disponível
+    if (!regiaoNome && store.piso && store.piso.regioes) {
+      regiaoNome = Object.keys(store.piso.regioes)[0] || '';
+    }
+
+    document.getElementById('piso-regiao-display').value = regiaoNome || '—';
 
     if (regiaoNome && store.piso && store.piso.regioes) {
       // Cria região se não existir
