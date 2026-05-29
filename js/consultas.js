@@ -195,10 +195,22 @@ window.MainApp = window.MainApp || {};
       if (cfg.fields.tipo) {
         tipoGroup.style.display = '';
         var tipoEl = document.getElementById('faq-edit-tipo');
-        tipoEl.innerHTML = cfg.fields.tipo.options.map(function (o) {
+        var options = cfg.fields.tipo.options;
+        // Se options é array vazio, popula com valores únicos dos dados
+        if (!options || !options.length) {
+          var seen = {};
+          options = [];
+          data.forEach(function (d) {
+            var v = d[cfg.fields.tipo.key];
+            if (v && !seen[v]) { seen[v] = true; options.push(v); }
+          });
+          options.sort();
+        }
+        tipoEl.innerHTML = options.map(function (o) {
           return '<option value="' + o + '">' + o + '</option>';
         }).join('');
-        tipoEl.value = item ? (item.tipo || item.orgao || '') : cfg.fields.tipo.options[0];
+        var tipoVal = item ? (item[cfg.fields.tipo.key] || '') : (options[0] || '');
+        tipoEl.value = tipoVal;
       } else {
         tipoGroup.style.display = 'none';
       }
