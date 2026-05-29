@@ -47,7 +47,6 @@ window.MainApp = window.MainApp || {};
       case 'piso':         initPiso(); break;
       case 'orientacoes':  initOrientacoes(); break;
       case 'listas':       initListas(); break;
-      case 'protDetalhados': initProtDetalhados(); break;
       case 'respostasPadrao': initRespostasPadrao(); break;
       case 'nomesEmpresariais': initNomesEmpresariais(); break;
       case 'calcHoras':    initCalcHoras(); break;
@@ -1042,130 +1041,6 @@ window.MainApp = window.MainApp || {};
       renderListas();
       app.showToast('Item excluído!', 'success', 2000);
     });
-  }
-
-  /* ═══════════════════════════════════════════
-     PROTOCOLOS DETALHADOS (527 registros)
-     ═══════════════════════════════════════ */
-
-  function initProtDetalhados() {
-    var ph = document.querySelector('.c-placeholder[data-section="protDetalhados"]');
-    if (!ph) return;
-
-    ph.innerHTML =
-      '<div class="row g-2 mb-2">' +
-        '<div class="col-md-3"><input type="text" id="protd-filtro" class="form-control form-control-sm" placeholder="Buscar por nome, protocolo, obs..." autocomplete="off"></div>' +
-        '<div class="col-md-2"><select id="protd-situacao" class="form-select form-select-sm bg-dark text-light border-secondary">' +
-          '<option value="">Todas situações</option></select></div>' +
-        '<div class="col-md-2"><select id="protd-ocorrencia" class="form-select form-select-sm bg-dark text-light border-secondary">' +
-          '<option value="">Todas ocorrências</option></select></div>' +
-        '<div class="col-md-2"><select id="protd-tipo" class="form-select form-select-sm bg-dark text-light border-secondary">' +
-          '<option value="">Todos tipos</option></select></div>' +
-        '<div class="col-md-3"><small id="protd-info" class="text-muted"></small></div>' +
-      '</div>' +
-      '<div id="protd-list" class="c-list" style="max-height:450px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>' +
-      '<div id="protd-pagination" class="d-none d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary">' +
-        '<small id="protd-page-info" class="text-muted"></small>' +
-        '<div class="btn-group btn-group-sm">' +
-          '<button id="protd-prev" class="btn btn-outline-secondary"><i class="fas fa-chevron-left"></i></button>' +
-          '<button id="protd-next" class="btn btn-outline-secondary"><i class="fas fa-chevron-right"></i></button>' +
-        '</div></div>';
-
-    var pageSize = 25, currentPage = 1, filtered = [];
-
-    function refresh() {
-      var term = normalize(document.getElementById('protd-filtro').value || '');
-      var sit = document.getElementById('protd-situacao').value;
-      var oco = document.getElementById('protd-ocorrencia').value;
-      var tip = document.getElementById('protd-tipo').value;
-
-      filtered = (store.protDetalhados || []).filter(function (r) {
-        if (term && normalize(r.nomeEstabelecimento + ' ' + r.numProtocolo + ' ' + r.obs + ' ' + r.situacao).indexOf(term) === -1) return false;
-        if (sit && r.situacao !== sit) return false;
-        if (oco && r.ocorrencia !== oco) return false;
-        if (tip && r.tipoEstabelecimento !== tip) return false;
-        return true;
-      });
-      currentPage = 1;
-      renderPage();
-    }
-
-    function renderPage() {
-      var el = document.getElementById('protd-list');
-      var info = document.getElementById('protd-info');
-      if (!el) return;
-      var total = Math.ceil(filtered.length / pageSize) || 1;
-      if (currentPage > total) currentPage = total;
-      var start = (currentPage - 1) * pageSize, end = Math.min(start + pageSize, filtered.length);
-      var page = filtered.slice(start, end);
-
-      if (info) info.textContent = filtered.length + ' registro(s)';
-      if (!page.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum registro encontrado.</p>'; return; }
-
-      el.innerHTML = page.map(function (r) {
-        var badge = r.situacao ? '<span class="badge bg-' + getStatusColor(r.situacao) + ' x-small me-1">' + escapeHtml(r.situacao) + '</span>' : '';
-        return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
-          '<div class="d-flex justify-content-between align-items-start">' +
-          '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(r.nomeEstabelecimento || '—') + '</div>' +
-          '<div class="d-flex gap-2 x-small text-muted">' +
-          '<span>Prot: ' + escapeHtml(r.numProtocolo || '—') + '</span>' +
-          '<span>Insc: ' + escapeHtml(r.inscricao || '—') + '</span>' +
-          '<span>Data: ' + escapeHtml(r.data || '—') + '</span>' +
-          '<span>Tipo: ' + escapeHtml(r.tipoEstabelecimento || '—') + '</span>' +
-          '</div>' +
-          (r.obs ? '<div class="x-small text-warning mt-1">Obs: ' + escapeHtml(r.obs) + '</div>' : '') +
-          '</div><div class="ms-2">' + badge +
-          '<span class="badge bg-secondary x-small">' + escapeHtml(r.ocorrencia || '') + '</span></div>' +
-          '</div></div>';
-      }).join('');
-
-      el.scrollTop = 0;
-      renderPagination();
-    }
-
-    function renderPagination() {
-      var pag = document.getElementById('protd-pagination');
-      var info = document.getElementById('protd-page-info');
-      if (!pag) return;
-      var t = Math.ceil(filtered.length / pageSize) || 1;
-      if (filtered.length <= pageSize) { pag.classList.add('d-none'); return; }
-      pag.classList.remove('d-none');
-      info.textContent = 'Página ' + currentPage + ' de ' + t;
-      document.getElementById('protd-prev').disabled = currentPage <= 1;
-      document.getElementById('protd-next').disabled = currentPage >= t;
-    }
-
-    // Wire events
-    document.getElementById('protd-filtro').addEventListener('input', refresh);
-    document.getElementById('protd-situacao').addEventListener('change', refresh);
-    document.getElementById('protd-ocorrencia').addEventListener('change', refresh);
-    document.getElementById('protd-tipo').addEventListener('change', refresh);
-    document.getElementById('protd-prev').addEventListener('click', function () { if (currentPage > 1) { currentPage--; renderPage(); } });
-    document.getElementById('protd-next').addEventListener('click', function () {
-      var t = Math.ceil(filtered.length / pageSize) || 1;
-      if (currentPage < t) { currentPage++; renderPage(); }
-    });
-
-    // Load data
-    loadSectionDataGeneric('protDetalhados', 'assets/protocolos-detalhados.json', function (data) {
-      store.protDetalhados = data;
-      saveStore();
-      // Populate dropdowns
-      populateSet('protd-situacao', data, 'situacao');
-      populateSet('protd-ocorrencia', data, 'ocorrencia');
-      populateSet('protd-tipo', data, 'tipoEstabelecimento');
-      refresh();
-    });
-  }
-
-  function populateSet(ddId, data, key) {
-    var dd = document.getElementById(ddId);
-    if (!dd) return;
-    var vals = new Set();
-    data.forEach(function (r) { if (r[key]) vals.add(r[key]); });
-    var sorted = Array.from(vals).sort();
-    dd.innerHTML = '<option value="">' + (dd.options[0] ? dd.options[0].text : 'Todos') + '</option>' +
-      sorted.map(function (v) { return '<option value="' + escapeHtml(v) + '">' + escapeHtml(v) + '</option>'; }).join('');
   }
 
   /* ═══════════════════════════════════════════
