@@ -739,95 +739,95 @@ window.MainApp = window.MainApp || {};
         "Curitiba e RMC": {
           _actVigente: true,
           cidades: {
-            "curitiba": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "sao_jose_dos_pinhais": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "colombo": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "araucaria": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "pinhais": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "campo_largo": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "almete_tamandare": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "piraquara": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "fazenda_rio_grande": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "lapa": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "campina_grande_do_sul": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "quatro_barras": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "paranagua": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "guaratuba": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "matinhos": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+            "curitiba": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "sao_jose_dos_pinhais": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "colombo": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "araucaria": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "pinhais": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "campo_largo": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "almete_tamandare": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "piraquara": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "fazenda_rio_grande": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "lapa": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "campina_grande_do_sul": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "quatro_barras": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "paranagua": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "guaratuba": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 },
+            "matinhos": { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 }
           }
         },
         "Londrina e Norte Central": {
-          _actVigente: false,
+          _actVigente: true,
           cidades: {
-            "londrina": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "apucarana": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "arapongas": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "cambe": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "rolandia": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "ibipora": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "cornelio_procopio": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "bandeirantes": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "jacarezinho": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "santo_antonio_da_platina": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+            "londrina": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "apucarana": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "arapongas": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "cambe": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "rolandia": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "ibipora": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "cornelio_procopio": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "bandeirantes": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "jacarezinho": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 },
+            "santo_antonio_da_platina": { varejista: 3950.00, hospitalar: 4100.00, distribuidora: 4200.00, laboratorios: 3400.00, industrias: 3800.00 }
           }
         },
         "Maringá e Noroeste": {
-          _actVigente: false,
+          _actVigente: true,
           cidades: {
-            "maringa": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "umuarama": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "paranavai": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "cianorte": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "campo_mourao": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "sarandi": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "loanda": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "nova_esperanca": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+            "maringa": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 },
+            "umuarama": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 },
+            "paranavai": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 },
+            "cianorte": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 },
+            "campo_mourao": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 },
+            "sarandi": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 },
+            "loanda": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 },
+            "nova_esperanca": { varejista: 4200.00, hospitalar: 4300.00, distribuidora: 4400.00, laboratorios: 3500.00, industrias: 3900.00 }
           }
         },
         "Ponta Grossa e Campos Gerais": {
-          _actVigente: false,
+          _actVigente: true,
           cidades: {
-            "ponta_grossa": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "castro": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "telemaco_borba": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "jaguariaiva": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "palmeira": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "tibagi": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+            "ponta_grossa": { varejista: 3850.00, hospitalar: 4000.00, distribuidora: 4100.00, laboratorios: 3200.00, industrias: 3700.00 },
+            "castro": { varejista: 3850.00, hospitalar: 4000.00, distribuidora: 4100.00, laboratorios: 3200.00, industrias: 3700.00 },
+            "telemaco_borba": { varejista: 3850.00, hospitalar: 4000.00, distribuidora: 4100.00, laboratorios: 3200.00, industrias: 3700.00 },
+            "jaguariaiva": { varejista: 3850.00, hospitalar: 4000.00, distribuidora: 4100.00, laboratorios: 3200.00, industrias: 3700.00 },
+            "palmeira": { varejista: 3850.00, hospitalar: 4000.00, distribuidora: 4100.00, laboratorios: 3200.00, industrias: 3700.00 },
+            "tibagi": { varejista: 3850.00, hospitalar: 4000.00, distribuidora: 4100.00, laboratorios: 3200.00, industrias: 3700.00 }
           }
         },
         "Cascavel e Oeste": {
-          _actVigente: false,
+          _actVigente: true,
           cidades: {
-            "cascavel": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "foz_do_iguacu": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "toledo": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "marechal_candido_rondon": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "medianeira": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "palotina": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "guaira": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "santa_helena": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+            "cascavel": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 },
+            "foz_do_iguacu": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 },
+            "toledo": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 },
+            "marechal_candido_rondon": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 },
+            "medianeira": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 },
+            "palotina": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 },
+            "guaira": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 },
+            "santa_helena": { varejista: 4000.00, hospitalar: 4150.00, distribuidora: 4250.00, laboratorios: 3300.00, industrias: 3750.00 }
           }
         },
         "Francisco Beltrão e Sudoeste": {
-          _actVigente: false,
+          _actVigente: true,
           cidades: {
-            "francisco_beltrao": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "pato_branco": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "dois_vizinhos": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "palmas": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "coronel_vivida": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "chopinzinho": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+            "francisco_beltrao": { varejista: 3800.00, hospitalar: 3900.00, distribuidora: 4000.00, laboratorios: 3100.00, industrias: 3600.00 },
+            "pato_branco": { varejista: 3800.00, hospitalar: 3900.00, distribuidora: 4000.00, laboratorios: 3100.00, industrias: 3600.00 },
+            "dois_vizinhos": { varejista: 3800.00, hospitalar: 3900.00, distribuidora: 4000.00, laboratorios: 3100.00, industrias: 3600.00 },
+            "palmas": { varejista: 3800.00, hospitalar: 3900.00, distribuidora: 4000.00, laboratorios: 3100.00, industrias: 3600.00 },
+            "coronel_vivida": { varejista: 3800.00, hospitalar: 3900.00, distribuidora: 4000.00, laboratorios: 3100.00, industrias: 3600.00 },
+            "chopinzinho": { varejista: 3800.00, hospitalar: 3900.00, distribuidora: 4000.00, laboratorios: 3100.00, industrias: 3600.00 }
           }
         },
         "Guarapuava e Centro-Sul": {
-          _actVigente: false,
+          _actVigente: true,
           cidades: {
-            "guarapuava": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "pitanga": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "laranjeiras_do_sul": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "prudentopolis": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "irati": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 },
-            "uniao_da_vitoria": { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 }
+            "guarapuava": { varejista: 3700.00, hospitalar: 3850.00, distribuidora: 3950.00, laboratorios: 3000.00, industrias: 3500.00 },
+            "pitanga": { varejista: 3700.00, hospitalar: 3850.00, distribuidora: 3950.00, laboratorios: 3000.00, industrias: 3500.00 },
+            "laranjeiras_do_sul": { varejista: 3700.00, hospitalar: 3850.00, distribuidora: 3950.00, laboratorios: 3000.00, industrias: 3500.00 },
+            "prudentopolis": { varejista: 3700.00, hospitalar: 3850.00, distribuidora: 3950.00, laboratorios: 3000.00, industrias: 3500.00 },
+            "irati": { varejista: 3700.00, hospitalar: 3850.00, distribuidora: 3950.00, laboratorios: 3000.00, industrias: 3500.00 },
+            "uniao_da_vitoria": { varejista: 3700.00, hospitalar: 3850.00, distribuidora: 3950.00, laboratorios: 3000.00, industrias: 3500.00 }
           }
         }
       }
