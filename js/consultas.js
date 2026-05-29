@@ -596,7 +596,7 @@ window.MainApp = window.MainApp || {};
     var cidadesLoaded = false, pisoLoaded = false;
     var cidadesData = [];
 
-    // 1. Tenta JSON dedicado, 2. Fallback para dados.ods (fiscal), 3. Fallback para store.piso
+    // Tenta JSON dedicado, fallback para store.piso.regioes
     fetch('assets/cidades-parana.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
@@ -607,24 +607,8 @@ window.MainApp = window.MainApp || {};
         if (pisoLoaded) initPisoReady();
       })
       .catch(function () {
-        // Fallback: carrega do dados.ods (mesma fonte do fiscal.js)
-        fetch('assets/dados.ods')
-          .then(function (r) { return r.arrayBuffer(); })
-          .then(function (buf) {
-            var wb = XLSX.read(buf, { type: 'array', cellNF: false });
-            var json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true });
-            cidadesData = json.slice(1).filter(function (l) { return l[0]; }).map(function (l) {
-              return { cidade: l[0].toString().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, ''), label: l[0].toString().trim() };
-            });
-            store._cidadesPR = { cidades: cidadesData };
-            saveStore();
-            cidadesLoaded = true;
-            if (pisoLoaded) initPisoReady();
-          })
-          .catch(function () {
-            cidadesLoaded = true;
-            if (pisoLoaded) initPisoReady();
-          });
+        cidadesLoaded = true;
+        if (pisoLoaded) initPisoReady();
       });
 
     loadSectionDataPiso(function () {
