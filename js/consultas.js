@@ -430,7 +430,7 @@ window.MainApp = window.MainApp || {};
     var start = (faqPage - 1) * FAQ_PAGE, end = Math.min(start + FAQ_PAGE, faqFiltered.length);
     var page = faqFiltered.slice(start, end);
 
-    el.innerHTML = '<div class="accordion faq-accordion" id="faqAccordion">' + page.map(function (r, i) {
+    el.innerHTML = '<div class="accordion faq-accordion" id="faqAccordion' + faqPage + '">' + page.map(function (r, i) {
       var uid = 'faq-' + faqPage + '-' + i;
       var comp = r.complemento ? '<div class="faq-complemento mt-2 p-2 border-start border-info border-2 bg-dark bg-opacity-25 small text-muted">' +
         escapeHtml(r.complemento).replace(/\r\n/g,'<br>').replace(/\n/g,'<br>') + '</div>' : '';
@@ -441,7 +441,7 @@ window.MainApp = window.MainApp || {};
             '<span class="flex-grow-1 text-start">' + escapeHtml(r.pergunta) + '</span>' +
           '</button>' +
         '</h2>' +
-        '<div id="' + uid + '" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">' +
+        '<div id="' + uid + '" class="accordion-collapse collapse" data-bs-parent="#faqAccordion' + faqPage + '">' +
           '<div class="accordion-body bg-dark bg-opacity-25 py-2 px-3 small text-light">' +
             '<div class="mb-2">' + autoLink(r.resposta).replace(/\r\n/g,'<br>').replace(/\n/g,'<br>') + '</div>' + comp +
             '<div class="d-flex gap-1 mt-2 pt-2 border-top border-secondary">' +
@@ -976,10 +976,30 @@ window.MainApp = window.MainApp || {};
     function tryU(u) {
       fetch(u).then(function (r) { if (!r.ok) throw new Error(); return r.json(); }).then(cb).catch(function () {
         if (u === url && fallbackUrl) tryU(fallbackUrl);
-        else cb(store[key] || (Array.isArray(store[key]) ? [] : {}));
+        else cb(store[key] || getDefaultData(key));
       });
     }
     tryU(url);
+  }
+
+  function getDefaultData(key) {
+    // Dados fallback quando JSONs não existem
+    var defaults = {
+      orientacoes: {
+        documentos: ['Razão social', 'Nome fantasia', 'Dados de contato (endereço/telefone/e-mail)', 'Verificar se selecionou - alteração de horário de funcionamento', 'Gerado pelo atual Diretor Técnico', 'Emitido nos últimos 30 dias anterior ao protocolo', 'Ramo de atividade igual ou alterado', 'Códigos de validação legíveis'],
+        situacoes: ['POSTO DE COLETA/LABORATÓRIO DE ANÁLISES CLÍNICAS', 'Verificar se o profissional possui habilitação como Farmacêutico-Bioquímico', 'Não é necessário declarar horário', 'Se é posto de coleta independente (matriz) deverá ter contrato com laboratório'],
+        checklist: ['ANEXAR O ARQUIVO DO PROCEDIMENTO NO GED', 'PADRÕES PARA SALVAR ARQUIVOS NO GED', 'PROTOCOLO INTERNO DE AD REFERENDUM', 'TRAMITAÇÃO DO PROTOCOLO PARA CONFERÊNCIA']
+      },
+      listas: {
+        documentos: ['CONTRATO DE PRESTAÇÃO DE SERVIÇOS', 'REQUERIMENTO DO ESTABELECIMENTO', 'CTPS DIGITAL', 'CTPS FÍSICA', 'E-SOCIAL', 'TERMO DE COMPROMISSO DO PROFISSIONAL'],
+        tiposEstabelecimento: ['FARMÁCIA SEM MANIPULAÇÃO', 'FARMÁCIA COM MANIPULAÇÃO', 'FARMÁCIA HOSPITALAR', 'DISTRIBUIDORA', 'LABORATÓRIO', 'INDÚSTRIA', 'POSTO DE COLETA', 'TRANSPORTADORA'],
+        respostasPadrao: ['ARQUIVAMENTO EMPRESA INCORRETA', 'SOLICITAÇÃO DE CORREÇÃO', 'PROTOCOLOS - CONFLITO DE HORÁRIOS', 'VÍNCULO DE TRABALHO - CTPS'],
+        prazosAssistencia: ['ARMAZENADORA DE MEDICAMENTOS', 'BANCO DE LEITE HUMANO', 'CENTRAL DE ABASTECIMENTO FARMACÊUTICO', 'CLÍNICA DE SERVIÇOS DE VACINAÇÃO', 'CONSULTÓRIO FARMACÊUTICO', 'DISTRIBUIDORA', 'FARMÁCIA COM MANIPULAÇÃO', 'FARMÁCIA SEM MANIPULAÇÃO']
+      },
+      respostasPadrao: { 'SOLICITAÇÃO DE CORREÇÃO': 'Documentação incorreta ou incompleta.\nEnviar/anexar no prazo de 01 dia útil acessando a tela inicial do CRF/PR em Casa, no atalho dos menus mais utilizados, em Protocolos, no ícone de "Protocolos Aguardando Resposta".\nAlertamos que documentos enviados errados ou não enviados dentro do prazo estará sujeito ao indeferimento com necessidade de reinício do procedimento.' },
+      nomesEmpresariais: ['CLÍNICA DE ESTÉTICA + NOME FANTASIA', 'LABORATÓRIO ANÁLISE CLÍNICAS - ORGÃO PÚBLICO', 'A IDENTIFICAÇÃO DO ESTABELECIMENTO NÃO DEVE SER ABREVIADA', 'A RAZÃO SOCIAL DEVE SEGUIR O MESMO PADRÃO DO CARTÃO CNPJ']
+    };
+    return defaults[key] || {};
   }
 
   function renderOrientacoes() {
