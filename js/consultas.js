@@ -89,19 +89,29 @@ window.MainApp = window.MainApp || {};
     });
   }
 
-  function loadSectionData(key, jsonUrl, defaultItem, callback) {
+  function loadSectionData(key, jsonUrl, defaultItem, callback, fallbackUrl) {
     // Prefere localStorage, fallback JSON
     if (store[key] && store[key].length) return callback(store[key]);
 
-    fetch(jsonUrl)
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
+    function tryFetch(url) {
+      return fetch(url).then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      }).then(function (data) {
         data = data.map(function (item, i) { item._id = item._id || (key + '_' + i); return item; });
         callback(data);
-      })
-      .catch(function () {
-        callback(store[key] || []);
       });
+    }
+
+    tryFetch(jsonUrl).catch(function () {
+      if (fallbackUrl) {
+        tryFetch(fallbackUrl).catch(function () {
+          callback(store[key] || []);
+        });
+      } else {
+        callback(store[key] || []);
+      }
+    });
   }
 
   function populateDropdown(dd, data, keyFn) {
@@ -285,11 +295,9 @@ window.MainApp = window.MainApp || {};
     },
     renderList: function (data, key) {
       return data.map(function (n) {
-        var linkHtml = n.link && !/^(ANVISA|CRF|STJ|CFQ|CFF|LEI|CURITIBA|PLANALTO|SESA)$/.test(n.link)
-          ? '<a href="' + escapeHtml(n.link) + '" target="_blank" rel="noopener" class="x-small text-info ms-2"><i class="fas fa-external-link-alt"></i></a>' : '';
         return '<div class="c-item mb-2 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
           '<div class="d-flex justify-content-between align-items-start">' +
-          '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(n.norma) + linkHtml + '</div>' +
+          '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(n.norma) + getLinkHtml(n) + '</div>' +
           '<div class="x-small text-muted">' + escapeHtml(n.assunto) + '</div></div>' +
           '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
           '<span class="badge bg-secondary me-1">' + escapeHtml(n.orgao) + '</span>' +
@@ -326,6 +334,33 @@ window.MainApp = window.MainApp || {};
   };
 
   function renderNormas(data, key) { return cfgNormas.renderList(data, key); }
+
+  // Mapeamento de órgãos para URLs oficiais
+  var ORGAO_LINKS = {
+    'ANVISA':   'https://antigo.anvisa.gov.br/legislacao',
+    'CFF':      'https://site.cff.org.br/',
+    'CRF':      'https://www.crf-pr.org.br/',
+    'STJ':      'https://www.stj.jus.br/',
+    'CFQ':      'https://cfq.org.br/',
+    'PLANALTO': 'https://www.planalto.gov.br/',
+    'CURITIBA': 'https://www.curitiba.pr.gov.br/',
+    'SESA':     'https://www.saude.pr.gov.br/',
+    'LEI':      'https://www.planalto.gov.br/'
+  };
+
+  function getLinkHtml(n) {
+    // Se o campo link é uma URL real (contém http), usa ela
+    if (n.link && /^https?:\/\//i.test(n.link)) {
+      return ' <a href="' + escapeHtml(n.link) + '" target="_blank" rel="noopener" class="x-small text-info" title="Abrir link"><i class="fas fa-external-link-alt"></i></a>';
+    }
+    // Se o link (ou órgão) tem um mapeamento de URL
+    var org = n.link || n.orgao;
+    if (org && ORGAO_LINKS[org]) {
+      return ' <a href="' + ORGAO_LINKS[org] + '" target="_blank" rel="noopener" class="x-small text-info" title="Site ' + escapeHtml(org) + '"><i class="fas fa-external-link-alt"></i></a>';
+    }
+    // Sem link: mostra badge do órgão (já renderizado separadamente)
+    return '';
+  }
   function renderProtocolos(data, key) { return cfgProtocolos.renderList(data, key); }
 
   /* ═══════════════════════════════════════════
@@ -365,7 +400,7 @@ window.MainApp = window.MainApp || {};
       store.faq = data;
       saveStore();
       faqRefresh();
-    });
+    }, 'assets/respostas.json');
   }
 
   function faqRefresh() {
@@ -893,12 +928,15 @@ window.MainApp = window.MainApp || {};
     });
   }
 
-  function loadSectionDataGeneric(key, url, cb) {
+  function loadSectionDataGeneric(key, url, cb, fallbackUrl) {
     if (store[key]) return cb(store[key]);
-    fetch(url)
-      .then(function (r) { return r.json(); })
-      .then(cb)
-      .catch(function () { cb(store[key] || { documentos: [], situacoes: [], checklist: [] }); });
+    function tryU(u) {
+      fetch(u).then(function (r) { if (!r.ok) throw new Error(); return r.json(); }).then(cb).catch(function () {
+        if (u === url && fallbackUrl) tryU(fallbackUrl);
+        else cb(store[key] || (Array.isArray(store[key]) ? [] : {}));
+      });
+    }
+    tryU(url);
   }
 
   function renderOrientacoes() {
