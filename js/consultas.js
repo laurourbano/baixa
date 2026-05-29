@@ -863,22 +863,31 @@ window.MainApp = window.MainApp || {};
   }
 
   function loadSectionDataPiso(cb) {
-    if (store.piso && store.piso.regioes) return cb();
+    // Verifica se cache tem dados realmente diferentes por região
+    var cached = store.piso;
+    if (cached && cached.regioes) {
+      var regNames = Object.keys(cached.regioes);
+      if (regNames.length > 1) {
+        var firstVal = null, allSame = true;
+        regNames.forEach(function (r) {
+          var cids = cached.regioes[r].cidades;
+          var v = cids && Object.values(cids)[0] ? Object.values(cids)[0].varejista : null;
+          if (v) {
+            if (firstVal === null) firstVal = v;
+            else if (Math.abs(v - firstVal) > 1) allSame = false;
+          }
+        });
+        if (!allSame) return cb(); // Dados já estão diferenciados
+      }
+    }
+    // Cache inválido ou dados antigos: recarrega
+    delete store.piso;
+
     fetch('assets/piso.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (!data.regioes) {
-          var novo = defaultPisoData();
-          var outrasCidades = {};
-          Object.keys(data).forEach(function (k) {
-            if (k !== 'default' && k !== 'horasSemana' && k !== 'valorHora' && k !== 'proporcional10h' && typeof data[k] === 'object') {
-              outrasCidades[k] = data[k];
-            }
-          });
-          if (Object.keys(outrasCidades).length > 0) {
-            novo.regioes["Outras"] = { _actVigente: false, cidades: outrasCidades };
-          }
-          store.piso = novo;
+          store.piso = defaultPisoData();
         } else {
           store.piso = data;
         }
