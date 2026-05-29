@@ -573,7 +573,10 @@ window.MainApp = window.MainApp || {};
             '<option value="distribuidora">Distribuidora</option><option value="laboratorios">Laboratórios</option>' +
             '<option value="industrias">Indústrias</option></select></div>' +
         '<div class="col-md-2"><label class="x-small text-muted">Piso Base R$</label>' +
-          '<input id="piso-base" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary"></div>' +
+          '<div class="input-group input-group-sm">' +
+            '<input id="piso-base" type="text" class="form-control bg-dark text-light border-secondary" readonly>' +
+            '<button id="piso-edit-val" class="btn btn-outline-warning" title="Editar valor"><i class="fas fa-edit"></i></button>' +
+          '</div></div>' +
         '<div class="col-md-2"><label class="x-small text-muted">Hrs Semana</label>' +
           '<input id="piso-horas" type="number" value="44" min="1" max="44" class="form-control form-control-sm bg-dark text-light border-secondary"></div>' +
       '</div>' +
@@ -642,6 +645,15 @@ window.MainApp = window.MainApp || {};
 
       document.getElementById('piso-calc').addEventListener('click', calcularPiso);
       document.getElementById('piso-save-val').addEventListener('click', savePisoValue);
+      document.getElementById('piso-edit-val').addEventListener('click', function () {
+        var current = parseFloat(document.getElementById('piso-base').value) || 0;
+        var novo = prompt('Editar valor do piso base (R$):', current.toFixed(2));
+        if (novo === null) return;
+        var val = parseFloat(novo.replace(',', '.'));
+        if (isNaN(val) || val <= 0) { app.showToast('Valor inválido.', 'warning', 2000); return; }
+        document.getElementById('piso-base').value = val.toFixed(2);
+        calcularPiso();
+      });
       document.getElementById('piso-add-cidade').addEventListener('click', addPisoCidade);
       document.getElementById('piso-del-cidade').addEventListener('click', delPisoCidade);
       document.getElementById('piso-categoria').addEventListener('change', function () {
@@ -1059,11 +1071,17 @@ window.MainApp = window.MainApp || {};
   }
 
   function loadSectionDataGeneric(key, url, cb, fallbackUrl) {
-    if (store[key]) return cb(store[key]);
+    // Só usa cache se tiver dados reais (objeto não vazio ou array com itens)
+    var cached = store[key];
+    var hasData = cached && (Array.isArray(cached) ? cached.length > 0 : Object.keys(cached).length > 0);
+    if (hasData) return cb(cached);
+
     function tryU(u) {
-      fetch(u).then(function (r) { if (!r.ok) throw new Error(); return r.json(); }).then(cb).catch(function () {
+      fetch(u).then(function (r) { if (!r.ok) throw new Error(); return r.json(); }).then(function (data) {
+        cb(data);
+      }).catch(function () {
         if (u === url && fallbackUrl) tryU(fallbackUrl);
-        else cb(store[key] || getDefaultData(key));
+        else cb(getDefaultData(key));
       });
     }
     tryU(url);
