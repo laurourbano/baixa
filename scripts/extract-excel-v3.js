@@ -55,27 +55,95 @@ for (let i = 0; i < rawO.length; i++) {
   const r = rawO[i];
   const val = (r[3] || '').trim();
   if (!val) continue;
-  if (val === 'DOCUMENTOS') { currentSection = 'documentos'; continue; }
-  if (val === 'SITUAÇÕES ESPECÍFICAS ') { currentSection = 'situacoes'; continue; }
-  if (val === 'LANÇAMENTOS NO SAGICON e GED') { currentSection = 'checklist'; continue; }
-  if (val === '*' || val === 'REQUERIMENTO DO ESTABELECIMENTO') continue;
+  if (/^documentos$/i.test(val)) { currentSection = 'documentos'; continue; }
+  if (/^situa[cç][oõ]es\s*espec[ií]ficas/i.test(val)) { currentSection = 'situacoes'; continue; }
+  if (/^lan[cç]amentos\s+no\s+sagicon/i.test(val)) { currentSection = 'checklist'; continue; }
+  if (/^\*$/.test(val) || /^requerimento\s+do\s+estabelecimento/i.test(val)) continue;
+  // Pula linhas que são cabeçalhos de seção (SITUAÇÕES ESPECÍFICAS, POSTO DE COLETA, etc.)
+  if (/^situa[cç][oõ]es/i.test(val) || /^posto\s+de\s+coleta/i.test(val)) continue;
   if (currentSection && orientacoes[currentSection]) {
     orientacoes[currentSection].push(val);
   }
 }
 out('orientacoes.json', orientacoes);
 
-// ── RESPOSTAS PADRÃO ──
-const rawRP = XLSX.utils.sheet_to_json(wb.Sheets['RESPOSTAS PADRÃO'], { header: 1 });
+// ── RESPOSTAS PADRÃO (extração completa com suporte a múltiplas entradas) ──
+const rpSheet = wb.Sheets['RESPOSTAS PADRÃO'];
+// Lê todas as células individualmente para capturar dados de colunas não lineares
+const rpCells = {};
+Object.keys(rpSheet).forEach(function (cell) {
+  if (cell === '!ref' || cell === '!merges' || cell === '!type') return;
+  var v = rpSheet[cell];
+  if (v && v.v !== undefined && String(v.v).trim()) {
+    var addr = XLSX.utils.decode_cell(cell);
+    if (!rpCells[addr.r]) rpCells[addr.r] = {};
+    rpCells[addr.r][addr.c] = String(v.v).trim();
+  }
+});
+// Também lê via header:1 para não perder estrutura de colunas
+const rawRP = XLSX.utils.sheet_to_json(rpSheet, { header: 1 });
 const respostasPadrao = {};
-let rpTitulo = '';
-let rpTexto = '';
-for (let i = 0; i < rawRP.length; i++) {
-  const r = rawRP[i];
-  if (r[1] && r[1].trim() === 'SOLICITAÇÃO DE CORREÇÃO') rpTitulo = r[1].trim();
-  if (r[1] && r[1].trim().startsWith('Documentação')) rpTexto = r[1].trim();
+let currentTitle = '';
+let currentLines = [];
+
+function isHeaderOrLabel(val) {
+  var v = val.toLowerCase();
+  return v === 'resposta padrão:' || v === 'resposta padrão' ||
+         v.startsWith('(copiar') || /^respostas?\s+padr[ãa]o/i.test(val);
 }
-if (rpTitulo && rpTexto) respostasPadrao[rpTitulo] = rpTexto;
+
+for (let i = 0; i < rawRP.length; i++) {
+  var r = rawRP[i];
+  var col1 = (r[0] || '').toString().trim();
+  var col2 = (r[1] || '').toString().trim();
+  // Também verifica coluna 0 (algumas entradas podem estar lá)
+  var candidate = col2 || col1;
+  
+  if (!candidate) {
+    // Linha vazia após acumular texto → finaliza entrada
+    if (currentTitle && currentLines.length) {
+      respostasPadrao[currentTitle] = currentLines.join('\n').trim();
+      currentTitle = ''; currentLines = [];
+    }
+    continue;
+  }
+
+  if (isHeaderOrLabel(candidate)) continue;
+
+  // Detecta se é um título de resposta (maiúsculas, termina com ':' ou parece nome de categoria)
+  var isTitle = !currentTitle && (
+    candidate === candidate.toUpperCase() ||
+    /^(ARQUIVAMENTO|ASSINATURA|CANCELAMENTO|CARGA HORÁRIA|DAP |DECLAROU|DOCUMENTOS|FORMULÁRIOS|HABILITAÇÕES|INDEFERIMENTO|PROTOCOLOS?|REGISTRO|RESPOSTAS?|SALÁRIO|SEM |SOLICITAÇÃO|TRANSFERÊNCIAS|VÍNCULO)/i.test(candidate)
+  );
+
+  if (isTitle) {
+    if (currentTitle && currentLines.length) {
+      respostasPadrao[currentTitle] = currentLines.join('\n').trim();
+    }
+    currentTitle = candidate;
+    currentLines = [];
+  } else if (currentTitle) {
+    currentLines.push(candidate);
+  }
+}
+// Última entrada
+if (currentTitle && currentLines.length) {
+  respostasPadrao[currentTitle] = currentLines.join('\n').trim();
+}
+
+// Se nenhuma entrada foi encontrada, faz fallback para o formato antigo
+if (Object.keys(respostasPadrao).length === 0) {
+  let rpTitulo = '', rpTexto = '';
+  for (let i = 0; i < rawRP.length; i++) {
+    var r = rawRP[i];
+    var val = (r[1] || r[0] || '').toString().trim();
+    if (!val) continue;
+    if (val.toUpperCase() === val && !isHeaderOrLabel(val)) rpTitulo = val;
+    if (val.length > 30 && !isHeaderOrLabel(val)) rpTexto = val;
+  }
+  if (rpTitulo && rpTexto) respostasPadrao[rpTitulo] = rpTexto;
+}
+
 out('respostas-padrao.json', respostasPadrao);
 
 // ── PISO ──

@@ -1096,11 +1096,26 @@ window.MainApp = window.MainApp || {};
     });
   }
 
+  // Schema esperado para cada chave — invalida cache se formato não bater
+  var CACHE_SCHEMA = {
+    orientacoes: ['documentos', 'situacoes', 'checklist'],
+    listas: ['documentos', 'tiposEstabelecimento', 'respostasPadrao', 'prazosAssistencia'],
+    faq: null // array de objetos
+  };
+
+  function isValidCache(key, data) {
+    if (!data) return false;
+    var schema = CACHE_SCHEMA[key];
+    if (schema === undefined) return true; // sem schema definido → confia no cache
+    if (schema === null) return Array.isArray(data) && data.length > 0; // espera array
+    // espera objeto com as chaves do schema
+    if (Array.isArray(data)) return false; // array onde deveria ser objeto → inválido
+    return schema.every(function (k) { return data[k] && Array.isArray(data[k]); });
+  }
+
   function loadSectionDataGeneric(key, url, cb, fallbackUrl) {
-    // Só usa cache se tiver dados reais (objeto não vazio ou array com itens)
     var cached = store[key];
-    var hasData = cached && (Array.isArray(cached) ? cached.length > 0 : Object.keys(cached).length > 0);
-    if (hasData) return cb(cached);
+    if (isValidCache(key, cached)) return cb(cached);
 
     function tryU(u) {
       fetch(u).then(function (r) { if (!r.ok) throw new Error(); return r.json(); }).then(function (data) {
@@ -1304,31 +1319,6 @@ window.MainApp = window.MainApp || {};
       ]
     };
     return defaults[key] || {};
-  }
-
-  function renderOrientacoes() {
-    var key = document.getElementById('orient-dropdown').value;
-    var data = (store.orientacoes || {})[key] || [];
-    var el = document.getElementById('orient-list');
-    if (!el) return;
-
-    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
-
-    el.innerHTML = data.map(function (item, i) {
-      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
-        '</div></div>';
-    }).join('');
-
-    el.querySelectorAll('[data-orient-edit]').forEach(function (b) {
-      b.addEventListener('click', function () { editOrientacaoItem(this.getAttribute('data-orient-edit'), parseInt(this.getAttribute('data-idx'))); });
-    });
-    el.querySelectorAll('[data-orient-del]').forEach(function (b) {
-      b.addEventListener('click', function () { deleteOrientacaoItem(this.getAttribute('data-orient-del'), parseInt(this.getAttribute('data-idx'))); });
-    });
   }
 
   function editOrientacaoItem(key, idx) {
