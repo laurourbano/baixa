@@ -1691,6 +1691,26 @@ textarea.form-control {
   border-radius: 1px;
 }
 
+/* FAQ Accordion items */
+.faq-accordion .accordion-button {
+  font-size: 0.82rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.faq-accordion .accordion-button::after {
+  filter: invert(0.6);
+}
+
+.faq-accordion .accordion-button:not(.collapsed) {
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none;
+}
+
+.faq-accordion .accordion-body {
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
 /* Itens CRUD genéricos */
 .c-item {
   transition: background 0.2s ease, border-color 0.2s ease;

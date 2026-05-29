@@ -430,23 +430,33 @@ window.MainApp = window.MainApp || {};
     var start = (faqPage - 1) * FAQ_PAGE, end = Math.min(start + FAQ_PAGE, faqFiltered.length);
     var page = faqFiltered.slice(start, end);
 
-    el.innerHTML = page.map(function (r) {
-      var comp = r.complemento ? '<div class="faq-complemento mt-1 p-2 border-start border-info border-2 bg-dark bg-opacity-25 small text-muted">' +
+    el.innerHTML = '<div class="accordion faq-accordion" id="faqAccordion">' + page.map(function (r, i) {
+      var uid = 'faq-' + faqPage + '-' + i;
+      var comp = r.complemento ? '<div class="faq-complemento mt-2 p-2 border-start border-info border-2 bg-dark bg-opacity-25 small text-muted">' +
         escapeHtml(r.complemento).replace(/\r\n/g,'<br>').replace(/\n/g,'<br>') + '</div>' : '';
-      return '<div class="faq-item mb-2 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
-        '<div class="d-flex justify-content-between align-items-start mb-1">' +
-        '<span class="badge bg-' + (r.tipo==='PF'?'primary':r.tipo==='PJ'?'success':'info') + ' me-2">' + escapeHtml(r.tipo) + '</span>' +
-        '<small class="text-muted flex-grow-1 fw-bold">' + escapeHtml(r.pergunta) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + r._id + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + r._id + '"><i class="fas fa-trash x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-faq-copy="' + r._id + '"><i class="fas fa-copy x-small"></i></button>' +
-        '</div></div><div class="small text-light mt-1">' + autoLink(r.resposta).replace(/\r\n/g,'<br>').replace(/\n/g,'<br>') + '</div>' + comp + '</div>';
-    }).join('');
+      return '<div class="accordion-item bg-transparent border-secondary mb-1">' +
+        '<h2 class="accordion-header">' +
+          '<button class="accordion-button collapsed bg-dark bg-opacity-50 text-light small fw-bold py-2" type="button" data-bs-toggle="collapse" data-bs-target="#' + uid + '">' +
+            '<span class="badge bg-' + (r.tipo==='PF'?'primary':r.tipo==='PJ'?'success':'info') + ' me-2 flex-shrink-0">' + escapeHtml(r.tipo) + '</span>' +
+            '<span class="flex-grow-1 text-start">' + escapeHtml(r.pergunta) + '</span>' +
+          '</button>' +
+        '</h2>' +
+        '<div id="' + uid + '" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">' +
+          '<div class="accordion-body bg-dark bg-opacity-25 py-2 px-3 small text-light">' +
+            '<div class="mb-2">' + autoLink(r.resposta).replace(/\r\n/g,'<br>').replace(/\n/g,'<br>') + '</div>' + comp +
+            '<div class="d-flex gap-1 mt-2 pt-2 border-top border-secondary">' +
+              '<button class="btn btn-sm btn-outline-warning py-0 px-2" data-c-edit="' + r._id + '"><i class="fas fa-edit x-small"></i> Editar</button>' +
+              '<button class="btn btn-sm btn-outline-danger py-0 px-2" data-c-del="' + r._id + '"><i class="fas fa-trash x-small"></i> Excluir</button>' +
+              '<button class="btn btn-sm btn-outline-secondary py-0 px-2" data-faq-copy="' + r._id + '"><i class="fas fa-copy x-small"></i> Copiar</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('') + '</div>';
 
-    el.querySelectorAll('[data-c-edit]').forEach(function (b) { b.addEventListener('click', function () { openFaqEditor(this.getAttribute('data-c-edit')); }); });
-    el.querySelectorAll('[data-c-del]').forEach(function (b) { b.addEventListener('click', function () { deleteFaqItem(this.getAttribute('data-c-del')); }); });
-    el.querySelectorAll('[data-faq-copy]').forEach(function (b) { b.addEventListener('click', function () { copyFaqById(this.getAttribute('data-faq-copy')); }); });
+    el.querySelectorAll('[data-c-edit]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); openFaqEditor(this.getAttribute('data-c-edit')); }); });
+    el.querySelectorAll('[data-c-del]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); deleteFaqItem(this.getAttribute('data-c-del')); }); });
+    el.querySelectorAll('[data-faq-copy]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); copyFaqById(this.getAttribute('data-faq-copy')); }); });
     el.scrollTop = 0;
   }
 
