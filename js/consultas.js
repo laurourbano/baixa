@@ -702,39 +702,43 @@ window.MainApp = window.MainApp || {};
     var nome = selectEl.value;
     if (!nome) return;
 
-    // Pega a região diretamente do atributo data-regiao do option selecionado
-    var selectedOption = selectEl.selectedOptions[0];
-    var regiaoNome = selectedOption ? selectedOption.getAttribute('data-regiao') : '';
+    var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-    // Fallback: busca nos dados do piso
-    if (!regiaoNome && store.piso && store.piso.regioes) {
-      var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    // Varre store.piso.regioes para encontrar a cidade e sua região
+    var regiaoNome = '', catValues = null;
+    if (store.piso && store.piso.regioes) {
       Object.keys(store.piso.regioes).forEach(function (r) {
         var cids = store.piso.regioes[r].cidades || {};
-        if (cids[cidadeKey]) regiaoNome = r;
+        if (cids[cidadeKey]) {
+          regiaoNome = r;
+          catValues = cids[cidadeKey];
+        }
       });
     }
+
+    // Fallback: primeira cidade da primeira região
     if (!regiaoNome && store.piso && store.piso.regioes) {
-      regiaoNome = Object.keys(store.piso.regioes)[0] || '';
+      var regioes = Object.keys(store.piso.regioes);
+      if (regioes.length) {
+        regiaoNome = regioes[0];
+        var primeiraReg = store.piso.regioes[regiaoNome];
+        if (primeiraReg && primeiraReg.cidades) {
+          catValues = Object.values(primeiraReg.cidades)[0];
+        }
+      }
     }
 
     document.getElementById('piso-regiao-display').value = regiaoNome || '—';
 
     if (regiaoNome && store.piso && store.piso.regioes) {
-      if (!store.piso.regioes[regiaoNome]) {
-        store.piso.regioes[regiaoNome] = { _actVigente: false, cidades: {} };
-      }
       var regData = store.piso.regioes[regiaoNome];
-      var cat = document.getElementById('piso-categoria').value;
+      if (!regData) { regData = { _actVigente: false, cidades: {} }; store.piso.regioes[regiaoNome] = regData; }
 
+      var cat = document.getElementById('piso-categoria').value;
       document.getElementById('piso-acordo-badge').classList.toggle('d-none', !regData._actVigente);
       document.getElementById('piso-acordo-alerta').classList.toggle('d-none', regData._actVigente);
 
-      var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      var catValue = null;
-      if (regData.cidades && regData.cidades[cidadeKey]) {
-        catValue = regData.cidades[cidadeKey][cat];
-      }
+      var catValue = catValues ? catValues[cat] : null;
       if (!catValue && regData.cidades) {
         var primeira = Object.values(regData.cidades)[0];
         if (primeira) catValue = primeira[cat];
@@ -742,8 +746,11 @@ window.MainApp = window.MainApp || {};
       if (!catValue && store.piso.regioes["Curitiba e RMC"] && store.piso.regioes["Curitiba e RMC"].cidades["curitiba"]) {
         catValue = store.piso.regioes["Curitiba e RMC"].cidades["curitiba"][cat];
       }
+
       document.getElementById('piso-base').value = 'R$ ' + (catValue || 0).toFixed(2);
       renderPisoTabela(regiaoNome, cidadeKey);
+    } else {
+      document.getElementById('piso-base').value = 'R$ 0,00';
     }
 
     calcularPiso();
