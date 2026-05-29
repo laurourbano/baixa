@@ -562,9 +562,9 @@ window.MainApp = window.MainApp || {};
     ph.innerHTML =
       '<div class="row g-2 mb-2">' +
         '<div class="col-md-4"><label class="x-small text-muted">Cidade</label>' +
-          '<input type="text" id="piso-cidade-search" class="form-control form-control-sm bg-dark text-light border-secondary" ' +
-            'placeholder="Digite o nome da cidade..." autocomplete="off" list="piso-cidade-list">' +
-          '<datalist id="piso-cidade-list"></datalist></div>' +
+          '<input type="text" id="piso-cidade-filter" class="form-control form-control-sm bg-dark text-light border-secondary" ' +
+            'placeholder="Digite para filtrar..." autocomplete="off">' +
+          '<select id="piso-cidade-select" class="form-select form-select-sm bg-dark text-light border-secondary mt-1" size="4"></select></div>' +
         '<div class="col-md-2"><label class="x-small text-muted">Região</label>' +
           '<input type="text" id="piso-regiao-display" class="form-control form-control-sm bg-dark text-light border-secondary" readonly></div>' +
         '<div class="col-md-2"><label class="x-small text-muted">Categoria</label>' +
@@ -617,11 +617,12 @@ window.MainApp = window.MainApp || {};
     });
 
     function initPisoReady() {
-      // Popula datalist com todas as cidades
-      var dl = document.getElementById('piso-cidade-list');
-      if (dl && cidadesData.length) {
-        dl.innerHTML = cidadesData.map(function (c) {
-          return '<option value="' + c.label + '">' + c.regiao + '</option>';
+      // Popula select com todas as cidades
+      var selectEl = document.getElementById('piso-cidade-select');
+      var filterEl = document.getElementById('piso-cidade-filter');
+      if (selectEl && cidadesData.length) {
+        selectEl.innerHTML = cidadesData.map(function (c) {
+          return '<option value="' + c.label + '" data-regiao="' + c.regiao + '">' + c.label + '</option>';
         }).join('');
       }
 
@@ -631,53 +632,39 @@ window.MainApp = window.MainApp || {};
       document.getElementById('piso-save-val').addEventListener('click', savePisoValue);
       document.getElementById('piso-add-cidade').addEventListener('click', addPisoCidade);
       document.getElementById('piso-del-cidade').addEventListener('click', delPisoCidade);
-      document.getElementById('piso-categoria').addEventListener('change', onPisoCategoriaChange);
+      document.getElementById('piso-categoria').addEventListener('change', function () {
+        if (selectEl.value) onCidadeSelectChange();
+      });
 
-      // Auto-complete: ao digitar cidade, busca região
-      var searchEl = document.getElementById('piso-cidade-search');
-      searchEl.addEventListener('input', onCidadeSearchInput);
-      searchEl.addEventListener('change', onCidadeSearchChange);
+      // Filtro de cidades: ao digitar, filtra o select
+      filterEl.addEventListener('input', function () {
+        var term = normalize(filterEl.value);
+        var options = selectEl.querySelectorAll('option');
+        options.forEach(function (opt) {
+          opt.style.display = !term || normalize(opt.value).indexOf(term) > -1 ? '' : 'none';
+        });
+      });
+
+      // Ao selecionar cidade, carrega dados
+      selectEl.addEventListener('change', onCidadeSelectChange);
 
       // Se já tem valor, dispara
-      if (searchEl.value) onCidadeSearchChange();
+      if (selectEl.value) onCidadeSelectChange();
     }
   }
 
-  function onCidadeSearchInput() {
-    // Esconde alertas enquanto digita
-    document.getElementById('piso-acordo-badge').classList.add('d-none');
-    document.getElementById('piso-acordo-alerta').classList.add('d-none');
-    document.getElementById('piso-regiao-display').value = '';
-  }
-
-  function onCidadeSearchChange() {
-    var nome = document.getElementById('piso-cidade-search').value.trim();
+  function onCidadeSelectChange() {
+    var selectEl = document.getElementById('piso-cidade-select');
+    var nome = selectEl.value;
     if (!nome) return;
 
-    // Busca na lista de cidades
-    var cidades = (store._cidadesPR && store._cidadesPR.cidades) || [];
-    var found = cidades.find(function (c) {
-      return c.label.toLowerCase() === nome.toLowerCase();
-    });
-
-    var regiaoNome = '';
-    if (found) {
-      regiaoNome = found.regiao;
-    } else {
-      // Fallback: procura por substring
-      var partial = cidades.find(function (c) {
-        return normalize(c.label).indexOf(normalize(nome)) > -1;
-      });
-      if (partial) {
-        regiaoNome = partial.regiao;
-        document.getElementById('piso-cidade-search').value = partial.label;
-      }
-    }
+    // Pega a região do atributo data
+    var selectedOption = selectEl.selectedOptions[0];
+    var regiaoNome = selectedOption ? selectedOption.getAttribute('data-regiao') : '';
 
     document.getElementById('piso-regiao-display').value = regiaoNome || 'Não encontrada';
 
     if (regiaoNome && store.piso && store.piso.regioes) {
-      // Verifica se a região tem dados
       var regData = store.piso.regioes[regiaoNome];
       var cat = document.getElementById('piso-categoria').value;
 
@@ -689,7 +676,6 @@ window.MainApp = window.MainApp || {};
         document.getElementById('piso-acordo-alerta').classList.remove('d-none');
       }
 
-      // Busca valor da primeira cidade da região ou fallback
       var primeiraCidade = regData && regData.cidades ? Object.values(regData.cidades)[0] : null;
       if (!primeiraCidade && store.piso.regioes["Curitiba e RMC"]) {
         primeiraCidade = Object.values(store.piso.regioes["Curitiba e RMC"].cidades)[0];
@@ -699,7 +685,6 @@ window.MainApp = window.MainApp || {};
       document.getElementById('piso-base').value = val.toFixed(2);
 
       if (regData) {
-        // Mostra tabela da região
         var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         renderPisoTabela(regiaoNome, cidadeKey);
       }
@@ -709,8 +694,8 @@ window.MainApp = window.MainApp || {};
   }
 
   function onPisoCategoriaChange() {
-    var nome = document.getElementById('piso-cidade-search').value.trim();
-    if (nome) onCidadeSearchChange();
+    var selectEl = document.getElementById('piso-cidade-select');
+    if (selectEl.value) onCidadeSelectChange();
   }
 
   function defaultPisoData() {
@@ -854,7 +839,8 @@ window.MainApp = window.MainApp || {};
 
   function savePisoValue() {
     var regiao = document.getElementById('piso-regiao-display').value;
-    var nomeCidade = document.getElementById('piso-cidade-search').value.trim();
+    var selectEl = document.getElementById('piso-cidade-select');
+    var nomeCidade = selectEl ? selectEl.value : '';
     var cat = document.getElementById('piso-categoria').value;
     var val = parseFloat(document.getElementById('piso-base').value) || 0;
     if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
@@ -879,14 +865,16 @@ window.MainApp = window.MainApp || {};
     var primeira = Object.values(store.piso.regioes[regiao].cidades)[0] || { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 };
     store.piso.regioes[regiao].cidades[cidadeKey] = Object.assign({}, primeira);
     saveStore();
-    document.getElementById('piso-cidade-search').value = nome.trim();
-    onCidadeSearchChange();
+    document.getElementById('piso-cidade-filter').value = nome.trim();
+    document.getElementById('piso-cidade-select').value = nome.trim();
+    onCidadeSelectChange();
     app.showToast('Cidade adicionada!', 'success', 2000);
   }
 
   function delPisoCidade() {
     var regiao = document.getElementById('piso-regiao-display').value;
-    var nomeCidade = document.getElementById('piso-cidade-search').value.trim();
+    var selectEl = document.getElementById('piso-cidade-select');
+    var nomeCidade = selectEl ? selectEl.value : '';
     if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
     var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (!store.piso.regioes[regiao] || !store.piso.regioes[regiao].cidades[cidadeKey]) {
@@ -900,7 +888,7 @@ window.MainApp = window.MainApp || {};
       function () {
         delete store.piso.regioes[regiao].cidades[cidadeKey];
         saveStore();
-        document.getElementById('piso-cidade-search').value = '';
+        document.getElementById('piso-cidade-filter').value = '';
         document.getElementById('piso-regiao-display').value = '';
         renderPisoTabelaTodas();
         app.showToast('Cidade removida!', 'success', 2000);
