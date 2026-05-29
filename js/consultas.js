@@ -60,13 +60,14 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="' + key + '"]');
     if (!ph) return;
     var panelId = 'c-data-' + key;
+    var showSearch = cfg.showSearch !== false; // default true
 
     ph.innerHTML =
       '<div class="d-flex gap-2 mb-2">' +
-        '<select id="' + panelId + '-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
+        '<select id="' + panelId + '-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:260px">' +
           '<option value="">Todos</option>' +
         '</select>' +
-        '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off">' +
+        (showSearch ? '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off">' : '') +
         '<button id="' + panelId + '-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
       '</div>' +
       '<div id="' + panelId + '-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
@@ -76,7 +77,7 @@ window.MainApp = window.MainApp || {};
     var filter = document.getElementById(panelId + '-filter');
     var addBtn = document.getElementById(panelId + '-add');
 
-    filter.addEventListener('input', function () { applyFilter(key, cfg); });
+    if (filter) filter.addEventListener('input', function () { applyFilter(key, cfg); });
     dropdown.addEventListener('change', function () { applyFilter(key, cfg); });
     addBtn.addEventListener('click', function () { openEditor(key, null, cfg); });
 
@@ -115,7 +116,8 @@ window.MainApp = window.MainApp || {};
   }
 
   function populateDropdown(dd, data, keyFn) {
-    if (!keyFn) { dd.parentElement.style.display = 'none'; return; }
+    if (!keyFn) { dd.style.display = 'none'; return; }
+    dd.style.display = '';
     var vals = [];
     var seen = {};
     data.forEach(function (item) {
@@ -285,6 +287,7 @@ window.MainApp = window.MainApp || {};
   /* ── Configurações por seção ──────────── */
   var cfgNormas = {
     itemLabel: 'Norma',
+    showSearch: false,
     dropdownKey: function (item) { return item.orgao; },
     searchKeys: ['norma', 'assunto', 'orgao'],
     fields: {
@@ -310,6 +313,7 @@ window.MainApp = window.MainApp || {};
 
   var cfgProtocolos = {
     itemLabel: 'Protocolo',
+    showSearch: false,
     dropdownKey: function (item) { return item.protocolo; },
     searchKeys: ['protocolo', 'estabelecimento', 'status'],
     fields: {
