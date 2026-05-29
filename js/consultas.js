@@ -596,6 +596,7 @@ window.MainApp = window.MainApp || {};
     var cidadesLoaded = false, pisoLoaded = false;
     var cidadesData = [];
 
+    // 1. Tenta JSON dedicado, 2. Fallback para dados.ods (fiscal), 3. Fallback para store.piso
     fetch('assets/cidades-parana.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
@@ -606,19 +607,24 @@ window.MainApp = window.MainApp || {};
         if (pisoLoaded) initPisoReady();
       })
       .catch(function () {
-        // Fallback: cria lista básica a partir do piso.json
-        cidadesData = [];
-        if (store.piso && store.piso.regioes) {
-          Object.keys(store.piso.regioes).forEach(function (regiao) {
-            var cids = store.piso.regioes[regiao].cidades || {};
-            Object.keys(cids).forEach(function (cid) {
-              var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
-              cidadesData.push({ cidade: cid, regiao: regiao, label: label });
+        // Fallback: carrega do dados.ods (mesma fonte do fiscal.js)
+        fetch('assets/dados.ods')
+          .then(function (r) { return r.arrayBuffer(); })
+          .then(function (buf) {
+            var wb = XLSX.read(buf, { type: 'array', cellNF: false });
+            var json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true });
+            cidadesData = json.slice(1).filter(function (l) { return l[0]; }).map(function (l) {
+              return { cidade: l[0].toString().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, ''), regiao: l[2] || 'Outras', label: l[0].toString().trim() };
             });
+            store._cidadesPR = { cidades: cidadesData };
+            saveStore();
+            cidadesLoaded = true;
+            if (pisoLoaded) initPisoReady();
+          })
+          .catch(function () {
+            cidadesLoaded = true;
+            if (pisoLoaded) initPisoReady();
           });
-        }
-        cidadesLoaded = true;
-        if (pisoLoaded) initPisoReady();
       });
 
     loadSectionDataPiso(function () {
@@ -686,11 +692,17 @@ window.MainApp = window.MainApp || {};
 
     document.getElementById('piso-regiao-display').value = regiaoNome || 'Não encontrada';
 
+    var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
     if (regiaoNome && store.piso && store.piso.regioes) {
+      // Cria região se não existir
+      if (!store.piso.regioes[regiaoNome]) {
+        store.piso.regioes[regiaoNome] = { _actVigente: false, cidades: {} };
+      }
       var regData = store.piso.regioes[regiaoNome];
       var cat = document.getElementById('piso-categoria').value;
 
-      if (regData && regData._actVigente) {
+      if (regData._actVigente) {
         document.getElementById('piso-acordo-badge').classList.remove('d-none');
         document.getElementById('piso-acordo-alerta').classList.add('d-none');
       } else {
@@ -698,18 +710,21 @@ window.MainApp = window.MainApp || {};
         document.getElementById('piso-acordo-alerta').classList.remove('d-none');
       }
 
-      var primeiraCidade = regData && regData.cidades ? Object.values(regData.cidades)[0] : null;
-      if (!primeiraCidade && store.piso.regioes["Curitiba e RMC"]) {
-        primeiraCidade = Object.values(store.piso.regioes["Curitiba e RMC"].cidades)[0];
-        document.getElementById('piso-acordo-alerta').classList.remove('d-none');
+      // Busca valor: cidade específica > primeira da região > Curitiba
+      var catValue = null;
+      if (regData.cidades[cidadeKey]) {
+        catValue = regData.cidades[cidadeKey][cat];
       }
-      var val = primeiraCidade ? (primeiraCidade[cat] || 0) : 0;
-      document.getElementById('piso-base').value = val.toFixed(2);
-
-      if (regData) {
-        var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        renderPisoTabela(regiaoNome, cidadeKey);
+      if (!catValue) {
+        var primeiraCidade = Object.values(regData.cidades)[0];
+        if (primeiraCidade) catValue = primeiraCidade[cat];
       }
+      if (!catValue && store.piso.regioes["Curitiba e RMC"]) {
+        var curitiba = store.piso.regioes["Curitiba e RMC"].cidades["curitiba"];
+        if (curitiba) catValue = curitiba[cat];
+      }
+      document.getElementById('piso-base').value = (catValue || 0).toFixed(2);
+      renderPisoTabela(regiaoNome, cidadeKey);
     }
 
     calcularPiso();
