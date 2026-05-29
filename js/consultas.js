@@ -60,22 +60,15 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="' + key + '"]');
     if (!ph) return;
     var panelId = 'c-data-' + key;
-    var showSearch = cfg.showSearch === true;
-    var showDropdown = cfg.showDropdown !== false;
 
     ph.innerHTML =
-      (showDropdown
-        ? '<div class="d-flex gap-2 mb-2">' +
-            '<select id="' + panelId + '-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:260px">' +
-              '<option value="">Todos</option>' +
-            '</select>' +
-            (showSearch ? '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off">' : '') +
-            '<button id="' + panelId + '-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
-          '</div>'
-        : '<div class="d-flex gap-2 mb-2">' +
-            '<button id="' + panelId + '-add" class="btn btn-sm btn-success"><i class="fas fa-plus me-1"></i> Adicionar</button>' +
-          '</div>'
-      ) +
+      '<div class="d-flex gap-2 mb-2">' +
+        '<select id="' + panelId + '-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:260px">' +
+          '<option value="">Todos</option>' +
+        '</select>' +
+        '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off">' +
+        '<button id="' + panelId + '-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+      '</div>' +
       '<div id="' + panelId + '-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
     // Wire events
@@ -83,8 +76,8 @@ window.MainApp = window.MainApp || {};
     var filter = document.getElementById(panelId + '-filter');
     var addBtn = document.getElementById(panelId + '-add');
 
-    if (filter) filter.addEventListener('input', function () { applyFilter(key, cfg); });
-    if (dropdown) dropdown.addEventListener('change', function () { applyFilter(key, cfg); });
+    filter.addEventListener('input', function () { applyFilter(key, cfg); });
+    dropdown.addEventListener('change', function () { applyFilter(key, cfg); });
     addBtn.addEventListener('click', function () { openEditor(key, null, cfg); });
 
     // Carrega dados
@@ -294,7 +287,6 @@ window.MainApp = window.MainApp || {};
   /* ── Configurações por seção ──────────── */
   var cfgNormas = {
     itemLabel: 'Norma',
-    showDropdown: false,
     dropdownKey: function (item) { return item.orgao; },
     searchKeys: ['norma', 'assunto', 'orgao'],
     fields: {
@@ -320,7 +312,6 @@ window.MainApp = window.MainApp || {};
 
   var cfgProtocolos = {
     itemLabel: 'Protocolo',
-    showDropdown: false,
     dropdownKey: function (item) { return item.protocolo; },
     searchKeys: ['protocolo', 'estabelecimento', 'status'],
     fields: {
@@ -921,7 +912,16 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2">' +
+        '<select id="orient-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
+          '<option value="documentos">Documentos</option><option value="situacoes">Situações Específicas</option>' +
+          '<option value="checklist">Checklist (SAGICON/GED)</option></select>' +
+        '<button id="orient-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+      '</div>' +
       '<div id="orient-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
+
+    document.getElementById('orient-dropdown').addEventListener('change', renderOrientacoes);
+    document.getElementById('orient-add').addEventListener('click', addOrientacaoItem);
 
     loadSectionDataGeneric('orientacoes', 'assets/orientacoes.json', function (data) {
       store.orientacoes = data;
@@ -930,37 +930,34 @@ window.MainApp = window.MainApp || {};
     });
   }
 
+  function addOrientacaoItem() {
+    var key = document.getElementById('orient-dropdown').value;
+    var text = prompt('Digite o novo item para ' + key + ':');
+    if (!text || !text.trim()) return;
+    if (!store.orientacoes) store.orientacoes = { documentos: [], situacoes: [], checklist: [] };
+    if (!store.orientacoes[key]) store.orientacoes[key] = [];
+    store.orientacoes[key].push(text.trim());
+    saveStore();
+    renderOrientacoes();
+    app.showToast('Item adicionado!', 'success', 2000);
+  }
+
   function renderOrientacoes() {
+    var key = document.getElementById('orient-dropdown').value;
+    var data = (store.orientacoes || {})[key] || [];
     var el = document.getElementById('orient-list');
     if (!el) return;
-    var data = store.orientacoes || {};
-    var secoes = [
-      { key: 'documentos', title: 'Documentos', icon: 'fa-file-alt', color: 'info' },
-      { key: 'situacoes', title: 'Situações Específicas', icon: 'fa-exclamation-triangle', color: 'warning' },
-      { key: 'checklist', title: 'Checklist SAGICON/GED', icon: 'fa-clipboard-check', color: 'success' }
-    ];
+    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
 
-    var html = '';
-    secoes.forEach(function (sec) {
-      var items = data[sec.key] || [];
-      html += '<div class="mb-3"><h6 class="x-small fw-bold text-' + sec.color + ' mb-1"><i class="fas ' + sec.icon + ' me-1"></i> ' + sec.title + ' (' + items.length + ')</h6>';
-      if (!items.length) {
-        html += '<p class="text-muted x-small ps-3">Nenhum item.</p>';
-      } else {
-        items.forEach(function (item, i) {
-          html += '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-            '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-            '<div class="btn-group btn-group-sm ms-2">' +
-            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + sec.key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + sec.key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
-            '</div></div>';
-        });
-      }
-      html += '</div>';
-    });
-    el.innerHTML = html;
+    el.innerHTML = data.map(function (item, i) {
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
+        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
+        '<div class="btn-group btn-group-sm ms-2">' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '</div></div>';
+    }).join('');
 
-    // Wire buttons
     el.querySelectorAll('[data-orient-edit]').forEach(function (b) {
       b.addEventListener('click', function () { editOrientacaoItem(this.getAttribute('data-orient-edit'), parseInt(this.getAttribute('data-idx'))); });
     });
@@ -1035,7 +1032,16 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2">' +
+        '<select id="listas-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px">' +
+          '<option value="documentos">Documentos</option><option value="tiposEstabelecimento">Tipos de Estabelecimento</option>' +
+          '<option value="respostasPadrao">Respostas Padrão</option><option value="prazosAssistencia">Prazos e Assistência</option></select>' +
+        '<button id="listas-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+      '</div>' +
       '<div id="listas-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
+
+    document.getElementById('listas-dropdown').addEventListener('change', renderListas);
+    document.getElementById('listas-add').addEventListener('click', addListasItem);
 
     loadSectionDataGeneric('listas', 'assets/listas.json', function (data) {
       store.listas = data;
@@ -1044,36 +1050,33 @@ window.MainApp = window.MainApp || {};
     });
   }
 
+  function addListasItem() {
+    var key = document.getElementById('listas-dropdown').value;
+    var text = prompt('Digite o novo item:');
+    if (!text || !text.trim()) return;
+    if (!store.listas) store.listas = { documentos: [], tiposEstabelecimento: [], respostasPadrao: [], prazosAssistencia: [] };
+    if (!store.listas[key]) store.listas[key] = [];
+    store.listas[key].push(text.trim());
+    saveStore();
+    renderListas();
+    app.showToast('Item adicionado!', 'success', 2000);
+  }
+
   function renderListas() {
+    var key = document.getElementById('listas-dropdown').value;
+    var data = (store.listas || {})[key] || [];
     var el = document.getElementById('listas-list');
     if (!el) return;
-    var data = store.listas || {};
-    var secoes = [
-      { key: 'documentos', title: 'Documentos', icon: 'fa-file-alt', color: 'info' },
-      { key: 'tiposEstabelecimento', title: 'Tipos de Estabelecimento', icon: 'fa-building', color: 'primary' },
-      { key: 'respostasPadrao', title: 'Respostas Padrão', icon: 'fa-reply', color: 'warning' },
-      { key: 'prazosAssistencia', title: 'Prazos e Assistência', icon: 'fa-clock', color: 'success' }
-    ];
+    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
 
-    var html = '';
-    secoes.forEach(function (sec) {
-      var items = data[sec.key] || [];
-      html += '<div class="mb-3"><h6 class="x-small fw-bold text-' + sec.color + ' mb-1"><i class="fas ' + sec.icon + ' me-1"></i> ' + sec.title + ' (' + items.length + ')</h6>';
-      if (!items.length) {
-        html += '<p class="text-muted x-small ps-3">Nenhum item.</p>';
-      } else {
-        items.forEach(function (item, i) {
-          html += '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-            '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-            '<div class="btn-group btn-group-sm ms-2">' +
-            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + sec.key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + sec.key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
-            '</div></div>';
-        });
-      }
-      html += '</div>';
-    });
-    el.innerHTML = html;
+    el.innerHTML = data.map(function (item, i) {
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
+        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
+        '<div class="btn-group btn-group-sm ms-2">' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '</div></div>';
+    }).join('');
 
     el.querySelectorAll('[data-listas-edit]').forEach(function (b) {
       b.addEventListener('click', function () { editListasItem(this.getAttribute('data-listas-edit'), parseInt(this.getAttribute('data-idx'))); });
