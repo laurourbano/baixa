@@ -16,16 +16,23 @@ window.MainApp = window.MainApp || {};
   /* ── Init ──────────────────────────────── */
   function initConsultas() {
     loadStore();
-    var acc = document.getElementById('consultasAccordion');
-    if (!acc) return;
-    acc.addEventListener('shown.bs.collapse', function (e) {
-      var btn = document.querySelector('[data-bs-target="#' + e.target.id + '"]');
-      if (!btn) return;
+    var tabs = document.getElementById('consultasTabs');
+    if (!tabs) return;
+
+    tabs.addEventListener('shown.bs.tab', function (e) {
+      var btn = e.target;
       var section = btn.getAttribute('data-section');
       if (!section || loaded[section]) return;
       loaded[section] = true;
       initSection(section);
     });
+
+    // Carrega a primeira tab automaticamente
+    var first = tabs.querySelector('.nav-link.active');
+    if (first) {
+      var sec = first.getAttribute('data-section');
+      if (sec && !loaded[sec]) { loaded[sec] = true; initSection(sec); }
+    }
   }
 
   function loadStore() {

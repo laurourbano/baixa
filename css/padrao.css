@@ -1654,29 +1654,41 @@ textarea.form-control {
   font-size: 0.81rem;
 }
 
-/* Accordion de Consultas */
-.consultas-accordion .accordion-button {
-  font-size: 0.9rem;
-  padding: 0.75rem 1rem;
-  transition: background 0.2s ease;
+/* Tabs de Consultas */
+.consultas-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
-.consultas-accordion .accordion-button:not(.collapsed) {
-  background: rgba(255, 255, 255, 0.06) !important;
-  box-shadow: none;
+.consultas-tabs .nav-link {
+  color: #888;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: color 0.2s;
 }
 
-.consultas-accordion .accordion-button::after {
-  filter: invert(0.7);
+.consultas-tabs .nav-link:hover {
+  color: #fff;
+  border: none;
 }
 
-.consultas-accordion .accordion-body {
-  padding: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+.consultas-tabs .nav-link.active {
+  color: var(--color-primary, #3b82f6);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--color-primary, #3b82f6);
 }
 
-.consultas-accordion .accordion-collapse {
-  transition: all 0.3s ease;
+.consultas-tabs::-webkit-scrollbar {
+  height: 2px;
+}
+
+.consultas-tabs::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
 }
 
 /* Itens CRUD genéricos */
