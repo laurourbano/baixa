@@ -646,13 +646,21 @@ window.MainApp = window.MainApp || {};
       document.getElementById('piso-calc').addEventListener('click', calcularPiso);
       document.getElementById('piso-save-val').addEventListener('click', savePisoValue);
       document.getElementById('piso-edit-val').addEventListener('click', function () {
-        var current = parseFloat(document.getElementById('piso-base').value) || 0;
-        var novo = prompt('Editar valor do piso base (R$):', current.toFixed(2));
-        if (novo === null) return;
-        var val = parseFloat(novo.replace(',', '.'));
-        if (isNaN(val) || val <= 0) { app.showToast('Valor inválido.', 'warning', 2000); return; }
-        document.getElementById('piso-base').value = val.toFixed(2);
-        calcularPiso();
+        var input = document.getElementById('piso-base');
+        input.removeAttribute('readonly');
+        input.type = 'number';
+        input.step = '0.01';
+        input.focus();
+        input.select();
+        function finish() {
+          input.setAttribute('readonly', 'readonly');
+          input.type = 'text';
+          var val = parseFloat(input.value) || 0;
+          input.value = 'R$ ' + val.toFixed(2);
+          calcularPiso();
+        }
+        input.addEventListener('blur', finish, { once: true });
+        input.addEventListener('keypress', function (e) { if (e.key === 'Enter') { input.blur(); } });
       });
       document.getElementById('piso-add-cidade').addEventListener('click', addPisoCidade);
       document.getElementById('piso-del-cidade').addEventListener('click', delPisoCidade);
@@ -682,22 +690,18 @@ window.MainApp = window.MainApp || {};
     var nome = selectEl.value;
     if (!nome) return;
 
-    var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    // Pega a região diretamente do atributo data-regiao do option selecionado
+    var selectedOption = selectEl.selectedOptions[0];
+    var regiaoNome = selectedOption ? selectedOption.getAttribute('data-regiao') : '';
 
-    // Busca a qual região do piso essa cidade pertence (nos dados carregados)
-    var regiaoNome = '';
-    if (store.piso && store.piso.regioes) {
+    // Fallback: busca nos dados do piso
+    if (!regiaoNome && store.piso && store.piso.regioes) {
+      var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       Object.keys(store.piso.regioes).forEach(function (r) {
         var cids = store.piso.regioes[r].cidades || {};
         if (cids[cidadeKey]) regiaoNome = r;
       });
     }
-    // Se não encontrou, tenta pelo data-regiao (JSON dedicado)
-    if (!regiaoNome) {
-      var selectedOption = selectEl.selectedOptions[0];
-      regiaoNome = selectedOption ? selectedOption.getAttribute('data-regiao') : '';
-    }
-    // Fallback: primeira região disponível
     if (!regiaoNome && store.piso && store.piso.regioes) {
       regiaoNome = Object.keys(store.piso.regioes)[0] || '';
     }
@@ -705,35 +709,28 @@ window.MainApp = window.MainApp || {};
     document.getElementById('piso-regiao-display').value = regiaoNome || '—';
 
     if (regiaoNome && store.piso && store.piso.regioes) {
-      // Cria região se não existir
       if (!store.piso.regioes[regiaoNome]) {
         store.piso.regioes[regiaoNome] = { _actVigente: false, cidades: {} };
       }
       var regData = store.piso.regioes[regiaoNome];
       var cat = document.getElementById('piso-categoria').value;
 
-      if (regData._actVigente) {
-        document.getElementById('piso-acordo-badge').classList.remove('d-none');
-        document.getElementById('piso-acordo-alerta').classList.add('d-none');
-      } else {
-        document.getElementById('piso-acordo-badge').classList.add('d-none');
-        document.getElementById('piso-acordo-alerta').classList.remove('d-none');
-      }
+      document.getElementById('piso-acordo-badge').classList.toggle('d-none', !regData._actVigente);
+      document.getElementById('piso-acordo-alerta').classList.toggle('d-none', regData._actVigente);
 
-      // Busca valor: cidade específica > primeira da região > Curitiba
+      var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       var catValue = null;
-      if (regData.cidades[cidadeKey]) {
+      if (regData.cidades && regData.cidades[cidadeKey]) {
         catValue = regData.cidades[cidadeKey][cat];
       }
-      if (!catValue) {
-        var primeiraCidade = Object.values(regData.cidades)[0];
-        if (primeiraCidade) catValue = primeiraCidade[cat];
+      if (!catValue && regData.cidades) {
+        var primeira = Object.values(regData.cidades)[0];
+        if (primeira) catValue = primeira[cat];
       }
-      if (!catValue && store.piso.regioes["Curitiba e RMC"]) {
-        var curitiba = store.piso.regioes["Curitiba e RMC"].cidades["curitiba"];
-        if (curitiba) catValue = curitiba[cat];
+      if (!catValue && store.piso.regioes["Curitiba e RMC"] && store.piso.regioes["Curitiba e RMC"].cidades["curitiba"]) {
+        catValue = store.piso.regioes["Curitiba e RMC"].cidades["curitiba"][cat];
       }
-      document.getElementById('piso-base').value = (catValue || 0).toFixed(2);
+      document.getElementById('piso-base').value = 'R$ ' + (catValue || 0).toFixed(2);
       renderPisoTabela(regiaoNome, cidadeKey);
     }
 
@@ -941,7 +938,7 @@ window.MainApp = window.MainApp || {};
     var selectEl = document.getElementById('piso-cidade-select');
     var nomeCidade = selectEl ? selectEl.value : '';
     var cat = document.getElementById('piso-categoria').value;
-    var val = parseFloat(document.getElementById('piso-base').value) || 0;
+    var val = parseFloat(document.getElementById('piso-base').value.replace(/[R$\s]/g, '').replace(',', '.')) || 0;
     if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
 
     var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -995,7 +992,8 @@ window.MainApp = window.MainApp || {};
   }
 
   function calcularPiso() {
-    var pisoBase = parseFloat(document.getElementById('piso-base').value) || 0;
+    var raw = document.getElementById('piso-base').value.replace(/[R$\s]/g, '').replace(',', '.');
+    var pisoBase = parseFloat(raw) || 0;
     var horas = parseFloat(document.getElementById('piso-horas').value) || 44;
     horas = Math.min(44, Math.max(1, horas));
     document.getElementById('piso-horas').value = horas;
