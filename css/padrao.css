@@ -1625,3 +1625,123 @@ textarea.form-control {
     grid-template-columns: repeat(6, 1fr);
   }
 }
+
+/* ── Consultas / FAQ ──────────────────── */
+.faq-complemento {
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+/* FAQ paginação */
+#faq-pagination {
+  transition: all 0.2s ease;
+}
+
+#faq-pagination .btn {
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+#faq-pagination .btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Modal FAQ Editor */
+#faqEditorModal .modal-body textarea {
+  resize: vertical;
+  min-height: 60px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.81rem;
+}
+
+/* Tabs de Consultas */
+.consultas-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.consultas-tabs .nav-link {
+  color: #888;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.consultas-tabs .nav-link:hover {
+  color: #fff;
+  border: none;
+}
+
+.consultas-tabs .nav-link.active {
+  color: var(--color-primary, #3b82f6);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--color-primary, #3b82f6);
+}
+
+.consultas-tabs::-webkit-scrollbar {
+  height: 2px;
+}
+
+.consultas-tabs::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+}
+
+/* FAQ Accordion items */
+.faq-accordion .accordion-button {
+  font-size: 0.82rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.faq-accordion .accordion-button::after {
+  filter: invert(0.6);
+}
+
+.faq-accordion .accordion-button:not(.collapsed) {
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none;
+}
+
+.faq-accordion .accordion-body {
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+/* Itens CRUD genéricos */
+.c-item {
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.c-item:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: var(--color-primary, #3b82f6) !important;
+}
+
+.c-item .btn-group .btn {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.35rem !important;
+  line-height: 1;
+  transition: transform 0.1s ease;
+}
+
+.c-item .btn-group .btn:hover {
+  transform: scale(1.15);
+}
+
+.c-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.c-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.c-placeholder {
+  color: #888;
+  font-size: 0.85rem;
+}

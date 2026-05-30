@@ -106,6 +106,8 @@
                 <div class="sidebar-divider"></div>
                 <a href="#" id="nav-ferramentas" class="nav-item" onclick="switchView('ferramentas')"><i
                         class="fas fa-tools"></i> <span>Ferramentas</span></a>
+                <a href="#" id="nav-consultas" class="nav-item" onclick="switchView('consultas')"><i
+                        class="fas fa-book"></i> <span>Consultas</span></a>
                 <div class="sidebar-divider"></div>
                 <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i
                         class="fas fa-cog"></i> <span>Configurações</span></a>
@@ -232,6 +234,34 @@
 
                         <!-- Ferramenta: Nuvem removida (salvamento é feito automaticamente no backend) -->
 
+                    </div>
+                </div>
+
+                <!-- VIEW: CONSULTAS (Base de Conhecimento) -->
+                <div id="view-consultas" class="app-view d-none">
+                    <!-- Tabs de navegação -->
+                    <ul class="nav nav-tabs consultas-tabs mb-3" id="consultasTabs" role="tablist">
+                        <li class="nav-item"><button class="nav-link active" data-section="faq" data-bs-toggle="tab" data-bs-target="#c-tab-faq"><i class="fas fa-question-circle me-1"></i> FAQ</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="normas" data-bs-toggle="tab" data-bs-target="#c-tab-normas"><i class="fas fa-balance-scale me-1"></i> Normas</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="protocolos" data-bs-toggle="tab" data-bs-target="#c-tab-protocolos"><i class="fas fa-list-check me-1"></i> Protocolos</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="piso" data-bs-toggle="tab" data-bs-target="#c-tab-piso"><i class="fas fa-dollar-sign me-1"></i> Piso</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="orientacoes" data-bs-toggle="tab" data-bs-target="#c-tab-orientacoes"><i class="fas fa-clipboard-list me-1"></i> Orientações</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="listas" data-bs-toggle="tab" data-bs-target="#c-tab-listas"><i class="fas fa-layer-group me-1"></i> Listas</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="respostasPadrao" data-bs-toggle="tab" data-bs-target="#c-tab-respostas"><i class="fas fa-reply me-1"></i> Respostas</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="nomesEmpresariais" data-bs-toggle="tab" data-bs-target="#c-tab-nomes"><i class="fas fa-tag me-1"></i> Nomes</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="calcHoras" data-bs-toggle="tab" data-bs-target="#c-tab-horas"><i class="fas fa-clock me-1"></i> Horas</button></li>
+                    </ul>
+                    <!-- Conteúdo das tabs -->
+                    <div class="tab-content" id="consultasTabContent">
+                        <div class="tab-pane fade show active" id="c-tab-faq"><div class="c-placeholder text-center py-3" data-section="faq"><div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-normas"><div class="c-placeholder text-center py-3" data-section="normas"><div class="spinner-border spinner-border-sm text-warning me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-protocolos"><div class="c-placeholder text-center py-3" data-section="protocolos"><div class="spinner-border spinner-border-sm text-success me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-piso"><div class="c-placeholder text-center py-3" data-section="piso"><div class="spinner-border spinner-border-sm text-danger me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-orientacoes"><div class="c-placeholder text-center py-3" data-section="orientacoes"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-listas"><div class="c-placeholder text-center py-3" data-section="listas"><div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-respostas"><div class="c-placeholder text-center py-3" data-section="respostasPadrao"><div class="spinner-border spinner-border-sm text-warning me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-nomes"><div class="c-placeholder text-center py-3" data-section="nomesEmpresariais"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-horas"><div class="c-placeholder text-center py-3" data-section="calcHoras"><div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...</div></div>
                     </div>
                 </div>
 
@@ -521,6 +551,7 @@
     <script defer src="js/weather.js"></script>
     <script defer src="js/fiscal.js"></script>
     <script defer src="js/calculator.js"></script>
+    <script defer src="js/consultas.js"></script>
     <script defer src="js/dashboards.js"></script>
     <script defer src="js/app.js"></script>
     <script defer src="js/main.js"></script>
@@ -550,6 +581,52 @@
                     <div class="d-flex justify-content-end gap-2 mt-3">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" id="dash-save-btn" class="btn btn-sm btn-success px-3">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de Edição/Inclusão de FAQ -->
+    <div class="modal fade" id="faqEditorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header py-2 border-secondary">
+                    <h6 id="faq-editor-title" class="modal-title small fw-bold">Nova Resposta</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <input type="hidden" id="faq-edit-id">
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <label class="x-small text-muted">Tipo</label>
+                            <select id="faq-edit-tipo" class="form-select form-select-sm bg-dark text-light border-secondary">
+                                <option value="PF">PF</option>
+                                <option value="PJ">PJ</option>
+                                <option value="PJ/PF">PJ/PF</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="x-small text-muted">Pergunta</label>
+                            <input type="text" id="faq-edit-pergunta" class="form-control form-control-sm bg-dark text-light border-secondary"
+                                placeholder="Digite a pergunta..." maxlength="300">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="x-small text-muted">Resposta</label>
+                        <textarea id="faq-edit-resposta" class="form-control form-control-sm bg-dark text-light border-secondary"
+                            rows="6" placeholder="Digite a resposta..." maxlength="5000"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="x-small text-muted">Complemento (opcional)</label>
+                        <textarea id="faq-edit-complemento" class="form-control form-control-sm bg-dark text-light border-secondary"
+                            rows="3" placeholder="Informação complementar..." maxlength="3000"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" id="faq-save-btn" class="btn btn-sm btn-success px-3" onclick="MainApp.saveFaqItem()">
+                            <i class="fas fa-save me-1"></i> Salvar
+                        </button>
                     </div>
                 </div>
             </div>
