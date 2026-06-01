@@ -94,12 +94,14 @@ window.MainApp = window.MainApp || {};
     var panelId = 'c-data-' + key;
 
     ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="' + panelId + '-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:260px">' +
           '<option value="">Todos</option>' +
         '</select>' +
-        '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off">' +
+        '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off" style="max-width:200px">' +
         '<button id="' + panelId + '-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="' + panelId + '-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="' + panelId + '-count" class="x-small text-muted align-self-center ms-auto"></span>' +
       '</div>' +
       '<div id="' + panelId + '-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
@@ -107,10 +109,37 @@ window.MainApp = window.MainApp || {};
     var dropdown = document.getElementById(panelId + '-dropdown');
     var filter = document.getElementById(panelId + '-filter');
     var addBtn = document.getElementById(panelId + '-add');
+    var copyBtn = document.getElementById(panelId + '-copyall');
 
     filter.addEventListener('input', function () { applyFilter(key, cfg); });
     dropdown.addEventListener('change', function () { applyFilter(key, cfg); });
     addBtn.addEventListener('click', function () { openEditor(key, null, cfg); });
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var data = store[key] || [];
+        var ddVal = dropdown ? dropdown.value : '';
+        var term = normalize(filter ? filter.value || '' : '');
+        var filtered = data.filter(function (item) {
+          if (ddVal && cfg.dropdownKey && cfg.dropdownKey(item) !== ddVal) return false;
+          if (term && cfg.searchKeys) {
+            var match = false;
+            cfg.searchKeys.forEach(function (k) { if (normalize(item[k] || '').indexOf(term) > -1) match = true; });
+            if (!match) return false;
+          }
+          return true;
+        });
+        if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+        var text = filtered.map(function (item) {
+          if (cfg.copyFormat) return cfg.copyFormat(item);
+          // Formato padrão: concatena valores de searchKeys
+          return (cfg.searchKeys || Object.keys(item)).map(function (k) {
+            return item[k] || '';
+          }).filter(Boolean).join(' — ');
+        }).join('\n');
+        copyToClipboard(text);
+        app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
+      });
+    }
 
     // Carrega dados
     loadSectionData(key, jsonUrl, cfg.defaultItem, function (data) {
@@ -189,9 +218,23 @@ window.MainApp = window.MainApp || {};
       listEl.innerHTML = cfg.renderList(filtered, key);
       wireCrudButtons(listEl, key, cfg);
     }
+
+    var countEl = document.getElementById(panelId + '-count');
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
   }
 
   function wireCrudButtons(container, key, cfg) {
+    container.querySelectorAll('[data-c-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var data = store[key] || [];
+        var id = this.getAttribute('data-c-copy');
+        var item = data.find(function (x) { return x._id === id; });
+        if (!item) return;
+        var text = cfg.copyFormat ? cfg.copyFormat(item) : JSON.stringify(item);
+        copyToClipboard(text);
+        app.showToast('Copiado!', 'success', 1500);
+      });
+    });
     container.querySelectorAll('[data-c-edit]').forEach(function (btn) {
       btn.addEventListener('click', function () { openEditor(key, this.getAttribute('data-c-edit'), cfg); });
     });
@@ -333,6 +376,7 @@ window.MainApp = window.MainApp || {};
     itemLabel: 'Norma',
     dropdownKey: function (item) { return item.orgao; },
     searchKeys: ['norma', 'assunto', 'orgao'],
+    copyFormat: function (item) { return item.norma + ' (' + item.orgao + '): ' + item.assunto + (item.link ? ' — ' + item.link : ''); },
     fields: {
       tipo:       { key: 'orgao', options: ['ANVISA','CFF','CRF','STJ','CFQ','PLANALTO','CURITIBA','SESA'] },
       pergunta:   { key: 'norma', label: 'Nome da Norma' },
@@ -347,6 +391,7 @@ window.MainApp = window.MainApp || {};
           '<div class="x-small text-muted">' + escapeHtml(n.assunto) + '</div></div>' +
           '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
           '<span class="badge bg-secondary me-1">' + escapeHtml(n.orgao) + '</span>' +
+          '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-c-copy="' + n._id + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + n._id + '" title="Editar"><i class="fas fa-edit x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + n._id + '" title="Excluir"><i class="fas fa-trash x-small"></i></button>' +
           '</div></div></div>';
@@ -356,8 +401,9 @@ window.MainApp = window.MainApp || {};
 
   var cfgProtocolos = {
     itemLabel: 'Protocolo',
-    dropdownKey: function (item) { return item.protocolo; },
+    dropdownKey: function (item) { return item.estabelecimento; },
     searchKeys: ['protocolo', 'estabelecimento', 'status'],
+    copyFormat: function (item) { return item.protocolo + ' — ' + item.estabelecimento + (item.status ? ' [' + item.status + ']' : ''); },
     fields: {
       tipo:       { key: 'estabelecimento', options: [] }, // populado dinamicamente
       pergunta:   { key: 'protocolo', label: 'Nome do Protocolo' },
@@ -372,6 +418,7 @@ window.MainApp = window.MainApp || {};
           '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(p.protocolo) + '</div>' +
           '<div class="x-small text-muted">' + escapeHtml(p.estabelecimento) + '</div></div>' +
           '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' + badge +
+          '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-c-copy="' + p._id + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + p._id + '" title="Editar"><i class="fas fa-edit x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + p._id + '" title="Excluir"><i class="fas fa-trash x-small"></i></button>' +
           '</div></div></div>';
@@ -629,6 +676,7 @@ window.MainApp = window.MainApp || {};
         '<span>Piso Proporcional: <b id="piso-prop" class="text-success">—</b></span>' +
         '<span class="ms-3">Valor/Hora: <b id="piso-hora" class="text-info">—</b></span>' +
         '<span class="ms-3">Ref. 30h: <b id="piso-30h" class="text-warning">—</b></span>' +
+        '<button id="piso-copy-result" class="btn btn-sm btn-outline-info ms-2 flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
       '</div>' +
       '<div id="piso-tabela" class="c-list" style="max-height:250px;overflow-y:auto"></div>';
 
@@ -719,6 +767,21 @@ window.MainApp = window.MainApp || {};
 
       // Se já tem valor, dispara
       if (selectEl.value) onCidadeSelectChange();
+
+      // Botão copiar resultado
+      document.getElementById('piso-copy-result').addEventListener('click', function () {
+        var prop = document.getElementById('piso-prop').textContent;
+        var hora = document.getElementById('piso-hora').textContent;
+        var ref30 = document.getElementById('piso-30h').textContent;
+        var cidade = document.getElementById('piso-cidade-select').value || '';
+        var cat = document.getElementById('piso-categoria').value;
+        var catLabel = document.getElementById('piso-categoria').selectedOptions[0].textContent;
+        var pisoBase = document.getElementById('piso-base').value;
+        var text = 'Cidade: ' + cidade + '\nCategoria: ' + catLabel + '\nPiso Base: ' + pisoBase +
+          '\nPiso Proporcional: ' + prop + '\nValor/Hora: ' + hora + '\nRef. 30h: ' + ref30;
+        copyToClipboard(text);
+        app.showToast('Resultado copiado!', 'success', 1500);
+      });
     }
   }
 
@@ -1067,16 +1130,29 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="orient-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
           '<option value="documentos">Documentos</option><option value="situacoes">Situações Específicas</option>' +
           '<option value="checklist">Checklist (SAGICON/GED)</option></select>' +
+        '<input type="text" id="orient-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar..." autocomplete="off" style="max-width:200px">' +
         '<button id="orient-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="orient-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="orient-count" class="x-small text-muted align-self-center ms-auto"></span>' +
       '</div>' +
       '<div id="orient-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
     document.getElementById('orient-dropdown').addEventListener('change', renderOrientacoes);
+    document.getElementById('orient-filter').addEventListener('input', renderOrientacoes);
     document.getElementById('orient-add').addEventListener('click', addOrientacaoItem);
+    document.getElementById('orient-copyall').addEventListener('click', function () {
+      var key = document.getElementById('orient-dropdown').value;
+      var data = (store.orientacoes || {})[key] || [];
+      var term = normalize(document.getElementById('orient-filter').value || '');
+      var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+      if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+      copyToClipboard(filtered.join('\n'));
+      app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
+    });
 
     loadSectionDataGeneric('orientacoes', 'assets/orientacoes.json', function (data) {
       store.orientacoes = data;
@@ -1101,18 +1177,33 @@ window.MainApp = window.MainApp || {};
     var key = document.getElementById('orient-dropdown').value;
     var data = (store.orientacoes || {})[key] || [];
     var el = document.getElementById('orient-list');
+    var countEl = document.getElementById('orient-count');
+    var term = normalize((document.getElementById('orient-filter') || {}).value || '');
     if (!el) return;
-    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
 
-    el.innerHTML = data.map(function (item, i) {
+    var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
+
+    if (!filtered.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = filtered.map(function (item, i) {
+      var origIdx = data.indexOf(item);
       return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
         '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
         '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-orient-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
         '</div></div>';
     }).join('');
 
+    el.querySelectorAll('[data-orient-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-orient-copy'));
+        var txt = data[idx];
+        if (txt) { copyToClipboard(txt); app.showToast('Item copiado!', 'success', 1500); }
+      });
+    });
     el.querySelectorAll('[data-orient-edit]').forEach(function (b) {
       b.addEventListener('click', function () { editOrientacaoItem(this.getAttribute('data-orient-edit'), parseInt(this.getAttribute('data-idx'))); });
     });
@@ -1376,16 +1467,29 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="listas-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px">' +
           '<option value="documentos">Documentos</option><option value="tiposEstabelecimento">Tipos de Estabelecimento</option>' +
           '<option value="respostasPadrao">Respostas Padrão</option><option value="prazosAssistencia">Prazos e Assistência</option></select>' +
+        '<input type="text" id="listas-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar..." autocomplete="off" style="max-width:200px">' +
         '<button id="listas-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="listas-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="listas-count" class="x-small text-muted align-self-center ms-auto"></span>' +
       '</div>' +
       '<div id="listas-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
     document.getElementById('listas-dropdown').addEventListener('change', renderListas);
+    document.getElementById('listas-filter').addEventListener('input', renderListas);
     document.getElementById('listas-add').addEventListener('click', addListasItem);
+    document.getElementById('listas-copyall').addEventListener('click', function () {
+      var key = document.getElementById('listas-dropdown').value;
+      var data = (store.listas || {})[key] || [];
+      var term = normalize(document.getElementById('listas-filter').value || '');
+      var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+      if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+      copyToClipboard(filtered.join('\n'));
+      app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
+    });
 
     loadSectionDataGeneric('listas', 'assets/listas.json', function (data) {
       store.listas = data;
@@ -1410,18 +1514,33 @@ window.MainApp = window.MainApp || {};
     var key = document.getElementById('listas-dropdown').value;
     var data = (store.listas || {})[key] || [];
     var el = document.getElementById('listas-list');
+    var countEl = document.getElementById('listas-count');
+    var term = normalize((document.getElementById('listas-filter') || {}).value || '');
     if (!el) return;
-    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
 
-    el.innerHTML = data.map(function (item, i) {
+    var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
+
+    if (!filtered.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = filtered.map(function (item, i) {
+      var origIdx = data.indexOf(item);
       return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
         '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
         '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-listas-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
         '</div></div>';
     }).join('');
 
+    el.querySelectorAll('[data-listas-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-listas-copy'));
+        var txt = data[idx];
+        if (txt) { copyToClipboard(txt); app.showToast('Item copiado!', 'success', 1500); }
+      });
+    });
     el.querySelectorAll('[data-listas-edit]').forEach(function (b) {
       b.addEventListener('click', function () { editListasItem(this.getAttribute('data-listas-edit'), parseInt(this.getAttribute('data-idx'))); });
     });
@@ -1460,10 +1579,12 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="rp-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px"></select>' +
+        '<input type="text" id="rp-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Filtrar..." autocomplete="off" style="max-width:180px">' +
         '<button id="rp-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
-        '<button id="rp-copy" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar selecionada</button>' +
+        '<button id="rp-edit" class="btn btn-sm btn-outline-warning flex-shrink-0"><i class="fas fa-edit me-1"></i> Editar</button>' +
+        '<button id="rp-copy" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
       '</div>' +
       '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
 
@@ -1479,6 +1600,7 @@ window.MainApp = window.MainApp || {};
       renderRespostasPadrao();
     });
 
+    document.getElementById('rp-filter').addEventListener('input', renderRespostasPadrao);
     document.getElementById('rp-dropdown').addEventListener('change', function () {
       var key = this.value;
       var items = store.respostasPadrao || {};
@@ -1493,7 +1615,19 @@ window.MainApp = window.MainApp || {};
       store.respostasPadrao[nome.trim()] = texto || '';
       saveStore();
       renderRespostasPadrao();
+      document.getElementById('rp-dropdown').value = nome.trim();
+      document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
       app.showToast('Resposta adicionada!', 'success', 2000);
+    });
+    document.getElementById('rp-edit').addEventListener('click', function () {
+      var key = document.getElementById('rp-dropdown').value;
+      if (!key) { app.showToast('Selecione uma resposta primeiro.', 'warning', 2000); return; }
+      var texto = prompt('Editar texto da resposta "' + key + '":', (store.respostasPadrao || {})[key] || '');
+      if (texto === null) return;
+      store.respostasPadrao[key] = texto || '';
+      saveStore();
+      document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+      app.showToast('Resposta atualizada!', 'success', 2000);
     });
     document.getElementById('rp-copy').addEventListener('click', function () {
       var key = document.getElementById('rp-dropdown').value;
@@ -1508,9 +1642,11 @@ window.MainApp = window.MainApp || {};
     var dd = document.getElementById('rp-dropdown');
     if (!dd) return;
     var items = store.respostasPadrao || {};
-    var keys = Object.keys(items).sort();
+    var term = normalize((document.getElementById('rp-filter') || {}).value || '');
+    var keys = Object.keys(items).filter(function (k) { return !term || normalize(k).indexOf(term) > -1; }).sort();
     if (!keys.length) {
-      dd.innerHTML = '<option value="">Nenhuma resposta cadastrada</option>';
+      dd.innerHTML = '<option value="">' + (term ? 'Nenhum resultado' : 'Nenhuma resposta cadastrada') + '</option>';
+      document.getElementById('rp-preview').innerHTML = '<span class="text-muted">Nenhuma resposta encontrada.</span>';
       return;
     }
     dd.innerHTML = '<option value="">Selecione...</option>' + keys.map(function (k) {
@@ -1547,8 +1683,13 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
-      '<div id="ne-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>' +
-      '<button id="ne-add" class="btn btn-sm btn-success mt-2"><i class="fas fa-plus me-1"></i> Adicionar</button>';
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
+        '<input type="text" id="ne-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar..." autocomplete="off" style="max-width:250px">' +
+        '<button id="ne-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus me-1"></i> Adicionar</button>' +
+        '<button id="ne-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="ne-count" class="x-small text-muted align-self-center ms-auto"></span>' +
+      '</div>' +
+      '<div id="ne-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
     loadSectionDataGeneric('nomesEmpresariais', 'assets/nomes-empresariais.json', function (data) {
       store.nomesEmpresariais = data;
@@ -1556,6 +1697,7 @@ window.MainApp = window.MainApp || {};
       renderNomesEmpresariais();
     });
 
+    document.getElementById('ne-filter').addEventListener('input', renderNomesEmpresariais);
     document.getElementById('ne-add').addEventListener('click', function () {
       var texto = prompt('Novo padrão de nome empresarial:');
       if (!texto || !texto.trim()) return;
@@ -1565,23 +1707,45 @@ window.MainApp = window.MainApp || {};
       renderNomesEmpresariais();
       app.showToast('Adicionado!', 'success', 2000);
     });
+    document.getElementById('ne-copyall').addEventListener('click', function () {
+      var data = store.nomesEmpresariais || [];
+      var term = normalize(document.getElementById('ne-filter').value || '');
+      var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+      if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+      copyToClipboard(filtered.join('\n'));
+      app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
+    });
   }
 
   function renderNomesEmpresariais() {
     var el = document.getElementById('ne-list');
+    var countEl = document.getElementById('ne-count');
     if (!el) return;
     var data = store.nomesEmpresariais || [];
-    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+    var term = normalize((document.getElementById('ne-filter') || {}).value || '');
+    var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
 
-    el.innerHTML = data.map(function (item, i) {
+    if (!filtered.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = filtered.map(function (item, i) {
+      var origIdx = data.indexOf(item);
       return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
         '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
         '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-ne-edit="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-ne-del="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-ne-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-ne-edit="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-ne-del="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
         '</div></div>';
     }).join('');
 
+    el.querySelectorAll('[data-ne-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-ne-copy'));
+        var txt = data[idx];
+        if (txt) { copyToClipboard(txt); app.showToast('Item copiado!', 'success', 1500); }
+      });
+    });
     el.querySelectorAll('[data-ne-edit]').forEach(function (b) {
       b.addEventListener('click', function () {
         var idx = parseInt(this.getAttribute('data-ne-edit'));
@@ -1614,17 +1778,32 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="calcHoras"]');
     if (!ph) return;
 
+    // Carrega instruções do JSON (calc-horas.json)
+    var instrucoesHtml = '<p class="x-small text-muted mb-2">Preencha os horários de cada turno por dia da semana (ex: 08:00-12:00).</p>';
+    fetch('assets/calc-horas.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.instrucoes && data.instrucoes.length) {
+          instrucoesHtml = '<div class="x-small text-muted mb-2 p-2 bg-dark bg-opacity-25 rounded border border-secondary">' +
+            '<i class="fas fa-info-circle me-1 text-info"></i><b>Instruções:</b><br>' +
+            data.instrucoes.map(function (inst) { return escapeHtml(inst); }).join('<br>') + '</div>';
+        }
+        var infoEl = document.getElementById('calc-horas-info');
+        if (infoEl) infoEl.innerHTML = instrucoesHtml;
+      })
+      .catch(function () {});
+
     ph.innerHTML =
-      '<p class="x-small text-muted mb-2">Preencha os horários de cada turno por dia da semana.</p>' +
+      '<div id="calc-horas-info">' + instrucoesHtml + '</div>' +
+      '<div class="d-flex gap-2 mb-2">' +
+        '<button id="calc-horas-copy" class="btn btn-sm btn-outline-info"><i class="fas fa-copy me-1"></i> Copiar resultados</button>' +
+      '</div>' +
       '<div class="table-responsive mb-2">' +
         '<table class="table table-sm table-dark table-borderless x-small" id="calc-horas-tabela">' +
           '<thead><tr><th>Dia</th><th>1º Turno (início—fim)</th><th>2º Turno (início—fim)</th><th>Intervalo (min)</th><th>Total</th></tr></thead>' +
           '<tbody id="calc-horas-body"></tbody>' +
           '<tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td colspan="3"></td><td id="calc-horas-total" class="text-success">0h</td></tr></tfoot>' +
         '</table>' +
-      '</div>' +
-      '<div class="x-small text-muted">' +
-        '<p>Preencha os campos de horário (ex: 08:00 - 12:00). O cálculo é automático.</p>' +
       '</div>';
 
     var dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
@@ -1643,6 +1822,22 @@ window.MainApp = window.MainApp || {};
 
     document.querySelectorAll('.calc-hora-input, .calc-int-input').forEach(function (input) {
       input.addEventListener('input', calcularHorasTotal);
+    });
+
+    // Botão copiar resultados
+    document.getElementById('calc-horas-copy').addEventListener('click', function () {
+      var dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+      var lines = [];
+      dias.forEach(function (dia) {
+        var t1 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="1"]');
+        var t2 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="2"]');
+        var totalEl = document.getElementById('calc-total-' + dia);
+        lines.push(dia + ': T1=' + (t1 ? t1.value || '-' : '-') + ' T2=' + (t2 ? t2.value || '-' : '-') + ' Total=' + (totalEl ? totalEl.textContent : '-'));
+      });
+      var totalSem = document.getElementById('calc-horas-total');
+      lines.push('TOTAL SEMANA: ' + (totalSem ? totalSem.textContent : '-'));
+      copyToClipboard(lines.join('\n'));
+      app.showToast('Resultados copiados!', 'success', 2000);
     });
   }
 
@@ -1718,6 +1913,7 @@ window.MainApp = window.MainApp || {};
           '<span>Resultado (Piso × Horas ÷ 44): <b id="piso-ref-resultado" class="text-success">—</b></span>' +
           '<span class="ms-3">Valor/Hora (Piso ÷ 220): <b id="piso-ref-valor-hora" class="text-info">—</b></span>' +
           '<span class="ms-3">Horas equivalentes: <b id="piso-ref-horas-equiv" class="text-warning">—</b></span>' +
+          '<button id="piso-ref-copy-result" class="btn btn-sm btn-outline-info ms-2 flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
         '</div>' +
         '<div class="x-small text-muted">' +
           '<p><i class="fas fa-info-circle me-1"></i> Use esta calculadora para converter pisos de ACT (Acordo Coletivo de Trabalho) entre jornadas diferentes.</p>' +
@@ -1752,6 +1948,18 @@ window.MainApp = window.MainApp || {};
         store.pisoRef = { valorReferencia: val, horasReferencia: hrs };
         saveStore();
         app.showToast('Valores salvos!', 'success');
+      });
+
+      document.getElementById('piso-ref-copy-result').addEventListener('click', function () {
+        var resultado = document.getElementById('piso-ref-resultado').textContent;
+        var valorHora = document.getElementById('piso-ref-valor-hora').textContent;
+        var horasEquiv = document.getElementById('piso-ref-horas-equiv').textContent;
+        var piso = document.getElementById('piso-ref-valor').value;
+        var horas = document.getElementById('piso-ref-horas').value;
+        var text = 'Piso Referência: R$ ' + piso + '\nHoras Ref.: ' + horas + 'h\n' +
+          'Resultado: ' + resultado + '\nValor/Hora: ' + valorHora + '\nHoras Equivalentes: ' + horasEquiv;
+        copyToClipboard(text);
+        app.showToast('Resultado copiado!', 'success', 1500);
       });
 
       calc();
