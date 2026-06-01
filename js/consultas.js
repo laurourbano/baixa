@@ -1694,6 +1694,9 @@ window.MainApp = window.MainApp || {};
       store.respostasPadrao = data;
       saveStore();
       renderRespostasPadrao();
+
+      // Importa respostas como cards no dashboard Ingresso PJ se vazio
+      importarRespostasComoCards(data);
     });
 
     document.getElementById('rp-filter').addEventListener('input', renderRespostasPadrao);
@@ -2366,6 +2369,38 @@ window.MainApp = window.MainApp || {};
     if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(function () {}); return; }
     var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+
+  function importarRespostasComoCards(respostas) {
+    if (!respostas || !Object.keys(respostas).length) return;
+    var dash = (app.__state && app.__state.dashboards || []).find(function (d) { return d.id === 'dash-ingresso-pj'; });
+    if (!dash) return;
+    // Só importa se o dashboard estiver vazio
+    if (dash.customs && dash.customs.length > 0) return;
+    if (!dash.customs) dash.customs = [];
+    if (!dash.order) dash.order = [];
+    var keys = Object.keys(respostas).sort();
+    var imported = 0;
+    keys.forEach(function (k) {
+      var id = 'rp-' + k.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      // Evita duplicatas
+      if (dash.customs.some(function (c) { return c.id === id; })) return;
+      dash.customs.push({
+        id: id,
+        title: k,
+        content: respostas[k],
+        color: 'info',
+        type: 'copy',
+        showDate: true
+      });
+      dash.order.push(id);
+      imported++;
+    });
+    if (imported > 0) {
+      app._save();
+      app.notifyChange();
+      app.showToast(imported + ' respostas importadas para Ingresso PJ!', 'success', 3000);
+    }
   }
 
   /* ── Exports ──────────────────────────── */
