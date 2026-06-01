@@ -80,6 +80,8 @@ window.MainApp = window.MainApp || {};
       case 'respostasPadrao': initRespostasPadrao(); break;
       case 'nomesEmpresariais': initNomesEmpresariais(); break;
       case 'calcHoras':    initCalcHoras(); break;
+      case 'pisoRef':     initPisoRef(); break;
+      case 'registros':   initRegistros(); break;
     }
   }
 
@@ -1684,6 +1686,263 @@ window.MainApp = window.MainApp || {};
     var h = parseInt(parts[0]) || 0;
     var m = parseInt(parts[1]) || 0;
     return h + m / 60;
+  }
+
+  /* ═══════════════════════════════════════════
+     PISO REFERÊNCIA (ACT)
+     Calculadora de piso por referência de ACT
+     ═══════════════════════════════════════ */
+
+  function initPisoRef() {
+    var ph = document.querySelector('.c-placeholder[data-section="pisoRef"]');
+    if (!ph) return;
+
+    loadPisoRefData(function (data) {
+      var d = data || {};
+      ph.innerHTML =
+        '<div class="row g-2 mb-3">' +
+          '<div class="col-md-3"><label class="x-small text-muted">Piso Referência (R$)</label>' +
+            '<input id="piso-ref-valor" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary" value="' + (d.valorReferencia || '4483') + '"></div>' +
+          '<div class="col-md-3"><label class="x-small text-muted">Horas Referência</label>' +
+            '<input id="piso-ref-horas" type="number" step="0.5" class="form-control form-control-sm bg-dark text-light border-secondary" value="' + (d.horasReferencia || '30') + '"></div>' +
+          '<div class="col-md-3"><label class="x-small text-muted">Horas Semana (padrão 44)</label>' +
+            '<input id="piso-ref-hrs-semana" type="number" class="form-control form-control-sm bg-dark text-light border-secondary" value="44" min="1" max="44"></div>' +
+          '<div class="col-md-3 d-flex align-items-end">' +
+            '<button id="piso-ref-calc" class="btn btn-sm btn-danger w-100"><i class="fas fa-calculator me-1"></i> Calcular</button></div>' +
+        '</div>' +
+        '<div class="row g-2 mb-2">' +
+          '<div class="col-md-6"><label class="x-small text-muted">Valor em Carteira (R$) — para calcular horas</label>' +
+            '<input id="piso-ref-carteira" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: 3056.59"></div>' +
+        '</div>' +
+        '<div class="d-flex flex-wrap gap-3 p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2">' +
+          '<span>Resultado (Piso × Horas ÷ 44): <b id="piso-ref-resultado" class="text-success">—</b></span>' +
+          '<span class="ms-3">Valor/Hora (Piso ÷ 220): <b id="piso-ref-valor-hora" class="text-info">—</b></span>' +
+          '<span class="ms-3">Horas equivalentes: <b id="piso-ref-horas-equiv" class="text-warning">—</b></span>' +
+        '</div>' +
+        '<div class="x-small text-muted">' +
+          '<p><i class="fas fa-info-circle me-1"></i> Use esta calculadora para converter pisos de ACT (Acordo Coletivo de Trabalho) entre jornadas diferentes.</p>' +
+          '<p>Fórmulas: <code>Resultado = Piso × Horas ÷ 44</code> | <code>Valor/Hora = Piso ÷ 220</code> | <code>Horas Equiv = Carteira × 44 ÷ Piso</code></p>' +
+        '</div>' +
+        '<button id="piso-ref-save" class="btn btn-sm btn-outline-success mt-2"><i class="fas fa-save me-1"></i> Salvar valores</button>';
+
+      function calc() {
+        var piso = parseFloat(document.getElementById('piso-ref-valor').value) || 0;
+        var horas = parseFloat(document.getElementById('piso-ref-horas').value) || 0;
+        var hrsSemana = parseFloat(document.getElementById('piso-ref-hrs-semana').value) || 44;
+        var carteira = parseFloat(document.getElementById('piso-ref-carteira').value) || 0;
+
+        var resultado = piso * horas / hrsSemana;
+        var valorHora = piso / 220;
+        var horasEquiv = carteira > 0 ? (carteira * hrsSemana / piso) : 0;
+
+        document.getElementById('piso-ref-resultado').textContent = 'R$ ' + resultado.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        document.getElementById('piso-ref-valor-hora').textContent = 'R$ ' + valorHora.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        document.getElementById('piso-ref-horas-equiv').textContent = horasEquiv > 0 ? horasEquiv.toFixed(1) + 'h' : '—';
+      }
+
+      document.getElementById('piso-ref-calc').addEventListener('click', calc);
+      document.getElementById('piso-ref-valor').addEventListener('input', calc);
+      document.getElementById('piso-ref-horas').addEventListener('input', calc);
+      document.getElementById('piso-ref-hrs-semana').addEventListener('input', calc);
+      document.getElementById('piso-ref-carteira').addEventListener('input', calc);
+
+      document.getElementById('piso-ref-save').addEventListener('click', function () {
+        var val = parseFloat(document.getElementById('piso-ref-valor').value) || 0;
+        var hrs = parseFloat(document.getElementById('piso-ref-horas').value) || 0;
+        store.pisoRef = { valorReferencia: val, horasReferencia: hrs };
+        saveStore();
+        app.showToast('Valores salvos!', 'success');
+      });
+
+      calc();
+    });
+  }
+
+  function loadPisoRefData(cb) {
+    if (store.pisoRef) return cb(store.pisoRef);
+    fetch('assets/piso-ref.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { store.pisoRef = data; saveStore(); cb(data); })
+      .catch(function () { cb(store.pisoRef || {}); });
+  }
+
+  /* ═══════════════════════════════════════════
+     REGISTROS (Protocolos Detalhados — 526+ registros)
+     Tabela pesquisável e filtrável
+     ═══════════════════════════════════════ */
+
+  function initRegistros() {
+    var ph = document.querySelector('.c-placeholder[data-section="registros"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
+        '<input type="text" id="reg-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar em todos os campos..." autocomplete="off" style="max-width:300px">' +
+        '<select id="reg-situacao" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:200px">' +
+          '<option value="">Todas situações</option>' +
+          '<option value="Finalizado">Finalizado</option>' +
+          '<option value="Pendencia documental">Pendência documental</option>' +
+          '<option value="Indeferido Sem Documento">Indeferido Sem Documento</option>' +
+          '<option value="Arquivado">Arquivado</option>' +
+          '<option value="Indeferido Sem Resposta">Indeferido Sem Resposta</option>' +
+          '<option value="Aguarda">Aguarda</option>' +
+        '</select>' +
+        '<select id="reg-ocorrencia" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:280px">' +
+          '<option value="">Todas ocorrências</option>' +
+        '</select>' +
+        '<span id="reg-count" class="x-small text-muted align-self-center ms-auto"></span>' +
+        '<button id="reg-copy-all" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar visíveis</button>' +
+        '<button id="reg-export" class="btn btn-sm btn-outline-success flex-shrink-0"><i class="fas fa-file-excel me-1"></i> Excel</button>' +
+      '</div>' +
+      '<div class="table-responsive" style="max-height:500px;overflow-y:auto">' +
+        '<table class="table table-sm table-dark table-hover x-small mb-0" id="reg-tabela">' +
+          '<thead class="sticky-top bg-dark">' +
+            '<tr>' +
+              '<th style="min-width:90px">Situação</th>' +
+              '<th style="min-width:80px">Nº Prot.</th>' +
+              '<th style="min-width:85px">Data</th>' +
+              '<th style="min-width:160px">Tipo Estab.</th>' +
+              '<th style="min-width:70px">Insc.</th>' +
+              '<th style="min-width:180px">Nome Estab.</th>' +
+              '<th style="min-width:140px">Ocorrência</th>' +
+              '<th style="min-width:200px">Obs</th>' +
+              '<th style="min-width:40px"></th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody id="reg-body"><tr><td colspan="9" class="text-center text-muted">Carregando...</td></tr></tbody>' +
+        '</table>' +
+      '</div>';
+
+    loadRegistrosData(function (data) {
+      store.registros = data;
+      saveStore();
+
+      // Popula dropdown de ocorrências
+      var ocorrencias = {};
+      data.forEach(function (r) {
+        var o = (r.ocorrencia || '').trim();
+        if (o) ocorrencias[o] = (ocorrencias[o] || 0) + 1;
+      });
+      var ocorrSelect = document.getElementById('reg-ocorrencia');
+      Object.keys(ocorrencias).sort().forEach(function (o) {
+        var opt = document.createElement('option');
+        opt.value = o;
+        opt.textContent = o + ' (' + ocorrencias[o] + ')';
+        ocorrSelect.appendChild(opt);
+      });
+
+      aplicarFiltroRegistros();
+
+      document.getElementById('reg-filter').addEventListener('input', aplicarFiltroRegistros);
+      document.getElementById('reg-situacao').addEventListener('change', aplicarFiltroRegistros);
+      document.getElementById('reg-ocorrencia').addEventListener('change', aplicarFiltroRegistros);
+
+      document.getElementById('reg-copy-all').addEventListener('click', function () {
+        var rows = document.querySelectorAll('#reg-body tr:not(.d-none)');
+        var text = Array.from(rows).map(function (row) {
+          var cells = row.querySelectorAll('td');
+          return [cells[0]?.textContent, cells[1]?.textContent, cells[2]?.textContent,
+                  cells[3]?.textContent, cells[4]?.textContent, cells[5]?.textContent,
+                  cells[6]?.textContent, cells[7]?.textContent].join(' | ');
+        }).join('\n');
+        if (!text.trim()) { app.showToast('Nenhum registro para copiar.', 'warning', 2000); return; }
+        copyToClipboard(text);
+        app.showToast(rows.length + ' registro(s) copiado(s)!', 'success');
+      });
+
+      document.getElementById('reg-export').addEventListener('click', function () {
+        var rows = document.querySelectorAll('#reg-body tr:not(.d-none)');
+        if (!rows.length) { app.showToast('Nenhum registro para exportar.', 'warning', 2000); return; }
+        var data = Array.from(rows).map(function (row) {
+          var cells = row.querySelectorAll('td');
+          return {
+            Situacao: cells[0]?.textContent || '',
+            NumProtocolo: cells[1]?.textContent || '',
+            Data: cells[2]?.textContent || '',
+            TipoEstabelecimento: cells[3]?.textContent || '',
+            Inscricao: cells[4]?.textContent || '',
+            NomeEstabelecimento: cells[5]?.textContent || '',
+            Ocorrencia: cells[6]?.textContent || '',
+            Obs: cells[7]?.textContent || ''
+          };
+        });
+        // Exporta como CSV (simples, sem dependência extra)
+        var csv = 'Situacao;NumProtocolo;Data;TipoEstabelecimento;Inscricao;NomeEstabelecimento;Ocorrencia;Obs\n' +
+          data.map(function (r) {
+            return [r.Situacao, r.NumProtocolo, r.Data, r.TipoEstabelecimento,
+                    r.Inscricao, r.NomeEstabelecimento, r.Ocorrencia, r.Obs]
+              .map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(';');
+          }).join('\n');
+        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'protocolos-detalhados.csv';
+        a.click();
+        app.showToast('Exportado com sucesso!', 'success');
+      });
+    });
+  }
+
+  function loadRegistrosData(cb) {
+    if (store.registros && store.registros.length) return cb(store.registros);
+    fetch('assets/protocolos-detalhados.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { store.registros = data; saveStore(); cb(data); })
+      .catch(function () { cb(store.registros || []); });
+  }
+
+  function aplicarFiltroRegistros() {
+    var data = store.registros || [];
+    var filter = normalize(document.getElementById('reg-filter')?.value || '');
+    var situacao = document.getElementById('reg-situacao')?.value || '';
+    var ocorrencia = document.getElementById('reg-ocorrencia')?.value || '';
+    var tbody = document.getElementById('reg-body');
+    var countEl = document.getElementById('reg-count');
+    if (!tbody) return;
+
+    var visible = 0;
+    tbody.innerHTML = data.map(function (r, i) {
+      var situacaoOk = !situacao || (r.situacao || '') === situacao;
+      var ocorrenciaOk = !ocorrencia || (r.ocorrencia || '') === ocorrencia;
+      var text = normalize((r.situacao || '') + ' ' + (r.numProtocolo || '') + ' ' +
+        (r.tipoEstabelecimento || '') + ' ' + (r.inscricao || '') + ' ' +
+        (r.nomeEstabelecimento || '') + ' ' + (r.ocorrencia || '') + ' ' + (r.obs || ''));
+      var filterOk = !filter || text.indexOf(filter) > -1;
+      var hidden = !situacaoOk || !ocorrenciaOk || !filterOk;
+
+      if (!hidden) visible++;
+
+      var statusColor = getStatusColor(r.situacao || '');
+      var dataFormatada = r.data || '';
+
+      return '<tr class="' + (hidden ? 'd-none' : '') + '" data-idx="' + i + '">' +
+        '<td><span class="badge bg-' + statusColor + ' x-small">' + escapeHtml(r.situacao || '') + '</span></td>' +
+        '<td>' + escapeHtml(r.numProtocolo || '—') + '</td>' +
+        '<td class="text-nowrap">' + escapeHtml(dataFormatada) + '</td>' +
+        '<td>' + escapeHtml(r.tipoEstabelecimento || '') + '</td>' +
+        '<td>' + escapeHtml(r.inscricao || '—') + '</td>' +
+        '<td><span title="' + escapeHtml(r.nomeEstabelecimento || '') + '">' + escapeHtml((r.nomeEstabelecimento || '').substring(0, 50) + ((r.nomeEstabelecimento || '').length > 50 ? '...' : '')) + '</span></td>' +
+        '<td>' + escapeHtml(r.ocorrencia || '') + '</td>' +
+        '<td class="text-muted" title="' + escapeHtml(r.obs || '') + '">' + escapeHtml((r.obs || '').substring(0, 60) + ((r.obs || '').length > 60 ? '...' : '')) + '</td>' +
+        '<td><button class="btn btn-sm btn-outline-secondary btn-copy-row" data-idx="' + i + '" title="Copiar"><i class="fas fa-copy"></i></button></td>' +
+        '</tr>';
+    }).join('');
+
+    if (countEl) countEl.textContent = visible + ' de ' + data.length + ' registros';
+
+    // Event listeners para botões de cópia individuais
+    tbody.querySelectorAll('.btn-copy-row').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-idx'));
+        var r = data[idx];
+        if (!r) return;
+        var text = [r.situacao, r.numProtocolo, r.data, r.tipoEstabelecimento,
+                     r.inscricao, r.nomeEstabelecimento, r.ocorrencia, r.obs]
+          .filter(Boolean).join(' | ');
+        copyToClipboard(text);
+        app.showToast('Registro copiado!', 'success', 1500);
+      });
+    });
   }
 
   /* ═══════════════════════════════════════════
