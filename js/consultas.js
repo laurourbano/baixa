@@ -1673,6 +1673,10 @@ window.MainApp = window.MainApp || {};
         store.respostasPadrao = null;
       }
     }
+    // Força recarregar do JSON se cache tiver menos de 5 respostas (provavelmente corrompido)
+    if (store.respostasPadrao && typeof store.respostasPadrao === 'object' && Object.keys(store.respostasPadrao).length < 5) {
+      store.respostasPadrao = null;
+    }
 
     ph.innerHTML =
       '<div class="d-flex gap-2 mb-2 flex-wrap">' +
@@ -2373,7 +2377,10 @@ window.MainApp = window.MainApp || {};
 
   function importarRespostasComoCards(respostas) {
     if (!respostas || !Object.keys(respostas).length) return;
-    var dash = (app.__state && app.__state.dashboards || []).find(function (d) { return d.id === 'dash-ingresso-pj'; });
+    if (Object.keys(respostas).length < 5) return; // cache corrompido, ignora
+    var state = app.__state;
+    if (!state || !state.dashboards) return;
+    var dash = state.dashboards.find(function (d) { return d.id === 'dash-ingresso-pj'; });
     if (!dash) return;
     // Só importa se o dashboard estiver vazio
     if (dash.customs && dash.customs.length > 0) return;
