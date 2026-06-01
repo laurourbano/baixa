@@ -1225,13 +1225,17 @@ window.MainApp = window.MainApp || {};
 
     el.innerHTML = filtered.map(function (item, i) {
       var origIdx = data.indexOf(item);
-      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-orient-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
-        '</div></div>';
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+        '<div class="d-flex justify-content-between align-items-center orient-item-header" style="cursor:pointer" data-orient-expand="' + origIdx + '">' +
+          '<small class="text-light flex-grow-1"><i class="fas fa-chevron-right x-small me-1 text-muted orient-chevron"></i>' + escapeHtml(item) + '</small>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+            '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-orient-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="orient-detail d-none mt-2 p-2 bg-dark bg-opacity-50 rounded border border-info small text-light" style="white-space:pre-wrap">' + escapeHtml(item) + '</div>' +
+      '</div>';
     }).join('');
 
     el.querySelectorAll('[data-orient-copy]').forEach(function (b) {
@@ -1246,6 +1250,26 @@ window.MainApp = window.MainApp || {};
     });
     el.querySelectorAll('[data-orient-del]').forEach(function (b) {
       b.addEventListener('click', function () { deleteOrientacaoItem(this.getAttribute('data-orient-del'), parseInt(this.getAttribute('data-idx'))); });
+    });
+    // Toggle expandir/recolher detalhes do item
+    el.querySelectorAll('[data-orient-expand]').forEach(function (header) {
+      header.addEventListener('click', function (e) {
+        // Não expande se clicou nos botões de ação
+        if (e.target.closest('button')) return;
+        var item = this.closest('.c-item');
+        var detail = item.querySelector('.orient-detail');
+        var chevron = this.querySelector('.orient-chevron');
+        var isHidden = detail.classList.contains('d-none');
+        if (isHidden) {
+          detail.classList.remove('d-none');
+          chevron.classList.remove('fa-chevron-right');
+          chevron.classList.add('fa-chevron-down');
+        } else {
+          detail.classList.add('d-none');
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-right');
+        }
+      });
     });
   }
 
@@ -1562,13 +1586,17 @@ window.MainApp = window.MainApp || {};
 
     el.innerHTML = filtered.map(function (item, i) {
       var origIdx = data.indexOf(item);
-      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-listas-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
-        '</div></div>';
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+        '<div class="d-flex justify-content-between align-items-center listas-item-header" style="cursor:pointer" data-listas-expand="' + origIdx + '">' +
+          '<small class="text-light flex-grow-1"><i class="fas fa-chevron-right x-small me-1 text-muted listas-chevron"></i>' + escapeHtml(item) + '</small>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+            '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-listas-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="listas-detail d-none mt-2 p-2 bg-dark bg-opacity-50 rounded border border-info small text-light" style="white-space:pre-wrap">' + escapeHtml(item) + '</div>' +
+      '</div>';
     }).join('');
 
     el.querySelectorAll('[data-listas-copy]').forEach(function (b) {
@@ -1583,6 +1611,25 @@ window.MainApp = window.MainApp || {};
     });
     el.querySelectorAll('[data-listas-del]').forEach(function (b) {
       b.addEventListener('click', function () { deleteListasItem(this.getAttribute('data-listas-del'), parseInt(this.getAttribute('data-idx'))); });
+    });
+    // Toggle expandir/recolher detalhes do item
+    el.querySelectorAll('[data-listas-expand]').forEach(function (header) {
+      header.addEventListener('click', function (e) {
+        if (e.target.closest('button')) return;
+        var item = this.closest('.c-item');
+        var detail = item.querySelector('.listas-detail');
+        var chevron = this.querySelector('.listas-chevron');
+        var isHidden = detail.classList.contains('d-none');
+        if (isHidden) {
+          detail.classList.remove('d-none');
+          chevron.classList.remove('fa-chevron-right');
+          chevron.classList.add('fa-chevron-down');
+        } else {
+          detail.classList.add('d-none');
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-right');
+        }
+      });
     });
   }
 
