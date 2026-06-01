@@ -271,7 +271,7 @@ window.MainApp = window.MainApp || {};
       calcular();
     });
 
-    // Botão Aplicar: ADICIONA nova linha (não sobrescreve)
+    // Botão Aplicar: preenche 1ª linha se vazia, senão adiciona nova
     document.getElementById('ferr-lote-aplicar').addEventListener('click', function () {
       var entrada = document.getElementById('ferr-lote-entrada').value;
       var saida = document.getElementById('ferr-lote-saida').value;
@@ -280,20 +280,27 @@ window.MainApp = window.MainApp || {};
         var dia = cb.value;
         var container = document.querySelector('.ferr-turnos-container[data-dia="' + dia + '"]');
         if (!container) return;
-        // Expande o dia
         container.classList.remove('d-none');
         var editBtn = document.querySelector('.ferr-edit-dia[data-dia="' + dia + '"]');
         if (editBtn) editBtn.classList.add('active');
-        // Adiciona nova linha (não sobrescreve existente)
-        var count = container.querySelectorAll('.ferr-turno-row').length;
-        var row = document.createElement('div');
-        row.className = 'ferr-turno-row d-flex gap-1 align-items-center mb-1';
-        row.innerHTML =
-          '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-entrada" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60" value="' + entrada + '">' +
-          '<span class="x-small text-muted">às</span>' +
-          '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-saida" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60" value="' + saida + '">' +
-          '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small ferr-rem-turno" title="Remover"><i class="fas fa-times"></i></button>';
-        container.appendChild(row);
+
+        // Se a primeira linha estiver vazia, preenche; senão adiciona nova
+        var firstRow = container.querySelector('.ferr-turno-row');
+        var firstEntrada = firstRow ? firstRow.querySelector('.ferr-entrada') : null;
+        if (firstEntrada && !firstEntrada.value) {
+          firstRow.querySelector('.ferr-entrada').value = entrada;
+          firstRow.querySelector('.ferr-saida').value = saida;
+        } else {
+          var count = container.querySelectorAll('.ferr-turno-row').length;
+          var row = document.createElement('div');
+          row.className = 'ferr-turno-row d-flex gap-1 align-items-center mb-1';
+          row.innerHTML =
+            '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-entrada" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60" value="' + entrada + '">' +
+            '<span class="x-small text-muted">às</span>' +
+            '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-saida" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60" value="' + saida + '">' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small ferr-rem-turno" title="Remover"><i class="fas fa-times"></i></button>';
+          container.appendChild(row);
+        }
       });
       calcular();
     });
