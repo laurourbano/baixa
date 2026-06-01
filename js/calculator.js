@@ -231,7 +231,12 @@ window.MainApp = window.MainApp || {};
         }
         totalSemana += totalDia;
         var totalEl = document.getElementById('ferr-total-' + dia);
-        if (totalEl) totalEl.textContent = formatHoras(totalDia);
+        if (totalEl) {
+          totalEl.textContent = formatHoras(totalDia);
+          // Destaca se ultrapassar 10h no dia
+          totalEl.classList.toggle('text-danger', totalDia > 10);
+          totalEl.classList.toggle('text-info', totalDia <= 10);
+        }
       });
 
       var totalSemEl = document.getElementById('ferr-calc-horas-total');
