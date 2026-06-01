@@ -73,6 +73,13 @@
             if (local) {
               bd.name = local.name;
               bd.icon = local.icon || bd.icon;
+              // Preserva cards e ordenação locais (mais recentes)
+              if (local.customs && local.customs.length > 0) {
+                bd.customs = local.customs;
+                bd.order = local.order || [];
+                bd.edits = local.edits || {};
+                bd.deleted = local.deleted || [];
+              }
             }
           });
 
