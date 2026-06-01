@@ -21,14 +21,25 @@
 const fs = require('fs');
 const path = require('path');
 
-// Dados base de piso (valores de referência — devem ser atualizados
-// com dados reais das CCTs do sindifar-pr.org.br)
+// Tenta carregar valores extraídos da planilha
+let pisoExtraido = null;
+try {
+  pisoExtraido = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'assets', 'piso-extraido.json'), 'utf-8'));
+  console.log('Usando valores extraídos da planilha (piso-extraido.json)');
+} catch (e) {
+  console.log('piso-extraido.json não encontrado, usando valores de referência');
+}
+
+const valoresBase = (pisoExtraido && pisoExtraido.default)
+  ? pisoExtraido.default
+  : { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 };
+
 const regioes = {
   "Curitiba e RMC": {
     _actVigente: true,
     _ultimaCCT: "2025-2026",
     _fonte: "https://sindifar-pr.org.br/negociacoes-coletivas/",
-    valores: { varejista: 4729.62, hospitalar: 4567.00, distribuidora: 4764.00, laboratorios: 3763.08, industrias: 4211.45 }
+    valores: valoresBase
   },
   "Londrina e Norte Central": {
     _actVigente: true,

@@ -413,11 +413,7 @@ window.MainApp = window.MainApp || {};
   }
 
   function updatePageTitle() {
-    var titleEl = document.getElementById('page-title');
-    if (titleEl) {
-      var dash = app.getActiveDash();
-      titleEl.textContent = dash ? dash.name : 'Parecer';
-    }
+    // O título da página é estático ("Parecer"), não deve ser alterado dinamicamente
     renderDashboardToolbar();
   }
 

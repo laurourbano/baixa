@@ -33,8 +33,7 @@ window.MainApp = window.MainApp || {};
       var d = fiscalData.find(function (x) { return x.cidade === select.value; });
       res.innerHTML = d
         ? '<div class="d-flex flex-column gap-1">' +
-          '<div class="d-flex justify-content-between"><span>Código: <b class="text-info">' + d.code + '</b></span><span>Região: <b class="text-warning">' + d.region + '</b></span></div>' +
-          '<div class="text-center mt-1 border-top border-secondary border-opacity-25 pt-1">Fiscal: <b class="text-success">' + d.fiscal + '</b></div></div>'
+          '<div class="d-flex justify-content-between"><span>Código: <b class="text-info">' + d.code + '</b></span><span>Região: <b class="text-warning">' + d.region + '</b></span></div></div>'
         : 'Aguardando seleção...';
     };
 

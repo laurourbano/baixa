@@ -31,8 +31,9 @@
     "Metadados a serem preenchidos no GED:",
     "Ano do documento.",
     "Número do protocolo.",
-    "PAE e PAP (poderão ser inseridos todos os PA de profissionais disponíveis no GED).",
-    "PRAZOS E ASSISTÊNCIA POR TIPOS DE ESTABELECIMENTO",
+    "PAE e PAP (poderão ser inseridos todos os PA de profissionais disponíveis no GED)."
+  ],
+  "prazos": [
     "CLÍNICA ESTÉTICA",
     "CLÍNICAS FARMACÊUTICAS",
     "NÃO HÁ PRAZO",
