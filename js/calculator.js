@@ -24,6 +24,7 @@ window.MainApp = window.MainApp || {};
 
   // ── Dados de piso por categoria (carregados assincronamente) ──
   var pisoData = null;
+  var todasCidades = [];
   var pisoCategorias = {
     varejista:    { nome: 'Varejista',    valor: 4729.62 },
     hospitalar:   { nome: 'Hospitalar',   valor: 4567.00 },
@@ -115,6 +116,44 @@ window.MainApp = window.MainApp || {};
     hrsTrabEl.addEventListener('input', calcularPisoFerr);
     baseEl.addEventListener('input', calcularPisoFerr);
 
+    // Busca de cidade para filtrar piso por região
+    var cidadeInput = document.getElementById('ferr-cidade');
+    var cidadeSelect = document.getElementById('ferr-cidade-select');
+
+    cidadeInput.addEventListener('input', function () {
+      var term = (cidadeInput.value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (!term || term.length < 2) { cidadeSelect.classList.add('d-none'); return; }
+      var matches = todasCidades.filter(function (c) {
+        return c.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').indexOf(term) > -1;
+      }).slice(0, 8);
+      if (!matches.length) { cidadeSelect.classList.add('d-none'); return; }
+      cidadeSelect.innerHTML = matches.map(function (c) {
+        return '<option value="' + c.key + '" data-valores=\'' + JSON.stringify(c.valores) + '\'>' + c.label + ' (' + c.regiao + ')</option>';
+      }).join('');
+      cidadeSelect.classList.remove('d-none');
+    });
+
+    cidadeSelect.addEventListener('change', function () {
+      var opt = cidadeSelect.selectedOptions[0];
+      if (!opt) return;
+      cidadeInput.value = opt.textContent.split(' (')[0];
+      cidadeSelect.classList.add('d-none');
+      // Atualiza piso base com valor da cidade selecionada
+      try {
+        var valores = JSON.parse(opt.getAttribute('data-valores'));
+        var cat = catEl.value;
+        if (valores && valores[cat]) {
+          pisoCategorias[cat].valor = valores[cat];
+          baseEl.value = valores[cat];
+          calcularPisoFerr();
+        }
+      } catch (e) {}
+    });
+
+    cidadeInput.addEventListener('blur', function () {
+      setTimeout(function () { cidadeSelect.classList.add('d-none'); }, 200);
+    });
+
     // Cálculo inicial
     calcularPisoFerr();
   }
@@ -194,6 +233,17 @@ window.MainApp = window.MainApp || {};
       .then(function (r) { return r.json(); })
       .then(function (data) {
         pisoData = data;
+        // Popula lista de cidades para autocomplete
+        todasCidades = [];
+        if (data.regioes) {
+          Object.keys(data.regioes).forEach(function (regiao) {
+            var cids = data.regioes[regiao].cidades || {};
+            Object.keys(cids).forEach(function (cid) {
+              var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+              todasCidades.push({ key: cid, label: label, regiao: regiao, valores: cids[cid] });
+            });
+          });
+        }
         // Atualiza valores padrão com dados do JSON (Curitiba)
         if (data.curitiba) {
           Object.keys(data.curitiba).forEach(function (cat) {
