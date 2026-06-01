@@ -1098,18 +1098,19 @@ window.MainApp = window.MainApp || {};
   function addPisoCidade() {
     var regiao = document.getElementById('piso-regiao-display').value;
     if (!regiao) { app.showToast('Digite o nome de uma cidade existente para usar sua região.', 'warning', 2500); return; }
-    var nome = prompt('Nome da nova cidade (ex: Sao Jose dos Pinhais):');
-    if (!nome || !nome.trim()) return;
-    var cidadeKey = nome.trim().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
-    if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
-    if (store.piso.regioes[regiao].cidades[cidadeKey]) { app.showToast('Cidade já existe nesta região!', 'warning', 2000); return; }
-    var primeira = Object.values(store.piso.regioes[regiao].cidades)[0] || { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 };
-    store.piso.regioes[regiao].cidades[cidadeKey] = Object.assign({}, primeira);
-    saveStore();
-    document.getElementById('piso-cidade-filter').value = nome.trim();
-    document.getElementById('piso-cidade-select').value = nome.trim();
-    onCidadeSelectChange();
-    app.showToast('Cidade adicionada!', 'success', 2000);
+    showPrompt('Nova Cidade', 'Nome da nova cidade (ex: Sao Jose dos Pinhais):', '', function (nome) {
+      if (!nome || !nome.trim()) return;
+      var cidadeKey = nome.trim().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
+      if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
+      if (store.piso.regioes[regiao].cidades[cidadeKey]) { app.showToast('Cidade já existe nesta região!', 'warning', 2000); return; }
+      var primeira = Object.values(store.piso.regioes[regiao].cidades)[0] || { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 };
+      store.piso.regioes[regiao].cidades[cidadeKey] = Object.assign({}, primeira);
+      saveStore();
+      document.getElementById('piso-cidade-filter').value = nome.trim();
+      document.getElementById('piso-cidade-select').value = nome.trim();
+      onCidadeSelectChange();
+      app.showToast('Cidade adicionada!', 'success', 2000);
+    });
   }
 
   function delPisoCidade() {
@@ -1200,14 +1201,15 @@ window.MainApp = window.MainApp || {};
 
   function addOrientacaoItem() {
     var key = document.getElementById('orient-dropdown').value;
-    var text = prompt('Digite o novo item para ' + key + ':');
-    if (!text || !text.trim()) return;
-    if (!store.orientacoes) store.orientacoes = { documentos: [], situacoes: [], checklist: [] };
-    if (!store.orientacoes[key]) store.orientacoes[key] = [];
-    store.orientacoes[key].push(text.trim());
-    saveStore();
-    renderOrientacoes();
-    app.showToast('Item adicionado!', 'success', 2000);
+    showPrompt('Novo Item', 'Digite o novo item para ' + key + ':', '', function (text) {
+      if (!text || !text.trim()) return;
+      if (!store.orientacoes) store.orientacoes = { documentos: [], situacoes: [], checklist: [] };
+      if (!store.orientacoes[key]) store.orientacoes[key] = [];
+      store.orientacoes[key].push(text.trim());
+      saveStore();
+      renderOrientacoes();
+      app.showToast('Item adicionado!', 'success', 2000);
+    });
   }
 
   function renderOrientacoes() {
@@ -1501,12 +1503,13 @@ window.MainApp = window.MainApp || {};
   function editOrientacaoItem(key, idx) {
     var data = (store.orientacoes || {})[key] || [];
     if (idx < 0 || idx >= data.length) return;
-    var text = prompt('Editar item:', data[idx]);
-    if (text === null) return;
-    data[idx] = text.trim();
-    saveStore();
-    renderOrientacoes();
-    app.showToast('Item atualizado!', 'success', 2000);
+    showPrompt('Editar Item', 'Editar item:', data[idx], function (text) {
+      if (text === null) return;
+      data[idx] = text.trim();
+      saveStore();
+      renderOrientacoes();
+      app.showToast('Item atualizado!', 'success', 2000);
+    });
   }
 
   function deleteOrientacaoItem(key, idx) {
@@ -1561,14 +1564,15 @@ window.MainApp = window.MainApp || {};
 
   function addListasItem() {
     var key = document.getElementById('listas-dropdown').value;
-    var text = prompt('Digite o novo item:');
-    if (!text || !text.trim()) return;
-    if (!store.listas) store.listas = { documentos: [], tiposEstabelecimento: [], respostasPadrao: [], prazosAssistencia: [] };
-    if (!store.listas[key]) store.listas[key] = [];
-    store.listas[key].push(text.trim());
-    saveStore();
-    renderListas();
-    app.showToast('Item adicionado!', 'success', 2000);
+    showPrompt('Novo Item', 'Digite o novo item:', '', function (text) {
+      if (!text || !text.trim()) return;
+      if (!store.listas) store.listas = { documentos: [], tiposEstabelecimento: [], respostasPadrao: [], prazosAssistencia: [] };
+      if (!store.listas[key]) store.listas[key] = [];
+      store.listas[key].push(text.trim());
+      saveStore();
+      renderListas();
+      app.showToast('Item adicionado!', 'success', 2000);
+    });
   }
 
   function renderListas() {
@@ -1636,12 +1640,13 @@ window.MainApp = window.MainApp || {};
   function editListasItem(key, idx) {
     var data = (store.listas || {})[key] || [];
     if (idx < 0 || idx >= data.length) return;
-    var text = prompt('Editar item:', data[idx]);
-    if (text === null) return;
-    data[idx] = text.trim();
-    saveStore();
-    renderListas();
-    app.showToast('Item atualizado!', 'success', 2000);
+    showPrompt('Editar Item', 'Editar item:', data[idx], function (text) {
+      if (text === null) return;
+      data[idx] = text.trim();
+      saveStore();
+      renderListas();
+      app.showToast('Item atualizado!', 'success', 2000);
+    });
   }
 
   function deleteListasItem(key, idx) {
@@ -1698,27 +1703,30 @@ window.MainApp = window.MainApp || {};
       document.getElementById('rp-preview').innerHTML = autoLink(items[key] || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
     });
     document.getElementById('rp-add').addEventListener('click', function () {
-      var nome = prompt('Nome da resposta padrão:');
-      if (!nome || !nome.trim()) return;
-      var texto = prompt('Texto da resposta:');
-      if (texto === null) return;
-      if (!store.respostasPadrao) store.respostasPadrao = {};
-      store.respostasPadrao[nome.trim()] = texto || '';
-      saveStore();
-      renderRespostasPadrao();
-      document.getElementById('rp-dropdown').value = nome.trim();
-      document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
-      app.showToast('Resposta adicionada!', 'success', 2000);
+      showPrompt('Nova Resposta', 'Nome da resposta padrão:', '', function (nome) {
+        if (!nome || !nome.trim()) return;
+        showPrompt('Nova Resposta', 'Texto da resposta:', '', function (texto) {
+          if (texto === null) return;
+          if (!store.respostasPadrao) store.respostasPadrao = {};
+          store.respostasPadrao[nome.trim()] = texto || '';
+          saveStore();
+          renderRespostasPadrao();
+          document.getElementById('rp-dropdown').value = nome.trim();
+          document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+          app.showToast('Resposta adicionada!', 'success', 2000);
+        });
+      });
     });
     document.getElementById('rp-edit').addEventListener('click', function () {
       var key = document.getElementById('rp-dropdown').value;
       if (!key) { app.showToast('Selecione uma resposta primeiro.', 'warning', 2000); return; }
-      var texto = prompt('Editar texto da resposta "' + key + '":', (store.respostasPadrao || {})[key] || '');
-      if (texto === null) return;
-      store.respostasPadrao[key] = texto || '';
-      saveStore();
-      document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
-      app.showToast('Resposta atualizada!', 'success', 2000);
+      showPrompt('Editar Resposta', 'Editar texto da resposta "' + key + '":', (store.respostasPadrao || {})[key] || '', function (texto) {
+        if (texto === null) return;
+        store.respostasPadrao[key] = texto || '';
+        saveStore();
+        document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+        app.showToast('Resposta atualizada!', 'success', 2000);
+      });
     });
     document.getElementById('rp-copy').addEventListener('click', function () {
       var key = document.getElementById('rp-dropdown').value;
@@ -1790,13 +1798,14 @@ window.MainApp = window.MainApp || {};
 
     document.getElementById('ne-filter').addEventListener('input', renderNomesEmpresariais);
     document.getElementById('ne-add').addEventListener('click', function () {
-      var texto = prompt('Novo padrão de nome empresarial:');
-      if (!texto || !texto.trim()) return;
-      if (!store.nomesEmpresariais) store.nomesEmpresariais = [];
-      store.nomesEmpresariais.push(texto.trim());
-      saveStore();
-      renderNomesEmpresariais();
-      app.showToast('Adicionado!', 'success', 2000);
+      showPrompt('Novo Padrão', 'Novo padrão de nome empresarial:', '', function (texto) {
+        if (!texto || !texto.trim()) return;
+        if (!store.nomesEmpresariais) store.nomesEmpresariais = [];
+        store.nomesEmpresariais.push(texto.trim());
+        saveStore();
+        renderNomesEmpresariais();
+        app.showToast('Adicionado!', 'success', 2000);
+      });
     });
     document.getElementById('ne-copyall').addEventListener('click', function () {
       var data = store.nomesEmpresariais || [];
@@ -1840,12 +1849,13 @@ window.MainApp = window.MainApp || {};
     el.querySelectorAll('[data-ne-edit]').forEach(function (b) {
       b.addEventListener('click', function () {
         var idx = parseInt(this.getAttribute('data-ne-edit'));
-        var texto = prompt('Editar:', store.nomesEmpresariais[idx]);
-        if (texto === null) return;
-        store.nomesEmpresariais[idx] = texto.trim();
-        saveStore();
-        renderNomesEmpresariais();
-        app.showToast('Atualizado!', 'success', 2000);
+        showPrompt('Editar Nome', 'Editar padrão de nome empresarial:', store.nomesEmpresariais[idx], function (texto) {
+          if (texto === null) return;
+          store.nomesEmpresariais[idx] = texto.trim();
+          saveStore();
+          renderNomesEmpresariais();
+          app.showToast('Atualizado!', 'success', 2000);
+        });
       });
     });
     el.querySelectorAll('[data-ne-del]').forEach(function (b) {
@@ -2313,6 +2323,39 @@ window.MainApp = window.MainApp || {};
     yes.parentNode.replaceChild(n, yes);
     n.onclick = function () { bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide(); cb(); };
     new bootstrap.Modal(document.getElementById('confirmModal')).show();
+  }
+
+  function showPrompt(title, message, defaultValue, cb) {
+    document.getElementById('prompt-title').textContent = title;
+    document.getElementById('prompt-message').textContent = message || '';
+    var input = document.getElementById('prompt-input');
+    input.value = defaultValue || '';
+    var ok = document.getElementById('prompt-btn-ok'), n = ok.cloneNode(true);
+    ok.parentNode.replaceChild(n, ok);
+    n.onclick = function () {
+      bootstrap.Modal.getInstance(document.getElementById('promptModal')).hide();
+      cb(input.value);
+    };
+    input.addEventListener('keypress', function handler(e) {
+      if (e.key === 'Enter') { n.click(); input.removeEventListener('keypress', handler); }
+    });
+    new bootstrap.Modal(document.getElementById('promptModal')).show();
+    setTimeout(function () { input.focus(); }, 400);
+  }
+
+  function showAlert(title, message, icon, cb) {
+    document.getElementById('alert-title').textContent = title;
+    document.getElementById('alert-message').textContent = message;
+    var iconEl = document.getElementById('alert-icon');
+    iconEl.innerHTML = icon ? '<i class="fas ' + icon + ' fa-2x text-info"></i>' : '';
+    var modal = new bootstrap.Modal(document.getElementById('alertModal'));
+    if (cb) {
+      document.getElementById('alertModal').addEventListener('hidden.bs.modal', function handler() {
+        document.getElementById('alertModal').removeEventListener('hidden.bs.modal', handler);
+        cb();
+      });
+    }
+    modal.show();
   }
 
   function normalize(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
