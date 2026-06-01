@@ -164,44 +164,87 @@ window.MainApp = window.MainApp || {};
 
   function initHorasAssistencia() {
     var tbody = document.getElementById('ferr-calc-horas-body');
-    if (!tbody) return; // Não está na view-ferramentas
+    if (!tbody) return;
 
     var dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
     dias.forEach(function (dia) {
       var tr = document.createElement('tr');
+      tr.setAttribute('data-dia', dia);
       tr.innerHTML =
-        '<td class="fw-bold">' + dia + '</td>' +
-        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary ferr-hora-input" data-dia="' + dia + '" data-turno="1" placeholder="08:00-12:00"></td>' +
-        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary ferr-hora-input" data-dia="' + dia + '" data-turno="2" placeholder="13:00-18:00"></td>' +
-        '<td><input type="number" class="form-control form-control-sm bg-dark text-light border-secondary ferr-int-input" data-dia="' + dia + '" value="0" min="0" max="120" style="max-width:70px"></td>' +
-        '<td class="ferr-dia-total text-info" id="ferr-total-' + dia + '">0h</td>';
+        '<td class="fw-bold align-middle">' + dia + '</td>' +
+        '<td colspan="3">' +
+          '<div class="ferr-turnos-container" data-dia="' + dia + '">' +
+            '<div class="ferr-turno-row d-flex gap-1 align-items-center mb-1">' +
+              '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-entrada" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+              '<span class="x-small text-muted">às</span>' +
+              '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-saida" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+            '</div>' +
+          '</div>' +
+          '<button class="btn btn-sm btn-outline-secondary py-0 px-2 x-small ferr-add-turno" data-dia="' + dia + '"><i class="fas fa-plus me-1"></i>Adicionar turno</button>' +
+        '</td>' +
+        '<td class="ferr-dia-total text-info align-middle text-end" id="ferr-total-' + dia + '">0h</td>';
       tbody.appendChild(tr);
     });
 
     function calcular() {
       var totalSemana = 0;
       dias.forEach(function (dia) {
-        var t1 = document.querySelector('.ferr-hora-input[data-dia="' + dia + '"][data-turno="1"]');
-        var t2 = document.querySelector('.ferr-hora-input[data-dia="' + dia + '"][data-turno="2"]');
-        var intervalo = document.querySelector('.ferr-int-input[data-dia="' + dia + '"]');
-        var totalEl = document.getElementById('ferr-total-' + dia);
+        var entradas = document.querySelectorAll('.ferr-entrada[data-dia="' + dia + '"]');
+        var saidas = document.querySelectorAll('.ferr-saida[data-dia="' + dia + '"]');
+        var totalDia = 0;
 
-        var horas1 = parseHoraRange(t1 ? t1.value : '');
-        var horas2 = parseHoraRange(t2 ? t2.value : '');
-        var intMin = parseFloat(intervalo ? intervalo.value : 0) || 0;
-        var total = horas1 + horas2 - (intMin / 60);
-        if (total < 0) total = 0;
-        totalSemana += total;
-        if (totalEl) totalEl.textContent = total.toFixed(2) + 'h';
+        for (var i = 0; i < entradas.length; i++) {
+          var entrada = entradas[i].value;
+          var saida = saidas[i].value;
+          if (entrada && saida) {
+            var h1 = parseHora(entrada);
+            var h2 = parseHora(saida);
+            if (!isNaN(h1) && !isNaN(h2)) {
+              var diff = h2 - h1;
+              if (diff < 0) diff += 24;
+              totalDia += diff;
+            }
+          }
+        }
+        totalSemana += totalDia;
+        var totalEl = document.getElementById('ferr-total-' + dia);
+        if (totalEl) totalEl.textContent = totalDia.toFixed(2) + 'h';
       });
 
       var totalSemEl = document.getElementById('ferr-calc-horas-total');
       if (totalSemEl) totalSemEl.textContent = totalSemana.toFixed(2) + 'h';
     }
 
-    document.querySelectorAll('.ferr-hora-input, .ferr-int-input').forEach(function (input) {
-      input.addEventListener('input', calcular);
+    // Event delegation para inputs e botões
+    tbody.addEventListener('input', function (e) {
+      if (e.target.classList.contains('ferr-entrada') || e.target.classList.contains('ferr-saida')) {
+        calcular();
+      }
+    });
+
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('.ferr-add-turno');
+      if (!btn) return;
+      var dia = btn.getAttribute('data-dia');
+      var container = document.querySelector('.ferr-turnos-container[data-dia="' + dia + '"]');
+      if (!container) return;
+      var count = container.querySelectorAll('.ferr-turno-row').length;
+      var row = document.createElement('div');
+      row.className = 'ferr-turno-row d-flex gap-1 align-items-center mb-1';
+      row.innerHTML =
+        '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-entrada" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60">' +
+        '<span class="x-small text-muted">às</span>' +
+        '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-saida" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60">' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small ferr-rem-turno" title="Remover"><i class="fas fa-times"></i></button>';
+      container.appendChild(row);
+    });
+
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('.ferr-rem-turno');
+      if (!btn) return;
+      btn.closest('.ferr-turno-row').remove();
+      calcular();
     });
   }
 

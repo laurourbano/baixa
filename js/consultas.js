@@ -1808,7 +1808,7 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     // Carrega instruções do JSON (calc-horas.json)
-    var instrucoesHtml = '<p class="x-small text-muted mb-2">Preencha os horários de cada turno por dia da semana (ex: 08:00-12:00).</p>';
+    var instrucoesHtml = '<p class="x-small text-muted mb-2">Preencha os horários de entrada e saída. Use "Adicionar turno" para múltiplos horários.</p>';
     fetch('assets/calc-horas.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
@@ -1829,9 +1829,9 @@ window.MainApp = window.MainApp || {};
       '</div>' +
       '<div class="table-responsive mb-2">' +
         '<table class="table table-sm table-dark table-borderless x-small" id="calc-horas-tabela">' +
-          '<thead><tr><th>Dia</th><th>1º Turno (início—fim)</th><th>2º Turno (início—fim)</th><th>Intervalo (min)</th><th>Total</th></tr></thead>' +
+          '<thead><tr><th>Dia</th><th>Entrada / Saída</th><th>Total</th></tr></thead>' +
           '<tbody id="calc-horas-body"></tbody>' +
-          '<tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td colspan="3"></td><td id="calc-horas-total" class="text-success">0h</td></tr></tfoot>' +
+          '<tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td></td><td id="calc-horas-total" class="text-success">0h</td></tr></tfoot>' +
         '</table>' +
       '</div>';
 
@@ -1840,28 +1840,68 @@ window.MainApp = window.MainApp || {};
 
     dias.forEach(function (dia) {
       var tr = document.createElement('tr');
+      tr.setAttribute('data-dia', dia);
       tr.innerHTML =
-        '<td class="fw-bold">' + dia + '</td>' +
-        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary calc-hora-input" data-dia="' + dia + '" data-turno="1" placeholder="08:00-12:00"></td>' +
-        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary calc-hora-input" data-dia="' + dia + '" data-turno="2" placeholder="13:00-18:00"></td>' +
-        '<td><input type="number" class="form-control form-control-sm bg-dark text-light border-secondary calc-int-input" data-dia="' + dia + '" value="0" min="0" max="120" style="max-width:70px"></td>' +
-        '<td class="calc-dia-total text-info" id="calc-total-' + dia + '">0h</td>';
+        '<td class="fw-bold align-middle">' + dia + '</td>' +
+        '<td>' +
+          '<div class="calc-turnos-container" data-dia="' + dia + '">' +
+            '<div class="calc-turno-row d-flex gap-1 align-items-center mb-1">' +
+              '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-entrada" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+              '<span class="x-small text-muted">às</span>' +
+              '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-saida" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+            '</div>' +
+          '</div>' +
+          '<button class="btn btn-sm btn-outline-secondary py-0 px-2 x-small calc-add-turno" data-dia="' + dia + '"><i class="fas fa-plus me-1"></i>Adicionar turno</button>' +
+        '</td>' +
+        '<td class="calc-dia-total text-info align-middle text-end" id="calc-total-' + dia + '">0h</td>';
       tbody.appendChild(tr);
     });
 
-    document.querySelectorAll('.calc-hora-input, .calc-int-input').forEach(function (input) {
-      input.addEventListener('input', calcularHorasTotal);
+    // Event delegation
+    tbody.addEventListener('input', function (e) {
+      if (e.target.classList.contains('calc-entrada') || e.target.classList.contains('calc-saida')) {
+        calcularHorasTotal();
+      }
+    });
+
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('.calc-add-turno');
+      if (!btn) return;
+      var dia = btn.getAttribute('data-dia');
+      var container = document.querySelector('.calc-turnos-container[data-dia="' + dia + '"]');
+      if (!container) return;
+      var count = container.querySelectorAll('.calc-turno-row').length;
+      var row = document.createElement('div');
+      row.className = 'calc-turno-row d-flex gap-1 align-items-center mb-1';
+      row.innerHTML =
+        '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-entrada" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60">' +
+        '<span class="x-small text-muted">às</span>' +
+        '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-saida" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60">' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small calc-rem-turno" title="Remover"><i class="fas fa-times"></i></button>';
+      container.appendChild(row);
+    });
+
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('.calc-rem-turno');
+      if (!btn) return;
+      btn.closest('.calc-turno-row').remove();
+      calcularHorasTotal();
     });
 
     // Botão copiar resultados
     document.getElementById('calc-horas-copy').addEventListener('click', function () {
-      var dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
       var lines = [];
       dias.forEach(function (dia) {
-        var t1 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="1"]');
-        var t2 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="2"]');
+        var entradas = document.querySelectorAll('.calc-entrada[data-dia="' + dia + '"]');
+        var saidas = document.querySelectorAll('.calc-saida[data-dia="' + dia + '"]');
+        var turnos = [];
+        for (var i = 0; i < entradas.length; i++) {
+          if (entradas[i].value && saidas[i].value) {
+            turnos.push(entradas[i].value + '-' + saidas[i].value);
+          }
+        }
         var totalEl = document.getElementById('calc-total-' + dia);
-        lines.push(dia + ': T1=' + (t1 ? t1.value || '-' : '-') + ' T2=' + (t2 ? t2.value || '-' : '-') + ' Total=' + (totalEl ? totalEl.textContent : '-'));
+        lines.push(dia + ': ' + (turnos.join(', ') || '-') + ' Total=' + (totalEl ? totalEl.textContent : '-'));
       });
       var totalSem = document.getElementById('calc-horas-total');
       lines.push('TOTAL SEMANA: ' + (totalSem ? totalSem.textContent : '-'));
@@ -1875,18 +1915,26 @@ window.MainApp = window.MainApp || {};
     var totalSemana = 0;
 
     dias.forEach(function (dia) {
-      var t1 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="1"]');
-      var t2 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="2"]');
-      var intervalo = document.querySelector('.calc-int-input[data-dia="' + dia + '"]');
+      var entradas = document.querySelectorAll('.calc-entrada[data-dia="' + dia + '"]');
+      var saidas = document.querySelectorAll('.calc-saida[data-dia="' + dia + '"]');
       var totalEl = document.getElementById('calc-total-' + dia);
+      var totalDia = 0;
 
-      var horas1 = parseHoraRange(t1 ? t1.value : '');
-      var horas2 = parseHoraRange(t2 ? t2.value : '');
-      var intMin = parseFloat(intervalo ? intervalo.value : 0) || 0;
-      var total = horas1 + horas2 - (intMin / 60);
-      if (total < 0) total = 0;
-      totalSemana += total;
-      if (totalEl) totalEl.textContent = total.toFixed(2) + 'h';
+      for (var i = 0; i < entradas.length; i++) {
+        var entrada = entradas[i].value;
+        var saida = saidas[i].value;
+        if (entrada && saida) {
+          var h1 = parseHora(entrada);
+          var h2 = parseHora(saida);
+          if (!isNaN(h1) && !isNaN(h2)) {
+            var diff = h2 - h1;
+            if (diff < 0) diff += 24;
+            totalDia += diff;
+          }
+        }
+      }
+      totalSemana += totalDia;
+      if (totalEl) totalEl.textContent = totalDia.toFixed(2) + 'h';
     });
 
     var totalEl = document.getElementById('calc-horas-total');
