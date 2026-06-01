@@ -57,15 +57,52 @@ window.MainApp = window.MainApp || {};
     DEFAULT_DASHBOARDS.forEach(function (tmpl) {
       var exists = dashboards.some(function (d) { return d.id === tmpl.id; });
       if (!exists) {
-        dashboards.push(createDashFromTemplate(tmpl));
+        var newDash = createDashFromTemplate(tmpl);
+        dashboards.push(newDash);
+        // Se for Ingresso PJ e estiver vazio, importa respostas padrão
+        if (tmpl.id === 'dash-ingresso-pj') {
+          importarRespostasParaDashboard(newDash);
+        }
       } else {
         // Garante ícone nos dashboards existentes que não têm
         var existing = dashboards.find(function (d) { return d.id === tmpl.id; });
         if (existing && !existing.icon) {
           existing.icon = tmpl.icon;
         }
+        // Importa respostas se Ingresso PJ estiver vazio
+        if (tmpl.id === 'dash-ingresso-pj' && existing && (!existing.customs || existing.customs.length === 0)) {
+          importarRespostasParaDashboard(existing);
+        }
       }
     });
+  }
+
+  function importarRespostasParaDashboard(dash) {
+    try {
+      var respostas = JSON.parse(localStorage.getItem('baixa_rt_data') || '{}').respostasPadrao || {};
+      if (typeof window._store !== 'undefined' && window._store.respostasPadrao) {
+        respostas = window._store.respostasPadrao;
+      }
+      var keys = Object.keys(respostas);
+      if (!keys.length) return;
+      // Já tem cards? Não importa de novo
+      if (dash.customs && dash.customs.length > 0) return;
+      if (!dash.customs) dash.customs = [];
+      if (!dash.order) dash.order = [];
+      keys.sort().forEach(function (k) {
+        var id = 'rp-' + k.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        var card = {
+          id: id,
+          title: k,
+          content: respostas[k],
+          color: 'info',
+          type: 'copy',
+          showDate: true
+        };
+        dash.customs.push(card);
+        dash.order.push(id);
+      });
+    } catch(e) {}
   }
 
   /* ── Carregar / Migrar ────────────────── */
