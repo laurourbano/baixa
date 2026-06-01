@@ -2382,8 +2382,9 @@ window.MainApp = window.MainApp || {};
     if (!state || !state.dashboards) return;
     var dash = state.dashboards.find(function (d) { return d.id === 'dash-ingresso-pj'; });
     if (!dash) return;
-    // Só importa se o dashboard estiver vazio
-    if (dash.customs && dash.customs.length > 0) return;
+    // Verifica se já tem cards de resposta importados (prefixo rp-)
+    var temRespostas = dash.customs && dash.customs.some(function (c) { return c.id && c.id.indexOf('rp-') === 0; });
+    if (temRespostas) return; // já importado, não duplica
     if (!dash.customs) dash.customs = [];
     if (!dash.order) dash.order = [];
     var keys = Object.keys(respostas).sort();
@@ -2406,6 +2407,9 @@ window.MainApp = window.MainApp || {};
     if (imported > 0) {
       app._save();
       app.notifyChange();
+      // Re-renderiza dashboard se estiver visível
+      if (typeof app.render === 'function') app.render();
+      if (typeof app.renderSidebarDashboards === 'function') app.renderSidebarDashboards();
       app.showToast(imported + ' respostas importadas para Ingresso PJ!', 'success', 3000);
     }
   }
