@@ -83,6 +83,18 @@ const regioes = {
     _ultimaCCT: "2024-2025",
     _fonte: "https://sindifar-pr.org.br/negociacoes-coletivas/",
     valores: { varejista: 3600.00, hospitalar: 3750.00, distribuidora: 3850.00, laboratorios: 3000.00, industrias: 3500.00 }
+  },
+  "Irati e Sudeste": {
+    _actVigente: false,
+    _ultimaCCT: "2024-2025",
+    _fonte: "https://sindifar-pr.org.br/negociacoes-coletivas/",
+    valores: { varejista: 3500.00, hospitalar: 3650.00, distribuidora: 3750.00, laboratorios: 2900.00, industrias: 3400.00 }
+  },
+  "Paranaguá e Litoral": {
+    _actVigente: false,
+    _ultimaCCT: "2024-2025",
+    _fonte: "https://sindifar-pr.org.br/negociacoes-coletivas/",
+    valores: { varejista: 3600.00, hospitalar: 3750.00, distribuidora: 3850.00, laboratorios: 3000.00, industrias: 3500.00 }
   }
 };
 
