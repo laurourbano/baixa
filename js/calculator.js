@@ -87,11 +87,13 @@ window.MainApp = window.MainApp || {};
       var ref30h = piso * 30 / hrsSemana;
       var ref20h = piso * 20 / hrsSemana;
 
+      var pisoBaseDisplay = document.getElementById('ferr-piso-base-display');
       var valorHoraEl = document.getElementById('ferr-valor-hora');
       var pisoPropEl = document.getElementById('ferr-piso-prop');
       var ref30hEl = document.getElementById('ferr-ref-30h');
       var ref20hEl = document.getElementById('ferr-ref-20h');
 
+      if (pisoBaseDisplay) pisoBaseDisplay.textContent = 'R$ ' + piso.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       if (valorHoraEl) valorHoraEl.textContent = 'R$ ' + valorHora.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       if (pisoPropEl) pisoPropEl.textContent = 'R$ ' + pisoProp.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       if (ref30hEl) ref30hEl.textContent = 'R$ ' + ref30h.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
