@@ -64,7 +64,18 @@
         var hasData = false;
         // Detecta formato: multi-dashboard vs flat antigo
         if (backend.dashboards && backend.dashboards.length > 0) {
-          // Formato multi-dashboard
+          // Preserva nomes/ícones locais se já existirem
+          var localState = JSON.parse(localStorage.getItem('baixa_rt_data')) || {};
+          var localDashboards = localState.dashboards || [];
+
+          backend.dashboards.forEach(function (bd) {
+            var local = localDashboards.find(function (ld) { return ld.id === bd.id; });
+            if (local) {
+              bd.name = local.name;
+              bd.icon = local.icon || bd.icon;
+            }
+          });
+
           app.__state.dashboards = backend.dashboards;
           app.__state.activeDashboard = backend.activeDashboard || backend.dashboards[0].id;
           app.__state.dashSortMode = backend.dashSortMode || 'custom';
