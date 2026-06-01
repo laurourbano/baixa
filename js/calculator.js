@@ -425,8 +425,10 @@ window.MainApp = window.MainApp || {};
     });
 
     // Botão +Todos: adiciona turno em TODOS os dias (não só expandidos)
-    document.getElementById('ferr-horas-lote').insertAdjacentHTML('beforeend',
-      '<button id="ferr-add-todos" class="btn btn-sm btn-outline-info py-0 px-2 x-small" title="Adicionar turno a todos os dias"><i class="fas fa-layer-group me-1"></i>+Todos</button>');
+    if (!document.getElementById('ferr-add-todos')) {
+      document.getElementById('ferr-horas-lote').insertAdjacentHTML('beforeend',
+        '<button id="ferr-add-todos" class="btn btn-sm btn-outline-info py-0 px-2 x-small" title="Adicionar turno a todos os dias"><i class="fas fa-layer-group me-1"></i>+Todos</button>');
+    }
     document.getElementById('ferr-add-todos').addEventListener('click', function () {
       dias.forEach(function (dia) {
         var container = document.querySelector('.ferr-turnos-container[data-dia="' + dia + '"]');
