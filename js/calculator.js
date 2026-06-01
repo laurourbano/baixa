@@ -101,7 +101,7 @@ window.MainApp = window.MainApp || {};
 
       if (pisoBaseDisplay) pisoBaseDisplay.textContent = 'R$ ' + piso.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       if (valorHoraEl) valorHoraEl.textContent = 'R$ ' + valorHora.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      if (totalHorasDisplay) totalHorasDisplay.textContent = hrsTrab.toFixed(2) + 'h';
+      if (totalHorasDisplay) totalHorasDisplay.textContent = formatHoras(hrsTrab);
       if (jornadaDisplay) jornadaDisplay.textContent = hrsSemana + 'h';
       if (pisoPropEl) pisoPropEl.textContent = 'R$ ' + salarioTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -234,11 +234,11 @@ window.MainApp = window.MainApp || {};
         }
         totalSemana += totalDia;
         var totalEl = document.getElementById('ferr-total-' + dia);
-        if (totalEl) totalEl.textContent = totalDia.toFixed(2) + 'h';
+        if (totalEl) totalEl.textContent = formatHoras(totalDia);
       });
 
       var totalSemEl = document.getElementById('ferr-calc-horas-total');
-      if (totalSemEl) totalSemEl.textContent = totalSemana.toFixed(2) + 'h';
+      if (totalSemEl) totalSemEl.textContent = formatHoras(totalSemana);
 
       // Dispara recálculo do piso
       if (typeof calcularPisoFerr === 'function') calcularPisoFerr();
@@ -363,6 +363,13 @@ window.MainApp = window.MainApp || {};
     var h = parseInt(parts[0]) || 0;
     var m = parseInt(parts[1]) || 0;
     return h + m / 60;
+  }
+
+  function formatHoras(decimal) {
+    var h = Math.floor(decimal);
+    var m = Math.round((decimal - h) * 60);
+    if (m === 60) { h++; m = 0; }
+    return h + 'h' + (m > 0 ? m.toString().padStart(2, '0') + 'min' : '');
   }
 
   /* ═══════════════════════════════════════════
