@@ -13,6 +13,8 @@
     "test:related": "vitest related",
     "bridge": "node bridge/server.js",
     "start": "node bridge/server.js",
+    "extract": "node scripts/extrair-atualizadores.js",
+    "extract:v4": "node -e \"require('./scripts/extract-excel-v4.js')\"",
     "dev": "http-server -p 8000"
   },
   "devDependencies": {

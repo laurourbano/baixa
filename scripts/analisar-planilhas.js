@@ -5,9 +5,9 @@ var XLSX = require('xlsx');
 var path = require('path');
 var fs = require('fs');
 
-var dir = 'assets';
+var dir = 'assets/planilhas';
 var files = fs.readdirSync(dir).filter(function (f) {
-  return f.startsWith('A.') && f.endsWith('.xlsx');
+  return f.endsWith('.xlsx') || f.endsWith('.ods');
 });
 
 files.forEach(function (f) {
