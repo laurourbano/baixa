@@ -1615,6 +1615,13 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="respostasPadrao"]');
     if (!ph) return;
 
+    // Invalida cache se for array em vez de objeto, ou objeto vazio
+    if (store.respostasPadrao) {
+      if (Array.isArray(store.respostasPadrao) || (typeof store.respostasPadrao === 'object' && Object.keys(store.respostasPadrao).length === 0)) {
+        store.respostasPadrao = null;
+      }
+    }
+
     ph.innerHTML =
       '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="rp-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px"></select>' +
