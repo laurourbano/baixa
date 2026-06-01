@@ -1779,3 +1779,11 @@ textarea.form-control {
   margin: 0;
   cursor: pointer;
 }
+
+/* ── Zebra striping na tabela de horas ── */
+#ferr-calc-horas-tabela tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+#ferr-calc-horas-tabela tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.06);
+}
