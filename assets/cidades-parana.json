@@ -1,0 +1,1569 @@
+{
+  "cidades": [
+    {
+      "cidade": "abatia",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Abatia"
+    },
+    {
+      "cidade": "agudos_do_sul",
+      "regiao": "Curitiba e RMC",
+      "label": "Agudos Do Sul"
+    },
+    {
+      "cidade": "almete_tamandare",
+      "regiao": "Curitiba e RMC",
+      "label": "Almete Tamandare"
+    },
+    {
+      "cidade": "alto_parana",
+      "regiao": "Londrina e Norte Central",
+      "label": "Alto Parana"
+    },
+    {
+      "cidade": "alto_piquiri",
+      "regiao": "Londrina e Norte Central",
+      "label": "Alto Piquiri"
+    },
+    {
+      "cidade": "amapora",
+      "regiao": "Londrina e Norte Central",
+      "label": "Amapora"
+    },
+    {
+      "cidade": "ampere",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Ampere"
+    },
+    {
+      "cidade": "anahy",
+      "regiao": "Cascavel e Oeste",
+      "label": "Anahy"
+    },
+    {
+      "cidade": "andira",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Andira"
+    },
+    {
+      "cidade": "antonina",
+      "regiao": "Curitiba e RMC",
+      "label": "Antonina"
+    },
+    {
+      "cidade": "antonio_olinto",
+      "regiao": "Irati e Sudeste",
+      "label": "Antonio Olinto"
+    },
+    {
+      "cidade": "apucarana",
+      "regiao": "Londrina e Norte Central",
+      "label": "Apucarana"
+    },
+    {
+      "cidade": "arapongas",
+      "regiao": "Londrina e Norte Central",
+      "label": "Arapongas"
+    },
+    {
+      "cidade": "arapoti",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Arapoti"
+    },
+    {
+      "cidade": "araruna",
+      "regiao": "Maringá e Noroeste",
+      "label": "Araruna"
+    },
+    {
+      "cidade": "araucaria",
+      "regiao": "Curitiba e RMC",
+      "label": "Araucaria"
+    },
+    {
+      "cidade": "assai",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Assai"
+    },
+    {
+      "cidade": "assis_chateaubriand",
+      "regiao": "Cascavel e Oeste",
+      "label": "Assis Chateaubriand"
+    },
+    {
+      "cidade": "astorga",
+      "regiao": "Londrina e Norte Central",
+      "label": "Astorga"
+    },
+    {
+      "cidade": "balsa_nova",
+      "regiao": "Curitiba e RMC",
+      "label": "Balsa Nova"
+    },
+    {
+      "cidade": "bandeirantes",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Bandeirantes"
+    },
+    {
+      "cidade": "barbosa_ferraz",
+      "regiao": "Londrina e Norte Central",
+      "label": "Barbosa Ferraz"
+    },
+    {
+      "cidade": "barra_do_jacare",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Barra Do Jacare"
+    },
+    {
+      "cidade": "barracao",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Barracao"
+    },
+    {
+      "cidade": "bela_vista_da_caroba",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Bela Vista Da Caroba"
+    },
+    {
+      "cidade": "bituruna",
+      "regiao": "Irati e Sudeste",
+      "label": "Bituruna"
+    },
+    {
+      "cidade": "boa_esperanca",
+      "regiao": "Maringá e Noroeste",
+      "label": "Boa Esperanca"
+    },
+    {
+      "cidade": "boa_ventura_de_sao_roque",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Boa Ventura De Sao Roque"
+    },
+    {
+      "cidade": "boa_vista_da_aparecida",
+      "regiao": "Cascavel e Oeste",
+      "label": "Boa Vista Da Aparecida"
+    },
+    {
+      "cidade": "bocaiuva_do_sul",
+      "regiao": "Curitiba e RMC",
+      "label": "Bocaiuva Do Sul"
+    },
+    {
+      "cidade": "bom_jesus_do_sul",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Bom Jesus Do Sul"
+    },
+    {
+      "cidade": "bom_sucesso",
+      "regiao": "Londrina e Norte Central",
+      "label": "Bom Sucesso"
+    },
+    {
+      "cidade": "borrazopolis",
+      "regiao": "Londrina e Norte Central",
+      "label": "Borrazopolis"
+    },
+    {
+      "cidade": "braganey",
+      "regiao": "Cascavel e Oeste",
+      "label": "Braganey"
+    },
+    {
+      "cidade": "cafelandia",
+      "regiao": "Cascavel e Oeste",
+      "label": "Cafelandia"
+    },
+    {
+      "cidade": "california",
+      "regiao": "Londrina e Norte Central",
+      "label": "California"
+    },
+    {
+      "cidade": "cambara",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Cambara"
+    },
+    {
+      "cidade": "cambe",
+      "regiao": "Londrina e Norte Central",
+      "label": "Cambe"
+    },
+    {
+      "cidade": "cambira",
+      "regiao": "Londrina e Norte Central",
+      "label": "Cambira"
+    },
+    {
+      "cidade": "campina_da_lagoa",
+      "regiao": "Maringá e Noroeste",
+      "label": "Campina Da Lagoa"
+    },
+    {
+      "cidade": "campina_do_simao",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Campina Do Simao"
+    },
+    {
+      "cidade": "campina_grande_do_sul",
+      "regiao": "Curitiba e RMC",
+      "label": "Campina Grande Do Sul"
+    },
+    {
+      "cidade": "campo_bonito",
+      "regiao": "Cascavel e Oeste",
+      "label": "Campo Bonito"
+    },
+    {
+      "cidade": "campo_do_tenente",
+      "regiao": "Curitiba e RMC",
+      "label": "Campo Do Tenente"
+    },
+    {
+      "cidade": "campo_largo",
+      "regiao": "Curitiba e RMC",
+      "label": "Campo Largo"
+    },
+    {
+      "cidade": "campo_mourao",
+      "regiao": "Maringá e Noroeste",
+      "label": "Campo Mourao"
+    },
+    {
+      "cidade": "candido_de_abreu",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Candido De Abreu"
+    },
+    {
+      "cidade": "candoi",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Candoi"
+    },
+    {
+      "cidade": "cantagalo",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Cantagalo"
+    },
+    {
+      "cidade": "capanema",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Capanema"
+    },
+    {
+      "cidade": "capitao_leonidas_marques",
+      "regiao": "Cascavel e Oeste",
+      "label": "Capitao Leonidas Marques"
+    },
+    {
+      "cidade": "carambei",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Carambei"
+    },
+    {
+      "cidade": "carlopolis",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Carlopolis"
+    },
+    {
+      "cidade": "cascavel",
+      "regiao": "Cascavel e Oeste",
+      "label": "Cascavel"
+    },
+    {
+      "cidade": "castro",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Castro"
+    },
+    {
+      "cidade": "catanduvas",
+      "regiao": "Cascavel e Oeste",
+      "label": "Catanduvas"
+    },
+    {
+      "cidade": "cerro_azul",
+      "regiao": "Curitiba e RMC",
+      "label": "Cerro Azul"
+    },
+    {
+      "cidade": "ceu_azul",
+      "regiao": "Cascavel e Oeste",
+      "label": "Ceu Azul"
+    },
+    {
+      "cidade": "chopinzinho",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Chopinzinho"
+    },
+    {
+      "cidade": "cianorte",
+      "regiao": "Maringá e Noroeste",
+      "label": "Cianorte"
+    },
+    {
+      "cidade": "clevelandia",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Clevelandia"
+    },
+    {
+      "cidade": "colombo",
+      "regiao": "Curitiba e RMC",
+      "label": "Colombo"
+    },
+    {
+      "cidade": "colorado",
+      "regiao": "Maringá e Noroeste",
+      "label": "Colorado"
+    },
+    {
+      "cidade": "congonhinhas",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Congonhinhas"
+    },
+    {
+      "cidade": "conselheiro_mairinck",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Conselheiro Mairinck"
+    },
+    {
+      "cidade": "contenda",
+      "regiao": "Curitiba e RMC",
+      "label": "Contenda"
+    },
+    {
+      "cidade": "corbelia",
+      "regiao": "Cascavel e Oeste",
+      "label": "Corbelia"
+    },
+    {
+      "cidade": "cornelio_procopio",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Cornelio Procopio"
+    },
+    {
+      "cidade": "coronel_vivida",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Coronel Vivida"
+    },
+    {
+      "cidade": "corumbatai_do_sul",
+      "regiao": "Londrina e Norte Central",
+      "label": "Corumbatai Do Sul"
+    },
+    {
+      "cidade": "cruz_machado",
+      "regiao": "Irati e Sudeste",
+      "label": "Cruz Machado"
+    },
+    {
+      "cidade": "cruzeiro_do_iguacu",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Cruzeiro Do Iguacu"
+    },
+    {
+      "cidade": "cruzeiro_do_oeste",
+      "regiao": "Maringá e Noroeste",
+      "label": "Cruzeiro Do Oeste"
+    },
+    {
+      "cidade": "cruzeiro_do_sul",
+      "regiao": "Londrina e Norte Central",
+      "label": "Cruzeiro Do Sul"
+    },
+    {
+      "cidade": "cruzmaltina",
+      "regiao": "Londrina e Norte Central",
+      "label": "Cruzmaltina"
+    },
+    {
+      "cidade": "curitiba",
+      "regiao": "Curitiba e RMC",
+      "label": "Curitiba"
+    },
+    {
+      "cidade": "curiuva",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Curiuva"
+    },
+    {
+      "cidade": "diamante_do_norte",
+      "regiao": "Londrina e Norte Central",
+      "label": "Diamante Do Norte"
+    },
+    {
+      "cidade": "diamante_do_sul",
+      "regiao": "Cascavel e Oeste",
+      "label": "Diamante Do Sul"
+    },
+    {
+      "cidade": "dois_vizinhos",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Dois Vizinhos"
+    },
+    {
+      "cidade": "douradina",
+      "regiao": "Maringá e Noroeste",
+      "label": "Douradina"
+    },
+    {
+      "cidade": "eneas_marques",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Eneas Marques"
+    },
+    {
+      "cidade": "engenheiro_beltrao",
+      "regiao": "Londrina e Norte Central",
+      "label": "Engenheiro Beltrao"
+    },
+    {
+      "cidade": "entre_rios_do_oeste",
+      "regiao": "Cascavel e Oeste",
+      "label": "Entre Rios Do Oeste"
+    },
+    {
+      "cidade": "faxinal",
+      "regiao": "Londrina e Norte Central",
+      "label": "Faxinal"
+    },
+    {
+      "cidade": "fazenda_rio_grande",
+      "regiao": "Curitiba e RMC",
+      "label": "Fazenda Rio Grande"
+    },
+    {
+      "cidade": "fenix",
+      "regiao": "Londrina e Norte Central",
+      "label": "Fenix"
+    },
+    {
+      "cidade": "fernandes_pinheiro",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Fernandes Pinheiro"
+    },
+    {
+      "cidade": "figueira",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Figueira"
+    },
+    {
+      "cidade": "flor_da_serra_do_sul",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Flor Da Serra Do Sul"
+    },
+    {
+      "cidade": "florai",
+      "regiao": "Maringá e Noroeste",
+      "label": "Florai"
+    },
+    {
+      "cidade": "floresta",
+      "regiao": "Maringá e Noroeste",
+      "label": "Floresta"
+    },
+    {
+      "cidade": "florestopolis",
+      "regiao": "Londrina e Norte Central",
+      "label": "Florestopolis"
+    },
+    {
+      "cidade": "formosa_do_oeste",
+      "regiao": "Cascavel e Oeste",
+      "label": "Formosa Do Oeste"
+    },
+    {
+      "cidade": "foz_do_iguacu",
+      "regiao": "Cascavel e Oeste",
+      "label": "Foz Do Iguacu"
+    },
+    {
+      "cidade": "foz_do_jordao",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Foz Do Jordao"
+    },
+    {
+      "cidade": "francisco_beltrao",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Francisco Beltrao"
+    },
+    {
+      "cidade": "general_carneiro",
+      "regiao": "Irati e Sudeste",
+      "label": "General Carneiro"
+    },
+    {
+      "cidade": "goioere",
+      "regiao": "Maringá e Noroeste",
+      "label": "Goioere"
+    },
+    {
+      "cidade": "goioxim",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Goioxim"
+    },
+    {
+      "cidade": "guaira",
+      "regiao": "Cascavel e Oeste",
+      "label": "Guaira"
+    },
+    {
+      "cidade": "guairaca",
+      "regiao": "Londrina e Norte Central",
+      "label": "Guairaca"
+    },
+    {
+      "cidade": "guamiranga",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Guamiranga"
+    },
+    {
+      "cidade": "guapirama",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Guapirama"
+    },
+    {
+      "cidade": "guaporema",
+      "regiao": "Maringá e Noroeste",
+      "label": "Guaporema"
+    },
+    {
+      "cidade": "guaraniacu",
+      "regiao": "Cascavel e Oeste",
+      "label": "Guaraniacu"
+    },
+    {
+      "cidade": "guarapuava",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Guarapuava"
+    },
+    {
+      "cidade": "guaraquecaba",
+      "regiao": "Curitiba e RMC",
+      "label": "Guaraquecaba"
+    },
+    {
+      "cidade": "guaratuba",
+      "regiao": "Curitiba e RMC",
+      "label": "Guaratuba"
+    },
+    {
+      "cidade": "honorio_serpa",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Honorio Serpa"
+    },
+    {
+      "cidade": "ibaiti",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Ibaiti"
+    },
+    {
+      "cidade": "ibema",
+      "regiao": "Cascavel e Oeste",
+      "label": "Ibema"
+    },
+    {
+      "cidade": "ibipora",
+      "regiao": "Londrina e Norte Central",
+      "label": "Ibipora"
+    },
+    {
+      "cidade": "icaraima",
+      "regiao": "Maringá e Noroeste",
+      "label": "Icaraima"
+    },
+    {
+      "cidade": "iguaracu",
+      "regiao": "Londrina e Norte Central",
+      "label": "Iguaracu"
+    },
+    {
+      "cidade": "iguatemi",
+      "regiao": "Maringá e Noroeste",
+      "label": "Iguatemi"
+    },
+    {
+      "cidade": "iguatu",
+      "regiao": "Cascavel e Oeste",
+      "label": "Iguatu"
+    },
+    {
+      "cidade": "imbau",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Imbau"
+    },
+    {
+      "cidade": "imbituva",
+      "regiao": "Irati e Sudeste",
+      "label": "Imbituva"
+    },
+    {
+      "cidade": "inacio_martins",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Inacio Martins"
+    },
+    {
+      "cidade": "inaja",
+      "regiao": "Londrina e Norte Central",
+      "label": "Inaja"
+    },
+    {
+      "cidade": "ipiranga",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Ipiranga"
+    },
+    {
+      "cidade": "iracema_do_oeste",
+      "regiao": "Cascavel e Oeste",
+      "label": "Iracema Do Oeste"
+    },
+    {
+      "cidade": "irati",
+      "regiao": "Irati e Sudeste",
+      "label": "Irati"
+    },
+    {
+      "cidade": "itaguaje",
+      "regiao": "Londrina e Norte Central",
+      "label": "Itaguaje"
+    },
+    {
+      "cidade": "itaipulandia",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Itaipulandia"
+    },
+    {
+      "cidade": "itanhanga",
+      "regiao": "Londrina e Norte Central",
+      "label": "Itanhanga"
+    },
+    {
+      "cidade": "ivai",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Ivai"
+    },
+    {
+      "cidade": "ivaipora",
+      "regiao": "Londrina e Norte Central",
+      "label": "Ivaipora"
+    },
+    {
+      "cidade": "ivate",
+      "regiao": "Maringá e Noroeste",
+      "label": "Ivate"
+    },
+    {
+      "cidade": "jaboti",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Jaboti"
+    },
+    {
+      "cidade": "jacarezinho",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Jacarezinho"
+    },
+    {
+      "cidade": "jaguariaiva",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Jaguariaiva"
+    },
+    {
+      "cidade": "jandaia_do_sul",
+      "regiao": "Londrina e Norte Central",
+      "label": "Jandaia Do Sul"
+    },
+    {
+      "cidade": "janipolis",
+      "regiao": "Maringá e Noroeste",
+      "label": "Janipolis"
+    },
+    {
+      "cidade": "japira",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Japira"
+    },
+    {
+      "cidade": "japura",
+      "regiao": "Maringá e Noroeste",
+      "label": "Japura"
+    },
+    {
+      "cidade": "jardim_alegre",
+      "regiao": "Londrina e Norte Central",
+      "label": "Jardim Alegre"
+    },
+    {
+      "cidade": "jesuitas",
+      "regiao": "Cascavel e Oeste",
+      "label": "Jesuitas"
+    },
+    {
+      "cidade": "joaquim_tavora",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Joaquim Tavora"
+    },
+    {
+      "cidade": "jundiai_do_sul",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Jundiai Do Sul"
+    },
+    {
+      "cidade": "juranda",
+      "regiao": "Maringá e Noroeste",
+      "label": "Juranda"
+    },
+    {
+      "cidade": "jussara",
+      "regiao": "Maringá e Noroeste",
+      "label": "Jussara"
+    },
+    {
+      "cidade": "kalore",
+      "regiao": "Londrina e Norte Central",
+      "label": "Kalore"
+    },
+    {
+      "cidade": "lapa",
+      "regiao": "Curitiba e RMC",
+      "label": "Lapa"
+    },
+    {
+      "cidade": "laranjeiras_do_sul",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Laranjeiras Do Sul"
+    },
+    {
+      "cidade": "lidianopolis",
+      "regiao": "Londrina e Norte Central",
+      "label": "Lidianopolis"
+    },
+    {
+      "cidade": "lindoeste",
+      "regiao": "Cascavel e Oeste",
+      "label": "Lindoeste"
+    },
+    {
+      "cidade": "loanda",
+      "regiao": "Londrina e Norte Central",
+      "label": "Loanda"
+    },
+    {
+      "cidade": "londrina",
+      "regiao": "Londrina e Norte Central",
+      "label": "Londrina"
+    },
+    {
+      "cidade": "luiziana",
+      "regiao": "Maringá e Noroeste",
+      "label": "Luiziana"
+    },
+    {
+      "cidade": "lunardelli",
+      "regiao": "Londrina e Norte Central",
+      "label": "Lunardelli"
+    },
+    {
+      "cidade": "mallet",
+      "regiao": "Irati e Sudeste",
+      "label": "Mallet"
+    },
+    {
+      "cidade": "mambore",
+      "regiao": "Maringá e Noroeste",
+      "label": "Mambore"
+    },
+    {
+      "cidade": "mandaguacu",
+      "regiao": "Londrina e Norte Central",
+      "label": "Mandaguacu"
+    },
+    {
+      "cidade": "mandaguari",
+      "regiao": "Londrina e Norte Central",
+      "label": "Mandaguari"
+    },
+    {
+      "cidade": "mandirituba",
+      "regiao": "Curitiba e RMC",
+      "label": "Mandirituba"
+    },
+    {
+      "cidade": "manfrinopolis",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Manfrinopolis"
+    },
+    {
+      "cidade": "mangueirinha",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Mangueirinha"
+    },
+    {
+      "cidade": "manoel_ribas",
+      "regiao": "Londrina e Norte Central",
+      "label": "Manoel Ribas"
+    },
+    {
+      "cidade": "marechal_candido_rondon",
+      "regiao": "Cascavel e Oeste",
+      "label": "Marechal Candido Rondon"
+    },
+    {
+      "cidade": "marialva",
+      "regiao": "Londrina e Norte Central",
+      "label": "Marialva"
+    },
+    {
+      "cidade": "marilena",
+      "regiao": "Londrina e Norte Central",
+      "label": "Marilena"
+    },
+    {
+      "cidade": "mariluz",
+      "regiao": "Londrina e Norte Central",
+      "label": "Mariluz"
+    },
+    {
+      "cidade": "maringa",
+      "regiao": "Londrina e Norte Central",
+      "label": "Maringa"
+    },
+    {
+      "cidade": "mariopolis",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Mariopolis"
+    },
+    {
+      "cidade": "marmeleiro",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Marmeleiro"
+    },
+    {
+      "cidade": "marumbi",
+      "regiao": "Londrina e Norte Central",
+      "label": "Marumbi"
+    },
+    {
+      "cidade": "matelandia",
+      "regiao": "Cascavel e Oeste",
+      "label": "Matelandia"
+    },
+    {
+      "cidade": "matinhos",
+      "regiao": "Curitiba e RMC",
+      "label": "Matinhos"
+    },
+    {
+      "cidade": "mato_rico",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Mato Rico"
+    },
+    {
+      "cidade": "maua_da_serra",
+      "regiao": "Londrina e Norte Central",
+      "label": "Maua Da Serra"
+    },
+    {
+      "cidade": "medianeira",
+      "regiao": "Cascavel e Oeste",
+      "label": "Medianeira"
+    },
+    {
+      "cidade": "mercedes",
+      "regiao": "Cascavel e Oeste",
+      "label": "Mercedes"
+    },
+    {
+      "cidade": "moreira_sales",
+      "regiao": "Maringá e Noroeste",
+      "label": "Moreira Sales"
+    },
+    {
+      "cidade": "morretes",
+      "regiao": "Curitiba e RMC",
+      "label": "Morretes"
+    },
+    {
+      "cidade": "nova_alianca_do_ivai",
+      "regiao": "Londrina e Norte Central",
+      "label": "Nova Alianca Do Ivai"
+    },
+    {
+      "cidade": "nova_america_da_colina",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Nova America Da Colina"
+    },
+    {
+      "cidade": "nova_aurora",
+      "regiao": "Cascavel e Oeste",
+      "label": "Nova Aurora"
+    },
+    {
+      "cidade": "nova_cantu",
+      "regiao": "Maringá e Noroeste",
+      "label": "Nova Cantu"
+    },
+    {
+      "cidade": "nova_esperanca",
+      "regiao": "Londrina e Norte Central",
+      "label": "Nova Esperanca"
+    },
+    {
+      "cidade": "nova_esperanca_do_sudoeste",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Nova Esperanca Do Sudoeste"
+    },
+    {
+      "cidade": "nova_fatima",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Nova Fatima"
+    },
+    {
+      "cidade": "nova_laranjeiras",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Nova Laranjeiras"
+    },
+    {
+      "cidade": "nova_londrina",
+      "regiao": "Londrina e Norte Central",
+      "label": "Nova Londrina"
+    },
+    {
+      "cidade": "nova_olimpia",
+      "regiao": "Maringá e Noroeste",
+      "label": "Nova Olimpia"
+    },
+    {
+      "cidade": "nova_prata_do_iguacu",
+      "regiao": "Cascavel e Oeste",
+      "label": "Nova Prata Do Iguacu"
+    },
+    {
+      "cidade": "nova_santa_barbara",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Nova Santa Barbara"
+    },
+    {
+      "cidade": "novo_itacolomi",
+      "regiao": "Londrina e Norte Central",
+      "label": "Novo Itacolomi"
+    },
+    {
+      "cidade": "ortigueira",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Ortigueira"
+    },
+    {
+      "cidade": "ourizona",
+      "regiao": "Londrina e Norte Central",
+      "label": "Ourizona"
+    },
+    {
+      "cidade": "ouro_verde_do_oeste",
+      "regiao": "Cascavel e Oeste",
+      "label": "Ouro Verde Do Oeste"
+    },
+    {
+      "cidade": "paicandu",
+      "regiao": "Londrina e Norte Central",
+      "label": "Paicandu"
+    },
+    {
+      "cidade": "palmas",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Palmas"
+    },
+    {
+      "cidade": "palmeira",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Palmeira"
+    },
+    {
+      "cidade": "palmital",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Palmital"
+    },
+    {
+      "cidade": "palotina",
+      "regiao": "Cascavel e Oeste",
+      "label": "Palotina"
+    },
+    {
+      "cidade": "paraiso_do_norte",
+      "regiao": "Londrina e Norte Central",
+      "label": "Paraiso Do Norte"
+    },
+    {
+      "cidade": "paranacity",
+      "regiao": "Londrina e Norte Central",
+      "label": "Paranacity"
+    },
+    {
+      "cidade": "paranagua",
+      "regiao": "Curitiba e RMC",
+      "label": "Paranagua"
+    },
+    {
+      "cidade": "paranapoema",
+      "regiao": "Maringá e Noroeste",
+      "label": "Paranapoema"
+    },
+    {
+      "cidade": "paranavai",
+      "regiao": "Maringá e Noroeste",
+      "label": "Paranavai"
+    },
+    {
+      "cidade": "pato_bragado",
+      "regiao": "Cascavel e Oeste",
+      "label": "Pato Bragado"
+    },
+    {
+      "cidade": "pato_branco",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Pato Branco"
+    },
+    {
+      "cidade": "paula_freitas",
+      "regiao": "Irati e Sudeste",
+      "label": "Paula Freitas"
+    },
+    {
+      "cidade": "paulo_frontin",
+      "regiao": "Irati e Sudeste",
+      "label": "Paulo Frontin"
+    },
+    {
+      "cidade": "peabiru",
+      "regiao": "Maringá e Noroeste",
+      "label": "Peabiru"
+    },
+    {
+      "cidade": "perobal",
+      "regiao": "Maringá e Noroeste",
+      "label": "Perobal"
+    },
+    {
+      "cidade": "perola_do_oeste",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Perola Do Oeste"
+    },
+    {
+      "cidade": "pien",
+      "regiao": "Curitiba e RMC",
+      "label": "Pien"
+    },
+    {
+      "cidade": "pinhais",
+      "regiao": "Curitiba e RMC",
+      "label": "Pinhais"
+    },
+    {
+      "cidade": "pinhal_de_sao_bento",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Pinhal De Sao Bento"
+    },
+    {
+      "cidade": "pinhalao",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Pinhalao"
+    },
+    {
+      "cidade": "pinhao",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Pinhao"
+    },
+    {
+      "cidade": "pirai_do_sul",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Pirai Do Sul"
+    },
+    {
+      "cidade": "piraquara",
+      "regiao": "Curitiba e RMC",
+      "label": "Piraquara"
+    },
+    {
+      "cidade": "pitanga",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Pitanga"
+    },
+    {
+      "cidade": "planaltina_do_parana",
+      "regiao": "Londrina e Norte Central",
+      "label": "Planaltina Do Parana"
+    },
+    {
+      "cidade": "planejado",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Planejado"
+    },
+    {
+      "cidade": "ponta_grossa",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Ponta Grossa"
+    },
+    {
+      "cidade": "pontal_do_parana",
+      "regiao": "Paranaguá e Litoral",
+      "label": "Pontal Do Parana"
+    },
+    {
+      "cidade": "ponte_do_parana",
+      "regiao": "Curitiba e RMC",
+      "label": "Ponte Do Parana"
+    },
+    {
+      "cidade": "porto_amazonas",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Porto Amazonas"
+    },
+    {
+      "cidade": "porto_rico",
+      "regiao": "Londrina e Norte Central",
+      "label": "Porto Rico"
+    },
+    {
+      "cidade": "porto_vitoria",
+      "regiao": "Irati e Sudeste",
+      "label": "Porto Vitoria"
+    },
+    {
+      "cidade": "pranchita",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Pranchita"
+    },
+    {
+      "cidade": "presidente_castelo_branco",
+      "regiao": "Londrina e Norte Central",
+      "label": "Presidente Castelo Branco"
+    },
+    {
+      "cidade": "prudentopolis",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Prudentopolis"
+    },
+    {
+      "cidade": "quarense",
+      "regiao": "Londrina e Norte Central",
+      "label": "Quarense"
+    },
+    {
+      "cidade": "quarese",
+      "regiao": "Maringá e Noroeste",
+      "label": "Quarese"
+    },
+    {
+      "cidade": "quarto_centenario",
+      "regiao": "Maringá e Noroeste",
+      "label": "Quarto Centenario"
+    },
+    {
+      "cidade": "quatigua",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Quatigua"
+    },
+    {
+      "cidade": "quatro_barras",
+      "regiao": "Curitiba e RMC",
+      "label": "Quatro Barras"
+    },
+    {
+      "cidade": "quatro_pontes",
+      "regiao": "Cascavel e Oeste",
+      "label": "Quatro Pontes"
+    },
+    {
+      "cidade": "quinta_do_sol",
+      "regiao": "Maringá e Noroeste",
+      "label": "Quinta Do Sol"
+    },
+    {
+      "cidade": "rancho_alegre_do_oeste",
+      "regiao": "Maringá e Noroeste",
+      "label": "Rancho Alegre Do Oeste"
+    },
+    {
+      "cidade": "realeza",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Realeza"
+    },
+    {
+      "cidade": "reboucas",
+      "regiao": "Irati e Sudeste",
+      "label": "Reboucas"
+    },
+    {
+      "cidade": "renascenca",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Renascenca"
+    },
+    {
+      "cidade": "reserva",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Reserva"
+    },
+    {
+      "cidade": "reserva_do_iguacu",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Reserva Do Iguacu"
+    },
+    {
+      "cidade": "ribeirao_claro",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Ribeirao Claro"
+    },
+    {
+      "cidade": "ribeirao_do_pinhal",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Ribeirao Do Pinhal"
+    },
+    {
+      "cidade": "rio_azul",
+      "regiao": "Irati e Sudeste",
+      "label": "Rio Azul"
+    },
+    {
+      "cidade": "rio_bonito_do_iguacu",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Rio Bonito Do Iguacu"
+    },
+    {
+      "cidade": "rio_branco_do_sul",
+      "regiao": "Curitiba e RMC",
+      "label": "Rio Branco Do Sul"
+    },
+    {
+      "cidade": "rio_negro",
+      "regiao": "Irati e Sudeste",
+      "label": "Rio Negro"
+    },
+    {
+      "cidade": "rolandia",
+      "regiao": "Londrina e Norte Central",
+      "label": "Rolandia"
+    },
+    {
+      "cidade": "rondon",
+      "regiao": "Maringá e Noroeste",
+      "label": "Rondon"
+    },
+    {
+      "cidade": "sabaudia",
+      "regiao": "Londrina e Norte Central",
+      "label": "Sabaudia"
+    },
+    {
+      "cidade": "salto_do_itarare",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Salto Do Itarare"
+    },
+    {
+      "cidade": "salto_do_lontra",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Salto Do Lontra"
+    },
+    {
+      "cidade": "santa_amelia",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Santa Amelia"
+    },
+    {
+      "cidade": "santa_cecilia_do_pavao",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Santa Cecilia Do Pavao"
+    },
+    {
+      "cidade": "santa_cruz_do_monte_castelo",
+      "regiao": "Londrina e Norte Central",
+      "label": "Santa Cruz Do Monte Castelo"
+    },
+    {
+      "cidade": "santa_fe",
+      "regiao": "Londrina e Norte Central",
+      "label": "Santa Fe"
+    },
+    {
+      "cidade": "santa_helena",
+      "regiao": "Cascavel e Oeste",
+      "label": "Santa Helena"
+    },
+    {
+      "cidade": "santa_isabel_do_ivai",
+      "regiao": "Londrina e Norte Central",
+      "label": "Santa Isabel Do Ivai"
+    },
+    {
+      "cidade": "santa_izabel_do_oeste",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Santa Izabel Do Oeste"
+    },
+    {
+      "cidade": "santa_lucia",
+      "regiao": "Cascavel e Oeste",
+      "label": "Santa Lucia"
+    },
+    {
+      "cidade": "santa_monica",
+      "regiao": "Londrina e Norte Central",
+      "label": "Santa Monica"
+    },
+    {
+      "cidade": "santa_tereza_do_oeste",
+      "regiao": "Cascavel e Oeste",
+      "label": "Santa Tereza Do Oeste"
+    },
+    {
+      "cidade": "santana_do_itarare",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Santana Do Itarare"
+    },
+    {
+      "cidade": "santo_antonio_da_platina",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Santo Antonio Da Platina"
+    },
+    {
+      "cidade": "santo_antonio_do_sudoeste",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Santo Antonio Do Sudoeste"
+    },
+    {
+      "cidade": "sao_carlos_do_ivai",
+      "regiao": "Londrina e Norte Central",
+      "label": "Sao Carlos Do Ivai"
+    },
+    {
+      "cidade": "sao_jeronimo_da_serra",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Sao Jeronimo Da Serra"
+    },
+    {
+      "cidade": "sao_joao_do_ivai",
+      "regiao": "Londrina e Norte Central",
+      "label": "Sao Joao Do Ivai"
+    },
+    {
+      "cidade": "sao_joao_do_triunfo",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Sao Joao Do Triunfo"
+    },
+    {
+      "cidade": "sao_jorge_do_ivai",
+      "regiao": "Londrina e Norte Central",
+      "label": "Sao Jorge Do Ivai"
+    },
+    {
+      "cidade": "sao_jorge_do_oeste",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Sao Jorge Do Oeste"
+    },
+    {
+      "cidade": "sao_jorge_do_patrocinio",
+      "regiao": "Maringá e Noroeste",
+      "label": "Sao Jorge Do Patrocinio"
+    },
+    {
+      "cidade": "sao_jose_da_boa_vista",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Sao Jose Da Boa Vista"
+    },
+    {
+      "cidade": "sao_jose_das_palmeiras",
+      "regiao": "Cascavel e Oeste",
+      "label": "Sao Jose Das Palmeiras"
+    },
+    {
+      "cidade": "sao_jose_dos_pinhais",
+      "regiao": "Curitiba e RMC",
+      "label": "Sao Jose Dos Pinhais"
+    },
+    {
+      "cidade": "sao_lourenco_do_oeste",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Sao Lourenco Do Oeste"
+    },
+    {
+      "cidade": "sao_manoel_do_parana",
+      "regiao": "Maringá e Noroeste",
+      "label": "Sao Manoel Do Parana"
+    },
+    {
+      "cidade": "sao_mateus_do_sul",
+      "regiao": "Irati e Sudeste",
+      "label": "Sao Mateus Do Sul"
+    },
+    {
+      "cidade": "sao_pedro_do_iguacu",
+      "regiao": "Cascavel e Oeste",
+      "label": "Sao Pedro Do Iguacu"
+    },
+    {
+      "cidade": "sao_pedro_do_ivai",
+      "regiao": "Londrina e Norte Central",
+      "label": "Sao Pedro Do Ivai"
+    },
+    {
+      "cidade": "sao_pedro_do_parana",
+      "regiao": "Londrina e Norte Central",
+      "label": "Sao Pedro Do Parana"
+    },
+    {
+      "cidade": "sao_tome",
+      "regiao": "Maringá e Noroeste",
+      "label": "Sao Tome"
+    },
+    {
+      "cidade": "sao_valentim",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Sao Valentim"
+    },
+    {
+      "cidade": "sapopema",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Sapopema"
+    },
+    {
+      "cidade": "sarandi",
+      "regiao": "Londrina e Norte Central",
+      "label": "Sarandi"
+    },
+    {
+      "cidade": "senges",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Senges"
+    },
+    {
+      "cidade": "serranopolis_do_iguacu",
+      "regiao": "Cascavel e Oeste",
+      "label": "Serranopolis Do Iguacu"
+    },
+    {
+      "cidade": "sertaneja",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Sertaneja"
+    },
+    {
+      "cidade": "siqueira_campos",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Siqueira Campos"
+    },
+    {
+      "cidade": "sulina",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Sulina"
+    },
+    {
+      "cidade": "tamboara",
+      "regiao": "Londrina e Norte Central",
+      "label": "Tamboara"
+    },
+    {
+      "cidade": "tambora",
+      "regiao": "Londrina e Norte Central",
+      "label": "Tambora"
+    },
+    {
+      "cidade": "tapejara",
+      "regiao": "Londrina e Norte Central",
+      "label": "Tapejara"
+    },
+    {
+      "cidade": "tapira",
+      "regiao": "Londrina e Norte Central",
+      "label": "Tapira"
+    },
+    {
+      "cidade": "telemaco_borba",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Telemaco Borba"
+    },
+    {
+      "cidade": "terra_boa",
+      "regiao": "Londrina e Norte Central",
+      "label": "Terra Boa"
+    },
+    {
+      "cidade": "tibagi",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Tibagi"
+    },
+    {
+      "cidade": "tijucas_do_sul",
+      "regiao": "Curitiba e RMC",
+      "label": "Tijucas Do Sul"
+    },
+    {
+      "cidade": "toledo",
+      "regiao": "Cascavel e Oeste",
+      "label": "Toledo"
+    },
+    {
+      "cidade": "tomazina",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Tomazina"
+    },
+    {
+      "cidade": "tres_barras_do_parana",
+      "regiao": "Cascavel e Oeste",
+      "label": "Tres Barras Do Parana"
+    },
+    {
+      "cidade": "tuneiras_do_oeste",
+      "regiao": "Maringá e Noroeste",
+      "label": "Tuneiras Do Oeste"
+    },
+    {
+      "cidade": "tupassi",
+      "regiao": "Cascavel e Oeste",
+      "label": "Tupassi"
+    },
+    {
+      "cidade": "turvo",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Turvo"
+    },
+    {
+      "cidade": "umuarama",
+      "regiao": "Londrina e Norte Central",
+      "label": "Umuarama"
+    },
+    {
+      "cidade": "uniao_da_vitoria",
+      "regiao": "Irati e Sudeste",
+      "label": "Uniao Da Vitoria"
+    },
+    {
+      "cidade": "ventania",
+      "regiao": "Ponta Grossa e Campos Gerais",
+      "label": "Ventania"
+    },
+    {
+      "cidade": "vera_cruz_do_oeste",
+      "regiao": "Cascavel e Oeste",
+      "label": "Vera Cruz Do Oeste"
+    },
+    {
+      "cidade": "vere",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Vere"
+    },
+    {
+      "cidade": "virmond",
+      "regiao": "Guarapuava e Centro-Sul",
+      "label": "Virmond"
+    },
+    {
+      "cidade": "vitorino",
+      "regiao": "Francisco Beltrão e Sudoeste",
+      "label": "Vitorino"
+    },
+    {
+      "cidade": "wenceslau_braz",
+      "regiao": "Jacarezinho e Norte Pioneiro",
+      "label": "Wenceslau Braz"
+    },
+    {
+      "cidade": "xambre",
+      "regiao": "Maringá e Noroeste",
+      "label": "Xambre"
+    }
+  ]
+}

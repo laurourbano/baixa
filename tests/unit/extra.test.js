@@ -48,10 +48,19 @@ describe('MainApp extended unit tests', () => {
       <input id="gh-token" />
       <input id="gh-repo" />
       <div id="gh-status"></div>
-      <input id="piso" value="0" />
-      <input id="horas" value="0" />
-      <div id="res-total"></div>
-      <div id="res-hora"></div>
+      <input id="ferr-piso-base" value="0" />
+      <input id="ferr-horas-semana" value="44" />
+      <input id="ferr-horas-trab" value="0" />
+      <select id="ferr-categoria">
+        <option value="varejista">Varejista</option>
+        <option value="hospitalar">Hospitalar</option>
+      </select>
+      <div id="ferr-valor-hora"></div>
+      <div id="ferr-piso-prop"></div>
+      <div id="ferr-ref-30h"></div>
+      <div id="ferr-ref-20h"></div>
+      <button id="ferr-calc"></button>
+      <button id="ferr-copy"></button>
       <select id="fiscal-select"></select>
       <input id="fiscal-filter" />
       <div id="fiscal-res"></div>
@@ -115,21 +124,27 @@ describe('MainApp extended unit tests', () => {
 
   /*** 2. Calculator logic ***/
   it('calculator updates totals when inputs change', () => {
-    const pisoEl = document.getElementById('piso');
-    const horasEl = document.getElementById('horas');
-    const totalEl = document.getElementById('res-total');
-    const horaEl = document.getElementById('res-hora');
+    const pisoEl = document.getElementById('ferr-piso-base');
+    const hrsSemanaEl = document.getElementById('ferr-horas-semana');
+    const hrsTrabEl = document.getElementById('ferr-horas-trab');
+    const valorHoraEl = document.getElementById('ferr-valor-hora');
+    const pisoPropEl = document.getElementById('ferr-piso-prop');
 
     // Simulate user input
     pisoEl.value = '2200';
-    horasEl.value = '44';
-    // Trigger oninput handlers set by initCalculator (already called in init)
-    const inputEvent = new Event('input');
-    pisoEl.dispatchEvent(inputEvent);
-    horasEl.dispatchEvent(inputEvent);
+    hrsSemanaEl.value = '44';
+    hrsTrabEl.value = '44';
 
-    expect(totalEl.textContent).toBe('2.200,00'); // 2200*44/44 = 2200
-    expect(horaEl.textContent).toBe('10,00'); // 2200/220 = 10
+    // Trigger oninput handlers
+    var inputEvent = new Event('input');
+    pisoEl.dispatchEvent(inputEvent);
+    hrsSemanaEl.dispatchEvent(inputEvent);
+    hrsTrabEl.dispatchEvent(inputEvent);
+
+    // Valor/Hora = 2200/220 = 10
+    expect(valorHoraEl.textContent).toBe('R$ 10,00');
+    // Piso Proporcional = 2200*44/44 = 2200
+    expect(pisoPropEl.textContent).toBe('R$ 2.200,00');
   });
 
   /*** 3. Cloud backup – GitHub interaction ***/

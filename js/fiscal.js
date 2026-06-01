@@ -1,5 +1,17 @@
 /**
- * fiscal.js — Busca de fiscais a partir de planilha ODS
+ * fiscal.js — Busca de fiscais por cidade
+ *
+ * @module fiscal
+ * @description
+ * Carrega uma planilha ODS/XLSX com dados de fiscais e permite busca por cidade.
+ *
+ * Funcionalidades:
+ * - Carregamento de planilha via SheetJS (xlsx)
+ * - Busca textual em tempo real conforme o usuário digita
+ * - Auto-seleção quando apenas 1 resultado é encontrado
+ * - Exibição de nome, telefone e município do fiscal
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

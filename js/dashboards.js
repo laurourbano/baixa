@@ -1,5 +1,22 @@
 /**
  * dashboards.js — Gerenciamento de múltiplos dashboards
+ *
+ * @module dashboards
+ * @description
+ * Gerencia criação, renomeação, exclusão e ordenação de dashboards na sidebar.
+ *
+ * Funcionalidades:
+ * - CRUD completo de dashboards com modal dedicado
+ * - 24 ícones Font Awesome disponíveis com seletor visual
+ * - Sugestão automática de ícone baseada em palavras-chave no nome
+ *   (ex.: "ingresso" → fa-door-open, "baixa" → fa-door-closed,
+ *    "conferência" → fa-clipboard-check, "pj" → fa-building)
+ * - Drag-and-drop para reordenação manual na sidebar
+ * - Alternância entre ordem manual e alfabética (A-Z, locale pt-BR)
+ * - Renderização dinâmica da sidebar com controles hover (editar/excluir)
+ * - Proteção: impede exclusão do último dashboard
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

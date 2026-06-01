@@ -1,5 +1,24 @@
 /**
- * weather.js — Widget de clima com geolocalização e busca de cidades
+ * weather.js — Widget de clima
+ *
+ * @module weather
+ * @description
+ * Exibe a previsão do tempo para a cidade do usuário.
+ *
+ * Fontes de dados:
+ * - Geolocalização: navigator.geolocation (GPS do navegador)
+ * - Geocodificação reversa: Nominatim (OpenStreetMap)
+ * - Busca de cidades: API IBGE (~5.570 municípios brasileiros)
+ * - Previsão: Open-Meteo (API gratuita, sem chave)
+ *
+ * Funcionalidades:
+ * - Detecção automática de localização
+ * - Busca manual de cidades brasileiras
+ * - Exibição de temperatura atual, máxima e mínima
+ * - Ícone representativo por weathercode (WMO)
+ * - Persistência da cidade selecionada em localStorage
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

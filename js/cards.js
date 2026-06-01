@@ -1,5 +1,26 @@
 /**
- * cards.js — Renderização, CRUD, cópia e drag-and-drop de cards (multi-dashboard)
+ * cards.js — Renderização, CRUD, cópia e drag-and-drop de cards
+ *
+ * @module cards
+ * @description
+ * Gerencia cards dentro de cada dashboard.
+ *
+ * Tipos de card suportados:
+ * - copy: texto copiável com data automática
+ * - link: link externo com botão "Abrir Link"
+ * - pdf: link para PDF com botão "Abrir PDF"
+ * - info: informativo somente leitura
+ *
+ * Funcionalidades:
+ * - render: grid responsivo (col-12 col-md-6 col-lg-3) com ordenação por drag-and-drop
+ * - Cópia inteligente: substitui placeholder [00/00/0000] pela data atual (pt-BR)
+ * - Modal Bootstrap para criar/editar cards com campos: título, tipo, cor, conteúdo,
+ *   link, local, situação, julgamento, flag mostrar data
+ * - Drag-and-drop via HTML5 Drag and Drop API nos handles ⠿
+ * - Exportação Excel (.xlsx) via SheetJS
+ * - Feedback visual de cópia (destaque verde temporário)
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

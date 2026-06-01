@@ -198,26 +198,50 @@
                 <!-- VIEW: FERRAMENTAS -->
                 <div id="view-ferramentas" class="app-view d-none">
                     <div class="row g-4">
-                        <!-- Ferramenta: Calculadora -->
-                        <div class="col-md-6 col-lg-4">
+                        <!-- Ferramenta: Calculadora Avançada de Piso -->
+                        <div class="col-12">
                             <div class="workspace-tool">
                                 <h6 class="fw-bold text-info mb-3 text-uppercase letter-spacing"><i
-                                        class="fas fa-calculator me-2"></i> Calculadora</h6>
-                                <div class="d-flex gap-2 mb-3">
-                                    <input id="piso" type="number" placeholder="Valor" class="form-control">
-                                    <input id="horas" type="number" placeholder="Hrs" class="form-control"
-                                        style="max-width: 80px;">
+                                        class="fas fa-calculator me-2"></i> Calculadora de Piso Salarial</h6>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-md-3">
+                                        <label class="x-small text-muted">Categoria</label>
+                                        <select id="ferr-categoria" class="form-select form-select-sm bg-dark text-light border-secondary">
+                                            <option value="varejista">Varejista</option>
+                                            <option value="hospitalar">Hospitalar</option>
+                                            <option value="distribuidora">Distribuidora</option>
+                                            <option value="laboratorios">Laboratórios</option>
+                                            <option value="industrias">Indústrias</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="x-small text-muted">Piso Base (R$)</label>
+                                        <input id="ferr-piso-base" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary" value="4729.62" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="x-small text-muted">Horas Semana</label>
+                                        <input id="ferr-horas-semana" type="number" class="form-control form-control-sm bg-dark text-light border-secondary" value="44" min="1" max="44">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="x-small text-muted">Horas Trabalhadas</label>
+                                        <input id="ferr-horas-trab" type="number" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: 30" min="0">
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end gap-2">
+                                        <button id="ferr-calc" class="btn btn-sm btn-danger"><i class="fas fa-calculator me-1"></i> Calcular</button>
+                                        <button id="ferr-copy" class="btn btn-sm btn-outline-info"><i class="fas fa-copy me-1"></i> Copiar</button>
+                                    </div>
                                 </div>
-                                <div
-                                    class="small text-muted d-flex justify-content-between p-2 bg-dark bg-opacity-25 rounded border border-secondary">
-                                    <span>Total: <b id="res-total" class="text-success">0</b></span>
-                                    <span>Hora: <b id="res-hora" class="text-info">0</b></span>
+                                <div class="small d-flex flex-wrap gap-3 p-2 bg-dark bg-opacity-25 rounded border border-secondary">
+                                    <span>Valor/Hora: <b id="ferr-valor-hora" class="text-info">R$ 21,50</b></span>
+                                    <span>Piso Proporcional: <b id="ferr-piso-prop" class="text-success">R$ 0,00</b></span>
+                                    <span>Ref. 30h: <b id="ferr-ref-30h" class="text-warning">R$ 0,00</b></span>
+                                    <span>Ref. 20h: <b id="ferr-ref-20h" class="text-warning">R$ 0,00</b></span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Ferramenta: Busca Fiscal -->
-                        <div class="col-md-6 col-lg-4">
+                        <div class="col-md-6 col-lg-5">
                             <div class="workspace-tool">
                                 <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i
                                         class="fas fa-search me-2"></i> Fiscal</h6>
@@ -232,8 +256,21 @@
                             </div>
                         </div>
 
-                        <!-- Ferramenta: Nuvem removida (salvamento é feito automaticamente no backend) -->
-
+                        <!-- Ferramenta: Calculadora de Horas de Assistência -->
+                        <div class="col-md-6 col-lg-7">
+                            <div class="workspace-tool">
+                                <h6 class="fw-bold text-success mb-3 text-uppercase letter-spacing"><i
+                                        class="fas fa-clock me-2"></i> Horas de Assistência (Tabela Semanal)</h6>
+                                <p class="x-small text-muted mb-2">Preencha os horários no formato HH:MM-HH:MM (ex: 08:00-12:00)</p>
+                                <div class="table-responsive" style="max-height:350px;overflow-y:auto">
+                                    <table class="table table-sm table-dark table-borderless x-small mb-0" id="ferr-calc-horas-tabela">
+                                        <thead><tr><th>Dia</th><th>1º Turno</th><th>2º Turno</th><th>Intervalo (min)</th><th>Total</th></tr></thead>
+                                        <tbody id="ferr-calc-horas-body"></tbody>
+                                        <tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td colspan="3"></td><td id="ferr-calc-horas-total" class="text-success">0h</td></tr></tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -250,6 +287,8 @@
                         <li class="nav-item"><button class="nav-link" data-section="respostasPadrao" data-bs-toggle="tab" data-bs-target="#c-tab-respostas"><i class="fas fa-reply me-1"></i> Respostas</button></li>
                         <li class="nav-item"><button class="nav-link" data-section="nomesEmpresariais" data-bs-toggle="tab" data-bs-target="#c-tab-nomes"><i class="fas fa-tag me-1"></i> Nomes</button></li>
                         <li class="nav-item"><button class="nav-link" data-section="calcHoras" data-bs-toggle="tab" data-bs-target="#c-tab-horas"><i class="fas fa-clock me-1"></i> Horas</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="pisoRef" data-bs-toggle="tab" data-bs-target="#c-tab-piso-ref"><i class="fas fa-file-invoice-dollar me-1"></i> Piso Ref</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="registros" data-bs-toggle="tab" data-bs-target="#c-tab-registros"><i class="fas fa-table me-1"></i> Registros</button></li>
                     </ul>
                     <!-- Conteúdo das tabs -->
                     <div class="tab-content" id="consultasTabContent">
@@ -262,6 +301,8 @@
                         <div class="tab-pane fade" id="c-tab-respostas"><div class="c-placeholder text-center py-3" data-section="respostasPadrao"><div class="spinner-border spinner-border-sm text-warning me-2"></div> Carregando...</div></div>
                         <div class="tab-pane fade" id="c-tab-nomes"><div class="c-placeholder text-center py-3" data-section="nomesEmpresariais"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...</div></div>
                         <div class="tab-pane fade" id="c-tab-horas"><div class="c-placeholder text-center py-3" data-section="calcHoras"><div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-piso-ref"><div class="c-placeholder text-center py-3" data-section="pisoRef"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-registros"><div class="c-placeholder text-center py-3" data-section="registros"><div class="spinner-border spinner-border-sm text-success me-2"></div> Carregando...</div></div>
                     </div>
                 </div>
 
@@ -624,7 +665,7 @@
                     </div>
                     <div class="d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" id="faq-save-btn" class="btn btn-sm btn-success px-3" onclick="MainApp.saveFaqItem()">
+                        <button type="button" id="faq-save-btn" class="btn btn-sm btn-success px-3">
                             <i class="fas fa-save me-1"></i> Salvar
                         </button>
                     </div>
