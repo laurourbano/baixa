@@ -205,6 +205,7 @@ window.MainApp = window.MainApp || {};
               '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-entrada" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
               '<span class="x-small text-muted">às</span>' +
               '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-saida" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+              '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small ferr-rem-turno" title="Remover"><i class="fas fa-times"></i></button>' +
             '</div>' +
           '</div>' +
         '</td>' +
@@ -268,11 +269,25 @@ window.MainApp = window.MainApp || {};
       }
     });
 
-    // Remover turno
+    // Remover turno — se ficar vazio, recria linha vazia
     tbody.addEventListener('click', function (e) {
       var btn = e.target.closest('.ferr-rem-turno');
       if (!btn) return;
-      btn.closest('.ferr-turno-row').remove();
+      var row = btn.closest('.ferr-turno-row');
+      var container = row.parentElement;
+      row.remove();
+      // Se não sobrou nenhuma linha, recria uma vazia
+      if (!container.querySelector('.ferr-turno-row')) {
+        var dia = container.getAttribute('data-dia');
+        var newRow = document.createElement('div');
+        newRow.className = 'ferr-turno-row d-flex gap-1 align-items-center mb-1';
+        newRow.innerHTML =
+          '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-entrada" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+          '<span class="x-small text-muted">às</span>' +
+          '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-saida" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+          '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small ferr-rem-turno" title="Remover"><i class="fas fa-times"></i></button>';
+        container.appendChild(newRow);
+      }
       calcular();
     });
 
@@ -310,7 +325,7 @@ window.MainApp = window.MainApp || {};
       calcular();
     });
 
-    // Botão Limpar: zera todos os turnos
+    // Botão Limpar: zera todos os turnos (mantém 1ª linha)
     document.getElementById('ferr-lote-limpar').addEventListener('click', function () {
       document.querySelectorAll('.ferr-dia-check:checked').forEach(function (cb) {
         var dia = cb.value;
@@ -319,6 +334,17 @@ window.MainApp = window.MainApp || {};
         container.querySelectorAll('.ferr-entrada, .ferr-saida').forEach(function (inp) { inp.value = ''; });
         var rows = container.querySelectorAll('.ferr-turno-row');
         for (var i = 1; i < rows.length; i++) rows[i].remove();
+        // Se não sobrou nenhuma linha, recria vazia
+        if (!container.querySelector('.ferr-turno-row')) {
+          var newRow = document.createElement('div');
+          newRow.className = 'ferr-turno-row d-flex gap-1 align-items-center mb-1';
+          newRow.innerHTML =
+            '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-entrada" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+            '<span class="x-small text-muted">às</span>' +
+            '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary ferr-saida" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small ferr-rem-turno" title="Remover"><i class="fas fa-times"></i></button>';
+          container.appendChild(newRow);
+        }
       });
       calcular();
     });
