@@ -185,7 +185,31 @@ window.MainApp = window.MainApp || {};
     document.getElementById('m-link').value = '';
     document.getElementById('m-showDate').checked = true;
     toggleLinkField();
+    populateRespostasPadrao();
     window.bsModal.show();
+  }
+
+  function populateRespostasPadrao() {
+    var rpSelect = document.getElementById('m-resposta-padrao');
+    if (!rpSelect) return;
+    var respostas = {};
+    // Tenta múltiplas fontes
+    try { var s = JSON.parse(localStorage.getItem('baixa_rt_data') || '{}'); if (s.respostasPadrao) respostas = s.respostasPadrao; } catch(e) {}
+    if (app.__state && app.__state.servicos && app.__state.servicos.respostasPadrao) respostas = app.__state.servicos.respostasPadrao;
+    if (window._store && window._store.respostasPadrao) respostas = window._store.respostasPadrao;
+    var keys = Object.keys(respostas).sort();
+    rpSelect.innerHTML = '<option value="">Nenhuma</option>' +
+      keys.map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
+    rpSelect.value = '';
+    rpSelect.onchange = function () {
+      var val = this.value;
+      if (val && respostas[val]) {
+        document.getElementById('m-content').value = respostas[val];
+        if (!document.getElementById('m-title').value) {
+          document.getElementById('m-title').value = val;
+        }
+      }
+    };
   }
 
   function saveCard() {
@@ -241,6 +265,7 @@ window.MainApp = window.MainApp || {};
     document.getElementById('m-showDate').checked = card.showDate !== false;
 
     toggleLinkField();
+    populateRespostasPadrao();
     window.bsModal.show();
   }
 
