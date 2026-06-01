@@ -572,7 +572,6 @@ h6,
   color: var(--color-text);
   text-align: left;
   letter-spacing: -0.01em;
-  text-transform: capitalize;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
