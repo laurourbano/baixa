@@ -1677,7 +1677,7 @@ window.MainApp = window.MainApp || {};
         '<button id="rp-edit" class="btn btn-sm btn-outline-warning flex-shrink-0"><i class="fas fa-edit me-1"></i> Editar</button>' +
         '<button id="rp-copy" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
       '</div>' +
-      '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
+      '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light text-start" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
 
     loadSectionDataGeneric('respostasPadrao', 'assets/respostas-padrao.json', function (data) {
       // Migra formato antigo {titulo, instrucao, texto} para dicionário {titulo: texto}
