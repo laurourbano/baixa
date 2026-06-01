@@ -671,6 +671,7 @@ window.MainApp = window.MainApp || {};
         '<button id="piso-del-cidade" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash me-1"></i> Remover</button>' +
         '<span id="piso-acordo-badge" class="badge bg-success ms-2 d-none">ACT Vigente</span>' +
         '<span id="piso-acordo-alerta" class="badge bg-warning text-dark ms-2 d-none">Sem ACT - piso geral</span>' +
+        '<span id="piso-cct-ano" class="badge ms-2 d-none"></span>' +
       '</div>' +
       '<div id="piso-result" class="small d-flex flex-wrap gap-2 p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2">' +
         '<span>Piso Proporcional: <b id="piso-prop" class="text-success">—</b></span>' +
@@ -825,6 +826,21 @@ window.MainApp = window.MainApp || {};
       var cat = document.getElementById('piso-categoria').value;
       document.getElementById('piso-acordo-badge').classList.toggle('d-none', !regData._actVigente);
       document.getElementById('piso-acordo-alerta').classList.toggle('d-none', regData._actVigente);
+
+      // Exibe ano da CCT vigente com destaque se diferente do ano atual
+      var cctAno = regData._ultimaCCT || '';
+      var cctBadge = document.getElementById('piso-cct-ano');
+      if (cctAno) {
+        var anoAtual = new Date().getFullYear();
+        var cctFim = parseInt(cctAno.split('-').pop()) || anoAtual;
+        var desatualizada = cctFim < anoAtual;
+        cctBadge.className = 'badge ms-2 ' + (desatualizada ? 'bg-danger' : 'bg-info');
+        cctBadge.innerHTML = '<i class="fas fa-' + (desatualizada ? 'exclamation-triangle' : 'check-circle') + ' me-1"></i>CCT ' + cctAno;
+        if (desatualizada) cctBadge.title = 'CCT desatualizada! Último acordo: ' + cctAno + '. Verifique nova convenção no SINDIFAR-PR.';
+        cctBadge.classList.remove('d-none');
+      } else {
+        cctBadge.classList.add('d-none');
+      }
 
       var catValue = catValues ? catValues[cat] : null;
       if (!catValue && regData.cidades) {
@@ -1007,7 +1023,14 @@ window.MainApp = window.MainApp || {};
       var primeira = rd.cidades ? Object.values(rd.cidades)[0] : null;
       if (!primeira) return;
       var actBadge = rd._actVigente ? '<span class="badge bg-success x-small">Sim</span>' : '<span class="badge bg-warning text-dark x-small">Não</span>';
-      html += '<tr><td>' + escapeHtml(regiao) + '</td><td>' + actBadge + '</td>';
+      var cctInfo = '';
+      if (rd._ultimaCCT) {
+        var anoAtual = new Date().getFullYear();
+        var cctFim = parseInt(rd._ultimaCCT.split('-').pop()) || anoAtual;
+        var desatualizada = cctFim < anoAtual;
+        cctInfo = ' <span class="badge ' + (desatualizada ? 'bg-danger' : 'bg-info') + ' x-small" title="' + (desatualizada ? 'CCT desatualizada!' : 'CCT vigente') + '">' + rd._ultimaCCT + '</span>';
+      }
+      html += '<tr><td>' + escapeHtml(regiao) + '</td><td>' + actBadge + cctInfo + '</td>';
       cats.forEach(function (cat) {
         html += '<td class="text-end text-success">' + (primeira[cat] || 0).toFixed(2) + '</td>';
       });
@@ -1028,8 +1051,14 @@ window.MainApp = window.MainApp || {};
     var catLabels = { varejista: 'Varejista', hospitalar: 'Hospitalar', distribuidora: 'Distribuidora', laboratorios: 'Laboratórios', industrias: 'Indústrias' };
 
     var actBadge = regData._actVigente ? '<span class="badge bg-success x-small">ACT Vigente</span>' : '<span class="badge bg-warning text-dark x-small">Geral</span>';
-
-    var html = '<div class="d-flex justify-content-between align-items-center mb-1"><small class="fw-bold text-light">' + escapeHtml(regiao) + '</small>' + actBadge + '</div>';
+    var cctBadge = '';
+    if (regData._ultimaCCT) {
+      var anoAtual = new Date().getFullYear();
+      var cctFim = parseInt(regData._ultimaCCT.split('-').pop()) || anoAtual;
+      var desatualizada = cctFim < anoAtual;
+      cctBadge = ' <span class="badge ' + (desatualizada ? 'bg-danger' : 'bg-info') + ' x-small">CCT ' + regData._ultimaCCT + '</span>';
+    }
+    var html = '<div class="d-flex justify-content-between align-items-center mb-1"><small class="fw-bold text-light">' + escapeHtml(regiao) + '</small><div>' + actBadge + cctBadge + '</div></div>';
     html += '<table class="table table-sm table-dark table-borderless mb-0 x-small">';
     html += '<thead><tr><th>Cidade</th>';
     cats.forEach(function (c) { html += '<th class="text-end">' + catLabels[c] + '</th>'; });
