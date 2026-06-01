@@ -198,14 +198,14 @@
                 <!-- VIEW: FERRAMENTAS -->
                 <div id="view-ferramentas" class="app-view d-none">
                     <div class="row g-4">
-                        <!-- Ferramenta: Calculadora Avançada de Piso -->
+                        <!-- Ferramenta: Calculadora de Piso + Horas (integradas) -->
                         <div class="col-12">
                             <div class="workspace-tool">
                                 <h6 class="fw-bold text-info mb-3 text-uppercase letter-spacing"><i
                                         class="fas fa-calculator me-2"></i> Calculadora de Piso Salarial</h6>
                                 <div class="row g-2 mb-3">
                                     <div class="col-12">
-                                        <label class="x-small text-muted mb-2">Categorias</label>
+                                        <label class="x-small text-muted mb-2">Categoria da Empresa</label>
                                         <div class="d-flex flex-wrap gap-2" id="ferr-categorias-radios">
                                             <label class="ferr-radio-label active"><input type="radio" name="ferr-cat" value="varejista" checked> Varejista <b class="text-success">R$ <span>4.729,62</span></b></label>
                                             <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="hospitalar"> Hospitalar <b class="text-success">R$ <span>4.567,00</span></b></label>
@@ -223,49 +223,23 @@
                                         <label class="x-small text-muted">Horas Semana</label>
                                         <input id="ferr-horas-semana" type="number" class="form-control form-control-sm bg-dark text-light border-secondary" value="44" min="1" max="44">
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="x-small text-muted">Horas Trabalhadas</label>
-                                        <input id="ferr-horas-trab" type="number" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: 30" min="0">
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-end gap-2">
-                                        <button id="ferr-calc" class="btn btn-sm btn-danger"><i class="fas fa-calculator me-1"></i> Calcular</button>
+                                    <div class="col-md-3 d-flex align-items-end gap-2">
                                         <button id="ferr-copy" class="btn btn-sm btn-outline-info"><i class="fas fa-copy me-1"></i> Copiar</button>
                                     </div>
                                 </div>
-                                <div class="small d-flex flex-wrap gap-3 p-2 bg-dark bg-opacity-25 rounded border border-secondary">
-                                    <span>Piso Base (44h): <b id="ferr-piso-base-display" class="text-light">R$ 4.729,62</b></span>
+                                <div class="small d-flex flex-wrap gap-3 p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-3">
+                                    <span>Piso Base: <b id="ferr-piso-base-display" class="text-light">R$ 4.729,62</b></span>
                                     <span>Valor/Hora: <b id="ferr-valor-hora" class="text-info">R$ 21,50</b></span>
+                                    <span>Total de Horas: <b id="ferr-total-horas-display" class="text-info">0h</b></span>
                                     <span>Salário Total: <b id="ferr-piso-prop" class="text-success fs-6">R$ 0,00</b></span>
-                                    <span>Ref. 30h: <b id="ferr-ref-30h" class="text-warning">R$ 0,00</b></span>
-                                    <span>Ref. 20h: <b id="ferr-ref-20h" class="text-warning">R$ 0,00</b></span>
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- Ferramenta: Busca Fiscal -->
-                        <div class="col-md-6 col-lg-5">
-                            <div class="workspace-tool">
-                                <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i
-                                        class="fas fa-search me-2"></i> Fiscal</h6>
-                                <input type="text" id="fiscal-filter" class="form-control form-control-sm mb-2"
-                                    placeholder="Filtrar cidade..." autocomplete="off">
-                                <select id="fiscal-select" class="form-select mb-3" disabled>
-                                    <option>Carregando...</option>
-                                </select>
-                                <div id="fiscal-res"
-                                    class="small text-muted p-2 bg-dark bg-opacity-25 rounded border border-secondary">
-                                    Selecione uma cidade</div>
-                            </div>
-                        </div>
-
-                        <!-- Ferramenta: Calculadora de Horas de Assistência -->
-                        <div class="col-md-6 col-lg-7">
-                            <div class="workspace-tool">
-                                <h6 class="fw-bold text-success mb-3 text-uppercase letter-spacing"><i
-                                        class="fas fa-clock me-2"></i> Horas de Assistência (Tabela Semanal)</h6>
-                                <p class="x-small text-muted mb-2">Preencha os horários de entrada e saída. Use "Adicionar turno" para múltiplos horários.</p>
+                                <!-- Tabela de Horas embutida -->
+                                <h6 class="fw-bold text-success mb-2 text-uppercase letter-spacing x-small"><i
+                                        class="fas fa-clock me-2"></i> Horários do Profissional</h6>
+                                <p class="x-small text-muted mb-1">Preencha os horários para calcular o salário automaticamente.</p>
                                 <div class="d-flex gap-2 align-items-center mb-1 flex-wrap" id="ferr-horas-lote">
-                                    <span class="x-small text-muted">Aplicar nos dias:</span>
+                                    <span class="x-small text-muted">Dias:</span>
                                     <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="DOM" checked> DOM</label>
                                     <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="SEG" checked> SEG</label>
                                     <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="TER" checked> TER</label>
@@ -286,6 +260,22 @@
                                         <tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td></td><td id="ferr-calc-horas-total" class="text-success">0h</td></tr></tfoot>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Ferramenta: Busca Fiscal -->
+                        <div class="col-md-6 col-lg-5">
+                            <div class="workspace-tool">
+                                <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i
+                                        class="fas fa-search me-2"></i> Fiscal</h6>
+                                <input type="text" id="fiscal-filter" class="form-control form-control-sm mb-2"
+                                    placeholder="Filtrar cidade..." autocomplete="off">
+                                <select id="fiscal-select" class="form-select mb-3" disabled>
+                                    <option>Carregando...</option>
+                                </select>
+                                <div id="fiscal-res"
+                                    class="small text-muted p-2 bg-dark bg-opacity-25 rounded border border-secondary">
+                                    Selecione uma cidade</div>
                             </div>
                         </div>
                     </div>

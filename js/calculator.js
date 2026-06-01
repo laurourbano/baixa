@@ -25,6 +25,7 @@ window.MainApp = window.MainApp || {};
   // ── Dados de piso por categoria (carregados assincronamente) ──
   var pisoData = null;
   var todasCidades = [];
+  var calcularPisoFerr = null; // exposta para ser chamada pela tabela de horas
   var pisoCategorias = {
     varejista:    { nome: 'Varejista',    valor: 4729.62 },
     hospitalar:   { nome: 'Hospitalar',   valor: 4567.00 },
@@ -47,8 +48,6 @@ window.MainApp = window.MainApp || {};
   function initPisoCalc() {
     var radiosContainer = document.getElementById('ferr-categorias-radios');
     var hrsSemanaEl = document.getElementById('ferr-horas-semana');
-    var hrsTrabEl = document.getElementById('ferr-horas-trab');
-    var calcBtn = document.getElementById('ferr-calc');
     var copyBtn = document.getElementById('ferr-copy');
 
     if (!radiosContainer) return;
@@ -61,6 +60,15 @@ window.MainApp = window.MainApp || {};
     function getPisoBase() {
       var cat = getSelectedCat();
       return pisoCategorias[cat] ? pisoCategorias[cat].valor : 0;
+    }
+
+    function getTotalHoras() {
+      var totalEl = document.getElementById('ferr-calc-horas-total');
+      if (totalEl) {
+        var txt = totalEl.textContent.replace('h', '').trim();
+        return parseFloat(txt) || 0;
+      }
+      return 0;
     }
 
     // Atualiza destaque visual dos radios
@@ -77,47 +85,40 @@ window.MainApp = window.MainApp || {};
       }
     });
 
-    function calcularPisoFerr() {
+    calcularPisoFerr = function () {
       var piso = getPisoBase();
       var hrsSemana = parseFloat(hrsSemanaEl.value) || 44;
-      var hrsTrab = parseFloat(hrsTrabEl.value) || 0;
+      var hrsTrab = getTotalHoras();
 
       var valorHora = piso / 220;
-      var pisoProp = hrsTrab > 0 ? (piso * hrsTrab / hrsSemana) : 0;
-      var ref30h = piso * 30 / hrsSemana;
-      var ref20h = piso * 20 / hrsSemana;
+      var salarioTotal = hrsTrab > 0 ? (piso * hrsTrab / hrsSemana) : 0;
 
       var pisoBaseDisplay = document.getElementById('ferr-piso-base-display');
       var valorHoraEl = document.getElementById('ferr-valor-hora');
+      var totalHorasDisplay = document.getElementById('ferr-total-horas-display');
       var pisoPropEl = document.getElementById('ferr-piso-prop');
-      var ref30hEl = document.getElementById('ferr-ref-30h');
-      var ref20hEl = document.getElementById('ferr-ref-20h');
 
       if (pisoBaseDisplay) pisoBaseDisplay.textContent = 'R$ ' + piso.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       if (valorHoraEl) valorHoraEl.textContent = 'R$ ' + valorHora.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      if (pisoPropEl) pisoPropEl.textContent = 'R$ ' + pisoProp.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      if (ref30hEl) ref30hEl.textContent = 'R$ ' + ref30h.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      if (ref20hEl) ref20hEl.textContent = 'R$ ' + ref20h.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (totalHorasDisplay) totalHorasDisplay.textContent = hrsTrab.toFixed(2) + 'h';
+      if (pisoPropEl) pisoPropEl.textContent = 'R$ ' + salarioTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function copiarResultado() {
       var piso = getPisoBase();
       var hrsSemana = parseFloat(hrsSemanaEl.value) || 44;
-      var hrsTrab = parseFloat(hrsTrabEl.value) || 0;
+      var hrsTrab = getTotalHoras();
       var catNome = pisoCategorias[getSelectedCat()] ? pisoCategorias[getSelectedCat()].nome : getSelectedCat();
 
       var valorHora = piso / 220;
-      var pisoProp = hrsTrab > 0 ? (piso * hrsTrab / hrsSemana) : 0;
-      var ref30h = piso * 30 / hrsSemana;
-      var ref20h = piso * 20 / hrsSemana;
+      var salarioTotal = hrsTrab > 0 ? (piso * hrsTrab / hrsSemana) : 0;
 
       var text =
         'Categoria: ' + catNome + '\n' +
-        'Piso Base (44h): R$ ' + piso.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '\n' +
+        'Piso Base: R$ ' + piso.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '\n' +
         'Valor/Hora: R$ ' + valorHora.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '\n' +
-        (hrsTrab > 0 ? 'Piso Proporcional (' + hrsTrab + 'h): R$ ' + pisoProp.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '\n' : '') +
-        'Ref. 30h: R$ ' + ref30h.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '\n' +
-        'Ref. 20h: R$ ' + ref20h.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        'Total de Horas: ' + hrsTrab.toFixed(2) + 'h\n' +
+        'Salário Total: R$ ' + salarioTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () {
@@ -126,10 +127,8 @@ window.MainApp = window.MainApp || {};
       }
     }
 
-    calcBtn.addEventListener('click', calcularPisoFerr);
     copyBtn.addEventListener('click', copiarResultado);
     hrsSemanaEl.addEventListener('input', calcularPisoFerr);
-    hrsTrabEl.addEventListener('input', calcularPisoFerr);
 
     // Busca de cidade para filtrar piso por região
     var cidadeInput = document.getElementById('ferr-cidade');
@@ -239,6 +238,9 @@ window.MainApp = window.MainApp || {};
 
       var totalSemEl = document.getElementById('ferr-calc-horas-total');
       if (totalSemEl) totalSemEl.textContent = totalSemana.toFixed(2) + 'h';
+
+      // Dispara recálculo do piso
+      if (typeof calcularPisoFerr === 'function') calcularPisoFerr();
     }
 
     // Toggle edição por dia (expandir campos para sobrescrever)
