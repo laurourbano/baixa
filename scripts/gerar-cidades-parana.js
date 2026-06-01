@@ -105,11 +105,34 @@ const regioes = {
 
 // Constrói lista plana: [{ cidade, regiao, label }]
 const cidades = [];
-Object.keys(regioes).forEach(regiao => {
-  regioes[regiao].forEach(cidade => {
-    const label = cidade.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    cidades.push({ cidade, regiao, label });
+// Função de normalização: minúsculo, sem acentos, sem espaços
+function normalize(str) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ç/g, 'c')
+    .replace(/\s+/g, '_')
+    .replace(/[^a-z0-9_]/g, '')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '');
+}
+
+// Remove duplicatas cross-região (cidade fica na primeira região encontrada)
+const seenCidades = {};
+const regioesClean = {};
+
+Object.keys(regioes).forEach(function (regiao) {
+  var cidadesRegiao = [];
+  regioes[regiao].forEach(function (cidade) {
+    var norm = normalize(cidade);
+    if (!norm || seenCidades[norm]) return;
+    seenCidades[norm] = true;
+    cidadesRegiao.push(norm);
+    const label = norm.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+    cidades.push({ cidade: norm, regiao: regiao, label: label });
   });
+  if (cidadesRegiao.length > 0) regioesClean[regiao] = cidadesRegiao;
 });
 
 // Ordena alfabeticamente por label
@@ -117,7 +140,7 @@ cidades.sort((a, b) => a.label.localeCompare(b.label, 'pt-BR'));
 
 fs.writeFileSync(
   path.join(__dirname, '..', 'assets', 'cidades-parana.json'),
-  JSON.stringify({ cidades, regioes }, null, 2)
+  JSON.stringify({ cidades, regioes: regioesClean }, null, 2)
 );
 
-console.log('cidades-parana.json gerado com', cidades.length, 'cidades em', Object.keys(regioes).length, 'regiões.');
+console.log('cidades-parana.json gerado com', cidades.length, 'cidades em', Object.keys(regioesClean).length, 'regiões.');

@@ -790,7 +790,7 @@ window.MainApp = window.MainApp || {};
     var nome = selectEl.value;
     if (!nome) return;
 
-    var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
 
     // Varre store.piso.regioes para encontrar a cidade e sua região
     var regiaoNome = '', catValues = null;
@@ -1057,7 +1057,7 @@ window.MainApp = window.MainApp || {};
     var val = parseFloat(document.getElementById('piso-base').value.replace(/[R$\s]/g, '').replace(',', '.')) || 0;
     if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
 
-    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
     if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
     if (!store.piso.regioes[regiao].cidades[cidadeKey]) store.piso.regioes[regiao].cidades[cidadeKey] = {};
     store.piso.regioes[regiao].cidades[cidadeKey][cat] = val;
@@ -1071,7 +1071,7 @@ window.MainApp = window.MainApp || {};
     if (!regiao) { app.showToast('Digite o nome de uma cidade existente para usar sua região.', 'warning', 2500); return; }
     var nome = prompt('Nome da nova cidade (ex: Sao Jose dos Pinhais):');
     if (!nome || !nome.trim()) return;
-    var cidadeKey = nome.trim().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var cidadeKey = nome.trim().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
     if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
     if (store.piso.regioes[regiao].cidades[cidadeKey]) { app.showToast('Cidade já existe nesta região!', 'warning', 2000); return; }
     var primeira = Object.values(store.piso.regioes[regiao].cidades)[0] || { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 };
@@ -1088,7 +1088,7 @@ window.MainApp = window.MainApp || {};
     var selectEl = document.getElementById('piso-cidade-select');
     var nomeCidade = selectEl ? selectEl.value : '';
     if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
-    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
     if (!store.piso.regioes[regiao] || !store.piso.regioes[regiao].cidades[cidadeKey]) {
       app.showToast('Cidade não encontrada na região.', 'warning', 2000); return;
     }
