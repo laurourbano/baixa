@@ -480,7 +480,7 @@ window.MainApp = window.MainApp || {};
      ═══════════════════════════════════════ */
 
   function loadPisoData() {
-    fetch('assets/piso.json')
+    fetch('assets/piso/piso.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         pisoData = data;

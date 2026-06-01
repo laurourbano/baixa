@@ -37,7 +37,7 @@ window.MainApp = window.MainApp || {};
         : 'Aguardando seleção...';
     };
 
-    return fetch('assets/dados.ods').then(function (r) { return r.arrayBuffer(); }).then(function (buf) {
+    return fetch('assets/planilhas/dados.ods').then(function (r) { return r.arrayBuffer(); }).then(function (buf) {
       var _warn = console.warn;
       var _error = console.error;
       console.warn = console.error = function () {};

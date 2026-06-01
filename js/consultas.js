@@ -72,8 +72,8 @@ window.MainApp = window.MainApp || {};
   function initSection(s) {
     switch (s) {
       case 'faq':          initFaq(); break;
-      case 'normas':       initCrudSection('normas', 'Normas e Legislação', 'assets/normas.json', renderNormas, cfgNormas); break;
-      case 'protocolos':   initCrudSection('protocolos', 'Protocolos', 'assets/protocolos-base.json', renderProtocolos, cfgProtocolos); break;
+      case 'normas':       initCrudSection('normas', 'Normas e Legislação', 'assets/consultas/normas.json', renderNormas, cfgNormas); break;
+      case 'protocolos':   initCrudSection('protocolos', 'Protocolos', 'assets/consultas/protocolos-base.json', renderProtocolos, cfgProtocolos); break;
       case 'piso':         initPiso(); break;
       case 'orientacoes':  initOrientacoes(); break;
       case 'listas':       initListas(); break;
@@ -489,11 +489,11 @@ window.MainApp = window.MainApp || {};
       if (faqPage < t) { faqPage++; faqRender(); faqRenderPagination(); }
     });
 
-    loadSectionData('faq', 'assets/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
+    loadSectionData('faq', 'assets/consultas/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
       store.faq = data;
       saveStore();
       faqRefresh();
-    }, 'assets/respostas.json');
+    }, 'assets/consultas/respostas.json');
   }
 
   function faqRefresh() {
@@ -686,7 +686,7 @@ window.MainApp = window.MainApp || {};
     var cidadesData = [];
 
     // Tenta JSON dedicado, fallback para store.piso.regioes
-    fetch('assets/cidades-parana.json')
+    fetch('assets/piso/cidades-parana.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         cidadesData = data.cidades || [];
@@ -987,7 +987,7 @@ window.MainApp = window.MainApp || {};
     // Cache inválido ou dados antigos: recarrega
     delete store.piso;
 
-    fetch('assets/piso.json')
+    fetch('assets/piso/piso.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (!data.regioes) {
@@ -1191,7 +1191,7 @@ window.MainApp = window.MainApp || {};
       app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
     });
 
-    loadSectionDataGeneric('orientacoes', 'assets/orientacoes.json', function (data) {
+    loadSectionDataGeneric('orientacoes', 'assets/consultas/orientacoes.json', function (data) {
       store.orientacoes = data;
       saveStore();
       renderOrientacoes();
@@ -1552,7 +1552,7 @@ window.MainApp = window.MainApp || {};
       app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
     });
 
-    loadSectionDataGeneric('listas', 'assets/listas.json', function (data) {
+    loadSectionDataGeneric('listas', 'assets/consultas/listas.json', function (data) {
       store.listas = data;
       saveStore();
       renderListas();
@@ -1679,7 +1679,7 @@ window.MainApp = window.MainApp || {};
       '</div>' +
       '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light text-start" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
 
-    loadSectionDataGeneric('respostasPadrao', 'assets/respostas-padrao.json', function (data) {
+    loadSectionDataGeneric('respostasPadrao', 'assets/consultas/respostas-padrao.json', function (data) {
       // Migra formato antigo {titulo, instrucao, texto} para dicionário {titulo: texto}
       if (data && data.titulo && data.texto && !data[data.titulo]) {
         var novo = {};
@@ -1782,7 +1782,7 @@ window.MainApp = window.MainApp || {};
       '</div>' +
       '<div id="ne-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
-    loadSectionDataGeneric('nomesEmpresariais', 'assets/nomes-empresariais.json', function (data) {
+    loadSectionDataGeneric('nomesEmpresariais', 'assets/consultas/nomes-empresariais.json', function (data) {
       store.nomesEmpresariais = data;
       saveStore();
       renderNomesEmpresariais();
@@ -1871,7 +1871,7 @@ window.MainApp = window.MainApp || {};
 
     // Carrega instruções do JSON (calc-horas.json)
     var instrucoesHtml = '<p class="x-small text-muted mb-2">Preencha os horários de entrada e saída. Use "Adicionar turno" para múltiplos horários.</p>';
-    fetch('assets/calc-horas.json')
+    fetch('assets/consultas/calc-horas.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data && data.instrucoes && data.instrucoes.length) {
@@ -2107,7 +2107,7 @@ window.MainApp = window.MainApp || {};
 
   function loadPisoRefData(cb) {
     if (store.pisoRef) return cb(store.pisoRef);
-    fetch('assets/piso-ref.json')
+    fetch('assets/piso/piso-ref.json')
       .then(function (r) { return r.json(); })
       .then(function (data) { store.pisoRef = data; saveStore(); cb(data); })
       .catch(function () { cb(store.pisoRef || {}); });
@@ -2232,7 +2232,7 @@ window.MainApp = window.MainApp || {};
 
   function loadRegistrosData(cb) {
     if (store.registros && store.registros.length) return cb(store.registros);
-    fetch('assets/protocolos-detalhados.json')
+    fetch('assets/consultas/protocolos-detalhados.json')
       .then(function (r) { return r.json(); })
       .then(function (data) { store.registros = data; saveStore(); cb(data); })
       .catch(function () { cb(store.registros || []); });

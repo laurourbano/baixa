@@ -1,0 +1,2322 @@
+{
+  "regioes": {
+    "Curitiba e RMC": {
+      "_actVigente": true,
+      "_ultimaCCT": "2025-2026",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "agudos_do_sul": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "almete_tamandare": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "antonina": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "araucaria": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "balsa_nova": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "bocaiuva_do_sul": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "campina_grande_do_sul": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "campo_do_tenente": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "campo_largo": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "cerro_azul": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "colombo": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "contenda": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "curitiba": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "fazenda_rio_grande": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "guaraquecaba": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "guaratuba": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "lapa": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "mandirituba": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "matinhos": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "morretes": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "paranagua": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "pien": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "pinhais": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "piraquara": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "ponte_do_parana": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "quatro_barras": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "rio_branco_do_sul": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "sao_jose_dos_pinhais": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        },
+        "tijucas_do_sul": {
+          "varejista": 4729.62,
+          "hospitalar": 4567,
+          "distribuidora": 4764,
+          "laboratorios": 3763.08,
+          "industrias": 4211.45
+        }
+      }
+    },
+    "Londrina e Norte Central": {
+      "_actVigente": true,
+      "_ultimaCCT": "2025-2026",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "alto_parana": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "alto_piquiri": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "amapora": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "apucarana": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "arapongas": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "astorga": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "barbosa_ferraz": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "bom_sucesso": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "borrazopolis": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "california": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "cambe": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "cambira": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "corumbatai_do_sul": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "cruzeiro_do_sul": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "cruzmaltina": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "diamante_do_norte": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "engenheiro_beltrao": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "faxinal": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "fenix": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "florestopolis": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "guairaca": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "ibipora": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "iguaracu": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "inaja": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "itaguaje": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "itanhanga": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "ivaipora": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "jandaia_do_sul": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "jardim_alegre": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "kalore": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "lidianopolis": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "loanda": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "londrina": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "lunardelli": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "mandaguacu": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "mandaguari": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "manoel_ribas": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "marialva": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "marilena": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "mariluz": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "maringa": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "marumbi": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "maua_da_serra": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "nova_alianca_do_ivai": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "nova_esperanca": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "nova_londrina": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "novo_itacolomi": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "ourizona": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "paicandu": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "paraiso_do_norte": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "paranacity": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "planaltina_do_parana": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "porto_rico": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "presidente_castelo_branco": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "quarense": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "rolandia": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "sabaudia": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "santa_cruz_do_monte_castelo": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "santa_fe": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "santa_isabel_do_ivai": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "santa_monica": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "sao_carlos_do_ivai": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "sao_joao_do_ivai": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "sao_jorge_do_ivai": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "sao_pedro_do_ivai": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "sao_pedro_do_parana": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "sarandi": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "tamboara": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "tambora": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "tapejara": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "tapira": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "terra_boa": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        },
+        "umuarama": {
+          "varejista": 3950,
+          "hospitalar": 4100,
+          "distribuidora": 4200,
+          "laboratorios": 3400,
+          "industrias": 3800
+        }
+      }
+    },
+    "Maringá e Noroeste": {
+      "_actVigente": true,
+      "_ultimaCCT": "2025-2026",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "araruna": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "boa_esperanca": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "campina_da_lagoa": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "campo_mourao": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "cianorte": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "colorado": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "cruzeiro_do_oeste": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "douradina": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "florai": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "floresta": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "goioere": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "guaporema": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "icaraima": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "iguatemi": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "ivate": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "janipolis": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "japura": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "juranda": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "jussara": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "luiziana": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "mambore": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "moreira_sales": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "nova_cantu": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "nova_olimpia": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "paranapoema": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "paranavai": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "peabiru": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "perobal": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "quarese": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "quarto_centenario": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "quinta_do_sol": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "rancho_alegre_do_oeste": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "rondon": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "sao_jorge_do_patrocinio": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "sao_manoel_do_parana": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "sao_tome": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "tuneiras_do_oeste": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        },
+        "xambre": {
+          "varejista": 4200,
+          "hospitalar": 4300,
+          "distribuidora": 4400,
+          "laboratorios": 3500,
+          "industrias": 3900
+        }
+      }
+    },
+    "Ponta Grossa e Campos Gerais": {
+      "_actVigente": true,
+      "_ultimaCCT": "2025-2026",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "arapoti": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "carambei": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "castro": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "curiuva": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "fernandes_pinheiro": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "guamiranga": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "imbau": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "ipiranga": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "ivai": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "jaguariaiva": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "ortigueira": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "palmeira": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "pirai_do_sul": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "ponta_grossa": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "porto_amazonas": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "reserva": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "sao_joao_do_triunfo": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "senges": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "telemaco_borba": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "tibagi": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        },
+        "ventania": {
+          "varejista": 3850,
+          "hospitalar": 4000,
+          "distribuidora": 4100,
+          "laboratorios": 3200,
+          "industrias": 3700
+        }
+      }
+    },
+    "Cascavel e Oeste": {
+      "_actVigente": true,
+      "_ultimaCCT": "2025-2026",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "anahy": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "assis_chateaubriand": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "boa_vista_da_aparecida": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "braganey": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "cafelandia": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "campo_bonito": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "capitao_leonidas_marques": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "cascavel": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "catanduvas": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "ceu_azul": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "corbelia": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "diamante_do_sul": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "entre_rios_do_oeste": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "formosa_do_oeste": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "foz_do_iguacu": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "guaira": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "guaraniacu": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "ibema": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "iguatu": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "iracema_do_oeste": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "jesuitas": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "lindoeste": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "marechal_candido_rondon": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "matelandia": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "medianeira": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "mercedes": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "nova_aurora": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "nova_prata_do_iguacu": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "ouro_verde_do_oeste": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "palotina": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "pato_bragado": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "quatro_pontes": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "santa_helena": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "santa_lucia": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "santa_tereza_do_oeste": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "sao_jose_das_palmeiras": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "sao_pedro_do_iguacu": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "serranopolis_do_iguacu": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "toledo": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "tres_barras_do_parana": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "tupassi": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        },
+        "vera_cruz_do_oeste": {
+          "varejista": 4000,
+          "hospitalar": 4150,
+          "distribuidora": 4250,
+          "laboratorios": 3300,
+          "industrias": 3750
+        }
+      }
+    },
+    "Francisco Beltrão e Sudoeste": {
+      "_actVigente": true,
+      "_ultimaCCT": "2025-2026",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "ampere": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "barracao": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "bela_vista_da_caroba": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "bom_jesus_do_sul": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "capanema": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "chopinzinho": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "clevelandia": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "coronel_vivida": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "cruzeiro_do_iguacu": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "dois_vizinhos": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "eneas_marques": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "flor_da_serra_do_sul": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "francisco_beltrao": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "honorio_serpa": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "itaipulandia": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "manfrinopolis": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "mangueirinha": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "mariopolis": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "marmeleiro": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "nova_esperanca_do_sudoeste": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "palmas": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "pato_branco": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "perola_do_oeste": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "pinhal_de_sao_bento": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "planejado": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "pranchita": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "realeza": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "renascenca": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "salto_do_lontra": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "santa_izabel_do_oeste": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "santo_antonio_do_sudoeste": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "sao_jorge_do_oeste": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "sao_lourenco_do_oeste": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "sao_valentim": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "sulina": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "vere": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        },
+        "vitorino": {
+          "varejista": 3800,
+          "hospitalar": 3900,
+          "distribuidora": 4000,
+          "laboratorios": 3100,
+          "industrias": 3600
+        }
+      }
+    },
+    "Guarapuava e Centro-Sul": {
+      "_actVigente": true,
+      "_ultimaCCT": "2025-2026",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "boa_ventura_de_sao_roque": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "campina_do_simao": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "candido_de_abreu": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "candoi": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "cantagalo": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "foz_do_jordao": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "goioxim": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "guarapuava": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "inacio_martins": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "laranjeiras_do_sul": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "mato_rico": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "nova_laranjeiras": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "palmital": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "pinhao": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "pitanga": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "prudentopolis": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "reserva_do_iguacu": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "rio_bonito_do_iguacu": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "turvo": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        },
+        "virmond": {
+          "varejista": 3700,
+          "hospitalar": 3850,
+          "distribuidora": 3950,
+          "laboratorios": 3000,
+          "industrias": 3500
+        }
+      }
+    },
+    "Jacarezinho e Norte Pioneiro": {
+      "_actVigente": false,
+      "_ultimaCCT": "2024-2025",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "abatia": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "andira": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "assai": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "bandeirantes": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "barra_do_jacare": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "cambara": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "carlopolis": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "congonhinhas": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "conselheiro_mairinck": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "cornelio_procopio": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "figueira": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "guapirama": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "ibaiti": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "jaboti": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "jacarezinho": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "japira": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "joaquim_tavora": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "jundiai_do_sul": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "nova_america_da_colina": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "nova_fatima": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "nova_santa_barbara": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "pinhalao": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "quatigua": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "ribeirao_claro": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "ribeirao_do_pinhal": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "salto_do_itarare": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "santa_amelia": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "santa_cecilia_do_pavao": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "santana_do_itarare": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "santo_antonio_da_platina": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "sao_jeronimo_da_serra": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "sao_jose_da_boa_vista": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "sapopema": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "sertaneja": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "siqueira_campos": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "tomazina": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "wenceslau_braz": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        }
+      }
+    },
+    "União da Vitória e Sul": {
+      "_actVigente": false,
+      "_ultimaCCT": "2024-2025",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "uniao_da_vitoria": {
+          "varejista": 3400,
+          "hospitalar": 3550,
+          "distribuidora": 3650,
+          "laboratorios": 2800,
+          "industrias": 3300
+        }
+      }
+    },
+    "Litoral": {
+      "_actVigente": false,
+      "_ultimaCCT": "2024-2025",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "litoral": {
+          "varejista": 3600,
+          "hospitalar": 3750,
+          "distribuidora": 3850,
+          "laboratorios": 3000,
+          "industrias": 3500
+        }
+      }
+    },
+    "Irati e Sudeste": {
+      "_actVigente": false,
+      "_ultimaCCT": "2024-2025",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "antonio_olinto": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "bituruna": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "cruz_machado": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "general_carneiro": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "imbituva": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "irati": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "mallet": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "paula_freitas": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "paulo_frontin": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "porto_vitoria": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "reboucas": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "rio_azul": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "rio_negro": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "sao_mateus_do_sul": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        },
+        "uniao_da_vitoria": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
+        }
+      }
+    },
+    "Paranaguá e Litoral": {
+      "_actVigente": false,
+      "_ultimaCCT": "2024-2025",
+      "_fonte": "https://sindifar-pr.org.br/negociacoes-coletivas/",
+      "cidades": {
+        "pontal_do_parana": {
+          "varejista": 3600,
+          "hospitalar": 3750,
+          "distribuidora": 3850,
+          "laboratorios": 3000,
+          "industrias": 3500
+        }
+      }
+    }
+  },
+  "curitiba": {
+    "varejista": 4729.62,
+    "hospitalar": 4567,
+    "distribuidora": 4764,
+    "laboratorios": 3763.08,
+    "industrias": 4211.45
+  },
+  "default": {
+    "varejista": 4729.62,
+    "hospitalar": 4567,
+    "distribuidora": 4764,
+    "laboratorios": 3763.08,
+    "industrias": 4211.45
+  },
+  "horasSemana": 44,
+  "valorHora": {
+    "varejista": 21.5,
+    "hospitalar": 20.76,
+    "distribuidora": 21.65,
+    "laboratorios": 17.1,
+    "industrias": 19.14
+  },
+  "proporcional10h": {
+    "varejista": 1074.91,
+    "hospitalar": 1037.95,
+    "distribuidora": 1082.73,
+    "laboratorios": 855.25,
+    "industrias": 957.15
+  }
+}
