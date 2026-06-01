@@ -1158,6 +1158,14 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="orientacoes"]');
     if (!ph) return;
 
+    // Força fetch se cache for inválido (objeto vazio ou sem chaves esperadas)
+    if (store.orientacoes && typeof store.orientacoes === 'object' && !Array.isArray(store.orientacoes)) {
+      var keys = Object.keys(store.orientacoes);
+      if (keys.length === 0 || !store.orientacoes.documentos || !store.orientacoes.situacoes || !store.orientacoes.checklist) {
+        store.orientacoes = null; // invalida cache
+      }
+    }
+
     ph.innerHTML =
       '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="orient-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
