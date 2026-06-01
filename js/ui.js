@@ -1,4 +1,24 @@
-/* ── Controle de Interface (Extraído do HTML) ── */
+/**
+ * ui.js — Controle de Interface
+ *
+ * @module ui
+ * @description
+ * Controla a interface do usuário: sidebar, tema e navegação entre views.
+ *
+ * Funcionalidades:
+ * - toggleSidebar: expandir/recolher sidebar com persistência (localStorage)
+ * - toggleTheme: alternar tema dark/light com persistência e atualização de ícone (🌙/☀️)
+ * - switchView: navegar entre views (dashboard, ferramentas, consultas, instruções)
+ *   com atualização de estado ativo na sidebar e badge no cabeçalho
+ *
+ * Views disponíveis:
+ * - dashboard: grid de cards do dashboard ativo
+ * - ferramentas: calculadora + busca de fiscais
+ * - consultas: base de conhecimento (9 abas)
+ * - instrucoes: guia de boas práticas para o Qwen Code
+ *
+ * @namespace window (funções globais)
+ */
 function toggleSidebar(e) {
     var sidebar = document.querySelector('.sidebar');
     sidebar.classList.toggle('expanded');

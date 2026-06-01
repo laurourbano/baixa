@@ -1,5 +1,17 @@
 /**
  * api.js — Comunicação com o backend
+ *
+ * @module api
+ * @description
+ * Gerencia toda a comunicação HTTP com o backend (Render).
+ *
+ * Funcionalidades:
+ * - callApi: requisição fetch com timeout via AbortController
+ * - callApiWithRetry: chamada com retry e backoff exponencial (para cold-start do Render)
+ * - notifyChange: autosave — detecta mudanças e envia POST /api/save + POST /api/backup
+ * - Atualização do indicador de status (🟢 API / 🟡 localStorage / 🔴 erro)
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

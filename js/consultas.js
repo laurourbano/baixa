@@ -1,7 +1,30 @@
 /**
- * consultas.js v3 — Base de Conhecimento completa.
- * 6 painéis accordion com lazy loading + dropdowns internos.
- * CRUD completo em todas as seções (FAQ, Normas, Protocolos, Piso, Orientações, Listas).
+ * consultas.js — Base de Conhecimento
+ *
+ * @module consultas
+ * @description
+ * Base de conhecimento completa com 9 seções e CRUD completo.
+ *
+ * Seções disponíveis:
+ * - FAQ: perguntas frequentes em accordion com paginação (10 itens/página)
+ * - Normas: legislação e normas de referência
+ * - Protocolos: base e detalhados
+ * - Piso: tabela de piso salarial
+ * - Orientações: diretrizes gerais
+ * - Listas: listas de referência
+ * - Respostas Padrão: modelos de respostas
+ * - Nomes Empresariais: lista de referência
+ * - Cálculo de Horas: referências para cálculo
+ *
+ * Funcionalidades comuns a todas as seções:
+ * - CRUD completo (adicionar, editar, excluir itens)
+ * - Busca textual em tempo real
+ * - Filtro por tipo/categoria (dropdown)
+ * - Cópia individual por item
+ * - Cópia em massa (todos os itens visíveis)
+ * - Persistência: localStorage com fallback para JSON assets
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

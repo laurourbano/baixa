@@ -1,5 +1,28 @@
 /**
  * store.js — Gerenciamento de estado centralizado (multi-dashboard)
+ *
+ * @module store
+ * @description
+ * Gerencia o estado global da aplicação com suporte a múltiplos dashboards.
+ *
+ * Estrutura de estado:
+ *   {
+ *     dashboards: Array<Dashboard>,  // Lista de dashboards
+ *     activeDashboard: string,       // ID do dashboard ativo
+ *     dashSortMode: 'custom'|'alpha', // Modo de ordenação da sidebar
+ *     servicos: Object               // Modelos de parecer por tipo
+ *   }
+ *
+ * Cada Dashboard contém: id, name, icon, order[], customs[], edits{}, deleted[]
+ *
+ * Funcionalidades:
+ * - 6 dashboards padrão pré-criados (Pareceres, Ingresso PJ, Inscrição PF,
+ *   Contratos, Conferência PF, Conferência PJ)
+ * - Migração automática do formato antigo (dashboard único) para multi-dashboard
+ * - CRUD de dashboards com persistência em localStorage (chave: baixa_rt_data)
+ * - Recriação de dashboards padrão se removidos acidentalmente
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

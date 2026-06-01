@@ -1,5 +1,18 @@
 /**
- * calculator.js — Calculadora de honorários (Piso × Horas / 44)
+ * calculator.js — Calculadora de honorários
+ *
+ * @module calculator
+ * @description
+ * Calculadora simples para honorários baseados em piso salarial.
+ *
+ * Fórmulas:
+ * - Total: (Piso × Horas) ÷ 44
+ * - Valor-Hora: Piso ÷ 220
+ *
+ * Resultados formatados em pt-BR com 2 casas decimais.
+ * Cálculo em tempo real via evento oninput.
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 
