@@ -413,10 +413,7 @@ window.MainApp = window.MainApp || {};
   }
 
   function updatePageTitle() {
-    var titleEl = document.getElementById('page-title');
-    if (titleEl) {
-      titleEl.textContent = 'Baixa RT';
-    }
+    // O título da página é estático ("Parecer"), não deve ser alterado dinamicamente
     renderDashboardToolbar();
   }
 
