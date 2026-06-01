@@ -490,7 +490,7 @@ window.MainApp = window.MainApp || {};
           Object.keys(data.regioes).forEach(function (regiao) {
             var cids = data.regioes[regiao].cidades || {};
             Object.keys(cids).forEach(function (cid) {
-              var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+              var label = cid.replace(/_/g, ' '); label = label.charAt(0).toUpperCase() + label.slice(1);
               todasCidades.push({ key: cid, label: label, regiao: regiao, valores: cids[cid] });
             });
           });

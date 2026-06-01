@@ -714,7 +714,7 @@ window.MainApp = window.MainApp || {};
         Object.keys(store.piso.regioes).forEach(function (regiao) {
           var cids = store.piso.regioes[regiao].cidades || {};
           Object.keys(cids).forEach(function (cid) {
-            var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+            var label = cid.replace(/_/g, ' '); label = label.charAt(0).toUpperCase() + label.slice(1);
             cidadesData.push({ cidade: cid, regiao: regiao, label: label });
           });
         });
@@ -1066,7 +1066,7 @@ window.MainApp = window.MainApp || {};
 
     cidades.forEach(function (cid) {
       var cd = regData.cidades[cid];
-      var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+      var label = cid.replace(/_/g, ' '); label = label.charAt(0).toUpperCase() + label.slice(1);
       var highlight = cid === cidadeKey ? ' class="table-active"' : '';
       html += '<tr' + highlight + '><td>' + label + '</td>';
       cats.forEach(function (cat) {
