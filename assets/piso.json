@@ -2265,6 +2265,13 @@
           "distribuidora": 3750,
           "laboratorios": 2900,
           "industrias": 3400
+        },
+        "uniao_da_vitoria": {
+          "varejista": 3500,
+          "hospitalar": 3650,
+          "distribuidora": 3750,
+          "laboratorios": 2900,
+          "industrias": 3400
         }
       }
     },
