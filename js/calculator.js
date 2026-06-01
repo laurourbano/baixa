@@ -81,6 +81,20 @@ window.MainApp = window.MainApp || {};
       }
     });
 
+    // Vínculo: Contratado / Sócio — atualiza UI e revalida intervalo
+    var vinculoRadios = document.querySelectorAll('input[name="ferr-vinculo"]');
+    vinculoRadios.forEach(function (r) {
+      r.addEventListener('change', function () {
+        document.querySelectorAll('.ferr-radio-label').forEach(function (lbl) {
+          var input = lbl.querySelector('input[name="ferr-vinculo"]');
+          if (input) lbl.classList.toggle('active', input.checked);
+        });
+        // Dispara validação na tabela de horas
+        var tbody = document.getElementById('ferr-calc-horas-body');
+        if (tbody) tbody.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    });
+
     calcularPisoFerr = function () {
       var piso = getPisoBase();
       var hrsSemana = JORNADA_PADRAO;
@@ -243,8 +257,67 @@ window.MainApp = window.MainApp || {};
       if (totalSemEl) totalSemEl.textContent = formatHoras(totalSemana);
       totalHorasSemana = totalSemana;
 
+      // Validação de intervalo para contratado
+      validarIntervalo();
+
       // Dispara recálculo do piso
       if (typeof calcularPisoFerr === 'function') calcularPisoFerr();
+    }
+
+    function validarIntervalo() {
+      var vinculo = document.querySelector('input[name="ferr-vinculo"]:checked');
+      var isContratado = vinculo && vinculo.value === 'contratado';
+      var alerta = document.getElementById('ferr-intervalo-alerta');
+      var msg = document.getElementById('ferr-intervalo-msg');
+      if (!alerta || !msg) return;
+
+      if (!isContratado) {
+        alerta.classList.add('d-none');
+        return;
+      }
+
+      // Verifica cada dia: se tem mais de um turno, confere intervalo entre eles
+      var semIntervalo = [];
+      dias.forEach(function (dia) {
+        var entradas = document.querySelectorAll('.ferr-entrada[data-dia="' + dia + '"]');
+        var saidas = document.querySelectorAll('.ferr-saida[data-dia="' + dia + '"]');
+        if (entradas.length < 2) return;
+        for (var i = 1; i < entradas.length; i++) {
+          var saidaAnt = parseHora(saidas[i - 1].value);
+          var entradaAtual = parseHora(entradas[i].value);
+          if (isNaN(saidaAnt) || isNaN(entradaAtual)) continue;
+          var intervalo = entradaAtual - saidaAnt;
+          if (intervalo < 0) intervalo += 24;
+          if (intervalo < 1 && (totalDiaPorDia(dia) > 6)) { // menos de 1h de intervalo com jornada > 6h
+            semIntervalo.push(dia);
+          } else if (intervalo < 0.25 && totalDiaPorDia(dia) > 4) { // menos de 15min com jornada > 4h
+            semIntervalo.push(dia);
+          }
+        }
+      });
+
+      if (semIntervalo.length > 0) {
+        msg.textContent = 'Contratado sem intervalo em: ' + semIntervalo.join(', ') + '. Verifique!';
+        alerta.classList.remove('d-none');
+      } else {
+        alerta.classList.add('d-none');
+      }
+    }
+
+    function totalDiaPorDia(dia) {
+      var entradas = document.querySelectorAll('.ferr-entrada[data-dia="' + dia + '"]');
+      var saidas = document.querySelectorAll('.ferr-saida[data-dia="' + dia + '"]');
+      var total = 0;
+      for (var i = 0; i < entradas.length; i++) {
+        var h1 = parseHora(entradas[i].value);
+        var h2 = parseHora(saidas[i].value);
+        if (!isNaN(h1) && !isNaN(h2)) {
+          var diff = h2 - h1;
+          if (diff < 0) diff += 24;
+          total += diff;
+        }
+      }
+      return total;
     }
 
     // Toggle edição por dia (expandir campos para sobrescrever)
