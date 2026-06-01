@@ -214,7 +214,14 @@
                                             <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="industrias"> Indústrias <b class="text-success">R$ <span>4.211,45</span></b></label>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
+                                        <label class="x-small text-muted">Vínculo</label>
+                                        <div class="d-flex gap-2">
+                                            <label class="ferr-radio-label active x-small py-1"><input type="radio" name="ferr-vinculo" value="contratado" checked> Contratado</label>
+                                            <label class="ferr-radio-label x-small py-1"><input type="radio" name="ferr-vinculo" value="socio"> Sócio</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
                                         <label class="x-small text-muted">Cidade</label>
                                         <input type="text" id="ferr-cidade" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar cidade..." autocomplete="off">
                                         <select id="ferr-cidade-select" class="form-select form-select-sm bg-dark text-light border-secondary mt-1 d-none" size="3"></select>
@@ -230,6 +237,7 @@
                                     <span>Jornada: <b id="ferr-horas-semana-display" class="text-light">44h</b></span>
                                     <span>Salário Total: <b id="ferr-piso-prop" class="text-success fs-6">R$ 0,00</b></span>
                                 </div>
+                                <div id="ferr-intervalo-alerta" class="alert alert-warning py-1 px-2 x-small d-none mb-2"><i class="fas fa-exclamation-triangle me-1"></i> <span id="ferr-intervalo-msg"></span></div>
 
                                 <!-- Tabela de Horas embutida -->
                                 <h6 class="fw-bold text-success mb-2 text-uppercase letter-spacing x-small"><i
@@ -261,7 +269,7 @@
                         </div>
 
                         <!-- Ferramenta: Busca Fiscal -->
-                        <div class="col-md-6 col-lg-5">
+                        <div class="col-12">
                             <div class="workspace-tool">
                                 <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i
                                         class="fas fa-search me-2"></i> Fiscal</h6>

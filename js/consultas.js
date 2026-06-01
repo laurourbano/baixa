@@ -72,8 +72,8 @@ window.MainApp = window.MainApp || {};
   function initSection(s) {
     switch (s) {
       case 'faq':          initFaq(); break;
-      case 'normas':       initCrudSection('normas', 'Normas e Legislação', 'assets/normas.json', renderNormas, cfgNormas); break;
-      case 'protocolos':   initCrudSection('protocolos', 'Protocolos', 'assets/protocolos-base.json', renderProtocolos, cfgProtocolos); break;
+      case 'normas':       initCrudSection('normas', 'Normas e Legislação', 'assets/consultas/normas.json', renderNormas, cfgNormas); break;
+      case 'protocolos':   initCrudSection('protocolos', 'Protocolos', 'assets/consultas/protocolos-base.json', renderProtocolos, cfgProtocolos); break;
       case 'piso':         initPiso(); break;
       case 'orientacoes':  initOrientacoes(); break;
       case 'listas':       initListas(); break;
@@ -489,11 +489,11 @@ window.MainApp = window.MainApp || {};
       if (faqPage < t) { faqPage++; faqRender(); faqRenderPagination(); }
     });
 
-    loadSectionData('faq', 'assets/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
+    loadSectionData('faq', 'assets/consultas/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
       store.faq = data;
       saveStore();
       faqRefresh();
-    }, 'assets/respostas.json');
+    }, 'assets/consultas/respostas.json');
   }
 
   function faqRefresh() {
@@ -686,7 +686,7 @@ window.MainApp = window.MainApp || {};
     var cidadesData = [];
 
     // Tenta JSON dedicado, fallback para store.piso.regioes
-    fetch('assets/cidades-parana.json')
+    fetch('assets/piso/cidades-parana.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         cidadesData = data.cidades || [];
@@ -987,7 +987,7 @@ window.MainApp = window.MainApp || {};
     // Cache inválido ou dados antigos: recarrega
     delete store.piso;
 
-    fetch('assets/piso.json')
+    fetch('assets/piso/piso.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (!data.regioes) {
@@ -1158,6 +1158,14 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="orientacoes"]');
     if (!ph) return;
 
+    // Força fetch se cache for inválido (objeto vazio ou sem chaves esperadas)
+    if (store.orientacoes && typeof store.orientacoes === 'object' && !Array.isArray(store.orientacoes)) {
+      var keys = Object.keys(store.orientacoes);
+      if (keys.length === 0 || !store.orientacoes.documentos || !store.orientacoes.situacoes || !store.orientacoes.checklist) {
+        store.orientacoes = null; // invalida cache
+      }
+    }
+
     ph.innerHTML =
       '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="orient-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
@@ -1183,7 +1191,7 @@ window.MainApp = window.MainApp || {};
       app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
     });
 
-    loadSectionDataGeneric('orientacoes', 'assets/orientacoes.json', function (data) {
+    loadSectionDataGeneric('orientacoes', 'assets/consultas/orientacoes.json', function (data) {
       store.orientacoes = data;
       saveStore();
       renderOrientacoes();
@@ -1217,13 +1225,17 @@ window.MainApp = window.MainApp || {};
 
     el.innerHTML = filtered.map(function (item, i) {
       var origIdx = data.indexOf(item);
-      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-orient-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
-        '</div></div>';
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+        '<div class="d-flex justify-content-between align-items-center orient-item-header" style="cursor:pointer" data-orient-expand="' + origIdx + '">' +
+          '<small class="text-light flex-grow-1"><i class="fas fa-chevron-right x-small me-1 text-muted orient-chevron"></i>' + escapeHtml(item) + '</small>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+            '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-orient-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="orient-detail d-none mt-2 p-2 bg-dark bg-opacity-50 rounded border border-info small text-light" style="white-space:pre-wrap">' + escapeHtml(item) + '</div>' +
+      '</div>';
     }).join('');
 
     el.querySelectorAll('[data-orient-copy]').forEach(function (b) {
@@ -1238,6 +1250,26 @@ window.MainApp = window.MainApp || {};
     });
     el.querySelectorAll('[data-orient-del]').forEach(function (b) {
       b.addEventListener('click', function () { deleteOrientacaoItem(this.getAttribute('data-orient-del'), parseInt(this.getAttribute('data-idx'))); });
+    });
+    // Toggle expandir/recolher detalhes do item
+    el.querySelectorAll('[data-orient-expand]').forEach(function (header) {
+      header.addEventListener('click', function (e) {
+        // Não expande se clicou nos botões de ação
+        if (e.target.closest('button')) return;
+        var item = this.closest('.c-item');
+        var detail = item.querySelector('.orient-detail');
+        var chevron = this.querySelector('.orient-chevron');
+        var isHidden = detail.classList.contains('d-none');
+        if (isHidden) {
+          detail.classList.remove('d-none');
+          chevron.classList.remove('fa-chevron-right');
+          chevron.classList.add('fa-chevron-down');
+        } else {
+          detail.classList.add('d-none');
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-right');
+        }
+      });
     });
   }
 
@@ -1520,7 +1552,7 @@ window.MainApp = window.MainApp || {};
       app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
     });
 
-    loadSectionDataGeneric('listas', 'assets/listas.json', function (data) {
+    loadSectionDataGeneric('listas', 'assets/consultas/listas.json', function (data) {
       store.listas = data;
       saveStore();
       renderListas();
@@ -1554,13 +1586,17 @@ window.MainApp = window.MainApp || {};
 
     el.innerHTML = filtered.map(function (item, i) {
       var origIdx = data.indexOf(item);
-      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-listas-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
-        '</div></div>';
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+        '<div class="d-flex justify-content-between align-items-center listas-item-header" style="cursor:pointer" data-listas-expand="' + origIdx + '">' +
+          '<small class="text-light flex-grow-1"><i class="fas fa-chevron-right x-small me-1 text-muted listas-chevron"></i>' + escapeHtml(item) + '</small>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+            '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-listas-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="listas-detail d-none mt-2 p-2 bg-dark bg-opacity-50 rounded border border-info small text-light" style="white-space:pre-wrap">' + escapeHtml(item) + '</div>' +
+      '</div>';
     }).join('');
 
     el.querySelectorAll('[data-listas-copy]').forEach(function (b) {
@@ -1575,6 +1611,25 @@ window.MainApp = window.MainApp || {};
     });
     el.querySelectorAll('[data-listas-del]').forEach(function (b) {
       b.addEventListener('click', function () { deleteListasItem(this.getAttribute('data-listas-del'), parseInt(this.getAttribute('data-idx'))); });
+    });
+    // Toggle expandir/recolher detalhes do item
+    el.querySelectorAll('[data-listas-expand]').forEach(function (header) {
+      header.addEventListener('click', function (e) {
+        if (e.target.closest('button')) return;
+        var item = this.closest('.c-item');
+        var detail = item.querySelector('.listas-detail');
+        var chevron = this.querySelector('.listas-chevron');
+        var isHidden = detail.classList.contains('d-none');
+        if (isHidden) {
+          detail.classList.remove('d-none');
+          chevron.classList.remove('fa-chevron-right');
+          chevron.classList.add('fa-chevron-down');
+        } else {
+          detail.classList.add('d-none');
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-right');
+        }
+      });
     });
   }
 
@@ -1607,6 +1662,13 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="respostasPadrao"]');
     if (!ph) return;
 
+    // Invalida cache se for array em vez de objeto, ou objeto vazio
+    if (store.respostasPadrao) {
+      if (Array.isArray(store.respostasPadrao) || (typeof store.respostasPadrao === 'object' && Object.keys(store.respostasPadrao).length === 0)) {
+        store.respostasPadrao = null;
+      }
+    }
+
     ph.innerHTML =
       '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="rp-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px"></select>' +
@@ -1615,9 +1677,9 @@ window.MainApp = window.MainApp || {};
         '<button id="rp-edit" class="btn btn-sm btn-outline-warning flex-shrink-0"><i class="fas fa-edit me-1"></i> Editar</button>' +
         '<button id="rp-copy" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
       '</div>' +
-      '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
+      '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light text-start" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
 
-    loadSectionDataGeneric('respostasPadrao', 'assets/respostas-padrao.json', function (data) {
+    loadSectionDataGeneric('respostasPadrao', 'assets/consultas/respostas-padrao.json', function (data) {
       // Migra formato antigo {titulo, instrucao, texto} para dicionário {titulo: texto}
       if (data && data.titulo && data.texto && !data[data.titulo]) {
         var novo = {};
@@ -1720,7 +1782,7 @@ window.MainApp = window.MainApp || {};
       '</div>' +
       '<div id="ne-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
-    loadSectionDataGeneric('nomesEmpresariais', 'assets/nomes-empresariais.json', function (data) {
+    loadSectionDataGeneric('nomesEmpresariais', 'assets/consultas/nomes-empresariais.json', function (data) {
       store.nomesEmpresariais = data;
       saveStore();
       renderNomesEmpresariais();
@@ -1809,7 +1871,7 @@ window.MainApp = window.MainApp || {};
 
     // Carrega instruções do JSON (calc-horas.json)
     var instrucoesHtml = '<p class="x-small text-muted mb-2">Preencha os horários de entrada e saída. Use "Adicionar turno" para múltiplos horários.</p>';
-    fetch('assets/calc-horas.json')
+    fetch('assets/consultas/calc-horas.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data && data.instrucoes && data.instrucoes.length) {
@@ -2045,7 +2107,7 @@ window.MainApp = window.MainApp || {};
 
   function loadPisoRefData(cb) {
     if (store.pisoRef) return cb(store.pisoRef);
-    fetch('assets/piso-ref.json')
+    fetch('assets/piso/piso-ref.json')
       .then(function (r) { return r.json(); })
       .then(function (data) { store.pisoRef = data; saveStore(); cb(data); })
       .catch(function () { cb(store.pisoRef || {}); });
@@ -2170,7 +2232,7 @@ window.MainApp = window.MainApp || {};
 
   function loadRegistrosData(cb) {
     if (store.registros && store.registros.length) return cb(store.registros);
-    fetch('assets/protocolos-detalhados.json')
+    fetch('assets/consultas/protocolos-detalhados.json')
       .then(function (r) { return r.json(); })
       .then(function (data) { store.registros = data; saveStore(); cb(data); })
       .catch(function () { cb(store.registros || []); });
