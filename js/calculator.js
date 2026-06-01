@@ -47,10 +47,10 @@ window.MainApp = window.MainApp || {};
 
   function initPisoCalc() {
     var radiosContainer = document.getElementById('ferr-categorias-radios');
-    var hrsSemanaEl = document.getElementById('ferr-horas-semana');
     var copyBtn = document.getElementById('ferr-copy');
 
     if (!radiosContainer) return;
+    var JORNADA_PADRAO = 44; // jornada legal CLT
 
     function getSelectedCat() {
       var checked = radiosContainer.querySelector('input[name="ferr-cat"]:checked');
@@ -87,7 +87,7 @@ window.MainApp = window.MainApp || {};
 
     calcularPisoFerr = function () {
       var piso = getPisoBase();
-      var hrsSemana = parseFloat(hrsSemanaEl.value) || 44;
+      var hrsSemana = JORNADA_PADRAO;
       var hrsTrab = getTotalHoras();
 
       var valorHora = piso / 220;
@@ -96,17 +96,19 @@ window.MainApp = window.MainApp || {};
       var pisoBaseDisplay = document.getElementById('ferr-piso-base-display');
       var valorHoraEl = document.getElementById('ferr-valor-hora');
       var totalHorasDisplay = document.getElementById('ferr-total-horas-display');
+      var jornadaDisplay = document.getElementById('ferr-horas-semana-display');
       var pisoPropEl = document.getElementById('ferr-piso-prop');
 
       if (pisoBaseDisplay) pisoBaseDisplay.textContent = 'R$ ' + piso.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       if (valorHoraEl) valorHoraEl.textContent = 'R$ ' + valorHora.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       if (totalHorasDisplay) totalHorasDisplay.textContent = hrsTrab.toFixed(2) + 'h';
+      if (jornadaDisplay) jornadaDisplay.textContent = hrsSemana + 'h';
       if (pisoPropEl) pisoPropEl.textContent = 'R$ ' + salarioTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function copiarResultado() {
       var piso = getPisoBase();
-      var hrsSemana = parseFloat(hrsSemanaEl.value) || 44;
+      var hrsSemana = JORNADA_PADRAO;
       var hrsTrab = getTotalHoras();
       var catNome = pisoCategorias[getSelectedCat()] ? pisoCategorias[getSelectedCat()].nome : getSelectedCat();
 
@@ -128,7 +130,6 @@ window.MainApp = window.MainApp || {};
     }
 
     copyBtn.addEventListener('click', copiarResultado);
-    hrsSemanaEl.addEventListener('input', calcularPisoFerr);
 
     // Busca de cidade para filtrar piso por região
     var cidadeInput = document.getElementById('ferr-cidade');
