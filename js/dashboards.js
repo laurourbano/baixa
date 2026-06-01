@@ -398,7 +398,8 @@ window.MainApp = window.MainApp || {};
   function updatePageTitle() {
     var titleEl = document.getElementById('page-title');
     if (titleEl) {
-      titleEl.textContent = 'Parecer';
+      var dash = app.getActiveDash();
+      titleEl.textContent = dash ? dash.name : 'Parecer';
     }
     renderDashboardToolbar();
   }
