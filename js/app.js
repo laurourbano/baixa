@@ -188,6 +188,11 @@
   }
 
   /* ── Importar respostas no Ingresso PJ ── */
+  function formatarTitulo(str) {
+    // Converte MAIÚSCULAS para Primeira letra maiúscula
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
   function importarRespostasIngressoPJ() {
     var dash = (app.__state && app.__state.dashboards || []).find(function (d) { return d.id === 'dash-ingresso-pj'; });
     if (!dash) return;
@@ -205,7 +210,7 @@
           var id = 'rp-' + k.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
           if (dash.customs.some(function (c) { return c.id === id; })) return;
           dash.customs.push({
-            id: id, title: k, content: respostas[k],
+            id: id, title: formatarTitulo(k), content: respostas[k],
             color: 'info', type: 'copy', showDate: true
           });
           dash.order.push(id);

@@ -2395,7 +2395,7 @@ window.MainApp = window.MainApp || {};
       if (dash.customs.some(function (c) { return c.id === id; })) return;
       dash.customs.push({
         id: id,
-        title: k,
+        title: k.charAt(0).toUpperCase() + k.slice(1).toLowerCase(),
         content: respostas[k],
         color: 'info',
         type: 'copy',
