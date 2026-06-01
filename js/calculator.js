@@ -25,7 +25,8 @@ window.MainApp = window.MainApp || {};
   // ── Dados de piso por categoria (carregados assincronamente) ──
   var pisoData = null;
   var todasCidades = [];
-  var calcularPisoFerr = null; // exposta para ser chamada pela tabela de horas
+  var calcularPisoFerr = null;
+  var totalHorasSemana = 0; // armazena valor decimal para cálculo do piso
   var pisoCategorias = {
     varejista:    { nome: 'Varejista',    valor: 4729.62 },
     hospitalar:   { nome: 'Hospitalar',   valor: 4567.00 },
@@ -63,12 +64,7 @@ window.MainApp = window.MainApp || {};
     }
 
     function getTotalHoras() {
-      var totalEl = document.getElementById('ferr-calc-horas-total');
-      if (totalEl) {
-        var txt = totalEl.textContent.replace('h', '').trim();
-        return parseFloat(txt) || 0;
-      }
-      return 0;
+      return totalHorasSemana;
     }
 
     // Atualiza destaque visual dos radios
@@ -240,6 +236,7 @@ window.MainApp = window.MainApp || {};
 
       var totalSemEl = document.getElementById('ferr-calc-horas-total');
       if (totalSemEl) totalSemEl.textContent = formatHoras(totalSemana);
+      totalHorasSemana = totalSemana;
 
       // Dispara recálculo do piso
       if (typeof calcularPisoFerr === 'function') calcularPisoFerr();
