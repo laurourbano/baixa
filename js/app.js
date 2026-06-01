@@ -124,6 +124,9 @@
     app.setupDragAndDrop();
     app.updatePageTitle();
 
+    // Importa respostas padrão como cards no Ingresso PJ (se vazio)
+    importarRespostasIngressoPJ();
+
     app.initFiscalSearch();
     app.initCalculator();
     app.initConsultas();
@@ -182,6 +185,39 @@
       var match = data.contents.match(/href="(\/documento\/view\/\d+\/[pP]lano-[^"]*)"/);
       if (match && match[1]) btnPlano.href = 'https://crf-pr.org.br' + match[1];
     } catch (e) { /* ignora silenciosamente */ }
+  }
+
+  /* ── Importar respostas no Ingresso PJ ── */
+  function importarRespostasIngressoPJ() {
+    var dash = (app.__state && app.__state.dashboards || []).find(function (d) { return d.id === 'dash-ingresso-pj'; });
+    if (!dash) return;
+    // Verifica se já tem cards de resposta (prefixo rp-)
+    if (dash.customs && dash.customs.some(function (c) { return c.id && c.id.indexOf('rp-') === 0; })) return;
+
+    fetch('assets/consultas/respostas-padrao.json')
+      .then(function (r) { return r.json(); })
+      .then(function (respostas) {
+        if (!respostas || !Object.keys(respostas).length) return;
+        if (!dash.customs) dash.customs = [];
+        if (!dash.order) dash.order = [];
+        var imported = 0;
+        Object.keys(respostas).sort().forEach(function (k) {
+          var id = 'rp-' + k.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+          if (dash.customs.some(function (c) { return c.id === id; })) return;
+          dash.customs.push({
+            id: id, title: k, content: respostas[k],
+            color: 'info', type: 'copy', showDate: true
+          });
+          dash.order.push(id);
+          imported++;
+        });
+        if (imported > 0) {
+          app._save();
+          app.notifyChange();
+          app.render();
+          app.showToast(imported + ' respostas importadas para Ingresso PJ!', 'success', 3000);
+        }
+      }).catch(function () {});
   }
 
   /* ── Bootstrap ────────────────────────── */
