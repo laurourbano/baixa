@@ -204,24 +204,20 @@
                                 <h6 class="fw-bold text-info mb-3 text-uppercase letter-spacing"><i
                                         class="fas fa-calculator me-2"></i> Calculadora de Piso Salarial</h6>
                                 <div class="row g-2 mb-3">
-                                    <div class="col-md-3">
-                                        <label class="x-small text-muted">Categoria</label>
-                                        <select id="ferr-categoria" class="form-select form-select-sm bg-dark text-light border-secondary">
-                                            <option value="varejista">Varejista</option>
-                                            <option value="hospitalar">Hospitalar</option>
-                                            <option value="distribuidora">Distribuidora</option>
-                                            <option value="laboratorios">Laboratórios</option>
-                                            <option value="industrias">Indústrias</option>
-                                        </select>
+                                    <div class="col-12">
+                                        <label class="x-small text-muted mb-2">Categorias</label>
+                                        <div class="d-flex flex-wrap gap-2" id="ferr-categorias-radios">
+                                            <label class="ferr-radio-label active"><input type="radio" name="ferr-cat" value="varejista" checked> Varejista <b class="text-success">R$ <span>4.729,62</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="hospitalar"> Hospitalar <b class="text-success">R$ <span>4.567,00</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="distribuidora"> Distribuidora <b class="text-success">R$ <span>4.764,00</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="laboratorios"> Laboratórios <b class="text-success">R$ <span>3.763,08</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="industrias"> Indústrias <b class="text-success">R$ <span>4.211,45</span></b></label>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <label class="x-small text-muted">Cidade</label>
                                         <input type="text" id="ferr-cidade" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar cidade..." autocomplete="off">
                                         <select id="ferr-cidade-select" class="form-select form-select-sm bg-dark text-light border-secondary mt-1 d-none" size="3"></select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="x-small text-muted">Piso Base (R$)</label>
-                                        <input id="ferr-piso-base" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary" value="4729.62" readonly>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="x-small text-muted">Horas Semana</label>
@@ -231,7 +227,7 @@
                                         <label class="x-small text-muted">Horas Trabalhadas</label>
                                         <input id="ferr-horas-trab" type="number" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: 30" min="0">
                                     </div>
-                                    <div class="col-md-3 d-flex align-items-end gap-2">
+                                    <div class="col-md-2 d-flex align-items-end gap-2">
                                         <button id="ferr-calc" class="btn btn-sm btn-danger"><i class="fas fa-calculator me-1"></i> Calcular</button>
                                         <button id="ferr-copy" class="btn btn-sm btn-outline-info"><i class="fas fa-copy me-1"></i> Copiar</button>
                                     </div>
@@ -267,6 +263,21 @@
                                 <h6 class="fw-bold text-success mb-3 text-uppercase letter-spacing"><i
                                         class="fas fa-clock me-2"></i> Horas de Assistência (Tabela Semanal)</h6>
                                 <p class="x-small text-muted mb-2">Preencha os horários de entrada e saída. Use "Adicionar turno" para múltiplos horários.</p>
+                                <div class="d-flex gap-2 align-items-center mb-1 flex-wrap" id="ferr-horas-lote">
+                                    <span class="x-small text-muted">Aplicar nos dias:</span>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="DOM" checked> DOM</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="SEG" checked> SEG</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="TER" checked> TER</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="QUA" checked> QUA</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="QUI" checked> QUI</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="SEX" checked> SEX</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="SAB"> SAB</label>
+                                    <input type="time" id="ferr-lote-entrada" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width:100px" step="60" title="Entrada">
+                                    <span class="x-small text-muted">às</span>
+                                    <input type="time" id="ferr-lote-saida" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width:100px" step="60" title="Saída">
+                                    <button id="ferr-lote-aplicar" class="btn btn-sm btn-outline-info py-0 px-2 x-small"><i class="fas fa-check me-1"></i>Aplicar</button>
+                                    <button id="ferr-lote-limpar" class="btn btn-sm btn-outline-secondary py-0 px-2 x-small"><i class="fas fa-eraser me-1"></i>Limpar</button>
+                                </div>
                                 <div class="table-responsive" style="max-height:350px;overflow-y:auto">
                                     <table class="table table-sm table-dark table-borderless x-small mb-0" id="ferr-calc-horas-tabela">
                                         <thead><tr><th>Dia</th><th>Entrada / Saída</th><th>Total</th></tr></thead>

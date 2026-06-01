@@ -45,25 +45,40 @@ window.MainApp = window.MainApp || {};
      ═══════════════════════════════════════ */
 
   function initPisoCalc() {
-    var catEl = document.getElementById('ferr-categoria');
-    var baseEl = document.getElementById('ferr-piso-base');
+    var radiosContainer = document.getElementById('ferr-categorias-radios');
     var hrsSemanaEl = document.getElementById('ferr-horas-semana');
     var hrsTrabEl = document.getElementById('ferr-horas-trab');
     var calcBtn = document.getElementById('ferr-calc');
     var copyBtn = document.getElementById('ferr-copy');
 
-    if (!catEl) return; // Não está na view-ferramentas
+    if (!radiosContainer) return;
 
-    // Atualiza piso base ao mudar categoria
-    function updatePisoBase() {
-      var cat = catEl.value;
-      var val = pisoCategorias[cat] ? pisoCategorias[cat].valor : 0;
-      baseEl.value = val;
-      calcularPisoFerr();
+    function getSelectedCat() {
+      var checked = radiosContainer.querySelector('input[name="ferr-cat"]:checked');
+      return checked ? checked.value : 'varejista';
     }
 
+    function getPisoBase() {
+      var cat = getSelectedCat();
+      return pisoCategorias[cat] ? pisoCategorias[cat].valor : 0;
+    }
+
+    // Atualiza destaque visual dos radios
+    function updateRadioUI() {
+      radiosContainer.querySelectorAll('.ferr-radio-label').forEach(function (lbl) {
+        lbl.classList.toggle('active', lbl.querySelector('input').checked);
+      });
+    }
+
+    radiosContainer.addEventListener('change', function (e) {
+      if (e.target.name === 'ferr-cat') {
+        updateRadioUI();
+        calcularPisoFerr();
+      }
+    });
+
     function calcularPisoFerr() {
-      var piso = parseFloat(baseEl.value) || 0;
+      var piso = getPisoBase();
       var hrsSemana = parseFloat(hrsSemanaEl.value) || 44;
       var hrsTrab = parseFloat(hrsTrabEl.value) || 0;
 
@@ -84,10 +99,10 @@ window.MainApp = window.MainApp || {};
     }
 
     function copiarResultado() {
-      var piso = parseFloat(baseEl.value) || 0;
+      var piso = getPisoBase();
       var hrsSemana = parseFloat(hrsSemanaEl.value) || 44;
       var hrsTrab = parseFloat(hrsTrabEl.value) || 0;
-      var catNome = pisoCategorias[catEl.value] ? pisoCategorias[catEl.value].nome : catEl.value;
+      var catNome = pisoCategorias[getSelectedCat()] ? pisoCategorias[getSelectedCat()].nome : getSelectedCat();
 
       var valorHora = piso / 220;
       var pisoProp = hrsTrab > 0 ? (piso * hrsTrab / hrsSemana) : 0;
@@ -109,12 +124,10 @@ window.MainApp = window.MainApp || {};
       }
     }
 
-    catEl.addEventListener('change', updatePisoBase);
     calcBtn.addEventListener('click', calcularPisoFerr);
     copyBtn.addEventListener('click', copiarResultado);
     hrsSemanaEl.addEventListener('input', calcularPisoFerr);
     hrsTrabEl.addEventListener('input', calcularPisoFerr);
-    baseEl.addEventListener('input', calcularPisoFerr);
 
     // Busca de cidade para filtrar piso por região
     var cidadeInput = document.getElementById('ferr-cidade');
@@ -141,10 +154,18 @@ window.MainApp = window.MainApp || {};
       // Atualiza piso base com valor da cidade selecionada
       try {
         var valores = JSON.parse(opt.getAttribute('data-valores'));
-        var cat = catEl.value;
-        if (valores && valores[cat]) {
-          pisoCategorias[cat].valor = valores[cat];
-          baseEl.value = valores[cat];
+        if (valores) {
+          Object.keys(valores).forEach(function (cat) {
+            if (pisoCategorias[cat]) {
+              pisoCategorias[cat].valor = valores[cat];
+              // Atualiza valor exibido no radio label
+              var span = radiosContainer.querySelector('input[value="' + cat + '"]');
+              if (span) {
+                var valorSpan = span.closest('.ferr-radio-label').querySelector('b span');
+                if (valorSpan) valorSpan.textContent = valores[cat].toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+              }
+            }
+          });
           calcularPisoFerr();
         }
       } catch (e) {}
@@ -246,6 +267,44 @@ window.MainApp = window.MainApp || {};
       btn.closest('.ferr-turno-row').remove();
       calcular();
     });
+
+    // Botões de aplicar/limpar em lote
+    document.getElementById('ferr-lote-aplicar').addEventListener('click', function () {
+      var entrada = document.getElementById('ferr-lote-entrada').value;
+      var saida = document.getElementById('ferr-lote-saida').value;
+      if (!entrada || !saida) return;
+      document.querySelectorAll('.ferr-dia-check:checked').forEach(function (cb) {
+        var dia = cb.value;
+        var container = document.querySelector('.ferr-turnos-container[data-dia="' + dia + '"]');
+        if (!container) return;
+        // Pega a primeira linha de turno
+        var firstRow = container.querySelector('.ferr-turno-row');
+        if (firstRow) {
+          firstRow.querySelector('.ferr-entrada').value = entrada;
+          firstRow.querySelector('.ferr-saida').value = saida;
+        }
+      });
+      calcular();
+    });
+
+    document.getElementById('ferr-lote-limpar').addEventListener('click', function () {
+      document.querySelectorAll('.ferr-dia-check:checked').forEach(function (cb) {
+        var dia = cb.value;
+        var container = document.querySelector('.ferr-turnos-container[data-dia="' + dia + '"]');
+        if (!container) return;
+        container.querySelectorAll('.ferr-entrada, .ferr-saida').forEach(function (inp) { inp.value = ''; });
+        // Remove turnos extras
+        var rows = container.querySelectorAll('.ferr-turno-row');
+        for (var i = 1; i < rows.length; i++) rows[i].remove();
+      });
+      calcular();
+    });
+
+    // Marcar/desmarcar todos
+    document.getElementById('ferr-horas-lote').addEventListener('change', function (e) {
+      if (!e.target.classList.contains('ferr-dia-check')) return;
+      // Se todos marcados, SAB também
+    });
   }
 
   function parseHoraRange(str) {
@@ -287,7 +346,7 @@ window.MainApp = window.MainApp || {};
             });
           });
         }
-        // Atualiza valores padrão com dados do JSON (Curitiba)
+        // Atualiza valores padrão com dados do JSON
         if (data.curitiba) {
           Object.keys(data.curitiba).forEach(function (cat) {
             if (pisoCategorias[cat]) {
@@ -301,13 +360,16 @@ window.MainApp = window.MainApp || {};
             }
           });
         }
-        // Atualiza UI se já estiver visível
-        var catEl = document.getElementById('ferr-categoria');
-        var baseEl = document.getElementById('ferr-piso-base');
-        if (catEl && baseEl) {
-          var cat = catEl.value;
-          var val = pisoCategorias[cat] ? pisoCategorias[cat].valor : 0;
-          baseEl.value = val;
+        // Atualiza valores exibidos nos radio labels
+        var radiosContainer = document.getElementById('ferr-categorias-radios');
+        if (radiosContainer) {
+          Object.keys(pisoCategorias).forEach(function (cat) {
+            var input = radiosContainer.querySelector('input[value="' + cat + '"]');
+            if (input) {
+              var valorSpan = input.closest('.ferr-radio-label').querySelector('b span');
+              if (valorSpan) valorSpan.textContent = pisoCategorias[cat].valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            }
+          });
         }
       })
       .catch(function () {
