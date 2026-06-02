@@ -68,39 +68,13 @@ window.MainApp = window.MainApp || {};
     });
   }
 
-  /* ── Carregar / Migrar ────────────────── */
-  var raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || null;
-  var state;
-
-  if (raw && raw.dashboards) {
-    ensureDefaultDashboards(raw.dashboards);
-    if (!raw.dashSortMode) raw.dashSortMode = 'custom';
-    state = raw;
-  } else if (raw && (raw.order || raw.customs)) {
-    var migratedDash = {
-      id: 'default',
-      name: 'Dashboard de Pareceres',
-      icon: 'fa-file-alt',
-      order: raw.order || [],
-      customs: raw.customs || [],
-      edits: raw.edits || {},
-      deleted: raw.deleted || []
-    };
-    state = {
-      dashboards: [migratedDash],
-      activeDashboard: 'default',
-      dashSortMode: 'custom',
-      servicos: raw.servicos || {}
-    };
-    ensureDefaultDashboards(state.dashboards);
-  } else {
-    state = {
-      dashboards: DEFAULT_DASHBOARDS.map(createDashFromTemplate),
-      activeDashboard: 'default',
-      dashSortMode: 'custom',
-      servicos: {}
-    };
-  }
+  /* ── Estado inicial (backend é a fonte primária) ── */
+  var state = {
+    dashboards: DEFAULT_DASHBOARDS.map(createDashFromTemplate),
+    activeDashboard: 'default',
+    dashSortMode: 'custom',
+    servicos: {}
+  };
 
   /* ── Helpers ──────────────────────────── */
   function getActiveDash() {
@@ -175,6 +149,46 @@ window.MainApp = window.MainApp || {};
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
+  function replaceState(newState) {
+    // Backend é a fonte da verdade — substitui estado completamente
+    if (!newState || !newState.dashboards) return false;
+    state.dashboards = newState.dashboards;
+    state.activeDashboard = newState.activeDashboard || 'default';
+    state.dashSortMode = newState.dashSortMode || 'custom';
+    state.servicos = newState.servicos || {};
+    ensureDefaultDashboards(state.dashboards);
+    save();
+    return true;
+  }
+
+  function loadFromLocalStorage() {
+    var raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || null;
+    if (!raw) return false;
+    if (raw.dashboards) {
+      state.dashboards = raw.dashboards;
+      state.activeDashboard = raw.activeDashboard || 'default';
+      state.dashSortMode = raw.dashSortMode || 'custom';
+      state.servicos = raw.servicos || {};
+      ensureDefaultDashboards(state.dashboards);
+      save();
+      return true;
+    }
+    if (raw.order || raw.customs) {
+      // Formato antigo — migrar
+      state.dashboards = [{
+        id: 'default', name: 'Dashboard de Pareceres', icon: 'fa-file-alt',
+        order: raw.order || [], customs: raw.customs || [],
+        edits: raw.edits || {}, deleted: raw.deleted || []
+      }];
+      state.activeDashboard = 'default';
+      state.servicos = raw.servicos || {};
+      ensureDefaultDashboards(state.dashboards);
+      save();
+      return true;
+    }
+    return false;
+  }
+
   function resetState() {
     state.dashboards = DEFAULT_DASHBOARDS.map(createDashFromTemplate);
     state.activeDashboard = 'default';
@@ -186,6 +200,8 @@ window.MainApp = window.MainApp || {};
   Object.defineProperty(app, '__state', { get: function () { return state; } });
 
   app._save = save;
+  app._replaceState = replaceState;
+  app._loadFromLocalStorage = loadFromLocalStorage;
   app.__resetState = resetState;
   app.getActiveDash = getActiveDash;
   app.setActiveDashboard = setActiveDashboard;

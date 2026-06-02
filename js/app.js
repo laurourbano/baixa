@@ -61,65 +61,38 @@
       });
       var backend = await res.json().catch(function () { return null; });
       if (backend) {
-        var hasData = false;
-        // Detecta formato: multi-dashboard vs flat antigo
+        // Backend é a fonte da verdade — substitui estado completamente
         if (backend.dashboards && backend.dashboards.length > 0) {
-          // Preserva nomes/ícones locais se já existirem
-          var localState = JSON.parse(localStorage.getItem('baixa_rt_data')) || {};
-          var localDashboards = localState.dashboards || [];
-
-          // Merge: backend é a base, mas dados locais (mais recentes) prevalecem
-          backend.dashboards.forEach(function (bd) {
-            var local = localDashboards.find(function (ld) { return ld.id === bd.id; });
-            if (local) {
-              bd.name = local.name;
-              bd.icon = local.icon || bd.icon;
-              // Preserva cards e ordenação locais (mais recentes)
-              bd.customs = local.customs || [];
-              bd.order = local.order || [];
-              bd.edits = local.edits || {};
-              bd.deleted = local.deleted || [];
-            }
-          });
-
-          // Preserva dashboards locais que não existem no backend (ex: save falhou)
-          localDashboards.forEach(function (ld) {
-            var existsInBackend = backend.dashboards.some(function (bd) { return bd.id === ld.id; });
-            if (!existsInBackend) {
-              backend.dashboards.push(ld);
-            }
-          });
-
-          app.__state.dashboards = backend.dashboards;
-          app.__state.activeDashboard = backend.activeDashboard || backend.dashboards[0].id;
-          app.__state.dashSortMode = backend.dashSortMode || 'custom';
-          app.__state.servicos = backend.servicos || {};
-          app.ensureDefaultDashboards();
-          hasData = true;
+          app._replaceState(backend);
+          loadedOk = true;
+          dataSource = 'api';
         } else if (backend.order && backend.order.length > 0 || backend.customs && backend.customs.length > 0) {
           // Formato antigo (flat) — migrar
-          app.__state.dashboards = [{
-            id: 'default',
-            name: 'Dashboard de Pareceres',
-            order: backend.order || [],
-            customs: backend.customs || [],
-            edits: backend.edits || {},
-            deleted: backend.deleted || []
-          }];
-          app.__state.activeDashboard = 'default';
-          app.__state.servicos = backend.servicos || {};
-          app.ensureDefaultDashboards();
-          hasData = true;
-        }
-        if (hasData) {
-          app._save();
+          app._replaceState({
+            dashboards: [{
+              id: 'default',
+              name: 'Dashboard de Pareceres',
+              icon: 'fa-file-alt',
+              order: backend.order || [],
+              customs: backend.customs || [],
+              edits: backend.edits || {},
+              deleted: backend.deleted || []
+            }],
+            activeDashboard: 'default',
+            servicos: backend.servicos || {}
+          });
           loadedOk = true;
           dataSource = 'api';
         }
       }
     } catch (e) {
       console.error('Erro ao carregar dados do backend:', e);
-      app.showToast('Falha ao carregar dados do backend. Usando dados locais.', 'warning', 4000);
+      // Fallback para localStorage
+      var localOk = app._loadFromLocalStorage();
+      if (localOk) {
+        loadedOk = true;
+        dataSource = 'localStorage';
+      }
     }
 
     app.hideLoading(loadedOk);
