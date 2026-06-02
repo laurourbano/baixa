@@ -68,18 +68,25 @@
           var localState = JSON.parse(localStorage.getItem('baixa_rt_data')) || {};
           var localDashboards = localState.dashboards || [];
 
+          // Merge: backend é a base, mas dados locais (mais recentes) prevalecem
           backend.dashboards.forEach(function (bd) {
             var local = localDashboards.find(function (ld) { return ld.id === bd.id; });
             if (local) {
               bd.name = local.name;
               bd.icon = local.icon || bd.icon;
               // Preserva cards e ordenação locais (mais recentes)
-              if (local.customs && local.customs.length > 0) {
-                bd.customs = local.customs;
-                bd.order = local.order || [];
-                bd.edits = local.edits || {};
-                bd.deleted = local.deleted || [];
-              }
+              bd.customs = local.customs || [];
+              bd.order = local.order || [];
+              bd.edits = local.edits || {};
+              bd.deleted = local.deleted || [];
+            }
+          });
+
+          // Preserva dashboards locais que não existem no backend (ex: save falhou)
+          localDashboards.forEach(function (ld) {
+            var existsInBackend = backend.dashboards.some(function (bd) { return bd.id === ld.id; });
+            if (!existsInBackend) {
+              backend.dashboards.push(ld);
             }
           });
 
@@ -189,8 +196,13 @@
 
   /* ── Importar respostas no Ingresso PJ ── */
   function formatarTitulo(str) {
-    // Converte MAIÚSCULAS para Primeira letra maiúscula
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    // Converte MAIÚSCULAS para Primeira letra maiúscula, preservando siglas (palavras com até 3 letras totalmente maiúsculas)
+    return str.split(' ').map(function (word) {
+      var upper = word.toUpperCase();
+      // Preserva siglas: palavras curtas (até 3 chars) que já estão em maiúsculas
+      if (word === upper && word.length <= 3) return upper;
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(' ');
   }
 
   function importarRespostasIngressoPJ() {
