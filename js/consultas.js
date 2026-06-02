@@ -2395,7 +2395,11 @@ window.MainApp = window.MainApp || {};
       if (dash.customs.some(function (c) { return c.id === id; })) return;
       dash.customs.push({
         id: id,
-        title: k.charAt(0).toUpperCase() + k.slice(1).toLowerCase(),
+        title: k.split(' ').map(function (w) {
+          var upper = w.toUpperCase();
+          if (w === upper && w.length <= 3) return upper;
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        }).join(' '),
         content: respostas[k],
         color: 'info',
         type: 'copy',
