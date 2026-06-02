@@ -71,6 +71,9 @@ window.MainApp = window.MainApp || {};
   }
 
   function notifyChange() {
+    // Garante que localStorage esteja atualizado antes de enviar ao backend
+    app._save();
+
     var status = document.getElementById('gh-status');
     if (status) {
       status.classList.remove('d-none');
