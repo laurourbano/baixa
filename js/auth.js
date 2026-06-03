@@ -42,6 +42,9 @@ window.MainApp = window.MainApp || {};
 
       document.getElementById('login-overlay').classList.add('hidden');
       app.showToast('Bem-vindo, ' + emailInput.value.split('@')[0] + '!', 'success');
+
+      // Carrega dados e inicializa o app após login bem-sucedido
+      if (app.loadAndInit) app.loadAndInit();
     } else {
       errorMsg.classList.remove('d-none');
       passInput.value = '';

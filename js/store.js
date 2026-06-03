@@ -73,7 +73,8 @@ window.MainApp = window.MainApp || {};
     dashboards: DEFAULT_DASHBOARDS.map(createDashFromTemplate),
     activeDashboard: 'default',
     dashSortMode: 'custom',
-    servicos: {}
+    servicos: {},
+    _lastModified: Date.now()
   };
 
   /* ── Helpers ──────────────────────────── */
@@ -146,6 +147,7 @@ window.MainApp = window.MainApp || {};
   }
 
   function save() {
+    state._lastModified = Date.now();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
@@ -156,6 +158,7 @@ window.MainApp = window.MainApp || {};
     state.activeDashboard = newState.activeDashboard || 'default';
     state.dashSortMode = newState.dashSortMode || 'custom';
     state.servicos = newState.servicos || {};
+    state._lastModified = newState._lastModified || Date.now();
     ensureDefaultDashboards(state.dashboards);
     save();
     return true;
@@ -169,6 +172,7 @@ window.MainApp = window.MainApp || {};
       state.activeDashboard = raw.activeDashboard || 'default';
       state.dashSortMode = raw.dashSortMode || 'custom';
       state.servicos = raw.servicos || {};
+      state._lastModified = raw._lastModified || Date.now();
       ensureDefaultDashboards(state.dashboards);
       save();
       return true;
@@ -182,6 +186,7 @@ window.MainApp = window.MainApp || {};
       }];
       state.activeDashboard = 'default';
       state.servicos = raw.servicos || {};
+      state._lastModified = Date.now();
       ensureDefaultDashboards(state.dashboards);
       save();
       return true;
@@ -193,6 +198,7 @@ window.MainApp = window.MainApp || {};
     state.dashboards = DEFAULT_DASHBOARDS.map(createDashFromTemplate);
     state.activeDashboard = 'default';
     state.servicos = {};
+    state._lastModified = Date.now();
     save();
   }
 

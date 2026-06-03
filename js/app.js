@@ -24,6 +24,9 @@
       document.getElementById('modal-avatar').textContent = initials;
 
       document.getElementById('login-overlay').classList.add('hidden');
+
+      // Carrega dados apenas se autenticado
+      await loadAndInit();
     } else {
       var emailInput = document.getElementById('login-email');
       var passInput = document.getElementById('login-password');
@@ -35,8 +38,12 @@
       });
 
       emailInput.focus();
+      // Não carrega dados — aguarda login bem-sucedido
     }
+  }
 
+  /* ── Carregar dados e inicializar app ─── */
+  async function loadAndInit() {
     // Carrega dados do backend (com retry para cold start do Render)
     app.showLoading('Conectando ao servidor...');
     var loadedOk = false;
@@ -212,5 +219,6 @@
 
   /* ── Bootstrap ────────────────────────── */
   app.init = init;
+  app.loadAndInit = loadAndInit;
   document.addEventListener('DOMContentLoaded', init);
 }());
