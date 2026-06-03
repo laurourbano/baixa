@@ -27,7 +27,8 @@
       "Bash(npm view *)",
       "Bash(ren *)",
       "Bash(npm audit)",
-      "Bash(git fetch *)"
+      "Bash(git fetch *)",
+      "Bash(git diff *)"
     ]
   },
   "$version": 4

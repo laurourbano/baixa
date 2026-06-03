@@ -37,10 +37,19 @@ function uploadToS3(key, body) {
 /* ── Validação ──────────────────────────── */
 function validateDataPayload(body) {
   if (!body || typeof body !== 'object') return 'Payload deve ser um objeto JSON';
+
+  // Novo formato (multi-dashboard)
+  if (body.dashboards) {
+    if (!Array.isArray(body.dashboards)) return 'dashboards deve ser um array';
+    return null;
+  }
+
+  // Formato antigo (compatibilidade)
   if (body.order && !Array.isArray(body.order)) return 'order deve ser um array';
   if (body.customs && !Array.isArray(body.customs)) return 'customs deve ser um array';
   if (body.deleted && !Array.isArray(body.deleted)) return 'deleted deve ser um array';
   if (body.edits && typeof body.edits !== 'object') return 'edits deve ser um objeto';
+
   return null;
 }
 
