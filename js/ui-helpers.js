@@ -1,5 +1,22 @@
 /**
- * ui-helpers.js — Toast, Confirm Dialog, Loading Overlay, Status Indicator
+ * ui-helpers.js — Componentes reutilizáveis de UI
+ *
+ * @module ui-helpers
+ * @description
+ * Fornece componentes de UI usados por todos os outros módulos.
+ *
+ * Componentes:
+ * - showToast(message, type, duration): notificação temporária com ícone
+ *   (success/fa-check-circle, warning/fa-exclamation-triangle,
+ *    danger/fa-exclamation-circle, info/fa-info-circle)
+ * - showLoading(message) / hideLoading(loaded): overlay de carregamento
+ *   com duração mínima de 600ms para evitar flicker
+ * - showConfirm(title, message, type): diálogo de confirmação baseado em Promise
+ *   (resolve true/false). Tipos: warning, danger, info
+ * - _updateStatusIndicator(source): badge no cabeçalho indicando origem dos dados
+ *   (api/saved/backup/save-error/localStorage)
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

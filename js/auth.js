@@ -1,5 +1,22 @@
 /**
- * auth.js — Autenticação local (login, logout, alteração de senha)
+ * auth.js — Autenticação local
+ *
+ * @module auth
+ * @description
+ * Gerencia autenticação local do usuário no frontend.
+ *
+ * Funcionalidades:
+ * - checkLogin: valida email + senha de 4 dígitos (padrão: "1234")
+ * - forgotPassword: exibe diálogo de recuperação de senha
+ * - updatePassword: altera senha com validações (tamanho mínimo, não repetida)
+ * - logout: remove autenticação e recarrega a página
+ *
+ * Armazenamento:
+ * - Senha: localStorage (baixa_rt_password)
+ * - Sessão: localStorage (baixa_rt_auth)
+ * - Email: localStorage (baixa_rt_user_email)
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 
@@ -25,6 +42,9 @@ window.MainApp = window.MainApp || {};
 
       document.getElementById('login-overlay').classList.add('hidden');
       app.showToast('Bem-vindo, ' + emailInput.value.split('@')[0] + '!', 'success');
+
+      // Carrega dados e inicializa o app após login bem-sucedido
+      if (app.loadAndInit) app.loadAndInit();
     } else {
       errorMsg.classList.remove('d-none');
       passInput.value = '';

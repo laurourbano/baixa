@@ -1,5 +1,26 @@
 /**
- * cards.js — Renderização, CRUD, cópia e drag-and-drop de cards (multi-dashboard)
+ * cards.js — Renderização, CRUD, cópia e drag-and-drop de cards
+ *
+ * @module cards
+ * @description
+ * Gerencia cards dentro de cada dashboard.
+ *
+ * Tipos de card suportados:
+ * - copy: texto copiável com data automática
+ * - link: link externo com botão "Abrir Link"
+ * - pdf: link para PDF com botão "Abrir PDF"
+ * - info: informativo somente leitura
+ *
+ * Funcionalidades:
+ * - render: grid responsivo (col-12 col-md-6 col-lg-3) com ordenação por drag-and-drop
+ * - Cópia inteligente: substitui placeholder [00/00/0000] pela data atual (pt-BR)
+ * - Modal Bootstrap para criar/editar cards com campos: título, tipo, cor, conteúdo,
+ *   link, local, situação, julgamento, flag mostrar data
+ * - Drag-and-drop via HTML5 Drag and Drop API nos handles ⠿
+ * - Exportação Excel (.xlsx) via SheetJS
+ * - Feedback visual de cópia (destaque verde temporário)
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 
@@ -164,7 +185,31 @@ window.MainApp = window.MainApp || {};
     document.getElementById('m-link').value = '';
     document.getElementById('m-showDate').checked = true;
     toggleLinkField();
+    populateRespostasPadrao();
     window.bsModal.show();
+  }
+
+  function populateRespostasPadrao() {
+    var rpSelect = document.getElementById('m-resposta-padrao');
+    if (!rpSelect) return;
+    var respostas = {};
+    // Tenta múltiplas fontes
+    try { var s = JSON.parse(localStorage.getItem('baixa_rt_data') || '{}'); if (s.respostasPadrao) respostas = s.respostasPadrao; } catch(e) {}
+    if (app.__state && app.__state.servicos && app.__state.servicos.respostasPadrao) respostas = app.__state.servicos.respostasPadrao;
+    if (window._store && window._store.respostasPadrao) respostas = window._store.respostasPadrao;
+    var keys = Object.keys(respostas).sort();
+    rpSelect.innerHTML = '<option value="">Nenhuma</option>' +
+      keys.map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
+    rpSelect.value = '';
+    rpSelect.onchange = function () {
+      var val = this.value;
+      if (val && respostas[val]) {
+        document.getElementById('m-content').value = respostas[val];
+        if (!document.getElementById('m-title').value) {
+          document.getElementById('m-title').value = val;
+        }
+      }
+    };
   }
 
   function saveCard() {
@@ -220,6 +265,7 @@ window.MainApp = window.MainApp || {};
     document.getElementById('m-showDate').checked = card.showDate !== false;
 
     toggleLinkField();
+    populateRespostasPadrao();
     window.bsModal.show();
   }
 

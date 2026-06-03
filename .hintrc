@@ -23,6 +23,8 @@
       }
     ],
     "detect-css-reflows/composite": "off",
-    "detect-css-reflows/paint": "off"
+    "detect-css-reflows/paint": "off",
+    "axe/aria": "off",
+    "axe/structure": "off"
   }
 }

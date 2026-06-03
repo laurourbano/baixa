@@ -1,5 +1,23 @@
 /**
- * servicos.js — Gerenciamento de páginas de parecer por tipo de serviço
+ * servicos.js — Modelos de parecer por tipo de serviço
+ *
+ * @module servicos
+ * @description
+ * Gerencia templates de parecer para 5 tipos de serviço.
+ *
+ * Serviços disponíveis:
+ * - ingresso-pj: Ingresso de Pessoa Jurídica
+ * - inscricao-pf: Inscrição de Pessoa Física
+ * - contratos: Controle de Contratos
+ * - conf-pf: Conferência de Pessoa Física
+ * - conf-pj: Conferência de Pessoa Jurídica
+ *
+ * Funcionalidades:
+ * - Textarea editável para cada serviço com persistência em localStorage
+ * - Botão de cópia via Clipboard API
+ * - Salvamento automático ao editar
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 

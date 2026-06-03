@@ -1,0 +1,177 @@
+[
+  {
+    "protocolo": "2ª VIA DE CARTEIRA DE IDENTIDADE PROFISSIONAL (WEB)",
+    "status": "Indeferido Por Conflito de Horário",
+    "estabelecimento": "FARMACEUTICO"
+  },
+  {
+    "protocolo": "2ª VIA DE CEDULA DE IDENTIDADE PROFISSIONAL (WEB)",
+    "status": "Indeferido Sem Resposta",
+    "estabelecimento": "TECNICO"
+  },
+  {
+    "protocolo": "ALTERACAO DE HORARIO E/OU MODALIDADE (WEB)",
+    "status": "Indeferido Sem Documento",
+    "estabelecimento": "ARMAZENADORA - MEDICAMENTOS E CORRELATOS"
+  },
+  {
+    "protocolo": "ALVARA DE AUTONOMO (WEB)",
+    "status": "Indeferido Por Diretor Técnico",
+    "estabelecimento": "BANCO DE ÓRGÃOS"
+  },
+  {
+    "protocolo": "AVERBACAO CONTRATUAL (WEB)",
+    "status": "Indeferido Por Canal Incorreto",
+    "estabelecimento": "CENTRAL DE ABASTECIMENTO FARMACEUTICO"
+  },
+  {
+    "protocolo": "BAIXA DE RESPONSABILIDADE TECNICA (WEB)",
+    "status": "Indeferido Sem Habilitacao",
+    "estabelecimento": "CENTRAL DE ABASTECIMENTO HOSPITALAR"
+  },
+  {
+    "protocolo": "CANCELAMENTO DE INSCRICAO - PF (WEB)",
+    "status": "Arquivado",
+    "estabelecimento": "CLÍNICA DE ESTÉTICA"
+  },
+  {
+    "protocolo": "CANCELAMENTO DE REGISTRO - PJ (WEB)",
+    "status": "Finalizado",
+    "estabelecimento": "CLÍNICA DE SERVIÇOS DE VACINAÇÃO"
+  },
+  {
+    "protocolo": "CERTIDAO SIMPLIFICADA - ATUALIZACAO CADASTRAL (WEB)",
+    "status": "Escala Indeferida Empresa Irregular",
+    "estabelecimento": "CLÍNICA FARMACÊUTICA"
+  },
+  {
+    "protocolo": "CRACHA DE IDENTIFICACAO (WEB)",
+    "status": "Escala Indeferida Empresa Sem o RT",
+    "estabelecimento": "CONSULTORIO FARMACEUTICO"
+  },
+  {
+    "protocolo": "EFETIVACAO DE INSCRICAO PROVISORIA PARA DEFINITIVA (WEB)",
+    "status": "Escala Indeferida Horário Divergente",
+    "estabelecimento": "CONTROLE DE VETORES E PRAGAS URBANAS"
+  },
+  {
+    "protocolo": "ESCALA DE ASSISTENCIA FARMACEUTICA (WEB)",
+    "status": "Pendência documental",
+    "estabelecimento": "DEPOSITO FECHADO"
+  },
+  {
+    "protocolo": "INGRESSO DE RESPONSABILIDADE TECNICA (WEB)",
+    "status": "Aguarda",
+    "estabelecimento": "DIST./IMP. MED.,COSM.,PROD. HIG. PESSOAL"
+  },
+  {
+    "protocolo": "PRE INSCRICAO PF",
+    "status": "Atenção",
+    "estabelecimento": "DISTRIBUIDOR/COMERCIO GASES MEDICINAIS"
+  },
+  {
+    "protocolo": "PRE CADASTRO PJ",
+    "status": "Correção interna",
+    "estabelecimento": "DISTRIBUIDOR/IMPORT./EXPORT. CORRELATOS"
+  },
+  {
+    "protocolo": "PRORROGACAO DE INSCRICAO PROVISORIA",
+    "status": "",
+    "estabelecimento": "DISTRIBUIDOR/IMPORT./EXPORT. COSMETICO"
+  },
+  {
+    "protocolo": "RENOVACAO DE CONTRATO (WEB)",
+    "status": "",
+    "estabelecimento": "DISTRIBUIDOR/IMPORT./EXPORT. MEDICAMENTO"
+  },
+  {
+    "protocolo": "REQUER BAIXA DE INSCRICAO - PF",
+    "status": "",
+    "estabelecimento": "EMPRESA ARMAZENADORA DE CORRELATOS"
+  },
+  {
+    "protocolo": "REQUER EFETIVACAO DE INSCRIÇÃO PROVISORIA",
+    "status": "",
+    "estabelecimento": "EMPRESA ARMAZENADORA DE COSMÉTICOS"
+  },
+  {
+    "protocolo": "REQUER INSCRICAO DE NAO FARMACEUTICO",
+    "status": "",
+    "estabelecimento": "EMPRESA ARMAZENADORA DE MEDICAMENTOS"
+  },
+  {
+    "protocolo": "REQUER INSCRICAO DEFINITIVA",
+    "status": "",
+    "estabelecimento": "EMPRESA DE CONSULTORIA"
+  },
+  {
+    "protocolo": "REQUER INSCRICAO POR TRANSFERENCIA",
+    "status": "",
+    "estabelecimento": "FARMACIA COM MANIPULACAO"
+  },
+  {
+    "protocolo": "REQUER INSCRICAO PROVISORIA",
+    "status": "",
+    "estabelecimento": "FARMACIA COM MANIPULACAO ALOPATICA E HOM"
+  },
+  {
+    "protocolo": "REQUER INSCRICAO REMIDA (WEB)",
+    "status": "",
+    "estabelecimento": "FARMACIA EQUIVALENTE A HOSPITALAR"
+  },
+  {
+    "protocolo": "REQUER INSCRICAO SECUNDARIA",
+    "status": "",
+    "estabelecimento": "FARMACIA HOMEOPATICA"
+  },
+  {
+    "protocolo": "REQUER PRORROGACAO INSCRICAO PROVISORIA",
+    "status": "",
+    "estabelecimento": "FARMACIA HOSPITALAR"
+  },
+  {
+    "protocolo": "REQUER REABILITACAO DE INSCRICAO DEFINITIVA",
+    "status": "",
+    "estabelecimento": "FARMACIA PRIVATIVA EMPRESA/ASSOCIAÇAO"
+  },
+  {
+    "protocolo": "REQUER REABILITACAO DE INSCRICAO POR TRANSFERENCIA",
+    "status": "",
+    "estabelecimento": "FARMACIA SEM MANIPULAÇAO OU DROGARIA"
+  },
+  {
+    "protocolo": "REQUER REABILITACAO DE REGISTRO - PJ",
+    "status": "",
+    "estabelecimento": "INDUSTRIA COSMETICOS/PERFUMARIA"
+  },
+  {
+    "protocolo": "REQUER RECONSIDERACAO DO INDEF. DO REGISTRO - PJ",
+    "status": "",
+    "estabelecimento": "INDUSTRIA DE ALIMENTOS"
+  },
+  {
+    "protocolo": "REQUER REGISTRO - PJ",
+    "status": "",
+    "estabelecimento": "INDUSTRIA DE CORRELATOS"
+  },
+  {
+    "protocolo": "SOLICITA ANOTACAO DE TITULO OU HABILITACAO PROFISSIONAL (WEB)",
+    "status": "",
+    "estabelecimento": "INDUSTRIA DE INSUMOS"
+  },
+  {
+    "protocolo": "SOLICITA CERTIDAO DE TRANSFERENCIA PARA OUTRO CRF (WEB)",
+    "status": "",
+    "estabelecimento": "INDUSTRIA DE PRODUTOS FARMACOPEICOS/FITO"
+  },
+  {
+    "protocolo": "SOLICITA CERTIDAO PARA FINS DE INSCRICAO SECUNDARIA EM OUTRO CRF (WEB)",
+    "status": "",
+    "estabelecimento": "INDUSTRIA DE SANEANTES"
+  },
+  {
+    "protocolo": "SOLICITA DECLARACAO DE APTIDAO EM SERVICOS DE VACINACAO (WEB)",
+    "status": "",
+    "estabelecimento": "INDUSTRIA FARMACEUTICA"
+  }
+]

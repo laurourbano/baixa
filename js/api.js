@@ -1,5 +1,17 @@
 /**
  * api.js — Comunicação com o backend
+ *
+ * @module api
+ * @description
+ * Gerencia toda a comunicação HTTP com o backend (Render).
+ *
+ * Funcionalidades:
+ * - callApi: requisição fetch com timeout via AbortController
+ * - callApiWithRetry: chamada com retry e backoff exponencial (para cold-start do Render)
+ * - notifyChange: autosave — detecta mudanças e envia POST /api/save + POST /api/backup
+ * - Atualização do indicador de status (🟢 API / 🟡 localStorage / 🔴 erro)
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 
@@ -59,6 +71,9 @@ window.MainApp = window.MainApp || {};
   }
 
   function notifyChange() {
+    // Garante que localStorage esteja atualizado antes de enviar ao backend
+    app._save();
+
     var status = document.getElementById('gh-status');
     if (status) {
       status.classList.remove('d-none');
@@ -66,7 +81,6 @@ window.MainApp = window.MainApp || {};
       status.innerHTML = '<span class="text-warning"><i class="fas fa-sync-alt fa-spin me-1"></i>Salvando...</span>';
       status.title = 'Enviando alterações para o backend...';
     }
-    app.showToast('Alteração detectada! Salvando no backend...', 'warning', 4000);
 
     var payload = {
       method: 'POST',
@@ -74,7 +88,12 @@ window.MainApp = window.MainApp || {};
       body: JSON.stringify(app.__state)
     };
 
-    callApi('/api/save', payload).then(function (r) {
+    // Usa retry (até 2 tentativas) para garantir que o save chegue ao backend
+    callApiWithRetry('/api/save', payload, {
+      maxRetries: 2,
+      baseTimeout: 15000,
+      delayMs: 1000
+    }).then(function (r) {
       return r.json().catch(function () { return null; });
     }).then(function (j) {
       if (j && status) {
@@ -90,7 +109,6 @@ window.MainApp = window.MainApp || {};
         status.className = 'badge bg-transparent border border-info x-small text-info';
         status.innerHTML = '<i class="fas fa-archive me-1"></i>Backup (API)';
         status.title = 'Backup criado no backend: ' + (bj.backup || bj.dataFile || 'ok');
-        app.showToast('Backup salvo no backend com sucesso!', 'success', 2500);
       } else if (status) {
         status.className = 'badge bg-transparent border border-warning x-small text-warning';
         status.innerHTML = '<i class="fas fa-check-circle me-1"></i>Salvo (sem backup)';
@@ -98,8 +116,11 @@ window.MainApp = window.MainApp || {};
       }
     }).catch(function () {
       if (status) {
-        app._updateStatusIndicator('save-error');
+        status.className = 'badge bg-transparent border border-danger x-small text-danger';
+        status.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Erro ao salvar';
+        status.title = 'Falha ao salvar no backend. Os dados estão seguros no navegador.';
       }
+      app._updateStatusIndicator('save-error');
     });
   }
 

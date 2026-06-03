@@ -1,6 +1,28 @@
 /**
- * main.js — Bootstrap. Em Node.js (testes), carrega todos os módulos.
- * Em browser, os módulos são carregados via <script> tags antes deste arquivo.
+ * main.js — Bootstrap do WorkDash
+ *
+ * Ponto de entrada do frontend. Responsável por:
+ * - Detectar ambiente (Node.js para testes vs. browser)
+ * - Carregar todos os módulos na ordem correta de dependência
+ * - Inicializar UI (tema, sidebar, views)
+ * - Carregar dados do backend com retry e fallback
+ * - Configurar autosave e drag-and-drop global
+ *
+ * @module main
+ * @requires config.js
+ * @requires store.js
+ * @requires api.js
+ * @requires auth.js
+ * @requires cards.js
+ * @requires dashboards.js
+ * @requires ui.js
+ * @requires ui-helpers.js
+ * @requires consultas.js
+ * @requires calculator.js
+ * @requires fiscal.js
+ * @requires weather.js
+ * @requires gh-backup.js
+ * @requires servicos.js
  */
 
 // Inicializa namespace global (necessário para ambiente Node.js)

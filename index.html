@@ -198,26 +198,78 @@
                 <!-- VIEW: FERRAMENTAS -->
                 <div id="view-ferramentas" class="app-view d-none">
                     <div class="row g-4">
-                        <!-- Ferramenta: Calculadora -->
-                        <div class="col-md-6 col-lg-4">
+                        <!-- Ferramenta: Calculadora de Piso + Horas (integradas) -->
+                        <div class="col-12">
                             <div class="workspace-tool">
                                 <h6 class="fw-bold text-info mb-3 text-uppercase letter-spacing"><i
-                                        class="fas fa-calculator me-2"></i> Calculadora</h6>
-                                <div class="d-flex gap-2 mb-3">
-                                    <input id="piso" type="number" placeholder="Valor" class="form-control">
-                                    <input id="horas" type="number" placeholder="Hrs" class="form-control"
-                                        style="max-width: 80px;">
+                                        class="fas fa-calculator me-2"></i> Calculadora de Piso Salarial</h6>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-12">
+                                        <label class="x-small text-muted mb-2">Categoria da Empresa</label>
+                                        <div class="d-flex flex-wrap gap-2" id="ferr-categorias-radios">
+                                            <label class="ferr-radio-label active"><input type="radio" name="ferr-cat" value="varejista" checked> Varejista <b class="text-success">R$ <span>4.729,62</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="hospitalar"> Hospitalar <b class="text-success">R$ <span>4.567,00</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="distribuidora"> Distribuidora <b class="text-success">R$ <span>4.764,00</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="laboratorios"> Laboratórios <b class="text-success">R$ <span>3.763,08</span></b></label>
+                                            <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="industrias"> Indústrias <b class="text-success">R$ <span>4.211,45</span></b></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="x-small text-muted">Vínculo</label>
+                                        <div class="d-flex gap-2">
+                                            <label class="ferr-radio-label active x-small py-1"><input type="radio" name="ferr-vinculo" value="contratado" checked> Contratado</label>
+                                            <label class="ferr-radio-label x-small py-1"><input type="radio" name="ferr-vinculo" value="socio"> Sócio</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="x-small text-muted">Cidade</label>
+                                        <input type="text" id="ferr-cidade" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar cidade..." autocomplete="off">
+                                        <select id="ferr-cidade-select" class="form-select form-select-sm bg-dark text-light border-secondary mt-1 d-none" size="3"></select>
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end gap-2">
+                                        <button id="ferr-copy" class="btn btn-sm btn-outline-info"><i class="fas fa-copy me-1"></i> Copiar</button>
+                                    </div>
                                 </div>
-                                <div
-                                    class="small text-muted d-flex justify-content-between p-2 bg-dark bg-opacity-25 rounded border border-secondary">
-                                    <span>Total: <b id="res-total" class="text-success">0</b></span>
-                                    <span>Hora: <b id="res-hora" class="text-info">0</b></span>
+                                <div class="small d-flex flex-wrap gap-3 p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-3">
+                                    <span>Piso Base: <b id="ferr-piso-base-display" class="text-light">R$ 4.729,62</b></span>
+                                    <span>Valor/Hora: <b id="ferr-valor-hora" class="text-info">R$ 21,50</b></span>
+                                    <span>Total de Horas: <b id="ferr-total-horas-display" class="text-info">0h</b></span>
+                                    <span>Jornada: <b id="ferr-horas-semana-display" class="text-light">44h</b></span>
+                                    <span>Salário Total: <b id="ferr-piso-prop" class="text-success fs-6">R$ 0,00</b></span>
+                                </div>
+                                <div id="ferr-intervalo-alerta" class="alert alert-warning py-1 px-2 x-small d-none mb-2"><i class="fas fa-exclamation-triangle me-1"></i> <span id="ferr-intervalo-msg"></span></div>
+
+                                <!-- Tabela de Horas embutida -->
+                                <h6 class="fw-bold text-success mb-2 text-uppercase letter-spacing x-small"><i
+                                        class="fas fa-clock me-2"></i> Horários do Profissional</h6>
+                                <p class="x-small text-muted mb-1">Preencha os horários para calcular o salário automaticamente.</p>
+                                <div class="d-flex gap-2 align-items-center mb-1 flex-wrap" id="ferr-horas-lote">
+                                    <span class="x-small text-muted">Dias:</span>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="DOM" checked> DOM</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="SEG" checked> SEG</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="TER" checked> TER</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="QUA" checked> QUA</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="QUI" checked> QUI</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="SEX" checked> SEX</label>
+                                    <label class="x-small"><input type="checkbox" class="ferr-dia-check" value="SAB"> SAB</label>
+                                    <input type="time" id="ferr-lote-entrada" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width:100px" step="60" title="Entrada">
+                                    <span class="x-small text-muted">às</span>
+                                    <input type="time" id="ferr-lote-saida" class="form-control form-control-sm bg-dark text-light border-secondary" style="max-width:100px" step="60" title="Saída">
+                                    <button id="ferr-lote-aplicar" class="btn btn-sm btn-outline-info py-0 px-2 x-small"><i class="fas fa-check me-1"></i>Aplicar</button>
+                                    <button id="ferr-lote-limpar" class="btn btn-sm btn-outline-secondary py-0 px-2 x-small"><i class="fas fa-eraser me-1"></i>Limpar</button>
+                                </div>
+                                <div class="table-responsive" style="max-height:350px;overflow-y:auto">
+                                    <table class="table table-sm table-dark table-borderless x-small mb-0" id="ferr-calc-horas-tabela">
+                                        <thead><tr><th>Dia</th><th>Entrada / Saída</th><th>Total</th></tr></thead>
+                                        <tbody id="ferr-calc-horas-body"></tbody>
+                                        <tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td></td><td id="ferr-calc-horas-total" class="text-success">0h</td></tr></tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Ferramenta: Busca Fiscal -->
-                        <div class="col-md-6 col-lg-4">
+                        <div class="col-12">
                             <div class="workspace-tool">
                                 <h6 class="fw-bold text-warning mb-3 text-uppercase letter-spacing"><i
                                         class="fas fa-search me-2"></i> Fiscal</h6>
@@ -231,9 +283,6 @@
                                     Selecione uma cidade</div>
                             </div>
                         </div>
-
-                        <!-- Ferramenta: Nuvem removida (salvamento é feito automaticamente no backend) -->
-
                     </div>
                 </div>
 
@@ -250,6 +299,8 @@
                         <li class="nav-item"><button class="nav-link" data-section="respostasPadrao" data-bs-toggle="tab" data-bs-target="#c-tab-respostas"><i class="fas fa-reply me-1"></i> Respostas</button></li>
                         <li class="nav-item"><button class="nav-link" data-section="nomesEmpresariais" data-bs-toggle="tab" data-bs-target="#c-tab-nomes"><i class="fas fa-tag me-1"></i> Nomes</button></li>
                         <li class="nav-item"><button class="nav-link" data-section="calcHoras" data-bs-toggle="tab" data-bs-target="#c-tab-horas"><i class="fas fa-clock me-1"></i> Horas</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="pisoRef" data-bs-toggle="tab" data-bs-target="#c-tab-piso-ref"><i class="fas fa-file-invoice-dollar me-1"></i> Piso Ref</button></li>
+                        <li class="nav-item"><button class="nav-link" data-section="registros" data-bs-toggle="tab" data-bs-target="#c-tab-registros"><i class="fas fa-table me-1"></i> Registros</button></li>
                     </ul>
                     <!-- Conteúdo das tabs -->
                     <div class="tab-content" id="consultasTabContent">
@@ -262,6 +313,8 @@
                         <div class="tab-pane fade" id="c-tab-respostas"><div class="c-placeholder text-center py-3" data-section="respostasPadrao"><div class="spinner-border spinner-border-sm text-warning me-2"></div> Carregando...</div></div>
                         <div class="tab-pane fade" id="c-tab-nomes"><div class="c-placeholder text-center py-3" data-section="nomesEmpresariais"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...</div></div>
                         <div class="tab-pane fade" id="c-tab-horas"><div class="c-placeholder text-center py-3" data-section="calcHoras"><div class="spinner-border spinner-border-sm text-info me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-piso-ref"><div class="c-placeholder text-center py-3" data-section="pisoRef"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Carregando...</div></div>
+                        <div class="tab-pane fade" id="c-tab-registros"><div class="c-placeholder text-center py-3" data-section="registros"><div class="spinner-border spinner-border-sm text-success me-2"></div> Carregando...</div></div>
                     </div>
                 </div>
 
@@ -471,6 +524,13 @@
                     <textarea id="m-content" rows="4" placeholder="Conteúdo"
                         class="form-control form-control-sm bg-dark text-light border-secondary mb-2"></textarea>
 
+                    <div class="mb-2">
+                        <label class="x-small text-muted">Inserir resposta padrão</label>
+                        <select id="m-resposta-padrao" class="form-select form-select-sm bg-dark text-light border-secondary">
+                            <option value="">Nenhuma</option>
+                        </select>
+                    </div>
+
                     <div class="form-check form-switch mb-2">
                         <input class="form-check-input bg-dark border-secondary" type="checkbox" id="m-showDate"
                             checked>
@@ -624,7 +684,7 @@
                     </div>
                     <div class="d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" id="faq-save-btn" class="btn btn-sm btn-success px-3" onclick="MainApp.saveFaqItem()">
+                        <button type="button" id="faq-save-btn" class="btn btn-sm btn-success px-3">
                             <i class="fas fa-save me-1"></i> Salvar
                         </button>
                     </div>
@@ -677,6 +737,45 @@
                             data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" onclick="MainApp.saveLocationManual()"
                             class="btn btn-sm btn-primary w-100">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Prompt (input de texto) -->
+    <div class="modal fade" id="promptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header py-2 border-secondary">
+                    <h6 id="prompt-title" class="modal-title small fw-bold">Entrada</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <p id="prompt-message" class="x-small text-muted mb-2"></p>
+                    <input type="text" id="prompt-input" class="form-control form-control-sm bg-dark text-light border-secondary" autocomplete="off">
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" id="prompt-btn-ok" class="btn btn-sm btn-success px-3">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Alert (mensagem) -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header py-2 border-secondary">
+                    <h6 id="alert-title" class="modal-title small fw-bold">Aviso</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 text-center">
+                    <div id="alert-icon" class="mb-2"></div>
+                    <p id="alert-message" class="small text-light mb-0"></p>
+                    <div class="d-flex justify-content-center mt-3">
+                        <button type="button" class="btn btn-sm btn-info px-4" data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>

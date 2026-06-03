@@ -1,129 +1,98 @@
 # ⚡ WorkDash
 
-[![Vercel Deploy](https://img.shields.io/badge/Vercel-Deploy-000?style=for-the-badge&logo=vercel)](https://vercel.com/)
+[![Netlify Status](https://img.shields.io/badge/Netlify-Deploy-00C7B7?style=for-the-badge&logo=netlify)](https://baixaparecer.netlify.app/)
 [![Licença MIT](https://img.shields.io/badge/Licença-MIT-green.svg?style=for-the-badge)](LICENSE)
 [![Status do Projeto](https://img.shields.io/badge/Status-Ativo-success?style=for-the-badge)](https://baixaparecer.netlify.app/)
+[![Node 22](https://img.shields.io/badge/Node-22.x-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
 
 O **WorkDash** é um painel de produtividade para fiscais, reunindo pareceres, contratos, conferências, busca de fiscais, calculadora e links úteis em um só lugar — com sincronização em nuvem e múltiplos dashboards personalizáveis.
 
 ---
 
-## 📸 Demonstração
-
-## 📸 Demonstração
-
-- **Screenshot (interface principal)**
-
-   ![Screenshot do Portal](assets/img/screenshots/screenshot-1.png)
-
-- **GIF de demonstração (exemplo)**
-
-   ![Demo GIF](assets/img/screenshots/demo.gif)
-
-> Nota: os arquivos acima são placeholders — substitua por capturas reais em `assets/img/screenshots/`.
-
-### Como capturar screenshots / GIFs rapidamente
-
-- Abrir a aplicação localmente (ex.: via `python -m http.server 8000` ou abrindo `index.html`).
-- Para captura de tela estática use a ferramenta nativa do seu sistema (Snipping Tool, macOS Screenshot, etc.).
-- Para GIFs simples (Linux/Windows/macOS) você pode gravar a tela com `ffmpeg` e converter:
-
-```bash
-# Gravar janela (Windows exemplo com gdigrab) - ajuste o título da janela
-ffmpeg -f gdigrab -framerate 15 -i title="Portal de Pareceres - Baixa RT" -video_size 1280x720 demo.mp4
-# Converter para GIF otimizado
-ffmpeg -i demo.mp4 -vf "fps=15,scale=800:-1:flags=lanczos" -gifflags +transdiff -y demo.gif
-```
-
-Coloque `screenshot-1.png` e `demo.gif` em `assets/img/screenshots/` e o README exibirá as imagens.
-
----
-
 ## ✨ Funcionalidades Principais
 
-- **🔐 Acesso Protegido**: Camada de segurança por senha (Padrão: `1234`) para proteger seus modelos.
-- **⚡ Cópia Inteligente**: Botões de um clique para copiar pareceres pré-formatados com inserção automática de data.
-- **🗂️ Gestão Dinâmica (CRUD)**: Adicione, edite e remova cards de pareceres, links externos ou PDFs diretamente pela interface.
-- **🧮 Calculadora de Piso**: Ferramenta integrada para cálculo rápido de valores baseados em horas de trabalho.
-- **🔍 Busca de Fiscal**: Localização rápida de fiscais por cidade.
-- **☁️ Sincronização Cloud**: Backup e restauração via GitHub API para nunca perder seus dados.
-- **📊 Exportação**: Gere relatórios em Excel (.xlsx) de todos os seus pareceres cadastrados.
+- **🔐 Acesso Protegido**: Camada de segurança por senha (padrão: `1234`), com possibilidade de troca e recuperação.
+- **🗂️ Múltiplos Dashboards**: Crie quantos dashboards quiser — cada um com seus próprios cards e organização independente.
+- **📋 Cards Inteligentes**: Cards de texto com cópia automática de data, links para URLs externas, PDFs e informativos.
+- **⚡ Cópia Inteligente**: Um clique para copiar pareceres formatados com inserção automática de data (`dd/mm/aaaa`).
+- **🎨 Interface Moderna**: Temas Dark/Light, sidebar retrátil, drag-and-drop e modais Bootstrap 5.3.
+- **🧮 Calculadora de Honorários**: Cálculo rápido de valores baseados em horas de trabalho (`Piso × Horas ÷ 44`).
+- **🔍 Busca de Fiscais**: Localização rápida de fiscais por cidade via planilha ODS.
+- **📚 Base de Conhecimento**: FAQ, Normas, Protocolos, Piso, Orientações e mais — com CRUD completo e busca textual.
+- **📝 Modelos de Parecer**: Templates por tipo de serviço (Ingresso PJ, Inscrição PF, Contratos, Conferências) com cópia fácil.
+- **🌤️ Widget de Clima**: Previsão do tempo em tempo real (Open-Meteo) com busca de cidades brasileiras (IBGE).
+- **☁️ Sincronização Cloud**: Autosave no backend (Render) com retry automático e fallback para localStorage.
+- **💾 Backup & Restore**: Backup manual via GitHub API ou endpoint do backend. Backups timestamped.
+- **📊 Exportação Excel**: Gere planilhas (.xlsx) com todos os cards de um dashboard.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias
 
-O projeto utiliza uma stack leve e performática, focada em zero dependências pesadas de backend:
-
-- **Frontend**: HTML5 Semântico, CSS3 (Bootstrap 5.3 + Custom CSS)
-- **Lógica**: Vanilla JavaScript (ES6+)
-- **Bibliotecas**:
-  - [Font Awesome 6](https://fontawesome.com/) (Ícones)
-  - [SheetJS](https://sheetjs.com/) (Exportação Excel)
-  - [Bootstrap 5.3](https://getbootstrap.com/) (UI/UX)
+- **Frontend**: HTML5 Semântico, CSS3, Vanilla JavaScript (ES6+)
+- **UI**: Bootstrap 5.3, Font Awesome 6, Fonte Inter (Google Fonts)
+- **Planilhas**: SheetJS (xlsx) — leitura ODS/XLSX e exportação
+- **Backend**: Node.js + Express 5, SQLite (better-sqlite3)
+- **Cloud**: Netlify (frontend), Render (backend), AWS S3 (backups opcionais)
+- **Testes**: Vitest + jsdom (unitários), Playwright (E2E)
+- **CI/CD**: GitHub Actions
 
 ---
 
 ## 🚀 Como Executar Localmente
 
-1. **Clone o repositório**:
+### Pré-requisitos
 
-   ```bash
-   git clone https://github.com/laurourbano/baixa.git
-   ```
+- [Node.js 22.x](https://nodejs.org/)
 
-2. **Entre na pasta**:
+### Frontend
 
-   ```bash
-   cd baixa
-   ```
+```bash
+git clone https://github.com/laurourbano/baixa.git
+cd baixa
+npm install
+npm run dev
+# Acesse http://localhost:8000
+```
 
-3. **Abra o arquivo**:
-   Basta abrir o `index.html` em qualquer navegador moderno.
+### Backend (opcional — para sincronização cloud)
+
+```bash
+npm run bridge
+# Backend rodando em http://localhost:3002
+```
 
 ---
 
-## 📚 Documentação Detalhada
+## 📚 Documentação
 
-Para documentação completa do projeto (arquitetura, API, deploy, desenvolvimento e testes), veja a pasta `docs/`:
+Documentação completa disponível na pasta [`docs/`](docs/):
 
-- [Arquitetura](docs/ARCHITECTURE.md)
-- [API](docs/API.md)
-- [Deploy no Render](docs/DEPLOY_RENDER.md)
-- [Desenvolvimento](docs/DEVELOPMENT.md)
-- [Testes](docs/TESTING.md)
+| Documento | Conteúdo |
+|---|---|
+| [📘 Guia do Usuário](docs/USER_GUIDE.md) | Manual completo de uso — dashboards, cards, ferramentas, consultas |
+| [🏗️ Arquitetura](docs/ARCHITECTURE.md) | Stack, estrutura, módulos e fluxo de dados |
+| [🔌 API](docs/API.md) | Documentação dos endpoints do backend |
+| [💻 Desenvolvimento](docs/DEVELOPMENT.md) | Guia do ambiente de desenvolvimento |
+| [🧪 Testes](docs/TESTING.md) | Como rodar e criar testes |
+| [🚀 Deploy Render](docs/DEPLOY_RENDER.md) | Deploy do backend no Render |
+| [☁️ S3](docs/S3.md) | Configuração de backups no AWS S3 |
 
-### Servir localmente (dev)
+---
 
-Para servir o frontend localmente via `npm`:
+## 🌍 Deploy
 
-```bash
-npm install
-npm run dev
-# acesse http://localhost:8000
-```
+### Frontend (Netlify)
 
-### Backups persistentes (S3)
+1. Conecte seu GitHub na [Netlify](https://netlify.com/).
+2. Importe o repositório.
+3. Configurações automáticas via `netlify.toml`.
 
-O backend suporta envio de backups para S3 quando as variáveis de ambiente estiverem configuradas:
+### Backend (Render)
 
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `AWS_REGION` ou `AWS_DEFAULT_REGION`
-- `S3_BUCKET_NAME` (ou `S3_BUCKET`)
-
-Veja `docs/S3.md` para detalhes.
-
-## 🌍 Deploy na Vercel
-
-Para hospedar este projeto na Vercel de forma gratuita e profissional:
-
-1. **Conecte seu GitHub** na [Vercel](https://vercel.com/).
-2. **Importe o repositório** `baixa`.
-3. **Configurações**:
-   - Build Command: (Deixe em branco ou `npm run build` se houver)
-   - Output Directory: `.` (Diretório raiz)
-4. **Pronto!** A Vercel fornecerá um link `.vercel.app` com SSL automático.
+1. Conecte seu GitHub no [Render](https://render.com/).
+2. Crie um Web Service apontando para o repositório.
+3. Configurações automáticas via `render.yaml`.
 
 ---
 

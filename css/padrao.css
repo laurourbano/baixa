@@ -1745,3 +1745,45 @@ textarea.form-control {
   color: #888;
   font-size: 0.85rem;
 }
+
+/* ── Radio labels das categorias de piso ── */
+.ferr-radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--bs-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.15s;
+}
+.ferr-radio-label input[type='radio'] {
+  accent-color: var(--bs-info);
+  margin: 0;
+}
+.ferr-radio-label.active {
+  border-color: var(--bs-info);
+  background: rgba(13, 202, 240, 0.15);
+  box-shadow: 0 0 6px rgba(13, 202, 240, 0.3);
+}
+.ferr-radio-label:hover {
+  border-color: var(--bs-info);
+  background: rgba(13, 202, 240, 0.08);
+}
+
+/* ── Checkboxes de dias na tabela de horas ── */
+.ferr-dia-check {
+  accent-color: var(--bs-success);
+  margin: 0;
+  cursor: pointer;
+}
+
+/* ── Zebra striping na tabela de horas ── */
+#ferr-calc-horas-tabela tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+#ferr-calc-horas-tabela tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.06);
+}

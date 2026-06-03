@@ -1,7 +1,30 @@
 /**
- * consultas.js v3 — Base de Conhecimento completa.
- * 6 painéis accordion com lazy loading + dropdowns internos.
- * CRUD completo em todas as seções (FAQ, Normas, Protocolos, Piso, Orientações, Listas).
+ * consultas.js — Base de Conhecimento
+ *
+ * @module consultas
+ * @description
+ * Base de conhecimento completa com 9 seções e CRUD completo.
+ *
+ * Seções disponíveis:
+ * - FAQ: perguntas frequentes em accordion com paginação (10 itens/página)
+ * - Normas: legislação e normas de referência
+ * - Protocolos: base e detalhados
+ * - Piso: tabela de piso salarial
+ * - Orientações: diretrizes gerais
+ * - Listas: listas de referência
+ * - Respostas Padrão: modelos de respostas
+ * - Nomes Empresariais: lista de referência
+ * - Cálculo de Horas: referências para cálculo
+ *
+ * Funcionalidades comuns a todas as seções:
+ * - CRUD completo (adicionar, editar, excluir itens)
+ * - Busca textual em tempo real
+ * - Filtro por tipo/categoria (dropdown)
+ * - Cópia individual por item
+ * - Cópia em massa (todos os itens visíveis)
+ * - Persistência: localStorage com fallback para JSON assets
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 
@@ -49,14 +72,16 @@ window.MainApp = window.MainApp || {};
   function initSection(s) {
     switch (s) {
       case 'faq':          initFaq(); break;
-      case 'normas':       initCrudSection('normas', 'Normas e Legislação', 'assets/normas.json', renderNormas, cfgNormas); break;
-      case 'protocolos':   initCrudSection('protocolos', 'Protocolos', 'assets/protocolos-base.json', renderProtocolos, cfgProtocolos); break;
+      case 'normas':       initCrudSection('normas', 'Normas e Legislação', 'assets/consultas/normas.json', renderNormas, cfgNormas); break;
+      case 'protocolos':   initCrudSection('protocolos', 'Protocolos', 'assets/consultas/protocolos-base.json', renderProtocolos, cfgProtocolos); break;
       case 'piso':         initPiso(); break;
       case 'orientacoes':  initOrientacoes(); break;
       case 'listas':       initListas(); break;
       case 'respostasPadrao': initRespostasPadrao(); break;
       case 'nomesEmpresariais': initNomesEmpresariais(); break;
       case 'calcHoras':    initCalcHoras(); break;
+      case 'pisoRef':     initPisoRef(); break;
+      case 'registros':   initRegistros(); break;
     }
   }
 
@@ -69,12 +94,14 @@ window.MainApp = window.MainApp || {};
     var panelId = 'c-data-' + key;
 
     ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="' + panelId + '-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:260px">' +
           '<option value="">Todos</option>' +
         '</select>' +
-        '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off">' +
+        '<input type="text" id="' + panelId + '-filter" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off" style="max-width:200px">' +
         '<button id="' + panelId + '-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="' + panelId + '-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="' + panelId + '-count" class="x-small text-muted align-self-center ms-auto"></span>' +
       '</div>' +
       '<div id="' + panelId + '-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
@@ -82,10 +109,37 @@ window.MainApp = window.MainApp || {};
     var dropdown = document.getElementById(panelId + '-dropdown');
     var filter = document.getElementById(panelId + '-filter');
     var addBtn = document.getElementById(panelId + '-add');
+    var copyBtn = document.getElementById(panelId + '-copyall');
 
     filter.addEventListener('input', function () { applyFilter(key, cfg); });
     dropdown.addEventListener('change', function () { applyFilter(key, cfg); });
     addBtn.addEventListener('click', function () { openEditor(key, null, cfg); });
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var data = store[key] || [];
+        var ddVal = dropdown ? dropdown.value : '';
+        var term = normalize(filter ? filter.value || '' : '');
+        var filtered = data.filter(function (item) {
+          if (ddVal && cfg.dropdownKey && cfg.dropdownKey(item) !== ddVal) return false;
+          if (term && cfg.searchKeys) {
+            var match = false;
+            cfg.searchKeys.forEach(function (k) { if (normalize(item[k] || '').indexOf(term) > -1) match = true; });
+            if (!match) return false;
+          }
+          return true;
+        });
+        if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+        var text = filtered.map(function (item) {
+          if (cfg.copyFormat) return cfg.copyFormat(item);
+          // Formato padrão: concatena valores de searchKeys
+          return (cfg.searchKeys || Object.keys(item)).map(function (k) {
+            return item[k] || '';
+          }).filter(Boolean).join(' — ');
+        }).join('\n');
+        copyToClipboard(text);
+        app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
+      });
+    }
 
     // Carrega dados
     loadSectionData(key, jsonUrl, cfg.defaultItem, function (data) {
@@ -164,9 +218,23 @@ window.MainApp = window.MainApp || {};
       listEl.innerHTML = cfg.renderList(filtered, key);
       wireCrudButtons(listEl, key, cfg);
     }
+
+    var countEl = document.getElementById(panelId + '-count');
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
   }
 
   function wireCrudButtons(container, key, cfg) {
+    container.querySelectorAll('[data-c-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var data = store[key] || [];
+        var id = this.getAttribute('data-c-copy');
+        var item = data.find(function (x) { return x._id === id; });
+        if (!item) return;
+        var text = cfg.copyFormat ? cfg.copyFormat(item) : JSON.stringify(item);
+        copyToClipboard(text);
+        app.showToast('Copiado!', 'success', 1500);
+      });
+    });
     container.querySelectorAll('[data-c-edit]').forEach(function (btn) {
       btn.addEventListener('click', function () { openEditor(key, this.getAttribute('data-c-edit'), cfg); });
     });
@@ -308,6 +376,7 @@ window.MainApp = window.MainApp || {};
     itemLabel: 'Norma',
     dropdownKey: function (item) { return item.orgao; },
     searchKeys: ['norma', 'assunto', 'orgao'],
+    copyFormat: function (item) { return item.norma + ' (' + item.orgao + '): ' + item.assunto + (item.link ? ' — ' + item.link : ''); },
     fields: {
       tipo:       { key: 'orgao', options: ['ANVISA','CFF','CRF','STJ','CFQ','PLANALTO','CURITIBA','SESA'] },
       pergunta:   { key: 'norma', label: 'Nome da Norma' },
@@ -322,6 +391,7 @@ window.MainApp = window.MainApp || {};
           '<div class="x-small text-muted">' + escapeHtml(n.assunto) + '</div></div>' +
           '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
           '<span class="badge bg-secondary me-1">' + escapeHtml(n.orgao) + '</span>' +
+          '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-c-copy="' + n._id + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + n._id + '" title="Editar"><i class="fas fa-edit x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + n._id + '" title="Excluir"><i class="fas fa-trash x-small"></i></button>' +
           '</div></div></div>';
@@ -331,8 +401,9 @@ window.MainApp = window.MainApp || {};
 
   var cfgProtocolos = {
     itemLabel: 'Protocolo',
-    dropdownKey: function (item) { return item.protocolo; },
+    dropdownKey: function (item) { return item.estabelecimento; },
     searchKeys: ['protocolo', 'estabelecimento', 'status'],
+    copyFormat: function (item) { return item.protocolo + ' — ' + item.estabelecimento + (item.status ? ' [' + item.status + ']' : ''); },
     fields: {
       tipo:       { key: 'estabelecimento', options: [] }, // populado dinamicamente
       pergunta:   { key: 'protocolo', label: 'Nome do Protocolo' },
@@ -347,6 +418,7 @@ window.MainApp = window.MainApp || {};
           '<div class="flex-grow-1"><div class="small fw-bold text-light">' + escapeHtml(p.protocolo) + '</div>' +
           '<div class="x-small text-muted">' + escapeHtml(p.estabelecimento) + '</div></div>' +
           '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' + badge +
+          '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-c-copy="' + p._id + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-c-edit="' + p._id + '" title="Editar"><i class="fas fa-edit x-small"></i></button>' +
           '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-c-del="' + p._id + '" title="Excluir"><i class="fas fa-trash x-small"></i></button>' +
           '</div></div></div>';
@@ -417,11 +489,11 @@ window.MainApp = window.MainApp || {};
       if (faqPage < t) { faqPage++; faqRender(); faqRenderPagination(); }
     });
 
-    loadSectionData('faq', 'assets/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
+    loadSectionData('faq', 'assets/consultas/faq.json', { tipo: 'PF', pergunta: '', resposta: '', complemento: '' }, function (data) {
       store.faq = data;
       saveStore();
       faqRefresh();
-    }, 'assets/respostas.json');
+    }, 'assets/consultas/respostas.json');
   }
 
   function faqRefresh() {
@@ -599,11 +671,13 @@ window.MainApp = window.MainApp || {};
         '<button id="piso-del-cidade" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash me-1"></i> Remover</button>' +
         '<span id="piso-acordo-badge" class="badge bg-success ms-2 d-none">ACT Vigente</span>' +
         '<span id="piso-acordo-alerta" class="badge bg-warning text-dark ms-2 d-none">Sem ACT - piso geral</span>' +
+        '<span id="piso-cct-ano" class="badge ms-2 d-none"></span>' +
       '</div>' +
       '<div id="piso-result" class="small d-flex flex-wrap gap-2 p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2">' +
         '<span>Piso Proporcional: <b id="piso-prop" class="text-success">—</b></span>' +
         '<span class="ms-3">Valor/Hora: <b id="piso-hora" class="text-info">—</b></span>' +
         '<span class="ms-3">Ref. 30h: <b id="piso-30h" class="text-warning">—</b></span>' +
+        '<button id="piso-copy-result" class="btn btn-sm btn-outline-info ms-2 flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
       '</div>' +
       '<div id="piso-tabela" class="c-list" style="max-height:250px;overflow-y:auto"></div>';
 
@@ -612,7 +686,7 @@ window.MainApp = window.MainApp || {};
     var cidadesData = [];
 
     // Tenta JSON dedicado, fallback para store.piso.regioes
-    fetch('assets/cidades-parana.json')
+    fetch('assets/piso/cidades-parana.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         cidadesData = data.cidades || [];
@@ -640,7 +714,7 @@ window.MainApp = window.MainApp || {};
         Object.keys(store.piso.regioes).forEach(function (regiao) {
           var cids = store.piso.regioes[regiao].cidades || {};
           Object.keys(cids).forEach(function (cid) {
-            var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+            var label = cid.replace(/_/g, ' '); label = label.charAt(0).toUpperCase() + label.slice(1);
             cidadesData.push({ cidade: cid, regiao: regiao, label: label });
           });
         });
@@ -694,6 +768,21 @@ window.MainApp = window.MainApp || {};
 
       // Se já tem valor, dispara
       if (selectEl.value) onCidadeSelectChange();
+
+      // Botão copiar resultado
+      document.getElementById('piso-copy-result').addEventListener('click', function () {
+        var prop = document.getElementById('piso-prop').textContent;
+        var hora = document.getElementById('piso-hora').textContent;
+        var ref30 = document.getElementById('piso-30h').textContent;
+        var cidade = document.getElementById('piso-cidade-select').value || '';
+        var cat = document.getElementById('piso-categoria').value;
+        var catLabel = document.getElementById('piso-categoria').selectedOptions[0].textContent;
+        var pisoBase = document.getElementById('piso-base').value;
+        var text = 'Cidade: ' + cidade + '\nCategoria: ' + catLabel + '\nPiso Base: ' + pisoBase +
+          '\nPiso Proporcional: ' + prop + '\nValor/Hora: ' + hora + '\nRef. 30h: ' + ref30;
+        copyToClipboard(text);
+        app.showToast('Resultado copiado!', 'success', 1500);
+      });
     }
   }
 
@@ -702,7 +791,7 @@ window.MainApp = window.MainApp || {};
     var nome = selectEl.value;
     if (!nome) return;
 
-    var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var cidadeKey = nome.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
 
     // Varre store.piso.regioes para encontrar a cidade e sua região
     var regiaoNome = '', catValues = null;
@@ -737,6 +826,21 @@ window.MainApp = window.MainApp || {};
       var cat = document.getElementById('piso-categoria').value;
       document.getElementById('piso-acordo-badge').classList.toggle('d-none', !regData._actVigente);
       document.getElementById('piso-acordo-alerta').classList.toggle('d-none', regData._actVigente);
+
+      // Exibe ano da CCT vigente com destaque se diferente do ano atual
+      var cctAno = regData._ultimaCCT || '';
+      var cctBadge = document.getElementById('piso-cct-ano');
+      if (cctAno) {
+        var anoAtual = new Date().getFullYear();
+        var cctFim = parseInt(cctAno.split('-').pop()) || anoAtual;
+        var desatualizada = cctFim < anoAtual;
+        cctBadge.className = 'badge ms-2 ' + (desatualizada ? 'bg-danger' : 'bg-info');
+        cctBadge.innerHTML = '<i class="fas fa-' + (desatualizada ? 'exclamation-triangle' : 'check-circle') + ' me-1"></i>CCT ' + cctAno;
+        if (desatualizada) cctBadge.title = 'CCT desatualizada! Último acordo: ' + cctAno + '. Verifique nova convenção no SINDIFAR-PR.';
+        cctBadge.classList.remove('d-none');
+      } else {
+        cctBadge.classList.add('d-none');
+      }
 
       var catValue = catValues ? catValues[cat] : null;
       if (!catValue && regData.cidades) {
@@ -883,7 +987,7 @@ window.MainApp = window.MainApp || {};
     // Cache inválido ou dados antigos: recarrega
     delete store.piso;
 
-    fetch('assets/piso.json')
+    fetch('assets/piso/piso.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (!data.regioes) {
@@ -919,7 +1023,14 @@ window.MainApp = window.MainApp || {};
       var primeira = rd.cidades ? Object.values(rd.cidades)[0] : null;
       if (!primeira) return;
       var actBadge = rd._actVigente ? '<span class="badge bg-success x-small">Sim</span>' : '<span class="badge bg-warning text-dark x-small">Não</span>';
-      html += '<tr><td>' + escapeHtml(regiao) + '</td><td>' + actBadge + '</td>';
+      var cctInfo = '';
+      if (rd._ultimaCCT) {
+        var anoAtual = new Date().getFullYear();
+        var cctFim = parseInt(rd._ultimaCCT.split('-').pop()) || anoAtual;
+        var desatualizada = cctFim < anoAtual;
+        cctInfo = ' <span class="badge ' + (desatualizada ? 'bg-danger' : 'bg-info') + ' x-small" title="' + (desatualizada ? 'CCT desatualizada!' : 'CCT vigente') + '">' + rd._ultimaCCT + '</span>';
+      }
+      html += '<tr><td>' + escapeHtml(regiao) + '</td><td>' + actBadge + cctInfo + '</td>';
       cats.forEach(function (cat) {
         html += '<td class="text-end text-success">' + (primeira[cat] || 0).toFixed(2) + '</td>';
       });
@@ -940,8 +1051,14 @@ window.MainApp = window.MainApp || {};
     var catLabels = { varejista: 'Varejista', hospitalar: 'Hospitalar', distribuidora: 'Distribuidora', laboratorios: 'Laboratórios', industrias: 'Indústrias' };
 
     var actBadge = regData._actVigente ? '<span class="badge bg-success x-small">ACT Vigente</span>' : '<span class="badge bg-warning text-dark x-small">Geral</span>';
-
-    var html = '<div class="d-flex justify-content-between align-items-center mb-1"><small class="fw-bold text-light">' + escapeHtml(regiao) + '</small>' + actBadge + '</div>';
+    var cctBadge = '';
+    if (regData._ultimaCCT) {
+      var anoAtual = new Date().getFullYear();
+      var cctFim = parseInt(regData._ultimaCCT.split('-').pop()) || anoAtual;
+      var desatualizada = cctFim < anoAtual;
+      cctBadge = ' <span class="badge ' + (desatualizada ? 'bg-danger' : 'bg-info') + ' x-small">CCT ' + regData._ultimaCCT + '</span>';
+    }
+    var html = '<div class="d-flex justify-content-between align-items-center mb-1"><small class="fw-bold text-light">' + escapeHtml(regiao) + '</small><div>' + actBadge + cctBadge + '</div></div>';
     html += '<table class="table table-sm table-dark table-borderless mb-0 x-small">';
     html += '<thead><tr><th>Cidade</th>';
     cats.forEach(function (c) { html += '<th class="text-end">' + catLabels[c] + '</th>'; });
@@ -949,7 +1066,7 @@ window.MainApp = window.MainApp || {};
 
     cidades.forEach(function (cid) {
       var cd = regData.cidades[cid];
-      var label = cid.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+      var label = cid.replace(/_/g, ' '); label = label.charAt(0).toUpperCase() + label.slice(1);
       var highlight = cid === cidadeKey ? ' class="table-active"' : '';
       html += '<tr' + highlight + '><td>' + label + '</td>';
       cats.forEach(function (cat) {
@@ -969,7 +1086,7 @@ window.MainApp = window.MainApp || {};
     var val = parseFloat(document.getElementById('piso-base').value.replace(/[R$\s]/g, '').replace(',', '.')) || 0;
     if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
 
-    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
     if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
     if (!store.piso.regioes[regiao].cidades[cidadeKey]) store.piso.regioes[regiao].cidades[cidadeKey] = {};
     store.piso.regioes[regiao].cidades[cidadeKey][cat] = val;
@@ -981,18 +1098,19 @@ window.MainApp = window.MainApp || {};
   function addPisoCidade() {
     var regiao = document.getElementById('piso-regiao-display').value;
     if (!regiao) { app.showToast('Digite o nome de uma cidade existente para usar sua região.', 'warning', 2500); return; }
-    var nome = prompt('Nome da nova cidade (ex: Sao Jose dos Pinhais):');
-    if (!nome || !nome.trim()) return;
-    var cidadeKey = nome.trim().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
-    if (store.piso.regioes[regiao].cidades[cidadeKey]) { app.showToast('Cidade já existe nesta região!', 'warning', 2000); return; }
-    var primeira = Object.values(store.piso.regioes[regiao].cidades)[0] || { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 };
-    store.piso.regioes[regiao].cidades[cidadeKey] = Object.assign({}, primeira);
-    saveStore();
-    document.getElementById('piso-cidade-filter').value = nome.trim();
-    document.getElementById('piso-cidade-select').value = nome.trim();
-    onCidadeSelectChange();
-    app.showToast('Cidade adicionada!', 'success', 2000);
+    showPrompt('Nova Cidade', 'Nome da nova cidade (ex: Sao Jose dos Pinhais):', '', function (nome) {
+      if (!nome || !nome.trim()) return;
+      var cidadeKey = nome.trim().toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
+      if (!store.piso.regioes[regiao]) store.piso.regioes[regiao] = { cidades: {}, _actVigente: false };
+      if (store.piso.regioes[regiao].cidades[cidadeKey]) { app.showToast('Cidade já existe nesta região!', 'warning', 2000); return; }
+      var primeira = Object.values(store.piso.regioes[regiao].cidades)[0] || { varejista: 4729.62, hospitalar: 4567, distribuidora: 4764, laboratorios: 3763.08, industrias: 4211.45 };
+      store.piso.regioes[regiao].cidades[cidadeKey] = Object.assign({}, primeira);
+      saveStore();
+      document.getElementById('piso-cidade-filter').value = nome.trim();
+      document.getElementById('piso-cidade-select').value = nome.trim();
+      onCidadeSelectChange();
+      app.showToast('Cidade adicionada!', 'success', 2000);
+    });
   }
 
   function delPisoCidade() {
@@ -1000,7 +1118,7 @@ window.MainApp = window.MainApp || {};
     var selectEl = document.getElementById('piso-cidade-select');
     var nomeCidade = selectEl ? selectEl.value : '';
     if (!regiao || !nomeCidade) { app.showToast('Selecione uma cidade primeiro.', 'warning', 2000); return; }
-    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var cidadeKey = nomeCidade.toLowerCase().replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/[^a-z0-9_]/g, '');
     if (!store.piso.regioes[regiao] || !store.piso.regioes[regiao].cidades[cidadeKey]) {
       app.showToast('Cidade não encontrada na região.', 'warning', 2000); return;
     }
@@ -1041,19 +1159,40 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="orientacoes"]');
     if (!ph) return;
 
+    // Força fetch se cache for inválido (objeto vazio ou sem chaves esperadas)
+    if (store.orientacoes && typeof store.orientacoes === 'object' && !Array.isArray(store.orientacoes)) {
+      var keys = Object.keys(store.orientacoes);
+      if (keys.length === 0 || !store.orientacoes.documentos || !store.orientacoes.situacoes || !store.orientacoes.checklist) {
+        store.orientacoes = null; // invalida cache
+      }
+    }
+
     ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="orient-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">' +
           '<option value="documentos">Documentos</option><option value="situacoes">Situações Específicas</option>' +
           '<option value="checklist">Checklist (SAGICON/GED)</option></select>' +
+        '<input type="text" id="orient-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar..." autocomplete="off" style="max-width:200px">' +
         '<button id="orient-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="orient-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="orient-count" class="x-small text-muted align-self-center ms-auto"></span>' +
       '</div>' +
       '<div id="orient-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
     document.getElementById('orient-dropdown').addEventListener('change', renderOrientacoes);
+    document.getElementById('orient-filter').addEventListener('input', renderOrientacoes);
     document.getElementById('orient-add').addEventListener('click', addOrientacaoItem);
+    document.getElementById('orient-copyall').addEventListener('click', function () {
+      var key = document.getElementById('orient-dropdown').value;
+      var data = (store.orientacoes || {})[key] || [];
+      var term = normalize(document.getElementById('orient-filter').value || '');
+      var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+      if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+      copyToClipboard(filtered.join('\n'));
+      app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
+    });
 
-    loadSectionDataGeneric('orientacoes', 'assets/orientacoes.json', function (data) {
+    loadSectionDataGeneric('orientacoes', 'assets/consultas/orientacoes.json', function (data) {
       store.orientacoes = data;
       saveStore();
       renderOrientacoes();
@@ -1062,37 +1201,77 @@ window.MainApp = window.MainApp || {};
 
   function addOrientacaoItem() {
     var key = document.getElementById('orient-dropdown').value;
-    var text = prompt('Digite o novo item para ' + key + ':');
-    if (!text || !text.trim()) return;
-    if (!store.orientacoes) store.orientacoes = { documentos: [], situacoes: [], checklist: [] };
-    if (!store.orientacoes[key]) store.orientacoes[key] = [];
-    store.orientacoes[key].push(text.trim());
-    saveStore();
-    renderOrientacoes();
-    app.showToast('Item adicionado!', 'success', 2000);
+    showPrompt('Novo Item', 'Digite o novo item para ' + key + ':', '', function (text) {
+      if (!text || !text.trim()) return;
+      if (!store.orientacoes) store.orientacoes = { documentos: [], situacoes: [], checklist: [] };
+      if (!store.orientacoes[key]) store.orientacoes[key] = [];
+      store.orientacoes[key].push(text.trim());
+      saveStore();
+      renderOrientacoes();
+      app.showToast('Item adicionado!', 'success', 2000);
+    });
   }
 
   function renderOrientacoes() {
     var key = document.getElementById('orient-dropdown').value;
     var data = (store.orientacoes || {})[key] || [];
     var el = document.getElementById('orient-list');
+    var countEl = document.getElementById('orient-count');
+    var term = normalize((document.getElementById('orient-filter') || {}).value || '');
     if (!el) return;
-    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
 
-    el.innerHTML = data.map(function (item, i) {
-      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
-        '</div></div>';
+    var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
+
+    if (!filtered.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = filtered.map(function (item, i) {
+      var origIdx = data.indexOf(item);
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+        '<div class="d-flex justify-content-between align-items-center orient-item-header" style="cursor:pointer" data-orient-expand="' + origIdx + '">' +
+          '<small class="text-light flex-grow-1"><i class="fas fa-chevron-right x-small me-1 text-muted orient-chevron"></i>' + escapeHtml(item) + '</small>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+            '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-orient-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-orient-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-orient-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="orient-detail d-none mt-2 p-2 bg-dark bg-opacity-50 rounded border border-info small text-light" style="white-space:pre-wrap">' + escapeHtml(item) + '</div>' +
+      '</div>';
     }).join('');
 
+    el.querySelectorAll('[data-orient-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-orient-copy'));
+        var txt = data[idx];
+        if (txt) { copyToClipboard(txt); app.showToast('Item copiado!', 'success', 1500); }
+      });
+    });
     el.querySelectorAll('[data-orient-edit]').forEach(function (b) {
       b.addEventListener('click', function () { editOrientacaoItem(this.getAttribute('data-orient-edit'), parseInt(this.getAttribute('data-idx'))); });
     });
     el.querySelectorAll('[data-orient-del]').forEach(function (b) {
       b.addEventListener('click', function () { deleteOrientacaoItem(this.getAttribute('data-orient-del'), parseInt(this.getAttribute('data-idx'))); });
+    });
+    // Toggle expandir/recolher detalhes do item
+    el.querySelectorAll('[data-orient-expand]').forEach(function (header) {
+      header.addEventListener('click', function (e) {
+        // Não expande se clicou nos botões de ação
+        if (e.target.closest('button')) return;
+        var item = this.closest('.c-item');
+        var detail = item.querySelector('.orient-detail');
+        var chevron = this.querySelector('.orient-chevron');
+        var isHidden = detail.classList.contains('d-none');
+        if (isHidden) {
+          detail.classList.remove('d-none');
+          chevron.classList.remove('fa-chevron-right');
+          chevron.classList.add('fa-chevron-down');
+        } else {
+          detail.classList.add('d-none');
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-right');
+        }
+      });
     });
   }
 
@@ -1324,12 +1503,13 @@ window.MainApp = window.MainApp || {};
   function editOrientacaoItem(key, idx) {
     var data = (store.orientacoes || {})[key] || [];
     if (idx < 0 || idx >= data.length) return;
-    var text = prompt('Editar item:', data[idx]);
-    if (text === null) return;
-    data[idx] = text.trim();
-    saveStore();
-    renderOrientacoes();
-    app.showToast('Item atualizado!', 'success', 2000);
+    showPrompt('Editar Item', 'Editar item:', data[idx], function (text) {
+      if (text === null) return;
+      data[idx] = text.trim();
+      saveStore();
+      renderOrientacoes();
+      app.showToast('Item atualizado!', 'success', 2000);
+    });
   }
 
   function deleteOrientacaoItem(key, idx) {
@@ -1351,18 +1531,31 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
         '<select id="listas-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px">' +
           '<option value="documentos">Documentos</option><option value="tiposEstabelecimento">Tipos de Estabelecimento</option>' +
           '<option value="respostasPadrao">Respostas Padrão</option><option value="prazosAssistencia">Prazos e Assistência</option></select>' +
+        '<input type="text" id="listas-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar..." autocomplete="off" style="max-width:200px">' +
         '<button id="listas-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="listas-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="listas-count" class="x-small text-muted align-self-center ms-auto"></span>' +
       '</div>' +
       '<div id="listas-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
     document.getElementById('listas-dropdown').addEventListener('change', renderListas);
+    document.getElementById('listas-filter').addEventListener('input', renderListas);
     document.getElementById('listas-add').addEventListener('click', addListasItem);
+    document.getElementById('listas-copyall').addEventListener('click', function () {
+      var key = document.getElementById('listas-dropdown').value;
+      var data = (store.listas || {})[key] || [];
+      var term = normalize(document.getElementById('listas-filter').value || '');
+      var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+      if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+      copyToClipboard(filtered.join('\n'));
+      app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
+    });
 
-    loadSectionDataGeneric('listas', 'assets/listas.json', function (data) {
+    loadSectionDataGeneric('listas', 'assets/consultas/listas.json', function (data) {
       store.listas = data;
       saveStore();
       renderListas();
@@ -1371,49 +1564,89 @@ window.MainApp = window.MainApp || {};
 
   function addListasItem() {
     var key = document.getElementById('listas-dropdown').value;
-    var text = prompt('Digite o novo item:');
-    if (!text || !text.trim()) return;
-    if (!store.listas) store.listas = { documentos: [], tiposEstabelecimento: [], respostasPadrao: [], prazosAssistencia: [] };
-    if (!store.listas[key]) store.listas[key] = [];
-    store.listas[key].push(text.trim());
-    saveStore();
-    renderListas();
-    app.showToast('Item adicionado!', 'success', 2000);
+    showPrompt('Novo Item', 'Digite o novo item:', '', function (text) {
+      if (!text || !text.trim()) return;
+      if (!store.listas) store.listas = { documentos: [], tiposEstabelecimento: [], respostasPadrao: [], prazosAssistencia: [] };
+      if (!store.listas[key]) store.listas[key] = [];
+      store.listas[key].push(text.trim());
+      saveStore();
+      renderListas();
+      app.showToast('Item adicionado!', 'success', 2000);
+    });
   }
 
   function renderListas() {
     var key = document.getElementById('listas-dropdown').value;
     var data = (store.listas || {})[key] || [];
     var el = document.getElementById('listas-list');
+    var countEl = document.getElementById('listas-count');
+    var term = normalize((document.getElementById('listas-filter') || {}).value || '');
     if (!el) return;
-    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
 
-    el.innerHTML = data.map(function (item, i) {
-      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
-        '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
-        '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
-        '</div></div>';
+    var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
+
+    if (!filtered.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = filtered.map(function (item, i) {
+      var origIdx = data.indexOf(item);
+      return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10">' +
+        '<div class="d-flex justify-content-between align-items-center listas-item-header" style="cursor:pointer" data-listas-expand="' + origIdx + '">' +
+          '<small class="text-light flex-grow-1"><i class="fas fa-chevron-right x-small me-1 text-muted listas-chevron"></i>' + escapeHtml(item) + '</small>' +
+          '<div class="btn-group btn-group-sm ms-2 flex-shrink-0">' +
+            '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-listas-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-listas-edit="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+            '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-listas-del="' + key + '" data-idx="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="listas-detail d-none mt-2 p-2 bg-dark bg-opacity-50 rounded border border-info small text-light" style="white-space:pre-wrap">' + escapeHtml(item) + '</div>' +
+      '</div>';
     }).join('');
 
+    el.querySelectorAll('[data-listas-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-listas-copy'));
+        var txt = data[idx];
+        if (txt) { copyToClipboard(txt); app.showToast('Item copiado!', 'success', 1500); }
+      });
+    });
     el.querySelectorAll('[data-listas-edit]').forEach(function (b) {
       b.addEventListener('click', function () { editListasItem(this.getAttribute('data-listas-edit'), parseInt(this.getAttribute('data-idx'))); });
     });
     el.querySelectorAll('[data-listas-del]').forEach(function (b) {
       b.addEventListener('click', function () { deleteListasItem(this.getAttribute('data-listas-del'), parseInt(this.getAttribute('data-idx'))); });
     });
+    // Toggle expandir/recolher detalhes do item
+    el.querySelectorAll('[data-listas-expand]').forEach(function (header) {
+      header.addEventListener('click', function (e) {
+        if (e.target.closest('button')) return;
+        var item = this.closest('.c-item');
+        var detail = item.querySelector('.listas-detail');
+        var chevron = this.querySelector('.listas-chevron');
+        var isHidden = detail.classList.contains('d-none');
+        if (isHidden) {
+          detail.classList.remove('d-none');
+          chevron.classList.remove('fa-chevron-right');
+          chevron.classList.add('fa-chevron-down');
+        } else {
+          detail.classList.add('d-none');
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-right');
+        }
+      });
+    });
   }
 
   function editListasItem(key, idx) {
     var data = (store.listas || {})[key] || [];
     if (idx < 0 || idx >= data.length) return;
-    var text = prompt('Editar item:', data[idx]);
-    if (text === null) return;
-    data[idx] = text.trim();
-    saveStore();
-    renderListas();
-    app.showToast('Item atualizado!', 'success', 2000);
+    showPrompt('Editar Item', 'Editar item:', data[idx], function (text) {
+      if (text === null) return;
+      data[idx] = text.trim();
+      saveStore();
+      renderListas();
+      app.showToast('Item atualizado!', 'success', 2000);
+    });
   }
 
   function deleteListasItem(key, idx) {
@@ -1434,15 +1667,28 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="respostasPadrao"]');
     if (!ph) return;
 
-    ph.innerHTML =
-      '<div class="d-flex gap-2 mb-2">' +
-        '<select id="rp-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px"></select>' +
-        '<button id="rp-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
-        '<button id="rp-copy" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar selecionada</button>' +
-      '</div>' +
-      '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
+    // Invalida cache se for array em vez de objeto, ou objeto vazio
+    if (store.respostasPadrao) {
+      if (Array.isArray(store.respostasPadrao) || (typeof store.respostasPadrao === 'object' && Object.keys(store.respostasPadrao).length === 0)) {
+        store.respostasPadrao = null;
+      }
+    }
+    // Força recarregar do JSON se cache tiver menos de 5 respostas (provavelmente corrompido)
+    if (store.respostasPadrao && typeof store.respostasPadrao === 'object' && Object.keys(store.respostasPadrao).length < 5) {
+      store.respostasPadrao = null;
+    }
 
-    loadSectionDataGeneric('respostasPadrao', 'assets/respostas-padrao.json', function (data) {
+    ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
+        '<select id="rp-dropdown" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:250px"></select>' +
+        '<input type="text" id="rp-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Filtrar..." autocomplete="off" style="max-width:180px">' +
+        '<button id="rp-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus"></i></button>' +
+        '<button id="rp-edit" class="btn btn-sm btn-outline-warning flex-shrink-0"><i class="fas fa-edit me-1"></i> Editar</button>' +
+        '<button id="rp-copy" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+      '</div>' +
+      '<div id="rp-preview" class="p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2 small text-light text-start" style="min-height:60px;white-space:pre-wrap">Selecione uma resposta padrão para visualizar.</div>';
+
+    loadSectionDataGeneric('respostasPadrao', 'assets/consultas/respostas-padrao.json', function (data) {
       // Migra formato antigo {titulo, instrucao, texto} para dicionário {titulo: texto}
       if (data && data.titulo && data.texto && !data[data.titulo]) {
         var novo = {};
@@ -1452,23 +1698,42 @@ window.MainApp = window.MainApp || {};
       store.respostasPadrao = data;
       saveStore();
       renderRespostasPadrao();
+
+      // Importa respostas como cards no dashboard Ingresso PJ se vazio
+      importarRespostasComoCards(data);
     });
 
+    document.getElementById('rp-filter').addEventListener('input', renderRespostasPadrao);
     document.getElementById('rp-dropdown').addEventListener('change', function () {
       var key = this.value;
       var items = store.respostasPadrao || {};
       document.getElementById('rp-preview').innerHTML = autoLink(items[key] || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
     });
     document.getElementById('rp-add').addEventListener('click', function () {
-      var nome = prompt('Nome da resposta padrão:');
-      if (!nome || !nome.trim()) return;
-      var texto = prompt('Texto da resposta:');
-      if (texto === null) return;
-      if (!store.respostasPadrao) store.respostasPadrao = {};
-      store.respostasPadrao[nome.trim()] = texto || '';
-      saveStore();
-      renderRespostasPadrao();
-      app.showToast('Resposta adicionada!', 'success', 2000);
+      showPrompt('Nova Resposta', 'Nome da resposta padrão:', '', function (nome) {
+        if (!nome || !nome.trim()) return;
+        showPrompt('Nova Resposta', 'Texto da resposta:', '', function (texto) {
+          if (texto === null) return;
+          if (!store.respostasPadrao) store.respostasPadrao = {};
+          store.respostasPadrao[nome.trim()] = texto || '';
+          saveStore();
+          renderRespostasPadrao();
+          document.getElementById('rp-dropdown').value = nome.trim();
+          document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+          app.showToast('Resposta adicionada!', 'success', 2000);
+        });
+      });
+    });
+    document.getElementById('rp-edit').addEventListener('click', function () {
+      var key = document.getElementById('rp-dropdown').value;
+      if (!key) { app.showToast('Selecione uma resposta primeiro.', 'warning', 2000); return; }
+      showPrompt('Editar Resposta', 'Editar texto da resposta "' + key + '":', (store.respostasPadrao || {})[key] || '', function (texto) {
+        if (texto === null) return;
+        store.respostasPadrao[key] = texto || '';
+        saveStore();
+        document.getElementById('rp-preview').innerHTML = autoLink(texto || '').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+        app.showToast('Resposta atualizada!', 'success', 2000);
+      });
     });
     document.getElementById('rp-copy').addEventListener('click', function () {
       var key = document.getElementById('rp-dropdown').value;
@@ -1483,9 +1748,11 @@ window.MainApp = window.MainApp || {};
     var dd = document.getElementById('rp-dropdown');
     if (!dd) return;
     var items = store.respostasPadrao || {};
-    var keys = Object.keys(items).sort();
+    var term = normalize((document.getElementById('rp-filter') || {}).value || '');
+    var keys = Object.keys(items).filter(function (k) { return !term || normalize(k).indexOf(term) > -1; }).sort();
     if (!keys.length) {
-      dd.innerHTML = '<option value="">Nenhuma resposta cadastrada</option>';
+      dd.innerHTML = '<option value="">' + (term ? 'Nenhum resultado' : 'Nenhuma resposta cadastrada') + '</option>';
+      document.getElementById('rp-preview').innerHTML = '<span class="text-muted">Nenhuma resposta encontrada.</span>';
       return;
     }
     dd.innerHTML = '<option value="">Selecione...</option>' + keys.map(function (k) {
@@ -1522,50 +1789,80 @@ window.MainApp = window.MainApp || {};
     if (!ph) return;
 
     ph.innerHTML =
-      '<div id="ne-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>' +
-      '<button id="ne-add" class="btn btn-sm btn-success mt-2"><i class="fas fa-plus me-1"></i> Adicionar</button>';
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
+        '<input type="text" id="ne-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar..." autocomplete="off" style="max-width:250px">' +
+        '<button id="ne-add" class="btn btn-sm btn-success flex-shrink-0"><i class="fas fa-plus me-1"></i> Adicionar</button>' +
+        '<button id="ne-copyall" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '<span id="ne-count" class="x-small text-muted align-self-center ms-auto"></span>' +
+      '</div>' +
+      '<div id="ne-list" class="c-list" style="max-height:420px;overflow-y:auto"><p class="text-muted small p-2 text-center">Carregando...</p></div>';
 
-    loadSectionDataGeneric('nomesEmpresariais', 'assets/nomes-empresariais.json', function (data) {
+    loadSectionDataGeneric('nomesEmpresariais', 'assets/consultas/nomes-empresariais.json', function (data) {
       store.nomesEmpresariais = data;
       saveStore();
       renderNomesEmpresariais();
     });
 
+    document.getElementById('ne-filter').addEventListener('input', renderNomesEmpresariais);
     document.getElementById('ne-add').addEventListener('click', function () {
-      var texto = prompt('Novo padrão de nome empresarial:');
-      if (!texto || !texto.trim()) return;
-      if (!store.nomesEmpresariais) store.nomesEmpresariais = [];
-      store.nomesEmpresariais.push(texto.trim());
-      saveStore();
-      renderNomesEmpresariais();
-      app.showToast('Adicionado!', 'success', 2000);
+      showPrompt('Novo Padrão', 'Novo padrão de nome empresarial:', '', function (texto) {
+        if (!texto || !texto.trim()) return;
+        if (!store.nomesEmpresariais) store.nomesEmpresariais = [];
+        store.nomesEmpresariais.push(texto.trim());
+        saveStore();
+        renderNomesEmpresariais();
+        app.showToast('Adicionado!', 'success', 2000);
+      });
+    });
+    document.getElementById('ne-copyall').addEventListener('click', function () {
+      var data = store.nomesEmpresariais || [];
+      var term = normalize(document.getElementById('ne-filter').value || '');
+      var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+      if (!filtered.length) { app.showToast('Nenhum item para copiar.', 'warning', 2000); return; }
+      copyToClipboard(filtered.join('\n'));
+      app.showToast(filtered.length + ' item(ns) copiado(s)!', 'success', 2000);
     });
   }
 
   function renderNomesEmpresariais() {
     var el = document.getElementById('ne-list');
+    var countEl = document.getElementById('ne-count');
     if (!el) return;
     var data = store.nomesEmpresariais || [];
-    if (!data.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+    var term = normalize((document.getElementById('ne-filter') || {}).value || '');
+    var filtered = data.filter(function (item) { return !term || normalize(item).indexOf(term) > -1; });
+    if (countEl) countEl.textContent = filtered.length + ' de ' + data.length + ' itens';
 
-    el.innerHTML = data.map(function (item, i) {
+    if (!filtered.length) { el.innerHTML = '<p class="text-muted small p-2 text-center">Nenhum item.</p>'; return; }
+
+    el.innerHTML = filtered.map(function (item, i) {
+      var origIdx = data.indexOf(item);
       return '<div class="c-item mb-1 p-2 rounded border border-secondary bg-dark bg-opacity-10 d-flex justify-content-between align-items-center">' +
         '<small class="text-light flex-grow-1">' + escapeHtml(item) + '</small>' +
         '<div class="btn-group btn-group-sm ms-2">' +
-        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-ne-edit="' + i + '"><i class="fas fa-edit x-small"></i></button>' +
-        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-ne-del="' + i + '"><i class="fas fa-trash x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-secondary py-0 px-1" data-ne-copy="' + origIdx + '" title="Copiar"><i class="fas fa-copy x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-warning py-0 px-1" data-ne-edit="' + origIdx + '"><i class="fas fa-edit x-small"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1" data-ne-del="' + origIdx + '"><i class="fas fa-trash x-small"></i></button>' +
         '</div></div>';
     }).join('');
 
+    el.querySelectorAll('[data-ne-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-ne-copy'));
+        var txt = data[idx];
+        if (txt) { copyToClipboard(txt); app.showToast('Item copiado!', 'success', 1500); }
+      });
+    });
     el.querySelectorAll('[data-ne-edit]').forEach(function (b) {
       b.addEventListener('click', function () {
         var idx = parseInt(this.getAttribute('data-ne-edit'));
-        var texto = prompt('Editar:', store.nomesEmpresariais[idx]);
-        if (texto === null) return;
-        store.nomesEmpresariais[idx] = texto.trim();
-        saveStore();
-        renderNomesEmpresariais();
-        app.showToast('Atualizado!', 'success', 2000);
+        showPrompt('Editar Nome', 'Editar padrão de nome empresarial:', store.nomesEmpresariais[idx], function (texto) {
+          if (texto === null) return;
+          store.nomesEmpresariais[idx] = texto.trim();
+          saveStore();
+          renderNomesEmpresariais();
+          app.showToast('Atualizado!', 'success', 2000);
+        });
       });
     });
     el.querySelectorAll('[data-ne-del]').forEach(function (b) {
@@ -1589,17 +1886,32 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="calcHoras"]');
     if (!ph) return;
 
+    // Carrega instruções do JSON (calc-horas.json)
+    var instrucoesHtml = '<p class="x-small text-muted mb-2">Preencha os horários de entrada e saída. Use "Adicionar turno" para múltiplos horários.</p>';
+    fetch('assets/consultas/calc-horas.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.instrucoes && data.instrucoes.length) {
+          instrucoesHtml = '<div class="x-small text-muted mb-2 p-2 bg-dark bg-opacity-25 rounded border border-secondary">' +
+            '<i class="fas fa-info-circle me-1 text-info"></i><b>Instruções:</b><br>' +
+            data.instrucoes.map(function (inst) { return escapeHtml(inst); }).join('<br>') + '</div>';
+        }
+        var infoEl = document.getElementById('calc-horas-info');
+        if (infoEl) infoEl.innerHTML = instrucoesHtml;
+      })
+      .catch(function () {});
+
     ph.innerHTML =
-      '<p class="x-small text-muted mb-2">Preencha os horários de cada turno por dia da semana.</p>' +
+      '<div id="calc-horas-info">' + instrucoesHtml + '</div>' +
+      '<div class="d-flex gap-2 mb-2">' +
+        '<button id="calc-horas-copy" class="btn btn-sm btn-outline-info"><i class="fas fa-copy me-1"></i> Copiar resultados</button>' +
+      '</div>' +
       '<div class="table-responsive mb-2">' +
         '<table class="table table-sm table-dark table-borderless x-small" id="calc-horas-tabela">' +
-          '<thead><tr><th>Dia</th><th>1º Turno (início—fim)</th><th>2º Turno (início—fim)</th><th>Intervalo (min)</th><th>Total</th></tr></thead>' +
+          '<thead><tr><th>Dia</th><th>Entrada / Saída</th><th>Total</th></tr></thead>' +
           '<tbody id="calc-horas-body"></tbody>' +
-          '<tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td colspan="3"></td><td id="calc-horas-total" class="text-success">0h</td></tr></tfoot>' +
+          '<tfoot><tr class="fw-bold"><td>TOTAL SEMANA</td><td></td><td id="calc-horas-total" class="text-success">0h</td></tr></tfoot>' +
         '</table>' +
-      '</div>' +
-      '<div class="x-small text-muted">' +
-        '<p>Preencha os campos de horário (ex: 08:00 - 12:00). O cálculo é automático.</p>' +
       '</div>';
 
     var dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
@@ -1607,17 +1919,73 @@ window.MainApp = window.MainApp || {};
 
     dias.forEach(function (dia) {
       var tr = document.createElement('tr');
+      tr.setAttribute('data-dia', dia);
       tr.innerHTML =
-        '<td class="fw-bold">' + dia + '</td>' +
-        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary calc-hora-input" data-dia="' + dia + '" data-turno="1" placeholder="08:00-12:00"></td>' +
-        '<td><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary calc-hora-input" data-dia="' + dia + '" data-turno="2" placeholder="13:00-18:00"></td>' +
-        '<td><input type="number" class="form-control form-control-sm bg-dark text-light border-secondary calc-int-input" data-dia="' + dia + '" value="0" min="0" max="120" style="max-width:70px"></td>' +
-        '<td class="calc-dia-total text-info" id="calc-total-' + dia + '">0h</td>';
+        '<td class="fw-bold align-middle">' + dia + '</td>' +
+        '<td>' +
+          '<div class="calc-turnos-container" data-dia="' + dia + '">' +
+            '<div class="calc-turno-row d-flex gap-1 align-items-center mb-1">' +
+              '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-entrada" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+              '<span class="x-small text-muted">às</span>' +
+              '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-saida" data-dia="' + dia + '" data-turno="0" style="max-width:100px" step="60">' +
+            '</div>' +
+          '</div>' +
+          '<button class="btn btn-sm btn-outline-secondary py-0 px-2 x-small calc-add-turno" data-dia="' + dia + '"><i class="fas fa-plus me-1"></i>Adicionar turno</button>' +
+        '</td>' +
+        '<td class="calc-dia-total text-info align-middle text-end" id="calc-total-' + dia + '">0h</td>';
       tbody.appendChild(tr);
     });
 
-    document.querySelectorAll('.calc-hora-input, .calc-int-input').forEach(function (input) {
-      input.addEventListener('input', calcularHorasTotal);
+    // Event delegation
+    tbody.addEventListener('input', function (e) {
+      if (e.target.classList.contains('calc-entrada') || e.target.classList.contains('calc-saida')) {
+        calcularHorasTotal();
+      }
+    });
+
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('.calc-add-turno');
+      if (!btn) return;
+      var dia = btn.getAttribute('data-dia');
+      var container = document.querySelector('.calc-turnos-container[data-dia="' + dia + '"]');
+      if (!container) return;
+      var count = container.querySelectorAll('.calc-turno-row').length;
+      var row = document.createElement('div');
+      row.className = 'calc-turno-row d-flex gap-1 align-items-center mb-1';
+      row.innerHTML =
+        '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-entrada" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60">' +
+        '<span class="x-small text-muted">às</span>' +
+        '<input type="time" class="form-control form-control-sm bg-dark text-light border-secondary calc-saida" data-dia="' + dia + '" data-turno="' + count + '" style="max-width:100px" step="60">' +
+        '<button class="btn btn-sm btn-outline-danger py-0 px-1 x-small calc-rem-turno" title="Remover"><i class="fas fa-times"></i></button>';
+      container.appendChild(row);
+    });
+
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('.calc-rem-turno');
+      if (!btn) return;
+      btn.closest('.calc-turno-row').remove();
+      calcularHorasTotal();
+    });
+
+    // Botão copiar resultados
+    document.getElementById('calc-horas-copy').addEventListener('click', function () {
+      var lines = [];
+      dias.forEach(function (dia) {
+        var entradas = document.querySelectorAll('.calc-entrada[data-dia="' + dia + '"]');
+        var saidas = document.querySelectorAll('.calc-saida[data-dia="' + dia + '"]');
+        var turnos = [];
+        for (var i = 0; i < entradas.length; i++) {
+          if (entradas[i].value && saidas[i].value) {
+            turnos.push(entradas[i].value + '-' + saidas[i].value);
+          }
+        }
+        var totalEl = document.getElementById('calc-total-' + dia);
+        lines.push(dia + ': ' + (turnos.join(', ') || '-') + ' Total=' + (totalEl ? totalEl.textContent : '-'));
+      });
+      var totalSem = document.getElementById('calc-horas-total');
+      lines.push('TOTAL SEMANA: ' + (totalSem ? totalSem.textContent : '-'));
+      copyToClipboard(lines.join('\n'));
+      app.showToast('Resultados copiados!', 'success', 2000);
     });
   }
 
@@ -1626,18 +1994,26 @@ window.MainApp = window.MainApp || {};
     var totalSemana = 0;
 
     dias.forEach(function (dia) {
-      var t1 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="1"]');
-      var t2 = document.querySelector('.calc-hora-input[data-dia="' + dia + '"][data-turno="2"]');
-      var intervalo = document.querySelector('.calc-int-input[data-dia="' + dia + '"]');
+      var entradas = document.querySelectorAll('.calc-entrada[data-dia="' + dia + '"]');
+      var saidas = document.querySelectorAll('.calc-saida[data-dia="' + dia + '"]');
       var totalEl = document.getElementById('calc-total-' + dia);
+      var totalDia = 0;
 
-      var horas1 = parseHoraRange(t1 ? t1.value : '');
-      var horas2 = parseHoraRange(t2 ? t2.value : '');
-      var intMin = parseFloat(intervalo ? intervalo.value : 0) || 0;
-      var total = horas1 + horas2 - (intMin / 60);
-      if (total < 0) total = 0;
-      totalSemana += total;
-      if (totalEl) totalEl.textContent = total.toFixed(2) + 'h';
+      for (var i = 0; i < entradas.length; i++) {
+        var entrada = entradas[i].value;
+        var saida = saidas[i].value;
+        if (entrada && saida) {
+          var h1 = parseHora(entrada);
+          var h2 = parseHora(saida);
+          if (!isNaN(h1) && !isNaN(h2)) {
+            var diff = h2 - h1;
+            if (diff < 0) diff += 24;
+            totalDia += diff;
+          }
+        }
+      }
+      totalSemana += totalDia;
+      if (totalEl) totalEl.textContent = totalDia.toFixed(2) + 'h';
     });
 
     var totalEl = document.getElementById('calc-horas-total');
@@ -1664,6 +2040,276 @@ window.MainApp = window.MainApp || {};
   }
 
   /* ═══════════════════════════════════════════
+     PISO REFERÊNCIA (ACT)
+     Calculadora de piso por referência de ACT
+     ═══════════════════════════════════════ */
+
+  function initPisoRef() {
+    var ph = document.querySelector('.c-placeholder[data-section="pisoRef"]');
+    if (!ph) return;
+
+    loadPisoRefData(function (data) {
+      var d = data || {};
+      ph.innerHTML =
+        '<div class="row g-2 mb-3">' +
+          '<div class="col-md-3"><label class="x-small text-muted">Piso Referência (R$)</label>' +
+            '<input id="piso-ref-valor" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary" value="' + (d.valorReferencia || '4483') + '"></div>' +
+          '<div class="col-md-3"><label class="x-small text-muted">Horas Referência</label>' +
+            '<input id="piso-ref-horas" type="number" step="0.5" class="form-control form-control-sm bg-dark text-light border-secondary" value="' + (d.horasReferencia || '30') + '"></div>' +
+          '<div class="col-md-3"><label class="x-small text-muted">Horas Semana (padrão 44)</label>' +
+            '<input id="piso-ref-hrs-semana" type="number" class="form-control form-control-sm bg-dark text-light border-secondary" value="44" min="1" max="44"></div>' +
+          '<div class="col-md-3 d-flex align-items-end">' +
+            '<button id="piso-ref-calc" class="btn btn-sm btn-danger w-100"><i class="fas fa-calculator me-1"></i> Calcular</button></div>' +
+        '</div>' +
+        '<div class="row g-2 mb-2">' +
+          '<div class="col-md-6"><label class="x-small text-muted">Valor em Carteira (R$) — para calcular horas</label>' +
+            '<input id="piso-ref-carteira" type="number" step="0.01" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: 3056.59"></div>' +
+        '</div>' +
+        '<div class="d-flex flex-wrap gap-3 p-2 bg-dark bg-opacity-25 rounded border border-secondary mb-2">' +
+          '<span>Resultado (Piso × Horas ÷ 44): <b id="piso-ref-resultado" class="text-success">—</b></span>' +
+          '<span class="ms-3">Valor/Hora (Piso ÷ 220): <b id="piso-ref-valor-hora" class="text-info">—</b></span>' +
+          '<span class="ms-3">Horas equivalentes: <b id="piso-ref-horas-equiv" class="text-warning">—</b></span>' +
+          '<button id="piso-ref-copy-result" class="btn btn-sm btn-outline-info ms-2 flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar</button>' +
+        '</div>' +
+        '<div class="x-small text-muted">' +
+          '<p><i class="fas fa-info-circle me-1"></i> Use esta calculadora para converter pisos de ACT (Acordo Coletivo de Trabalho) entre jornadas diferentes.</p>' +
+          '<p>Fórmulas: <code>Resultado = Piso × Horas ÷ 44</code> | <code>Valor/Hora = Piso ÷ 220</code> | <code>Horas Equiv = Carteira × 44 ÷ Piso</code></p>' +
+        '</div>' +
+        '<button id="piso-ref-save" class="btn btn-sm btn-outline-success mt-2"><i class="fas fa-save me-1"></i> Salvar valores</button>';
+
+      function calc() {
+        var piso = parseFloat(document.getElementById('piso-ref-valor').value) || 0;
+        var horas = parseFloat(document.getElementById('piso-ref-horas').value) || 0;
+        var hrsSemana = parseFloat(document.getElementById('piso-ref-hrs-semana').value) || 44;
+        var carteira = parseFloat(document.getElementById('piso-ref-carteira').value) || 0;
+
+        var resultado = piso * horas / hrsSemana;
+        var valorHora = piso / 220;
+        var horasEquiv = carteira > 0 ? (carteira * hrsSemana / piso) : 0;
+
+        document.getElementById('piso-ref-resultado').textContent = 'R$ ' + resultado.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        document.getElementById('piso-ref-valor-hora').textContent = 'R$ ' + valorHora.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        document.getElementById('piso-ref-horas-equiv').textContent = horasEquiv > 0 ? horasEquiv.toFixed(1) + 'h' : '—';
+      }
+
+      document.getElementById('piso-ref-calc').addEventListener('click', calc);
+      document.getElementById('piso-ref-valor').addEventListener('input', calc);
+      document.getElementById('piso-ref-horas').addEventListener('input', calc);
+      document.getElementById('piso-ref-hrs-semana').addEventListener('input', calc);
+      document.getElementById('piso-ref-carteira').addEventListener('input', calc);
+
+      document.getElementById('piso-ref-save').addEventListener('click', function () {
+        var val = parseFloat(document.getElementById('piso-ref-valor').value) || 0;
+        var hrs = parseFloat(document.getElementById('piso-ref-horas').value) || 0;
+        store.pisoRef = { valorReferencia: val, horasReferencia: hrs };
+        saveStore();
+        app.showToast('Valores salvos!', 'success');
+      });
+
+      document.getElementById('piso-ref-copy-result').addEventListener('click', function () {
+        var resultado = document.getElementById('piso-ref-resultado').textContent;
+        var valorHora = document.getElementById('piso-ref-valor-hora').textContent;
+        var horasEquiv = document.getElementById('piso-ref-horas-equiv').textContent;
+        var piso = document.getElementById('piso-ref-valor').value;
+        var horas = document.getElementById('piso-ref-horas').value;
+        var text = 'Piso Referência: R$ ' + piso + '\nHoras Ref.: ' + horas + 'h\n' +
+          'Resultado: ' + resultado + '\nValor/Hora: ' + valorHora + '\nHoras Equivalentes: ' + horasEquiv;
+        copyToClipboard(text);
+        app.showToast('Resultado copiado!', 'success', 1500);
+      });
+
+      calc();
+    });
+  }
+
+  function loadPisoRefData(cb) {
+    if (store.pisoRef) return cb(store.pisoRef);
+    fetch('assets/piso/piso-ref.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { store.pisoRef = data; saveStore(); cb(data); })
+      .catch(function () { cb(store.pisoRef || {}); });
+  }
+
+  /* ═══════════════════════════════════════════
+     REGISTROS (Protocolos Detalhados — 526+ registros)
+     Tabela pesquisável e filtrável
+     ═══════════════════════════════════════ */
+
+  function initRegistros() {
+    var ph = document.querySelector('.c-placeholder[data-section="registros"]');
+    if (!ph) return;
+
+    ph.innerHTML =
+      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
+        '<input type="text" id="reg-filter" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Buscar em todos os campos..." autocomplete="off" style="max-width:300px">' +
+        '<select id="reg-situacao" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:200px">' +
+          '<option value="">Todas situações</option>' +
+          '<option value="Finalizado">Finalizado</option>' +
+          '<option value="Pendencia documental">Pendência documental</option>' +
+          '<option value="Indeferido Sem Documento">Indeferido Sem Documento</option>' +
+          '<option value="Arquivado">Arquivado</option>' +
+          '<option value="Indeferido Sem Resposta">Indeferido Sem Resposta</option>' +
+          '<option value="Aguarda">Aguarda</option>' +
+        '</select>' +
+        '<select id="reg-ocorrencia" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:280px">' +
+          '<option value="">Todas ocorrências</option>' +
+        '</select>' +
+        '<span id="reg-count" class="x-small text-muted align-self-center ms-auto"></span>' +
+        '<button id="reg-copy-all" class="btn btn-sm btn-outline-info flex-shrink-0"><i class="fas fa-copy me-1"></i> Copiar visíveis</button>' +
+        '<button id="reg-export" class="btn btn-sm btn-outline-success flex-shrink-0"><i class="fas fa-file-excel me-1"></i> Excel</button>' +
+      '</div>' +
+      '<div class="table-responsive" style="max-height:500px;overflow-y:auto">' +
+        '<table class="table table-sm table-dark table-hover x-small mb-0" id="reg-tabela">' +
+          '<thead class="sticky-top bg-dark">' +
+            '<tr>' +
+              '<th style="min-width:90px">Situação</th>' +
+              '<th style="min-width:80px">Nº Prot.</th>' +
+              '<th style="min-width:85px">Data</th>' +
+              '<th style="min-width:160px">Tipo Estab.</th>' +
+              '<th style="min-width:70px">Insc.</th>' +
+              '<th style="min-width:180px">Nome Estab.</th>' +
+              '<th style="min-width:140px">Ocorrência</th>' +
+              '<th style="min-width:200px">Obs</th>' +
+              '<th style="min-width:40px"></th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody id="reg-body"><tr><td colspan="9" class="text-center text-muted">Carregando...</td></tr></tbody>' +
+        '</table>' +
+      '</div>';
+
+    loadRegistrosData(function (data) {
+      store.registros = data;
+      saveStore();
+
+      // Popula dropdown de ocorrências
+      var ocorrencias = {};
+      data.forEach(function (r) {
+        var o = (r.ocorrencia || '').trim();
+        if (o) ocorrencias[o] = (ocorrencias[o] || 0) + 1;
+      });
+      var ocorrSelect = document.getElementById('reg-ocorrencia');
+      Object.keys(ocorrencias).sort().forEach(function (o) {
+        var opt = document.createElement('option');
+        opt.value = o;
+        opt.textContent = o + ' (' + ocorrencias[o] + ')';
+        ocorrSelect.appendChild(opt);
+      });
+
+      aplicarFiltroRegistros();
+
+      document.getElementById('reg-filter').addEventListener('input', aplicarFiltroRegistros);
+      document.getElementById('reg-situacao').addEventListener('change', aplicarFiltroRegistros);
+      document.getElementById('reg-ocorrencia').addEventListener('change', aplicarFiltroRegistros);
+
+      document.getElementById('reg-copy-all').addEventListener('click', function () {
+        var rows = document.querySelectorAll('#reg-body tr:not(.d-none)');
+        var text = Array.from(rows).map(function (row) {
+          var cells = row.querySelectorAll('td');
+          return [cells[0]?.textContent, cells[1]?.textContent, cells[2]?.textContent,
+                  cells[3]?.textContent, cells[4]?.textContent, cells[5]?.textContent,
+                  cells[6]?.textContent, cells[7]?.textContent].join(' | ');
+        }).join('\n');
+        if (!text.trim()) { app.showToast('Nenhum registro para copiar.', 'warning', 2000); return; }
+        copyToClipboard(text);
+        app.showToast(rows.length + ' registro(s) copiado(s)!', 'success');
+      });
+
+      document.getElementById('reg-export').addEventListener('click', function () {
+        var rows = document.querySelectorAll('#reg-body tr:not(.d-none)');
+        if (!rows.length) { app.showToast('Nenhum registro para exportar.', 'warning', 2000); return; }
+        var data = Array.from(rows).map(function (row) {
+          var cells = row.querySelectorAll('td');
+          return {
+            Situacao: cells[0]?.textContent || '',
+            NumProtocolo: cells[1]?.textContent || '',
+            Data: cells[2]?.textContent || '',
+            TipoEstabelecimento: cells[3]?.textContent || '',
+            Inscricao: cells[4]?.textContent || '',
+            NomeEstabelecimento: cells[5]?.textContent || '',
+            Ocorrencia: cells[6]?.textContent || '',
+            Obs: cells[7]?.textContent || ''
+          };
+        });
+        // Exporta como CSV (simples, sem dependência extra)
+        var csv = 'Situacao;NumProtocolo;Data;TipoEstabelecimento;Inscricao;NomeEstabelecimento;Ocorrencia;Obs\n' +
+          data.map(function (r) {
+            return [r.Situacao, r.NumProtocolo, r.Data, r.TipoEstabelecimento,
+                    r.Inscricao, r.NomeEstabelecimento, r.Ocorrencia, r.Obs]
+              .map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(';');
+          }).join('\n');
+        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'protocolos-detalhados.csv';
+        a.click();
+        app.showToast('Exportado com sucesso!', 'success');
+      });
+    });
+  }
+
+  function loadRegistrosData(cb) {
+    if (store.registros && store.registros.length) return cb(store.registros);
+    fetch('assets/consultas/protocolos-detalhados.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { store.registros = data; saveStore(); cb(data); })
+      .catch(function () { cb(store.registros || []); });
+  }
+
+  function aplicarFiltroRegistros() {
+    var data = store.registros || [];
+    var filter = normalize(document.getElementById('reg-filter')?.value || '');
+    var situacao = document.getElementById('reg-situacao')?.value || '';
+    var ocorrencia = document.getElementById('reg-ocorrencia')?.value || '';
+    var tbody = document.getElementById('reg-body');
+    var countEl = document.getElementById('reg-count');
+    if (!tbody) return;
+
+    var visible = 0;
+    tbody.innerHTML = data.map(function (r, i) {
+      var situacaoOk = !situacao || (r.situacao || '') === situacao;
+      var ocorrenciaOk = !ocorrencia || (r.ocorrencia || '') === ocorrencia;
+      var text = normalize((r.situacao || '') + ' ' + (r.numProtocolo || '') + ' ' +
+        (r.tipoEstabelecimento || '') + ' ' + (r.inscricao || '') + ' ' +
+        (r.nomeEstabelecimento || '') + ' ' + (r.ocorrencia || '') + ' ' + (r.obs || ''));
+      var filterOk = !filter || text.indexOf(filter) > -1;
+      var hidden = !situacaoOk || !ocorrenciaOk || !filterOk;
+
+      if (!hidden) visible++;
+
+      var statusColor = getStatusColor(r.situacao || '');
+      var dataFormatada = r.data || '';
+
+      return '<tr class="' + (hidden ? 'd-none' : '') + '" data-idx="' + i + '">' +
+        '<td><span class="badge bg-' + statusColor + ' x-small">' + escapeHtml(r.situacao || '') + '</span></td>' +
+        '<td>' + escapeHtml(r.numProtocolo || '—') + '</td>' +
+        '<td class="text-nowrap">' + escapeHtml(dataFormatada) + '</td>' +
+        '<td>' + escapeHtml(r.tipoEstabelecimento || '') + '</td>' +
+        '<td>' + escapeHtml(r.inscricao || '—') + '</td>' +
+        '<td><span title="' + escapeHtml(r.nomeEstabelecimento || '') + '">' + escapeHtml((r.nomeEstabelecimento || '').substring(0, 50) + ((r.nomeEstabelecimento || '').length > 50 ? '...' : '')) + '</span></td>' +
+        '<td>' + escapeHtml(r.ocorrencia || '') + '</td>' +
+        '<td class="text-muted" title="' + escapeHtml(r.obs || '') + '">' + escapeHtml((r.obs || '').substring(0, 60) + ((r.obs || '').length > 60 ? '...' : '')) + '</td>' +
+        '<td><button class="btn btn-sm btn-outline-secondary btn-copy-row" data-idx="' + i + '" title="Copiar"><i class="fas fa-copy"></i></button></td>' +
+        '</tr>';
+    }).join('');
+
+    if (countEl) countEl.textContent = visible + ' de ' + data.length + ' registros';
+
+    // Event listeners para botões de cópia individuais
+    tbody.querySelectorAll('.btn-copy-row').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-idx'));
+        var r = data[idx];
+        if (!r) return;
+        var text = [r.situacao, r.numProtocolo, r.data, r.tipoEstabelecimento,
+                     r.inscricao, r.nomeEstabelecimento, r.ocorrencia, r.obs]
+          .filter(Boolean).join(' | ');
+        copyToClipboard(text);
+        app.showToast('Registro copiado!', 'success', 1500);
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════════
      HELPERS
      ═══════════════════════════════════════ */
 
@@ -1686,6 +2332,39 @@ window.MainApp = window.MainApp || {};
     new bootstrap.Modal(document.getElementById('confirmModal')).show();
   }
 
+  function showPrompt(title, message, defaultValue, cb) {
+    document.getElementById('prompt-title').textContent = title;
+    document.getElementById('prompt-message').textContent = message || '';
+    var input = document.getElementById('prompt-input');
+    input.value = defaultValue || '';
+    var ok = document.getElementById('prompt-btn-ok'), n = ok.cloneNode(true);
+    ok.parentNode.replaceChild(n, ok);
+    n.onclick = function () {
+      bootstrap.Modal.getInstance(document.getElementById('promptModal')).hide();
+      cb(input.value);
+    };
+    input.addEventListener('keypress', function handler(e) {
+      if (e.key === 'Enter') { n.click(); input.removeEventListener('keypress', handler); }
+    });
+    new bootstrap.Modal(document.getElementById('promptModal')).show();
+    setTimeout(function () { input.focus(); }, 400);
+  }
+
+  function showAlert(title, message, icon, cb) {
+    document.getElementById('alert-title').textContent = title;
+    document.getElementById('alert-message').textContent = message;
+    var iconEl = document.getElementById('alert-icon');
+    iconEl.innerHTML = icon ? '<i class="fas ' + icon + ' fa-2x text-info"></i>' : '';
+    var modal = new bootstrap.Modal(document.getElementById('alertModal'));
+    if (cb) {
+      document.getElementById('alertModal').addEventListener('hidden.bs.modal', function handler() {
+        document.getElementById('alertModal').removeEventListener('hidden.bs.modal', handler);
+        cb();
+      });
+    }
+    modal.show();
+  }
+
   function normalize(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
   function escapeHtml(t) { var m = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }; return String(t).replace(/[&<>"']/g, function (c) { return m[c]; }); }
   function getStatusColor(s) { s = normalize(s); if (s.indexOf('indeferido')>-1) return 'danger'; if (s.indexOf('finalizado')>-1) return 'success'; if (s.indexOf('arquivado')>-1) return 'secondary'; if (s.indexOf('pendência')>-1||s.indexOf('pendencia')>-1) return 'warning'; if (s.indexOf('aguarda')>-1) return 'info'; if (s.indexOf('atenção')>-1||s.indexOf('atencao')>-1) return 'warning'; if (s.indexOf('correção')>-1||s.indexOf('correcao')>-1) return 'warning'; return 'secondary'; }
@@ -1694,6 +2373,49 @@ window.MainApp = window.MainApp || {};
     if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(function () {}); return; }
     var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+
+  function importarRespostasComoCards(respostas) {
+    if (!respostas || !Object.keys(respostas).length) return;
+    if (Object.keys(respostas).length < 5) return; // cache corrompido, ignora
+    var state = app.__state;
+    if (!state || !state.dashboards) return;
+    var dash = state.dashboards.find(function (d) { return d.id === 'dash-ingresso-pj'; });
+    if (!dash) return;
+    // Verifica se já tem cards de resposta importados (prefixo rp-)
+    var temRespostas = dash.customs && dash.customs.some(function (c) { return c.id && c.id.indexOf('rp-') === 0; });
+    if (temRespostas) return; // já importado, não duplica
+    if (!dash.customs) dash.customs = [];
+    if (!dash.order) dash.order = [];
+    var keys = Object.keys(respostas).sort();
+    var imported = 0;
+    keys.forEach(function (k) {
+      var id = 'rp-' + k.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      // Evita duplicatas
+      if (dash.customs.some(function (c) { return c.id === id; })) return;
+      dash.customs.push({
+        id: id,
+        title: k.split(' ').map(function (w) {
+          var upper = w.toUpperCase();
+          if (w === upper && w.length <= 3) return upper;
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        }).join(' '),
+        content: respostas[k],
+        color: 'info',
+        type: 'copy',
+        showDate: true
+      });
+      dash.order.push(id);
+      imported++;
+    });
+    if (imported > 0) {
+      app._save();
+      app.notifyChange();
+      // Re-renderiza dashboard se estiver visível
+      if (typeof app.render === 'function') app.render();
+      if (typeof app.renderSidebarDashboards === 'function') app.renderSidebarDashboards();
+      app.showToast(imported + ' respostas importadas para Ingresso PJ!', 'success', 3000);
+    }
   }
 
   /* ── Exports ──────────────────────────── */

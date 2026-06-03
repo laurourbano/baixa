@@ -1,5 +1,22 @@
 /**
- * gh-backup.js — GitHub backup e restore de cards
+ * gh-backup.js — Backup e restore via GitHub API
+ *
+ * @module gh-backup
+ * @description
+ * Permite fazer backup e restaurar dados usando a API do GitHub.
+ *
+ * Funcionalidades:
+ * - Autenticação por token GitHub (permissão repo)
+ * - Backup: PUT do estado completo no repositório do usuário
+ * - Restore: GET e aplicação do estado salvo
+ * - Suporte a migração de formato antigo (dashboard único) para multi-dashboard
+ * - Interface via modal de configurações
+ *
+ * Requer:
+ * - Token GitHub com permissão `repo`
+ * - Nome do repositório no formato `usuario/repo`
+ *
+ * @namespace MainApp
  */
 window.MainApp = window.MainApp || {};
 
