@@ -11,6 +11,7 @@
         "c5",
         "c7",
         "c2",
+        "c6",
         "c4",
         "c9",
         "c8",
@@ -570,9 +571,7 @@
           "showDate": true
         }
       },
-      "deleted": [
-        "c6"
-      ]
+      "deleted": []
     }
   ],
   "activeDashboard": "default",
