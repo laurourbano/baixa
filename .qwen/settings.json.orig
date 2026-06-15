@@ -31,7 +31,8 @@
       "Bash(git diff *)",
       "Bash(git mv *)",
       "Bash(git pull)",
-      "Bash(git show *)"
+      "Bash(git show *)",
+      "Bash(curl *)"
     ]
   },
   "$version": 4
