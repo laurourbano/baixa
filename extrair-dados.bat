@@ -8,6 +8,6 @@ echo.
 echo ============================================
 echo   Extração concluída!
 echo   Agora recarregue o site (Ctrl+Shift+R)
-echo   e limpe o cache: localStorage.clear()
+echo   (NAO use localStorage.clear() — isso apaga suas edicoes!)
 echo ============================================
 pause

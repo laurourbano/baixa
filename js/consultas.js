@@ -1667,16 +1667,12 @@ window.MainApp = window.MainApp || {};
     var ph = document.querySelector('.c-placeholder[data-section="respostasPadrao"]');
     if (!ph) return;
 
-    // Invalida cache se for array em vez de objeto, ou objeto vazio
-    if (store.respostasPadrao) {
-      if (Array.isArray(store.respostasPadrao) || (typeof store.respostasPadrao === 'object' && Object.keys(store.respostasPadrao).length === 0)) {
-        store.respostasPadrao = null;
-      }
-    }
-    // Força recarregar do JSON se cache tiver menos de 5 respostas (provavelmente corrompido)
-    if (store.respostasPadrao && typeof store.respostasPadrao === 'object' && Object.keys(store.respostasPadrao).length < 5) {
+    // Corrige cache inválido (array em vez de objeto), mas NÃO descarta dados válidos
+    if (store.respostasPadrao && Array.isArray(store.respostasPadrao)) {
       store.respostasPadrao = null;
     }
+    // Se não há cache, garante objeto vazio para merge posterior
+    var tinhaCache = !!store.respostasPadrao;
 
     ph.innerHTML =
       '<div class="d-flex gap-2 mb-2 flex-wrap">' +
@@ -1695,12 +1691,22 @@ window.MainApp = window.MainApp || {};
         novo[data.titulo] = data.texto;
         data = novo;
       }
-      store.respostasPadrao = data;
+      // Merge: preserva edições do usuário, adiciona apenas itens novos do JSON
+      if (tinhaCache && store.respostasPadrao) {
+        // Adiciona ao cache apenas chaves que não existem localmente
+        Object.keys(data).forEach(function (k) {
+          if (!(k in store.respostasPadrao)) {
+            store.respostasPadrao[k] = data[k];
+          }
+        });
+      } else {
+        store.respostasPadrao = data;
+      }
       saveStore();
       renderRespostasPadrao();
 
       // Importa respostas como cards no dashboard Ingresso PJ se vazio
-      importarRespostasComoCards(data);
+      importarRespostasComoCards(store.respostasPadrao);
     });
 
     document.getElementById('rp-filter').addEventListener('input', renderRespostasPadrao);
