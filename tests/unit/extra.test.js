@@ -48,19 +48,27 @@ describe('MainApp extended unit tests', () => {
       <input id="gh-token" />
       <input id="gh-repo" />
       <div id="gh-status"></div>
-      <input id="ferr-piso-base" value="0" />
-      <input id="ferr-horas-semana" value="44" />
-      <input id="ferr-horas-trab" value="0" />
-      <select id="ferr-categoria">
-        <option value="varejista">Varejista</option>
-        <option value="hospitalar">Hospitalar</option>
-      </select>
+      <div id="ferr-categorias-radios">
+        <label class="ferr-radio-label active"><input type="radio" name="ferr-cat" value="varejista" checked> Varejista <b class="text-success">R$ <span>4.729,62</span></b></label>
+        <label class="ferr-radio-label"><input type="radio" name="ferr-cat" value="hospitalar"> Hospitalar <b class="text-success">R$ <span>4.567,00</span></b></label>
+      </div>
+      <div id="ferr-piso-base-display"></div>
       <div id="ferr-valor-hora"></div>
+      <div id="ferr-total-horas-display"></div>
+      <div id="ferr-horas-semana-display"></div>
       <div id="ferr-piso-prop"></div>
-      <div id="ferr-ref-30h"></div>
-      <div id="ferr-ref-20h"></div>
-      <button id="ferr-calc"></button>
+      <div id="ferr-intervalo-alerta" class="d-none"><span id="ferr-intervalo-msg"></span></div>
       <button id="ferr-copy"></button>
+      <div id="ferr-horas-lote">
+        <input type="checkbox" class="ferr-dia-check" value="SEG" checked>
+        <input id="ferr-lote-entrada" type="time">
+        <input id="ferr-lote-saida" type="time">
+        <button id="ferr-lote-aplicar"></button>
+        <button id="ferr-lote-limpar"></button>
+      </div>
+      <table><tbody id="ferr-calc-horas-body"></tbody><tfoot><td id="ferr-calc-horas-total"></td></tfoot></table>
+      <div id="ferr-cidade-select" class="d-none"></div>
+      <input id="ferr-cidade">
       <select id="fiscal-select"></select>
       <input id="fiscal-filter" />
       <div id="fiscal-res"></div>
@@ -124,27 +132,35 @@ describe('MainApp extended unit tests', () => {
 
   /*** 2. Calculator logic ***/
   it('calculator updates totals when inputs change', () => {
-    const pisoEl = document.getElementById('ferr-piso-base');
-    const hrsSemanaEl = document.getElementById('ferr-horas-semana');
-    const hrsTrabEl = document.getElementById('ferr-horas-trab');
-    const valorHoraEl = document.getElementById('ferr-valor-hora');
-    const pisoPropEl = document.getElementById('ferr-piso-prop');
+    // Inicializa a calculadora (cria tabela de horas e listeners)
+    MainApp.initCalculator();
 
-    // Simulate user input
-    pisoEl.value = '2200';
-    hrsSemanaEl.value = '44';
-    hrsTrabEl.value = '44';
+    var pisoBaseDisplay = document.getElementById('ferr-piso-base-display');
+    var valorHoraEl = document.getElementById('ferr-valor-hora');
+    var totalHorasDisplay = document.getElementById('ferr-total-horas-display');
+    var jornadaDisplay = document.getElementById('ferr-horas-semana-display');
+    var pisoPropEl = document.getElementById('ferr-piso-prop');
 
-    // Trigger oninput handlers
-    var inputEvent = new Event('input');
-    pisoEl.dispatchEvent(inputEvent);
-    hrsSemanaEl.dispatchEvent(inputEvent);
-    hrsTrabEl.dispatchEvent(inputEvent);
+    // Após init, valores padrão (varejista: R$ 4.729,62, 0h trabalhadas)
+    expect(pisoBaseDisplay.textContent).toBe('R$ 4.729,62');
+    expect(valorHoraEl.textContent).toBe('R$ 21,50');
+    expect(jornadaDisplay.textContent).toBe('44h');
+    expect(pisoPropEl.textContent).toBe('R$ 0,00');
 
-    // Valor/Hora = 2200/220 = 10
-    expect(valorHoraEl.textContent).toBe('R$ 10,00');
-    // Piso Proporcional = 2200*44/44 = 2200
-    expect(pisoPropEl.textContent).toBe('R$ 2.200,00');
+    // Preenche horas: SEG 08:00-12:00 e 14:00-18:00 = 8h
+    var loteEntrada = document.getElementById('ferr-lote-entrada');
+    var loteSaida = document.getElementById('ferr-lote-saida');
+    loteEntrada.value = '08:00';
+    loteSaida.value = '12:00';
+    document.getElementById('ferr-lote-aplicar').click();
+
+    loteEntrada.value = '14:00';
+    loteSaida.value = '18:00';
+    document.getElementById('ferr-lote-aplicar').click();
+
+    // Total de horas: 8h → piso proporcional = 4729.62 * 8 / 44 ≈ 859,93
+    expect(totalHorasDisplay.textContent).toBe('8h');
+    expect(pisoPropEl.textContent).toBe('R$ 859,93');
   });
 
   /*** 3. Cloud backup – GitHub interaction ***/
