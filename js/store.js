@@ -74,7 +74,7 @@ window.MainApp = window.MainApp || {};
     activeDashboard: 'default',
     dashSortMode: 'custom',
     servicos: {},
-    _lastModified: Date.now()
+    _lastModified: 0
   };
 
   /* ── Helpers ──────────────────────────── */
