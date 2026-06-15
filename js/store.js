@@ -152,13 +152,53 @@ window.MainApp = window.MainApp || {};
   }
 
   function replaceState(newState) {
-    // Backend é a fonte da verdade — substitui estado completamente
+    // Backend é a fonte da verdade — mas preserva edições locais se o backend estiver desatualizado
     if (!newState || !newState.dashboards) return false;
-    state.dashboards = newState.dashboards;
+
+    var backendTime = newState._lastModified || 0;
+    var localTime = state._lastModified || 0;
+
+    // Mescla dashboards por ID
+    var mergedDashboards = newState.dashboards.map(function (backendDash) {
+      var localDash = state.dashboards.find(function (d) { return d.id === backendDash.id; });
+      if (!localDash) return backendDash;
+
+      // Se o estado local é mais recente, preserva edits e customs locais
+      if (localTime > backendTime) {
+        // Mantém customs e order locais, mas garante que cards do backend que não existem localmente sejam adicionados
+        var localIds = {};
+        localDash.customs.forEach(function (c) { localIds[c.id] = true; });
+        backendDash.customs.forEach(function (c) {
+          if (!localIds[c.id]) {
+            localDash.customs.push(c);
+            if (localDash.order.indexOf(c.id) === -1) localDash.order.push(c.id);
+          }
+        });
+
+        // Preserva edits locais (não sobrescreve com versões antigas do backend)
+        var mergedEdits = {};
+        Object.keys(backendDash.edits).forEach(function (id) { mergedEdits[id] = backendDash.edits[id]; });
+        Object.keys(localDash.edits).forEach(function (id) { mergedEdits[id] = localDash.edits[id]; });
+
+        return {
+          id: backendDash.id,
+          name: backendDash.name || localDash.name,
+          icon: backendDash.icon || localDash.icon,
+          order: localDash.order,
+          customs: localDash.customs,
+          edits: mergedEdits,
+          deleted: localDash.deleted
+        };
+      }
+
+      return backendDash;
+    });
+
+    state.dashboards = mergedDashboards;
     state.activeDashboard = newState.activeDashboard || 'default';
     state.dashSortMode = newState.dashSortMode || 'custom';
     state.servicos = newState.servicos || {};
-    state._lastModified = newState._lastModified || Date.now();
+    state._lastModified = Math.max(localTime, backendTime);
     ensureDefaultDashboards(state.dashboards);
     save();
     return true;
