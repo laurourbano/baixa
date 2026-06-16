@@ -6,12 +6,14 @@
  *
  * Armazenamento: Netlify Blobs (key-value persistente, sempre online)
  */
-const { getStore } = require('@netlify/blobs');
+const { connectLambda, getStore } = require('@netlify/blobs');
 
 const STORE_NAME = 'workdash-data';
 const DATA_KEY = 'state';
 
 exports.handler = async function (event) {
+  connectLambda(event);
+
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',

@@ -49,7 +49,9 @@
       "Bash(git config *)",
       "computer_use__hotkey",
       "computer_use__bring_to_front",
-      "Bash(winget *)"
+      "Bash(winget *)",
+      "WebFetch(baixaparecer.netlify.app)",
+      "Bash(netlify *)"
     ]
   },
   "$version": 4

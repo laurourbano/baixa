@@ -48,7 +48,9 @@
       "computer_use__zoom",
       "Bash(git config *)",
       "computer_use__hotkey",
-      "computer_use__bring_to_front"
+      "computer_use__bring_to_front",
+      "Bash(winget *)",
+      "WebFetch(baixaparecer.netlify.app)"
     ]
   },
   "$version": 4

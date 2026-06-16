@@ -66,6 +66,14 @@
       dataSource = loaded ? 'localStorage' : 'default';
     }
 
+    // 3. Se carregou do localStorage, tenta enviar para o backend
+    if (dataSource === 'localStorage') {
+      app.pushData().then(function (ok) {
+        if (ok) dataSource = 'api';
+        app._updateStatusIndicator(dataSource);
+      });
+    }
+
     app.hideLoading(loaded);
     app._updateStatusIndicator(dataSource);
 
