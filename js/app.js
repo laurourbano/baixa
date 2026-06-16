@@ -47,7 +47,7 @@
     // 1. Tenta carregar do backend (Netlify Function, sempre online)
     try {
       var backend = await app.fetchData();
-      if (backend && backend.dashboards) {
+      if (backend && backend.dashboards && backend.dashboards.length) {
         app.__state.dashboards = backend.dashboards;
         app.__state.activeDashboard = backend.activeDashboard || 'default';
         app.__state.dashSortMode = backend.dashSortMode || 'custom';

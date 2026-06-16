@@ -34,7 +34,7 @@ window.MainApp = window.MainApp || {};
     return callApi('', {}, 10000)
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        return (data && data.dashboards) ? data : null;
+        return (data && data.dashboards && data.dashboards.length) ? data : null;
       })
       .catch(function () { return null; });
   }
