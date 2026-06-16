@@ -5,27 +5,10 @@
  * - Detectar ambiente (Node.js para testes vs. browser)
  * - Carregar todos os módulos na ordem correta de dependência
  * - Inicializar UI (tema, sidebar, views)
- * - Carregar dados do backend com retry e fallback
- * - Configurar autosave e drag-and-drop global
  *
  * @module main
- * @requires config.js
- * @requires store.js
- * @requires api.js
- * @requires auth.js
- * @requires cards.js
- * @requires dashboards.js
- * @requires ui.js
- * @requires ui-helpers.js
- * @requires consultas.js
- * @requires calculator.js
- * @requires fiscal.js
- * @requires weather.js
- * @requires gh-backup.js
- * @requires servicos.js
  */
 
-// Inicializa namespace global (necessário para ambiente Node.js)
 if (typeof window !== 'undefined') {
   window.MainApp = window.MainApp || {};
 }
@@ -43,6 +26,7 @@ if (typeof module !== 'undefined' && module.exports) {
   require('./consultas.js');
   require('./dashboards.js');
   require('./gh-backup.js');
+  require('./servicos.js');
   require('./app.js');
   module.exports = window.MainApp;
 }

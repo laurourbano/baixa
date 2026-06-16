@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="WorkDash — painel de produtividade para fiscais. Pareceres, contratos, conferências e mais.">
+    <meta name="description" content="WorkDash — painel de produtividade. Pareceres, contratos, conferências e mais.">
     <title>WorkDash</title>
     <meta name="author" content="Lauro Urbano">
     <meta name="keywords" content="WorkDash, painel fiscal, pareceres, dashboard">
@@ -585,6 +585,21 @@
                             Nova Senha</button>
                     </div>
                     <hr class="border-secondary my-3">
+
+                    <!-- Backup e Restauração -->
+                    <label class="x-small fw-bold text-uppercase letter-spacing text-muted mb-2"><i
+                            class="fas fa-database me-1"></i> Dados</label>
+                    <div class="d-flex gap-2 mb-2">
+                        <button onclick="MainApp.exportToFile()" class="btn btn-sm btn-outline-info flex-fill">
+                            <i class="fas fa-download me-1"></i> Exportar
+                        </button>
+                        <button onclick="document.getElementById('import-file-input').click()" class="btn btn-sm btn-outline-warning flex-fill">
+                            <i class="fas fa-upload me-1"></i> Importar
+                        </button>
+                        <input type="file" id="import-file-input" accept=".json" class="d-none">
+                    </div>
+
+                    <hr class="border-secondary my-3">
                     <button onclick="MainApp.logout()" class="btn btn-sm btn-outline-danger w-100">
                         <i class="fas fa-sign-out-alt me-1"></i> Sair do Sistema
                     </button>
@@ -613,6 +628,8 @@
     <script defer src="js/calculator.js"></script>
     <script defer src="js/consultas.js"></script>
     <script defer src="js/dashboards.js"></script>
+    <script defer src="js/gh-backup.js"></script>
+    <script defer src="js/servicos.js"></script>
     <script defer src="js/app.js"></script>
     <script defer src="js/main.js"></script>
 

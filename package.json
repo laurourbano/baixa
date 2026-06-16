@@ -11,8 +11,6 @@
     "test": "npm run test:unit && npm run test:integration",
     "test:watch": "vitest",
     "test:related": "vitest related",
-    "bridge": "node bridge/server.js",
-    "start": "node bridge/server.js",
     "extract": "node scripts/extrair-atualizadores.js",
     "extract:v4": "node -e \"require('./scripts/extract-excel-v4.js')\"",
     "dev": "http-server -p 8000"
@@ -28,9 +26,6 @@
     "xlsx": "^0.18.5"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.500.0",
-    "better-sqlite3": "^12.10.0",
-    "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "@netlify/blobs": "^10.7.9"
   }
 }

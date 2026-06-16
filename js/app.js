@@ -8,11 +8,9 @@
 
   /* ── Init ──────────────────────────────── */
   async function init() {
-    // Inicializa modais Bootstrap
     window.bsModal = new bootstrap.Modal(document.getElementById('cardModal'));
     window.locModal = new bootstrap.Modal(document.getElementById('locationModal'));
 
-    // Verifica autenticação
     var isAuth = localStorage.getItem('baixa_rt_auth') === 'true';
     if (isAuth) {
       var email = localStorage.getItem('baixa_rt_user_email') || 'usuario@portal.com';
@@ -24,8 +22,6 @@
       document.getElementById('modal-avatar').textContent = initials;
 
       document.getElementById('login-overlay').classList.add('hidden');
-
-      // Carrega dados apenas se autenticado
       await loadAndInit();
     } else {
       var emailInput = document.getElementById('login-email');
@@ -38,80 +34,46 @@
       });
 
       emailInput.focus();
-      // Não carrega dados — aguarda login bem-sucedido
     }
   }
 
   /* ── Carregar dados e inicializar app ─── */
   async function loadAndInit() {
-    // Carrega dados do backend (com retry para cold start do Render)
-    app.showLoading('Conectando ao servidor...');
-    var loadedOk = false;
+    app.showLoading('Carregando dados...');
+
+    var loaded = false;
     var dataSource = 'localStorage';
 
+    // 1. Tenta carregar do backend (Netlify Function, sempre online)
     try {
-      // Ping de aquecimento — acorda o backend (Render cold start)
-      try {
-        await app.callApi('/api/health', {}, 10000);
-      } catch (_) {
-        // Ignora falha no ping, tenta /api/data mesmo assim
+      var backend = await app.fetchData();
+      if (backend && backend.dashboards) {
+        app.__state.dashboards = backend.dashboards;
+        app.__state.activeDashboard = backend.activeDashboard || 'default';
+        app.__state.dashSortMode = backend.dashSortMode || 'custom';
+        app.__state.servicos = backend.servicos || {};
+        app.__state._lastModified = backend._lastModified || Date.now();
+        app.ensureDefaultDashboards();
+        app._save();
+        loaded = true;
+        dataSource = 'api';
       }
+    } catch (_) { /* offline — fallback abaixo */ }
 
-      app.showLoading('Carregando dados...');
-      var res = await app.callApiWithRetry('/api/data', {}, {
-        maxRetries: 3,
-        baseTimeout: 30000,
-        delayMs: 2000,
-        onRetry: function (attempt, maxRetries) {
-          app.showLoading('Aguardando servidor... (tentativa ' + attempt + '/' + maxRetries + ')');
-        }
-      });
-      var backend = await res.json().catch(function () { return null; });
-      if (backend) {
-        // Backend é a fonte da verdade — substitui estado completamente
-        if (backend.dashboards && backend.dashboards.length > 0) {
-          app._replaceState(backend);
-          loadedOk = true;
-          dataSource = 'api';
-        } else if (backend.order && backend.order.length > 0 || backend.customs && backend.customs.length > 0) {
-          // Formato antigo (flat) — migrar
-          app._replaceState({
-            dashboards: [{
-              id: 'default',
-              name: 'Dashboard de Pareceres',
-              icon: 'fa-file-alt',
-              order: backend.order || [],
-              customs: backend.customs || [],
-              edits: backend.edits || {},
-              deleted: backend.deleted || []
-            }],
-            activeDashboard: 'default',
-            servicos: backend.servicos || {}
-          });
-          loadedOk = true;
-          dataSource = 'api';
-        }
-      }
-    } catch (e) {
-      console.error('Erro ao carregar dados do backend:', e);
-      // Fallback para localStorage
-      var localOk = app._loadFromLocalStorage();
-      if (localOk) {
-        loadedOk = true;
-        dataSource = 'localStorage';
-      }
+    // 2. Fallback: localStorage
+    if (!loaded) {
+      loaded = app._load();
+      dataSource = loaded ? 'localStorage' : 'default';
     }
 
-    app.hideLoading(loadedOk);
+    app.hideLoading(loaded);
     app._updateStatusIndicator(dataSource);
 
-    // Inicializa dashboards e renderiza sidebar
     app.initDashboards();
     app.render();
     app.setupDragAndDrop();
     app.updatePageTitle();
 
-    // Importa respostas padrão como cards no Ingresso PJ (se vazio)
     importarRespostasIngressoPJ();
 
     app.initFiscalSearch();
@@ -120,7 +82,6 @@
     initPlanoInspection();
     app.initWeather();
 
-    // Enter no modal de localização
     var weatherFilter = document.getElementById('weather-city-filter');
     if (weatherFilter) {
       weatherFilter.addEventListener('keypress', function (e) {
@@ -131,7 +92,6 @@
       });
     }
 
-    // Focus automático nos modais
     document.getElementById('cardModal').addEventListener('shown.bs.modal', function () {
       document.getElementById('m-title').focus();
     });
@@ -145,10 +105,8 @@
       if (filter) filter.focus();
     });
 
-    // Expor saveCard globalmente (usado em onclick no HTML)
     window.saveCard = app.saveCard;
 
-    // Restaurar tokens salvos
     var savedToken = localStorage.getItem('gh_token');
     var ghTokenEl = document.getElementById('gh-token');
     if (savedToken && ghTokenEl) ghTokenEl.value = savedToken;
@@ -156,6 +114,16 @@
     var savedRepo = localStorage.getItem('gh_repo');
     var ghRepoEl = document.getElementById('gh-repo');
     if (savedRepo && ghRepoEl) ghRepoEl.value = savedRepo;
+
+    var importInput = document.getElementById('import-file-input');
+    if (importInput) {
+      importInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+          app.importFromFile(this.files[0]);
+          this.value = '';
+        }
+      });
+    }
 
     app._save();
   }
@@ -176,10 +144,8 @@
 
   /* ── Importar respostas no Ingresso PJ ── */
   function formatarTitulo(str) {
-    // Converte MAIÚSCULAS para Primeira letra maiúscula, preservando siglas (palavras com até 3 letras totalmente maiúsculas)
     return str.split(' ').map(function (word) {
       var upper = word.toUpperCase();
-      // Preserva siglas: palavras curtas (até 3 chars) que já estão em maiúsculas
       if (word === upper && word.length <= 3) return upper;
       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     }).join(' ');
@@ -188,7 +154,6 @@
   function importarRespostasIngressoPJ() {
     var dash = (app.__state && app.__state.dashboards || []).find(function (d) { return d.id === 'dash-ingresso-pj'; });
     if (!dash) return;
-    // Verifica se já tem cards de resposta (prefixo rp-)
     if (dash.customs && dash.customs.some(function (c) { return c.id && c.id.indexOf('rp-') === 0; })) return;
 
     fetch('assets/consultas/respostas-padrao.json')

@@ -1,26 +1,8 @@
 /**
  * store.js — Gerenciamento de estado centralizado (multi-dashboard)
  *
- * @module store
- * @description
- * Gerencia o estado global da aplicação com suporte a múltiplos dashboards.
- *
- * Estrutura de estado:
- *   {
- *     dashboards: Array<Dashboard>,  // Lista de dashboards
- *     activeDashboard: string,       // ID do dashboard ativo
- *     dashSortMode: 'custom'|'alpha', // Modo de ordenação da sidebar
- *     servicos: Object               // Modelos de parecer por tipo
- *   }
- *
- * Cada Dashboard contém: id, name, icon, order[], customs[], edits{}, deleted[]
- *
- * Funcionalidades:
- * - 6 dashboards padrão pré-criados (Pareceres, Ingresso PJ, Inscrição PF,
- *   Contratos, Conferência PF, Conferência PJ)
- * - Migração automática do formato antigo (dashboard único) para multi-dashboard
- * - CRUD de dashboards com persistência em localStorage (chave: baixa_rt_data)
- * - Recriação de dashboards padrão se removidos acidentalmente
+ * Persistência: localStorage (chave: baixa_rt_data)
+ * Export/Import: JSON file download/upload
  *
  * @namespace MainApp
  */
@@ -31,7 +13,7 @@ window.MainApp = window.MainApp || {};
 
   var STORAGE_KEY = 'baixa_rt_data';
 
-  /* ── Dashboards padrão pré-criados ────── */
+  /* ── Dashboards padrão ─────────────────── */
   var DEFAULT_DASHBOARDS = [
     { id: 'default',          name: 'Dashboard de Pareceres', icon: 'fa-file-alt' },
     { id: 'dash-ingresso-pj', name: 'Ingresso PJ',            icon: 'fa-door-open' },
@@ -59,16 +41,13 @@ window.MainApp = window.MainApp || {};
       if (!exists) {
         dashboards.push(createDashFromTemplate(tmpl));
       } else {
-        // Garante ícone nos dashboards existentes que não têm
         var existing = dashboards.find(function (d) { return d.id === tmpl.id; });
-        if (existing && !existing.icon) {
-          existing.icon = tmpl.icon;
-        }
+        if (existing && !existing.icon) existing.icon = tmpl.icon;
       }
     });
   }
 
-  /* ── Estado inicial (backend é a fonte primária) ── */
+  /* ── Estado ────────────────────────────── */
   var state = {
     dashboards: DEFAULT_DASHBOARDS.map(createDashFromTemplate),
     activeDashboard: 'default',
@@ -77,7 +56,80 @@ window.MainApp = window.MainApp || {};
     _lastModified: 0
   };
 
-  /* ── Helpers ──────────────────────────── */
+  /* ── Persistência ──────────────────────── */
+  function save() {
+    state._lastModified = Date.now();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function load() {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    try {
+      var parsed = JSON.parse(raw);
+      if (!parsed || !parsed.dashboards) return false;
+      state.dashboards = parsed.dashboards;
+      state.activeDashboard = parsed.activeDashboard || 'default';
+      state.dashSortMode = parsed.dashSortMode || 'custom';
+      state.servicos = parsed.servicos || {};
+      state._lastModified = parsed._lastModified || Date.now();
+      ensureDefaultDashboards(state.dashboards);
+      save();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function resetState() {
+    state.dashboards = DEFAULT_DASHBOARDS.map(createDashFromTemplate);
+    state.activeDashboard = 'default';
+    state.servicos = {};
+    state._lastModified = Date.now();
+    save();
+  }
+
+  /* ── Export / Import ───────────────────── */
+  function exportToFile() {
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'workdash-backup-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    app.showToast('Backup exportado com sucesso!', 'success');
+  }
+
+  function importFromFile(file) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        var imported = JSON.parse(e.target.result);
+        if (!imported.dashboards) {
+          app.showToast('Arquivo inválido: formato não reconhecido.', 'danger');
+          return;
+        }
+        state.dashboards = imported.dashboards;
+        state.activeDashboard = imported.activeDashboard || 'default';
+        state.dashSortMode = imported.dashSortMode || 'custom';
+        state.servicos = imported.servicos || {};
+        state._lastModified = Date.now();
+        ensureDefaultDashboards(state.dashboards);
+        save();
+        app.render();
+        app.initDashboards();
+        app.showToast('Dados restaurados com sucesso!', 'success');
+      } catch (_) {
+        app.showToast('Erro ao ler o arquivo.', 'danger');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  /* ── Acesso ao dashboard ativo ─────────── */
   function getActiveDash() {
     var activeId = state.activeDashboard || 'default';
     var dash = state.dashboards.find(function (d) { return d.id === activeId; });
@@ -93,16 +145,12 @@ window.MainApp = window.MainApp || {};
     save();
   }
 
+  /* ── CRUD de dashboards ────────────────── */
   function addDashboard(name, icon) {
     var id = 'dash-' + Date.now();
     state.dashboards.push({
-      id: id,
-      name: name,
-      icon: icon || 'fa-file-alt',
-      order: [],
-      customs: [],
-      edits: {},
-      deleted: []
+      id: id, name: name, icon: icon || 'fa-file-alt',
+      order: [], customs: [], edits: {}, deleted: []
     });
     save();
     return id;
@@ -122,9 +170,7 @@ window.MainApp = window.MainApp || {};
     var idx = state.dashboards.findIndex(function (d) { return d.id === id; });
     if (idx === -1) return false;
     state.dashboards.splice(idx, 1);
-    if (state.activeDashboard === id) {
-      state.activeDashboard = state.dashboards[0].id;
-    }
+    if (state.activeDashboard === id) state.activeDashboard = state.dashboards[0].id;
     save();
     return true;
   }
@@ -146,109 +192,14 @@ window.MainApp = window.MainApp || {};
     save();
   }
 
-  function save() {
-    state._lastModified = Date.now();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }
-
-  function replaceState(newState) {
-    // Backend é a fonte da verdade — mas preserva edições locais se o backend estiver desatualizado
-    if (!newState || !newState.dashboards) return false;
-
-    var backendTime = newState._lastModified || 0;
-    var localTime = state._lastModified || 0;
-
-    // Mescla dashboards por ID
-    var mergedDashboards = newState.dashboards.map(function (backendDash) {
-      var localDash = state.dashboards.find(function (d) { return d.id === backendDash.id; });
-      if (!localDash) return backendDash;
-
-      // Se o estado local é mais recente, preserva edits e customs locais
-      if (localTime > backendTime) {
-        // Mantém customs e order locais, mas garante que cards do backend que não existem localmente sejam adicionados
-        var localIds = {};
-        localDash.customs.forEach(function (c) { localIds[c.id] = true; });
-        backendDash.customs.forEach(function (c) {
-          if (!localIds[c.id]) {
-            localDash.customs.push(c);
-            if (localDash.order.indexOf(c.id) === -1) localDash.order.push(c.id);
-          }
-        });
-
-        // Preserva edits locais (não sobrescreve com versões antigas do backend)
-        var mergedEdits = {};
-        Object.keys(backendDash.edits).forEach(function (id) { mergedEdits[id] = backendDash.edits[id]; });
-        Object.keys(localDash.edits).forEach(function (id) { mergedEdits[id] = localDash.edits[id]; });
-
-        return {
-          id: backendDash.id,
-          name: backendDash.name || localDash.name,
-          icon: backendDash.icon || localDash.icon,
-          order: localDash.order,
-          customs: localDash.customs,
-          edits: mergedEdits,
-          deleted: localDash.deleted
-        };
-      }
-
-      return backendDash;
-    });
-
-    state.dashboards = mergedDashboards;
-    state.activeDashboard = newState.activeDashboard || 'default';
-    state.dashSortMode = newState.dashSortMode || 'custom';
-    state.servicos = newState.servicos || {};
-    state._lastModified = Math.max(localTime, backendTime);
-    ensureDefaultDashboards(state.dashboards);
-    save();
-    return true;
-  }
-
-  function loadFromLocalStorage() {
-    var raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || null;
-    if (!raw) return false;
-    if (raw.dashboards) {
-      state.dashboards = raw.dashboards;
-      state.activeDashboard = raw.activeDashboard || 'default';
-      state.dashSortMode = raw.dashSortMode || 'custom';
-      state.servicos = raw.servicos || {};
-      state._lastModified = raw._lastModified || Date.now();
-      ensureDefaultDashboards(state.dashboards);
-      save();
-      return true;
-    }
-    if (raw.order || raw.customs) {
-      // Formato antigo — migrar
-      state.dashboards = [{
-        id: 'default', name: 'Dashboard de Pareceres', icon: 'fa-file-alt',
-        order: raw.order || [], customs: raw.customs || [],
-        edits: raw.edits || {}, deleted: raw.deleted || []
-      }];
-      state.activeDashboard = 'default';
-      state.servicos = raw.servicos || {};
-      state._lastModified = Date.now();
-      ensureDefaultDashboards(state.dashboards);
-      save();
-      return true;
-    }
-    return false;
-  }
-
-  function resetState() {
-    state.dashboards = DEFAULT_DASHBOARDS.map(createDashFromTemplate);
-    state.activeDashboard = 'default';
-    state.servicos = {};
-    state._lastModified = Date.now();
-    save();
-  }
-
-  /* ── Expor API ────────────────────────── */
+  /* ── Expor API ─────────────────────────── */
   Object.defineProperty(app, '__state', { get: function () { return state; } });
 
   app._save = save;
-  app._replaceState = replaceState;
-  app._loadFromLocalStorage = loadFromLocalStorage;
+  app._load = load;
   app.__resetState = resetState;
+  app.exportToFile = exportToFile;
+  app.importFromFile = importFromFile;
   app.getActiveDash = getActiveDash;
   app.setActiveDashboard = setActiveDashboard;
   app.addDashboard = addDashboard;

@@ -1,20 +1,11 @@
 /**
  * ui-helpers.js — Componentes reutilizáveis de UI
  *
- * @module ui-helpers
- * @description
- * Fornece componentes de UI usados por todos os outros módulos.
- *
  * Componentes:
- * - showToast(message, type, duration): notificação temporária com ícone
- *   (success/fa-check-circle, warning/fa-exclamation-triangle,
- *    danger/fa-exclamation-circle, info/fa-info-circle)
+ * - showToast(message, type, duration): notificação temporária
  * - showLoading(message) / hideLoading(loaded): overlay de carregamento
- *   com duração mínima de 600ms para evitar flicker
- * - showConfirm(title, message, type): diálogo de confirmação baseado em Promise
- *   (resolve true/false). Tipos: warning, danger, info
- * - _updateStatusIndicator(source): badge no cabeçalho indicando origem dos dados
- *   (api/saved/backup/save-error/localStorage)
+ * - showConfirm(title, message, type): diálogo de confirmação (Promise)
+ * - _updateStatusIndicator(source): badge no header
  *
  * @namespace MainApp
  */
@@ -77,7 +68,7 @@ window.MainApp = window.MainApp || {};
     var wait = Math.max(0, 600 - elapsed);
     setTimeout(function () {
       overlay.classList.add('d-none');
-      if (loaded) showToast('Dados carregados com sucesso.', 'success', 1800);
+      if (loaded) showToast('Dados carregados.', 'success', 1800);
     }, wait);
   }
 
@@ -121,28 +112,18 @@ window.MainApp = window.MainApp || {};
     if (!status) return;
     status.classList.remove('d-none');
 
-    var apiUrl = window.BAIXA_API_URL || window.location.origin;
-
     if (source === 'api') {
       status.className = 'badge bg-transparent border border-success x-small text-success';
-      status.innerHTML = '<i class="fas fa-cloud me-1"></i>Dados via API';
-      status.title = 'Carregado do backend (' + apiUrl + ') → banco SQLite';
-    } else if (source === 'saved') {
-      status.className = 'badge bg-transparent border border-success x-small text-success';
-      status.innerHTML = '<i class="fas fa-check-circle me-1"></i>Salvo (API)';
-      status.title = 'Dados salvos no backend (' + apiUrl + ') → banco SQLite';
-    } else if (source === 'backup') {
-      status.className = 'badge bg-transparent border border-info x-small text-info';
-      status.innerHTML = '<i class="fas fa-archive me-1"></i>Backup (API)';
-      status.title = 'Backup criado no backend (' + apiUrl + ')';
-    } else if (source === 'save-error') {
-      status.className = 'badge bg-transparent border border-danger x-small text-danger';
-      status.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Dados via localStorage';
-      status.title = 'Falha ao salvar no backend (' + apiUrl + '). Dados salvos apenas no navegador (localStorage).';
-    } else {
+      status.innerHTML = '<i class="fas fa-cloud me-1"></i>Servidor';
+      status.title = 'Dados carregados do servidor (Netlify Functions)';
+    } else if (source === 'localStorage') {
       status.className = 'badge bg-transparent border border-warning x-small text-warning';
-      status.innerHTML = '<i class="fas fa-hdd me-1"></i>Dados via localStorage';
-      status.title = 'Carregado do armazenamento local do navegador (localStorage) — backend indisponível';
+      status.innerHTML = '<i class="fas fa-hdd me-1"></i>Dados locais';
+      status.title = 'Servidor indisponível — dados do navegador';
+    } else {
+      status.className = 'badge bg-transparent border border-secondary x-small text-secondary';
+      status.innerHTML = '<i class="fas fa-hdd me-1"></i>Padrão';
+      status.title = 'Nenhum dado encontrado — estado inicial';
     }
   }
 
@@ -151,4 +132,5 @@ window.MainApp = window.MainApp || {};
   app.hideLoading = hideLoading;
   app.showConfirm = showConfirm;
   app._updateStatusIndicator = updateStatusIndicator;
+
 }(window.MainApp));

@@ -2,5 +2,13 @@
   publish = "."
   command = "echo 'Static site deploy - skipping build'"
 
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
 [context.production.environment]
   NODE_VERSION = "22"

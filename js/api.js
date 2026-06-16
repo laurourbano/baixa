@@ -1,15 +1,10 @@
 /**
- * api.js — Comunicação com o backend
+ * api.js — Comunicação com o backend (Netlify Function)
  *
- * @module api
- * @description
- * Gerencia toda a comunicação HTTP com o backend (Render).
+ * GET  /api → carrega dados do servidor
+ * POST /api → salva dados no servidor
  *
- * Funcionalidades:
- * - callApi: requisição fetch com timeout via AbortController
- * - callApiWithRetry: chamada com retry e backoff exponencial (para cold-start do Render)
- * - notifyChange: autosave — detecta mudanças e envia POST /api/save + POST /api/backup
- * - Atualização do indicador de status (🟢 API / 🟡 localStorage / 🔴 erro)
+ * Fallback: se offline, localStorage mantém tudo seguro.
  *
  * @namespace MainApp
  */
@@ -18,113 +13,72 @@ window.MainApp = window.MainApp || {};
 (function (app) {
   'use strict';
 
-  async function callApi(path, options, timeoutMs) {
-    const base = window.BAIXA_API_URL ? window.BAIXA_API_URL.replace(/\/$/, '') : '';
-    const url = base ? (base + path) : path;
-    const controller = new AbortController();
-    const timer = setTimeout(function () { controller.abort(); }, timeoutMs || 5000);
-    try {
-      const res = await fetch(url, Object.assign({}, options, { signal: controller.signal }));
-      clearTimeout(timer);
-      return res;
-    } catch (err) {
-      clearTimeout(timer);
-      throw err;
-    }
-  }
-
-  /**
-   * callApiWithRetry — chamada com retry e backoff exponencial.
-   * Útil para backends com cold start (ex: Render free tier).
-   * @param {string} path - caminho da API (ex: '/api/data')
-   * @param {object} [options] - opções do fetch
-   * @param {object} [retryOpts]
-   * @param {number} [retryOpts.maxRetries=3] - número máximo de tentativas
-   * @param {number} [retryOpts.baseTimeout=30000] - timeout por tentativa (ms)
-   * @param {number} [retryOpts.delayMs=2000] - delay inicial entre tentativas (ms)
-   * @param {function} [retryOpts.onRetry] - callback(attempt, maxRetries, delay)
-   */
-  async function callApiWithRetry(path, options, retryOpts) {
-    var opts = retryOpts || {};
-    var maxRetries = opts.maxRetries || 3;
-    var baseTimeout = opts.baseTimeout || 30000;
-    var delayMs = opts.delayMs || 2000;
-    var onRetry = opts.onRetry || null;
-
-    var lastError = null;
-
-    for (var attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        var res = await callApi(path, options, baseTimeout);
+  function callApi(path, options, timeoutMs) {
+    var url = (window.BAIXA_API_URL || '/api') + (path || '');
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, timeoutMs || 10000);
+    return fetch(url, Object.assign({}, options, { signal: controller.signal }))
+      .then(function (res) {
+        clearTimeout(timer);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         return res;
-      } catch (err) {
-        lastError = err;
-        if (attempt < maxRetries) {
-          var delay = delayMs * Math.pow(2, attempt); // backoff exponencial
-          if (onRetry) onRetry(attempt + 1, maxRetries, delay);
-          await new Promise(function (r) { setTimeout(r, delay); });
-        }
-      }
-    }
-
-    throw lastError;
+      })
+      .catch(function (err) {
+        clearTimeout(timer);
+        throw err;
+      });
   }
 
+  /** Busca dados do backend. Retorna null se indisponível. */
+  function fetchData() {
+    return callApi('', {}, 10000)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        return (data && data.dashboards) ? data : null;
+      })
+      .catch(function () { return null; });
+  }
+
+  /** Envia estado para o backend. Retorna true se ok. */
+  function pushData() {
+    var state = app.__state;
+    if (!state || !state.dashboards) return Promise.resolve(false);
+    return callApi('', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    }, 8000)
+      .then(function () { return true; })
+      .catch(function () { return false; });
+  }
+
+  /** Chamado a cada alteração — salva local e tenta enviar. */
   function notifyChange() {
-    // Garante que localStorage esteja atualizado antes de enviar ao backend
     app._save();
 
     var status = document.getElementById('gh-status');
-    if (status) {
-      status.classList.remove('d-none');
-      status.className = 'badge bg-transparent border border-warning x-small text-warning';
-      status.innerHTML = '<span class="text-warning"><i class="fas fa-sync-alt fa-spin me-1"></i>Salvando...</span>';
-      status.title = 'Enviando alterações para o backend...';
-    }
+    if (!status) return;
 
-    var payload = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(app.__state)
-    };
+    status.classList.remove('d-none');
+    status.className = 'badge bg-transparent border border-warning x-small text-warning';
+    status.innerHTML = '<i class="fas fa-sync-alt fa-spin me-1"></i>Salvando...';
+    status.title = 'Enviando para o servidor...';
 
-    // Usa retry (até 2 tentativas) para garantir que o save chegue ao backend
-    callApiWithRetry('/api/save', payload, {
-      maxRetries: 2,
-      baseTimeout: 15000,
-      delayMs: 1000
-    }).then(function (r) {
-      return r.json().catch(function () { return null; });
-    }).then(function (j) {
-      if (j && status) {
+    pushData().then(function (ok) {
+      if (ok) {
         status.className = 'badge bg-transparent border border-success x-small text-success';
-        status.innerHTML = '<i class="fas fa-check-circle me-1"></i>Salvo (API)';
-        status.title = 'Salvo no backend: ' + (j.backup || j.saved || 'ok') + ' → banco SQLite';
-      }
-      return callApi('/api/backup', payload);
-    }).then(function (b) {
-      return b.json().catch(function () { return null; });
-    }).then(function (bj) {
-      if (bj && status) {
-        status.className = 'badge bg-transparent border border-info x-small text-info';
-        status.innerHTML = '<i class="fas fa-archive me-1"></i>Backup (API)';
-        status.title = 'Backup criado no backend: ' + (bj.backup || bj.dataFile || 'ok');
-      } else if (status) {
+        status.innerHTML = '<i class="fas fa-cloud-check me-1"></i>Salvo';
+        status.title = 'Dados salvos no servidor e no navegador';
+      } else {
         status.className = 'badge bg-transparent border border-warning x-small text-warning';
-        status.innerHTML = '<i class="fas fa-check-circle me-1"></i>Salvo (sem backup)';
-        status.title = 'Salvo no backend, mas backup falhou';
+        status.innerHTML = '<i class="fas fa-hdd me-1"></i>Salvo (offline)';
+        status.title = 'Servidor indisponível. Dados salvos apenas no navegador.';
       }
-    }).catch(function () {
-      if (status) {
-        status.className = 'badge bg-transparent border border-danger x-small text-danger';
-        status.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Erro ao salvar';
-        status.title = 'Falha ao salvar no backend. Os dados estão seguros no navegador.';
-      }
-      app._updateStatusIndicator('save-error');
     });
   }
 
-  app.callApi = callApi;
-  app.callApiWithRetry = callApiWithRetry;
+  app.fetchData = fetchData;
+  app.pushData = pushData;
   app.notifyChange = notifyChange;
+
 }(window.MainApp));
