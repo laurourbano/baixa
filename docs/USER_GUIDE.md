@@ -252,6 +252,7 @@ Legislação e normas de referência. Dados carregados de `assets/normas.json`.
 ### Protocolos
 
 Protocolos e procedimentos organizados em duas fontes:
+
 - **Protocolos Base:** `assets/protocolos-base.json`
 - **Protocolos Detalhados:** `assets/protocolos-detalhados.json`
 
@@ -294,6 +295,7 @@ Acessíveis pela sidebar com o ícone 📝, os modelos de parecer são templates
 | Conferência PJ | Modelo para conferência de Pessoa Jurídica |
 
 Cada modelo possui:
+
 - **Textarea editável** para o texto do parecer.
 - **Botão de cópia** para copiar o texto para a área de transferência.
 - **Persistência** em localStorage — suas edições são salvas automaticamente.
@@ -364,10 +366,9 @@ O WorkDash permite fazer backup dos seus dados em um repositório privado do Git
 
 ### Sincronização Automática (Cloud)
 
-O WorkDash está integrado a um backend na nuvem (Render) que sincroniza dados entre dispositivos:
+O WorkDash está integrado ao Netlify Functions + Netlify Blobs que sincroniza dados entre dispositivos:
 
 - **Autosave:** Alterações nos cards são salvas automaticamente no servidor.
-- **Cold-start:** O backend no Render pode hibernar; o frontend faz retry automático (3 tentativas com backoff exponencial).
 - **Fallback:** Se o backend estiver indisponível, os dados são salvos localmente em localStorage.
 - **Indicador de status:** Um ícone no cabeçalho mostra a origem dos dados:
   - 🟢 **API:** Dados carregados do servidor.

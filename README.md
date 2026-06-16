@@ -21,8 +21,8 @@ O **WorkDash** é um painel de produtividade para fiscais, reunindo pareceres, c
 - **📚 Base de Conhecimento**: FAQ, Normas, Protocolos, Piso, Orientações e mais — com CRUD completo e busca textual.
 - **📝 Modelos de Parecer**: Templates por tipo de serviço (Ingresso PJ, Inscrição PF, Contratos, Conferências) com cópia fácil.
 - **🌤️ Widget de Clima**: Previsão do tempo em tempo real (Open-Meteo) com busca de cidades brasileiras (IBGE).
-- **☁️ Sincronização Cloud**: Autosave no backend (Render) com retry automático e fallback para localStorage.
-- **💾 Backup & Restore**: Backup manual via GitHub API ou endpoint do backend. Backups timestamped.
+- **☁️ Sincronização Cloud**: Autosave via Netlify Functions + Netlify Blobs com fallback para localStorage.
+- **💾 Backup & Restore**: Backup manual via GitHub API. Backups timestamped.
 - **📊 Exportação Excel**: Gere planilhas (.xlsx) com todos os cards de um dashboard.
 
 ---
@@ -32,8 +32,8 @@ O **WorkDash** é um painel de produtividade para fiscais, reunindo pareceres, c
 - **Frontend**: HTML5 Semântico, CSS3, Vanilla JavaScript (ES6+)
 - **UI**: Bootstrap 5.3, Font Awesome 6, Fonte Inter (Google Fonts)
 - **Planilhas**: SheetJS (xlsx) — leitura ODS/XLSX e exportação
-- **Backend**: Node.js + Express 5, SQLite (better-sqlite3)
-- **Cloud**: Netlify (frontend), Render (backend), AWS S3 (backups opcionais)
+- **Backend**: Netlify Functions + Netlify Blobs (serverless)
+- **Cloud**: Netlify (frontend + backend integrado)
 - **Testes**: Vitest + jsdom (unitários), Playwright (E2E)
 - **CI/CD**: GitHub Actions
 
@@ -57,9 +57,12 @@ npm run dev
 
 ### Backend (opcional — para sincronização cloud)
 
+O backend usa Netlify Functions + Netlify Blobs, rodando diretamente na infraestrutura do Netlify — sem necessidade de servidor separado.
+
 ```bash
-npm run bridge
-# Backend rodando em http://localhost:3002
+# Para testar localmente com netlify-cli:
+netlify dev
+# Backend rodando em http://localhost:8888/.netlify/functions/api
 ```
 
 ---
@@ -75,24 +78,18 @@ Documentação completa disponível na pasta [`docs/`](docs/):
 | [🔌 API](docs/API.md) | Documentação dos endpoints do backend |
 | [💻 Desenvolvimento](docs/DEVELOPMENT.md) | Guia do ambiente de desenvolvimento |
 | [🧪 Testes](docs/TESTING.md) | Como rodar e criar testes |
-| [🚀 Deploy Render](docs/DEPLOY_RENDER.md) | Deploy do backend no Render |
 | [☁️ S3](docs/S3.md) | Configuração de backups no AWS S3 |
 
 ---
 
 ## 🌍 Deploy
 
-### Frontend (Netlify)
+### Netlify (Frontend + Backend)
 
 1. Conecte seu GitHub na [Netlify](https://netlify.com/).
 2. Importe o repositório.
 3. Configurações automáticas via `netlify.toml`.
-
-### Backend (Render)
-
-1. Conecte seu GitHub no [Render](https://render.com/).
-2. Crie um Web Service apontando para o repositório.
-3. Configurações automáticas via `render.yaml`.
+4. As funções serverless (API) são deployadas junto com o frontend.
 
 ---
 

@@ -12,15 +12,14 @@ Visão completa da arquitetura, organização e fluxo de dados do repositório `
 | **UI Framework** | Bootstrap 5.3 | Grid, modais, temas (dark/light) |
 | **Ícones** | Font Awesome 6 | Ícones via CDN |
 | **Planilhas** | SheetJS (xlsx) | Leitura ODS/XLSX e exportação |
-| **Backend** | Node.js + Express 5 | API REST em `bridge/server.js` |
-| **Banco** | SQLite (better-sqlite3) | Persistência via `bridge/db.js` |
+| **Backend** | Netlify Functions + Blobs | API REST serverless |
+| **Banco** | Netlify Blobs | Key-value persistente |
 | **Backup Cloud** | AWS S3 (opcional) | Backups persistentes |
 | **Dev Server** | http-server | Servir frontend local |
 | **Testes Unitários** | Vitest + jsdom | `tests/unit/` |
 | **Testes E2E** | Playwright | `tests/integration/` |
 | **CI/CD** | GitHub Actions | Build + testes automáticos |
-| **Deploy Frontend** | Netlify | Hospedagem estática |
-| **Deploy Backend** | Render | Web service com disco persistente |
+| **Deploy** | Netlify | Hospedagem estática + funções serverless |
 
 ---
 
@@ -48,13 +47,9 @@ baixa/
 │   ├── weather.js              # Widget de clima (Open-Meteo)
 │   ├── gh-backup.js            # Backup/restore via GitHub API
 │   └── servicos.js             # Modelos de parecer por tipo de serviço
-├── bridge/
-│   ├── server.js               # Servidor Express (porta 3002)
-│   ├── db.js                   # Camada SQLite (WAL mode)
-│   ├── routes.js               # Rotas da API
-│   ├── automate_sagicon.ps1    # Script PowerShell de automação
-│   ├── data.json               # Dados persistidos
-│   └── backups/                # Backups timestamped
+├── netlify/
+│   └── functions/
+│       └── api.js           # Netlify Function — API serverless
 ├── assets/
 │   ├── img/                    # logo.svg, logo.png, favicon.ico
 │   ├── faq.json                # Dados FAQ
@@ -73,7 +68,6 @@ baixa/
 │   ├── USER_GUIDE.md           # Guia do usuário
 │   ├── ARCHITECTURE.md         # Este arquivo
 │   ├── API.md                  # Documentação dos endpoints
-│   ├── DEPLOY_RENDER.md        # Guia de deploy no Render
 │   ├── DEVELOPMENT.md          # Guia de desenvolvimento local
 │   ├── TESTING.md              # Guia de testes
 │   └── S3.md                   # Integração com S3
@@ -83,7 +77,6 @@ baixa/
 ├── scripts/                    # Scripts auxiliares (extração Excel, geradores)
 ├── .github/workflows/ci.yml    # CI no GitHub Actions
 ├── netlify.toml                # Configuração de deploy no Netlify
-├── render.yaml                 # Configuração de deploy no Render
 ├── package.json                # Dependências e scripts npm
 └── vitest.config.js / playwright.config.js
 ```
@@ -108,49 +101,44 @@ baixa/
 │              │                │
 │  ┌───────────▼────────────┐  │
 │  │       api.js           │  │  ◄── Comunicação HTTP
-│  │  fetch + retry         │  │
+│  │  fetch               │  │
 │  └───────────┬────────────┘  │
 └──────────────┼───────────────┘
                │
                ▼
 ┌──────────────────────────────┐
-│     Backend (Render)         │
+│   Netlify Functions          │
 │                              │
 │  ┌────────────────────────┐  │
-│  │    server.js (Express) │  │
+│  │   api.js (serverless)  │  │
 │  └───────────┬────────────┘  │
 │              │                │
 │  ┌───────────▼────────────┐  │
-│  │       db.js (SQLite)   │  │
-│  └───────────┬────────────┘  │
-│              │                │
-│  ┌───────────▼────────────┐  │
-│  │   bridge/data.json     │  │
-│  │   bridge/backups/      │  │
+│  │   Netlify Blobs        │  │
+│  │   (key-value store)    │  │
 │  └────────────────────────┘  │
 └──────────────────────────────┘
                │ (opcional)
                ▼
 ┌──────────────────────────────┐
-│        AWS S3                │
-│   (backups persistentes)     │
+│        GitHub API            │
+│   (backup manual)            │
 └──────────────────────────────┘
 ```
 
 ### Fluxo de carregamento
 
-1. **Frontend inicia** → `api.js::callApi('GET /api/data')`
-2. Se backend disponível → dados retornados do SQLite
-3. Se backend hibernando (cold-start Render) → retry automático (3 tentativas, backoff exponencial)
-4. Se todas as tentativas falham → fallback para `localStorage`
-5. Se localStorage vazio → estado inicial com dashboards padrão
+1. **Frontend inicia** → `api.js::callApi('GET /api')`
+2. Se backend disponível → dados retornados do Netlify Blobs
+3. Se backend indisponível → fallback para `localStorage`
+4. Se localStorage vazio → estado inicial com dashboards padrão
 
 ### Fluxo de salvamento
 
 1. Usuário modifica card → `store.save()` → grava em localStorage
-2. `api.js` detecta mudança → `POST /api/save` (autosave)
-3. Backend grava em SQLite + arquivo timestamped em `bridge/backups/`
-4. Opcional: backup manual via GitHub API (`gh-backup.js`) ou `POST /api/backup`
+2. `api.js` detecta mudança → `POST /api` (autosave)
+3. Backend grava no Netlify Blobs
+4. Opcional: backup manual via GitHub API (`gh-backup.js`)
 
 ---
 
@@ -170,7 +158,7 @@ Em ambiente Node (testes), os módulos são importados via `require()`. Em brows
 
 ### `config.js`
 
-Define `window.BAIXA_API_URL` — URL base do backend. Em produção: `https://baixa-backend.onrender.com`.
+Define `window.BAIXA_API_URL` — URL base do backend. Em produção: `/api` (redireciona para a Netlify Function).
 
 ### `store.js`
 
@@ -289,35 +277,14 @@ Modelos de parecer:
 
 ## Backend
 
-### `bridge/server.js`
+### `netlify/functions/api.js`
 
-Servidor Express na porta `3002` (ou `PORT`):
+Netlify Function serverless:
 
-- CORS habilitado para o domínio do frontend
-- Serve arquivos estáticos do diretório raiz
-- Middleware JSON
-
-### `bridge/db.js`
-
-Camada SQLite via `better-sqlite3`:
-
-- **Tabelas:**
-  - `state`: key-value para dados da aplicação
-  - `backups`: histórico de backups (id, data, payload)
-- **Configuração:** WAL mode + foreign keys
-- **Prepared statements** para performance
-
-### `bridge/routes.js`
-
-Rotas da API (ver `docs/API.md` para detalhes):
-
-- `POST /automate` — Dispara script PowerShell
-- `POST /api/backup` — Backup manual
-- `POST /api/save` — Autosave
-- `GET /api/backups` — Listar backups
-- `GET /api/backup/:name` — Baixar backup
-- `GET /api/data` — Dados atuais (com fallbacks)
-- `GET /api/health` — Health check
+- GET `/api` → retorna estado salvo do Netlify Blobs
+- POST `/api` → salva estado no Netlify Blobs
+- CORS habilitado para qualquer origem
+- Usa `connectLambda` para injetar contexto do Netlify
 
 ---
 
@@ -327,12 +294,9 @@ Rotas da API (ver `docs/API.md` para detalhes):
 
 | Camada | Localização | Persistência |
 |---|---|---|
-| 1. Backend SQLite | `bridge/baixa.db` | Persistente (Render com disco) |
-| 2. Backend JSON | `bridge/data.json` | Persistente (Render com disco) |
-| 3. Backups timestamped | `bridge/backups/` | Persistente (Render com disco) |
-| 4. localStorage | Navegador | Local ao dispositivo |
-| 5. S3 (opcional) | AWS S3 | Durável |
-| 6. GitHub API | Repositório do usuário | Durável |
+| 1. Netlify Blobs | `netlify/functions/api.js` | Persistente (nuvem) |
+| 2. localStorage | Navegador | Local ao dispositivo |
+| 3. GitHub API | Repositório do usuário | Durável |
 
 ### Estratégia de fallback
 
@@ -349,10 +313,8 @@ API disponível?
 ## Segurança
 
 - **Autenticação local:** Senha de 4 dígitos armazenada em localStorage (hash simples)
-- **API sem autenticação:** Presume ambiente controlado; acesso deve ser restrito por firewall/VPN
-- **Endpoint `/automate`:** Executa PowerShell local — acesso deve ser estritamente controlado
 - **Token GitHub:** Armazenado em localStorage (cliente-side); use token com escopo mínimo (`repo` apenas)
-- **CORS:** Configurado para permitir apenas o domínio do frontend
+- **CORS:** Configurado para permitir qualquer origem (API pública)
 
 ---
 
@@ -360,8 +322,7 @@ API disponível?
 
 | Componente | Plataforma | Configuração |
 |---|---|---|
-| Frontend | Netlify | `netlify.toml`, publish="." |
-| Backend | Render | `render.yaml`, disco 1GB |
+| Frontend + Backend | Netlify | `netlify.toml`, funções serverless |
 | CI | GitHub Actions | `.github/workflows/ci.yml` |
 
 ---
