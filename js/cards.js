@@ -48,68 +48,66 @@ window.MainApp = window.MainApp || {};
     if (!d) return;
 
     var date = formattedDate();
+    var filterMode = d.filterMode || 'active';
+    var hasEdits = false;
+    for (var _k in d.edits) { if (d.edits.hasOwnProperty(_k)) { hasEdits = true; break; } }
 
-    grid.innerHTML = d.customs
-      .filter(function (c) { return d.deleted.indexOf(c.id) === -1; })
-      .map(function (c) { return Object.assign({}, c, d.edits[c.id]); })
-      .sort(function (a, b) {
-        var ia = d.order.indexOf(a.id);
-        var ib = d.order.indexOf(b.id);
-        if (ia === -1) ia = 999;
-        if (ib === -1) ib = 999;
-        return ia - ib;
-      })
-      .map(function (card) {
-        var isLink = card.type === 'link' || card.type === 'pdf';
-        var isInfo = card.type === 'info';
-        var icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
-        var btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
-        var color = card.color || 'light';
-        var bootstrapColor = color === 'light' ? 'secondary' : color;
-        var canCopy = !isLink && !isInfo;
+    // Map para lookup O(1) de posição no order
+    var orderMap = {};
+    for (var oi = 0; oi < d.order.length; oi++) {
+      orderMap[d.order[oi]] = oi;
+    }
 
-        var metaLine = '';
-        if (card.local || card.sit || card.julgamento) {
-          metaLine = '<div class="info-line">' +
-            '<span>Local: <b>' + (card.local || '') + '</b></span>' +
-            '<span>Situação: <b>' + (card.sit || '') + '</b></span>' +
-            '<span>Julgamento: <b>' + (card.julgamento || '') + '</b></span>' +
-            '</div>';
-        }
+    // Set para lookup O(1) de deletados
+    var deletedSet = {};
+    for (var di = 0; di < d.deleted.length; di++) {
+      deletedSet[d.deleted[di]] = true;
+    }
 
-        var body = '';
-        if (isLink) {
-          body = '<div class="link-card-body text-center mt-2">' +
-            '<p class="x-small mb-2">' + (card.content || 'Acesso rápido') + '</p>' +
-            '<a href="' + card.link + '" target="_blank" class="btn btn-outline-' + bootstrapColor + ' btn-sm-compact" onclick="event.stopPropagation()">' +
-            '<i class="fas ' + icon + ' me-1"></i>' + btnLabel + '</a></div>';
-        } else if (isInfo) {
-          body = '<div class="content-display">' + card.content + '</div>' +
-            '<div class="info-card-badge"><i class="fas fa-info-circle me-1"></i> Informativo</div>';
-        } else {
-          var contentHtml = (card.showDate !== false ? date + ' - ' : '') +
-            card.content.replace(/\[\s*00\/00\/0000\s*\]/g, '<span class="date-highlight">' + date + '</span>');
-          body = '<div class="content-display">' + contentHtml + '</div>' +
-            '<div class="card-copy-hint"><i class="fas fa-mouse-pointer me-1"></i> Clique no card para copiar</div>' +
-            '<div class="card-copy-success"><i class="fas fa-check-circle me-1"></i> Conteúdo Copiado!</div>' +
-            '<button class="btn-copy-mini btn-outline-success" onclick="event.stopPropagation(); MainApp.copy(this, \'' + card.id + '\')" title="Copiar conteúdo">' +
-            '<i class="fas fa-copy"></i></button>';
-        }
+    // Set para lookup O(1) de inativos
+    var inactiveSet = {};
+    for (var ii = 0; ii < d.inactive.length; ii++) {
+      inactiveSet[d.inactive[ii]] = true;
+    }
 
-        var clickHandler = canCopy ? ' onclick="MainApp.copy(this.querySelector(\'.content-display\'), \'' + card.id + '\')"' : '';
+    // Filtra cards conforme filterMode
+    var active = [];
+    for (var ai = 0; ai < d.customs.length; ai++) {
+      var c = d.customs[ai];
+      if (deletedSet[c.id]) continue;
 
-        return '<div class="col-12 col-md-6 col-lg-3 mb-3">' +
-          '<div class="card h-100 border-' + color + (isInfo ? ' card-info-type' : '') + '" data-id="' + card.id + '" data-color="' + color + '" draggable="true"' + clickHandler + '>' +
-          '<div class="card-head" onclick="event.stopPropagation()">' +
-          '<span class="handle">⠿</span>' +
-          '<span class="card-title-header">' + card.title + '</span>' +
-          '<div class="actions">' +
-          '<i class="fa fa-pen" onclick="MainApp.edit(\'' + card.id + '\')"></i>' +
-          '<i class="fa fa-trash" onclick="MainApp.del(\'' + card.id + '\')"></i>' +
-          '</div></div>' + metaLine + body + '</div></div>';
-      }).join('');
+      var isInactive = !!inactiveSet[c.id];
 
-    app._save();
+      if (filterMode === 'active' && isInactive) continue;
+      if (filterMode === 'inactive' && !isInactive) continue;
+
+      var card = hasEdits && d.edits[c.id] ? Object.assign({}, c, d.edits[c.id]) : c;
+      card._inactive = isInactive;
+      active.push(card);
+    }
+
+    // Ordena por order map (O(n log n) sem indexOf interno)
+    active.sort(function (a, b) {
+      return (orderMap[a.id] !== undefined ? orderMap[a.id] : 999) -
+             (orderMap[b.id] !== undefined ? orderMap[b.id] : 999);
+    });
+
+    // Renderiza HTML
+    var html = '';
+    for (var ri = 0; ri < active.length; ri++) {
+      html += renderCardHTML(active[ri], date);
+    }
+
+    // Placeholder quando não há cards no filtro atual
+    if (active.length === 0) {
+      var placeholderMsg = filterMode === 'inactive'
+        ? 'Nenhum card inativo neste dashboard.'
+        : 'Nenhum card neste dashboard. Clique em + para adicionar.';
+      html = '<div class="col-12 text-center py-5 text-muted x-small">' +
+        '<i class="fas fa-inbox fs-4 mb-2 d-block"></i>' + placeholderMsg + '</div>';
+    }
+
+    grid.innerHTML = html;
 
     if (lastCopiedId) {
       var cardEl = document.querySelector('[data-id="' + lastCopiedId + '"]');
@@ -124,6 +122,72 @@ window.MainApp = window.MainApp || {};
         }
       }
     }
+
+    app._save();
+  }
+
+  /** Constrói HTML de um card — extraído para clareza e performance */
+  function renderCardHTML(card, date) {
+    var isInactive = card._inactive === true;
+    var isLink = card.type === 'link' || card.type === 'pdf';
+    var isInfo = card.type === 'info';
+    var icon = card.type === 'pdf' ? 'fa-file-pdf' : 'fa-external-link-alt';
+    var btnLabel = card.type === 'pdf' ? 'Abrir PDF' : 'Abrir Link';
+    var color = card.color || 'light';
+    var bootstrapColor = color === 'light' ? 'secondary' : color;
+    var canCopy = !isLink && !isInfo && !isInactive;
+
+    var metaLine = '';
+    if (card.local || card.sit || card.julgamento) {
+      metaLine = '<div class="info-line">' +
+        '<span>Local: <b>' + (card.local || '') + '</b></span>' +
+        '<span>Situação: <b>' + (card.sit || '') + '</b></span>' +
+        '<span>Julgamento: <b>' + (card.julgamento || '') + '</b></span>' +
+        '</div>';
+    }
+
+    var body = '';
+    if (isLink) {
+      body = '<div class="link-card-body text-center mt-2">' +
+        '<p class="x-small mb-2">' + (card.content || 'Acesso rápido') + '</p>' +
+        '<a href="' + card.link + '" target="_blank" class="btn btn-outline-' + bootstrapColor + ' btn-sm-compact" onclick="event.stopPropagation()">' +
+        '<i class="fas ' + icon + ' me-1"></i>' + btnLabel + '</a></div>';
+    } else if (isInfo) {
+      body = '<div class="content-display">' + card.content + '</div>' +
+        '<div class="info-card-badge"><i class="fas fa-info-circle me-1"></i> Informativo</div>';
+    } else {
+      var contentHtml = (card.showDate !== false ? date + ' - ' : '') +
+        card.content.replace(/\[\s*00\/00\/0000\s*\]/g, '<span class="date-highlight">' + date + '</span>');
+      body = '<div class="content-display">' + contentHtml + '</div>';
+
+      if (isInactive) {
+        body += '<div class="info-card-badge bg-secondary bg-opacity-25 text-muted"><i class="fas fa-box-archive me-1"></i> Inativo</div>';
+        body += '<button class="btn-copy-mini btn-outline-info" onclick="event.stopPropagation(); MainApp.toggleInactive(\'' + card.id + '\')" title="Reativar card">' +
+          '<i class="fas fa-rotate-left"></i></button>';
+      } else {
+        body += '<div class="card-copy-hint"><i class="fas fa-mouse-pointer me-1"></i> Clique no card para copiar</div>' +
+          '<div class="card-copy-success"><i class="fas fa-check-circle me-1"></i> Conteúdo Copiado!</div>' +
+          '<button class="btn-copy-mini btn-outline-success" onclick="event.stopPropagation(); MainApp.copy(this, \'' + card.id + '\')" title="Copiar conteúdo">' +
+          '<i class="fas fa-copy"></i></button>';
+      }
+    }
+
+    var clickHandler = canCopy ? ' onclick="MainApp.copy(this.querySelector(\'.content-display\'), \'' + card.id + '\')"' : '';
+
+    var inactiveClass = isInactive ? ' card-inactive' : '';
+
+    return '<div class="col-12 col-md-6 col-lg-3 mb-3">' +
+      '<div class="card h-100 border-' + color + (isInfo ? ' card-info-type' : '') + inactiveClass + '" data-id="' + card.id + '" data-color="' + color + '" draggable="true"' + clickHandler + '>' +
+      '<div class="card-head" onclick="event.stopPropagation()">' +
+      '<span class="handle">⠿</span>' +
+      '<span class="card-title-header">' + card.title + '</span>' +
+      '<div class="actions">' +
+      '<i class="fa fa-pen" onclick="MainApp.edit(\'' + card.id + '\')"></i>' +
+      '<i class="fa fa-trash" onclick="MainApp.del(\'' + card.id + '\')"></i>' +
+      (isInactive
+        ? '<i class="fa fa-rotate-left text-info ms-1" onclick="MainApp.toggleInactive(\'' + card.id + '\')" title="Reativar"></i>'
+        : '<i class="fa fa-box-archive text-warning ms-1" onclick="MainApp.toggleInactive(\'' + card.id + '\')" title="Inativar"></i>') +
+      '</div></div>' + metaLine + body + '</div></div>';
   }
 
   /* ── Reset highlight ───────────────────── */
@@ -274,11 +338,35 @@ window.MainApp = window.MainApp || {};
       if (confirmed) {
         var d = dash();
         d.deleted.push(id);
+        // Remove também do inactive se estiver lá
+        var inactiveIdx = d.inactive.indexOf(id);
+        if (inactiveIdx !== -1) d.inactive.splice(inactiveIdx, 1);
         render();
         app.notifyChange();
         app.showToast('Card removido com sucesso.', 'info');
       }
     });
+  }
+
+  /* ── Soft delete / Inativação ──────────── */
+  function toggleInactive(id) {
+    var d = dash();
+    if (!d) return;
+    var idx = d.inactive.indexOf(id);
+
+    if (idx === -1) {
+      // Inativar
+      d.inactive.push(id);
+      render();
+      app.notifyChange();
+      app.showToast('Card inativado. Use o filtro "Inativos" para visualizar.', 'info', 3000);
+    } else {
+      // Reativar
+      d.inactive.splice(idx, 1);
+      render();
+      app.notifyChange();
+      app.showToast('Card reativado com sucesso.', 'success');
+    }
   }
 
   function copy(el, id) {
@@ -359,6 +447,7 @@ window.MainApp = window.MainApp || {};
   app.render = render;
   app.edit = edit;
   app.del = del;
+  app.toggleInactive = toggleInactive;
   app.copy = copy;
   app.closeModal = closeModal;
   app.toggleLinkField = toggleLinkField;

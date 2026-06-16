@@ -11,6 +11,9 @@
     "test": "npm run test:unit && npm run test:integration",
     "test:watch": "vitest",
     "test:related": "vitest related",
+    "test:stress": "node scripts/stress-test.js",
+    "test:performance": "playwright test tests/integration/performance.spec.js",
+    "bench": "node scripts/performance-bench.js",
     "extract": "node scripts/extrair-atualizadores.js",
     "extract:v4": "node -e \"require('./scripts/extract-excel-v4.js')\"",
     "dev": "http-server -p 8000"

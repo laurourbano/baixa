@@ -52,7 +52,8 @@ window.MainApp = window.MainApp || {};
       .catch(function () { return false; });
   }
 
-  /** Chamado a cada alteração — salva local e tenta enviar. */
+  /** Chamado a cada alteração — salva local e tenta enviar (com debounce). */
+  var _notifyTimer = null;
   function notifyChange() {
     app._save();
 
@@ -64,17 +65,22 @@ window.MainApp = window.MainApp || {};
     status.innerHTML = '<i class="fas fa-sync-alt fa-spin me-1"></i>Salvando...';
     status.title = 'Enviando para o servidor...';
 
-    pushData().then(function (ok) {
-      if (ok) {
-        status.className = 'badge bg-transparent border border-success x-small text-success';
-        status.innerHTML = '<i class="fas fa-cloud-check me-1"></i>Salvo';
-        status.title = 'Dados salvos no servidor e no navegador';
-      } else {
-        status.className = 'badge bg-transparent border border-warning x-small text-warning';
-        status.innerHTML = '<i class="fas fa-hdd me-1"></i>Salvo (offline)';
-        status.title = 'Servidor indisponível. Dados salvos apenas no navegador.';
-      }
-    });
+    // Debounce: aguarda 800ms de inatividade antes de enviar
+    if (_notifyTimer) clearTimeout(_notifyTimer);
+    _notifyTimer = setTimeout(function () {
+      _notifyTimer = null;
+      pushData().then(function (ok) {
+        if (ok) {
+          status.className = 'badge bg-transparent border border-success x-small text-success';
+          status.innerHTML = '<i class="fas fa-cloud-check me-1"></i>Salvo';
+          status.title = 'Dados salvos no servidor e no navegador';
+        } else {
+          status.className = 'badge bg-transparent border border-warning x-small text-warning';
+          status.innerHTML = '<i class="fas fa-hdd me-1"></i>Salvo (offline)';
+          status.title = 'Servidor indisponível. Dados salvos apenas no navegador.';
+        }
+      });
+    }, 800);
   }
 
   app.fetchData = fetchData;

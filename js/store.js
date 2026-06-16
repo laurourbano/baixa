@@ -31,7 +31,9 @@ window.MainApp = window.MainApp || {};
       order: [],
       customs: [],
       edits: {},
-      deleted: []
+      deleted: [],
+      inactive: [],
+      filterMode: 'active'
     };
   }
 
@@ -44,6 +46,11 @@ window.MainApp = window.MainApp || {};
         var existing = dashboards.find(function (d) { return d.id === tmpl.id; });
         if (existing && !existing.icon) existing.icon = tmpl.icon;
       }
+    });
+    // Garante campos novos em dashboards migrados de versões antigas
+    dashboards.forEach(function (d) {
+      if (!d.inactive) d.inactive = [];
+      if (!d.filterMode) d.filterMode = 'active';
     });
   }
 
@@ -150,7 +157,8 @@ window.MainApp = window.MainApp || {};
     var id = 'dash-' + Date.now();
     state.dashboards.push({
       id: id, name: name, icon: icon || 'fa-file-alt',
-      order: [], customs: [], edits: {}, deleted: []
+      order: [], customs: [], edits: {}, deleted: [],
+      inactive: [], filterMode: 'active'
     });
     save();
     return id;
@@ -192,6 +200,19 @@ window.MainApp = window.MainApp || {};
     save();
   }
 
+  /* ── Filtro de cards (ativo/inativo/todos) ── */
+  function setFilterMode(mode) {
+    var dash = getActiveDash();
+    if (!dash) return;
+    dash.filterMode = mode;
+    save();
+  }
+
+  function getFilterMode() {
+    var dash = getActiveDash();
+    return dash ? (dash.filterMode || 'active') : 'active';
+  }
+
   /* ── Expor API ─────────────────────────── */
   Object.defineProperty(app, '__state', { get: function () { return state; } });
 
@@ -207,6 +228,8 @@ window.MainApp = window.MainApp || {};
   app.removeDashboard = removeDashboard;
   app.reorderDashboards = reorderDashboards;
   app.setDashSortMode = setDashSortMode;
+  app.setFilterMode = setFilterMode;
+  app.getFilterMode = getFilterMode;
   app.ensureDefaultDashboards = function () { ensureDefaultDashboards(state.dashboards); };
 
 }(window.MainApp));

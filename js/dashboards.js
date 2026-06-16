@@ -432,11 +432,39 @@ window.MainApp = window.MainApp || {};
     var escapedName = (dash.name || 'Dashboard').replace(/'/g, "\\'");
     var escapedIcon = (dash.icon || 'fa-file-alt').replace(/'/g, "\\'");
     var totalDashboards = app.__state.dashboards.length;
+    var filterMode = dash.filterMode || 'active';
+
+    var filterOptions = [
+      { value: 'active',   icon: 'fa-circle-check', label: 'Ativos' },
+      { value: 'inactive', icon: 'fa-box-archive',  label: 'Inativos' },
+      { value: 'all',      icon: 'fa-layer-group',   label: 'Todos' }
+    ];
+
+    var filterHtml = '<div class="btn-group btn-group-sm dash-filter-group ms-2" role="group">';
+    filterOptions.forEach(function (opt) {
+      var isActive = filterMode === opt.value ? ' active' : '';
+      filterHtml += '<button class="btn btn-outline-secondary dash-filter-btn' + isActive + '" ' +
+        'onclick="MainApp.setFilterAndRender(\'' + opt.value + '\')" ' +
+        'title="' + opt.label + '">' +
+        '<i class="fas ' + opt.icon + ' me-1"></i>' + opt.label + '</button>';
+    });
+    filterHtml += '</div>';
 
     var html = '<div class="dash-toolbar-inner">' +
       '<span class="dash-toolbar-label"><i class="fas ' + dash.icon + ' me-2"></i>' + dash.name + '</span>' +
-      '<div class="dash-toolbar-actions">' +
-      '<button class="btn btn-sm btn-outline-primary dash-page-edit-btn" onclick="MainApp.openDashboardModal(\'rename\',\'' + escapedId + '\',\'' + escapedName + '\',\'' + escapedIcon + '\')" title="Editar nome e ícone da página">' +
+      '<div class="dash-toolbar-actions">';
+
+    // Badge de contagem
+    var activeCount = dash.customs.filter(function (c) { return dash.deleted.indexOf(c.id) === -1 && dash.inactive.indexOf(c.id) === -1; }).length;
+    var inactiveCount = dash.inactive.length;
+    html += '<span class="badge bg-secondary bg-opacity-25 text-muted x-small me-2" title="' + activeCount + ' ativos, ' + inactiveCount + ' inativos">' +
+      activeCount + ' ativo' + (activeCount !== 1 ? 's' : '') +
+      (inactiveCount > 0 ? ' / ' + inactiveCount + ' inativo' + (inactiveCount !== 1 ? 's' : '') : '') +
+      '</span>';
+
+    html += filterHtml;
+
+    html += '<button class="btn btn-sm btn-outline-primary dash-page-edit-btn ms-2" onclick="MainApp.openDashboardModal(\'rename\',\'' + escapedId + '\',\'' + escapedName + '\',\'' + escapedIcon + '\')" title="Editar nome e ícone da página">' +
       '<i class="fas fa-pen-to-square me-1"></i> Editar página</button>';
 
     if (totalDashboards > 1) {
@@ -446,6 +474,13 @@ window.MainApp = window.MainApp || {};
 
     html += '</div></div>';
     toolbar.innerHTML = html;
+  }
+
+  /** Atualiza filtro e re-renderiza (chamado pelos botões de filtro) */
+  function setFilterAndRender(mode) {
+    app.setFilterMode(mode);
+    app.render();
+    app.renderDashboardToolbar();
   }
 
   function initDashboards() {
@@ -462,6 +497,7 @@ window.MainApp = window.MainApp || {};
   app.deleteDashboardPrompt = deleteDashboardPrompt;
   app.updatePageTitle = updatePageTitle;
   app.renderDashboardToolbar = renderDashboardToolbar;
+  app.setFilterAndRender = setFilterAndRender;
   app.initDashboards = initDashboards;
   app.toggleSortMode = toggleSortMode;
 
