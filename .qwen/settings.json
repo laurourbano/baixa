@@ -32,7 +32,24 @@
       "Bash(git mv *)",
       "Bash(git pull)",
       "Bash(git show *)",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(gh *)",
+      "Bash(where *)",
+      "Bash(nvm *)",
+      "Bash(fnm *)",
+      "Bash(volta *)",
+      "computer_use__list_apps",
+      "computer_use__list_windows",
+      "computer_use__get_window_state",
+      "computer_use__scroll",
+      "computer_use__page",
+      "computer_use__click",
+      "computer_use__press_key",
+      "computer_use__zoom",
+      "Bash(git config *)",
+      "computer_use__hotkey",
+      "computer_use__bring_to_front",
+      "Bash(winget *)"
     ]
   },
   "$version": 4
