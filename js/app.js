@@ -52,7 +52,12 @@
         app.__state.activeDashboard = backend.activeDashboard || 'default';
         app.__state.dashSortMode = backend.dashSortMode || 'custom';
         app.__state.servicos = backend.servicos || {};
-        app.__state._ramais = backend._ramais || { ramais: [], orientacoes: null };
+        // Preserva ramais locais se o backend vier sem eles
+        if (backend._ramais && backend._ramais.ramais && backend._ramais.ramais.length) {
+          app.__state._ramais = backend._ramais;
+        } else if (!app.__state._ramais) {
+          app.__state._ramais = { ramais: [], orientacoes: null };
+        }
         app.__state._lastModified = backend._lastModified || Date.now();
         app.ensureDefaultDashboards();
         app._save();

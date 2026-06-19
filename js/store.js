@@ -60,6 +60,7 @@ window.MainApp = window.MainApp || {};
     activeDashboard: 'default',
     dashSortMode: 'custom',
     servicos: {},
+    _ramais: { ramais: [], orientacoes: null },
     _lastModified: 0
   };
 

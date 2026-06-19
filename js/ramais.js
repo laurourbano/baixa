@@ -266,7 +266,7 @@ window.MainApp = window.MainApp || {};
       ativo: true
     };
     state.ramais.push(novo);
-    app._save();
+    app.notifyChange();
     return novo;
   }
 
@@ -280,7 +280,7 @@ window.MainApp = window.MainApp || {};
     if (dados.setor !== undefined) r.setor = dados.setor;
     if (dados.regiao !== undefined) r.regiao = dados.regiao;
     if (dados.telefone !== undefined) r.telefone = dados.telefone;
-    app._save();
+    app.notifyChange();
     return true;
   }
 
@@ -292,7 +292,7 @@ window.MainApp = window.MainApp || {};
     }
     if (idx === -1) return false;
     state.ramais.splice(idx, 1);
-    app._save();
+    app.notifyChange();
     return true;
   }
 
@@ -301,7 +301,7 @@ window.MainApp = window.MainApp || {};
     var r = getRamalById(id);
     if (!r) return false;
     r.ativo = !r.ativo;
-    app._save();
+    app.notifyChange();
     return r.ativo;
   }
 
