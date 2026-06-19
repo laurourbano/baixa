@@ -50,7 +50,10 @@
       "computer_use__hotkey",
       "computer_use__bring_to_front",
       "Bash(winget *)",
-      "WebFetch(baixaparecer.netlify.app)"
+      "WebFetch(baixaparecer.netlify.app)",
+      "Bash(netlify *)",
+      "Bash(git *)",
+      "Bash(python *)"
     ]
   },
   "$version": 4

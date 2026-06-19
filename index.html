@@ -505,10 +505,10 @@
                             <table class="table table-sm table-dark table-hover align-middle mb-0">
                                 <thead class="table-dark sticky-top">
                                     <tr>
-                                        <th class="x-small text-muted ps-3">Nome</th>
-                                        <th class="x-small text-muted text-center" style="width:80px">Ramal</th>
-                                        <th class="x-small text-muted">Setor</th>
-                                        <th class="x-small text-muted">E-mail</th>
+                                        <th class="x-small text-muted ps-3 sortable" data-sort="nome" onclick="MainApp.sortRamais('nome')" style="cursor:pointer">Nome <i class="fas fa-sort ms-1 opacity-25"></i></th>
+                                        <th class="x-small text-muted text-center sortable" data-sort="ramal" onclick="MainApp.sortRamais('ramal')" style="cursor:pointer;width:80px">Ramal <i class="fas fa-sort ms-1 opacity-25"></i></th>
+                                        <th class="x-small text-muted sortable" data-sort="setor" onclick="MainApp.sortRamais('setor')" style="cursor:pointer">Setor <i class="fas fa-sort ms-1 opacity-25"></i></th>
+                                        <th class="x-small text-muted sortable" data-sort="email" onclick="MainApp.sortRamais('email')" style="cursor:pointer">E-mail <i class="fas fa-sort ms-1 opacity-25"></i></th>
                                         <th class="x-small text-muted text-center" style="width:65px">Status</th>
                                         <th class="x-small text-muted text-end pe-2" style="width:140px">Ações</th>
                                     </tr>

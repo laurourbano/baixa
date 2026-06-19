@@ -339,6 +339,49 @@ window.MainApp = window.MainApp || {};
 
   /* ── Render ────────────────────────────── */
   var _gruposColapsados = {};
+  var _sortColuna = 'setor';
+  var _sortDir = 'asc';
+
+  function sortRamais(coluna) {
+    if (_sortColuna === coluna) {
+      _sortDir = _sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      _sortColuna = coluna;
+      _sortDir = 'asc';
+    }
+    _updateSortIcons();
+    refreshRamais();
+  }
+
+  function _updateSortIcons() {
+    var headers = document.querySelectorAll('#view-ramais .sortable');
+    for (var i = 0; i < headers.length; i++) {
+      var h = headers[i];
+      var col = h.getAttribute('data-sort');
+      var icon = h.querySelector('i');
+      if (!icon) continue;
+      if (col === _sortColuna) {
+        icon.className = 'fas fa-sort-' + (_sortDir === 'asc' ? 'up' : 'down') + ' ms-1';
+        icon.style.opacity = '1';
+      } else {
+        icon.className = 'fas fa-sort ms-1';
+        icon.style.opacity = '0.25';
+      }
+    }
+  }
+
+  function _sortLista(lista) {
+    return lista.sort(function (a, b) {
+      var va = (a[_sortColuna] || '').toString().toLowerCase();
+      var vb = (b[_sortColuna] || '').toString().toLowerCase();
+      if (_sortColuna === 'ramal') {
+        va = va.padStart(4, '0');
+        vb = vb.padStart(4, '0');
+      }
+      var cmp = va.localeCompare(vb, 'pt-BR');
+      return _sortDir === 'asc' ? cmp : -cmp;
+    });
+  }
 
   function renderTabela(lista) {
     var tbody = document.getElementById('ramais-tbody');
@@ -359,6 +402,11 @@ window.MainApp = window.MainApp || {};
 
     var nomesSetores = Object.keys(grupos).sort(function (a, b) {
       return a.localeCompare(b, 'pt-BR');
+    });
+
+    // Ordena membros dentro de cada grupo
+    nomesSetores.forEach(function (s) {
+      grupos[s] = _sortLista(grupos[s]);
     });
 
     function rowRamal(r) {
@@ -544,7 +592,7 @@ window.MainApp = window.MainApp || {};
     var targetPane = document.getElementById('ramais-pane-' + tab);
     if (targetPane) targetPane.classList.remove('d-none');
 
-    if (tab === 'ramais') refreshRamais();
+    if (tab === 'ramais') { refreshRamais(); _updateSortIcons(); }
   }
 
   /* ── Init ──────────────────────────────── */
@@ -595,6 +643,7 @@ window.MainApp = window.MainApp || {};
   app.deleteRamalConfirm = deleteRamalConfirm;
   app.switchRamaisTab = switchRamaisTab;
   app.toggleGrupoRamais = toggleGrupoRamais;
+  app.sortRamais = sortRamais;
   app.initRamais = initRamais;
   app.refreshRamais = refreshRamais;
 
