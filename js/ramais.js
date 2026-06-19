@@ -53,128 +53,128 @@ window.MainApp = window.MainApp || {};
   /* ── Ramais iniciais (extraídos do PDF) ── */
   var RAMAIS_INICIAIS = [
     // GABINETE DA DIRETORIA
-    { nome: 'Marissol Alves', ramal: '9542', email: 'marissol.alves@crf-pr.org.br', setor: 'Gabinete da Diretoria', ativo: true },
-    { nome: 'Viviana Botega', ramal: '9553', email: 'viviana.botega@crf-pr.org.br', setor: 'Gabinete da Diretoria', ativo: true },
+    { nome: 'Marissol Alves', ramal: '9542', email: 'marissol.alves@crf-pr.org.br', departamento: 'Gabinete da Diretoria', ativo: true, subsetores: [] },
+    { nome: 'Viviana Botega', ramal: '9553', email: 'viviana.botega@crf-pr.org.br', departamento: 'Gabinete da Diretoria', ativo: true, subsetores: [] },
+    { nome: 'Nilze Muller', ramal: '9544', email: 'nilze.muller@crf-pr.org.br', departamento: 'Gabinete da Diretoria', ativo: true, subsetores: [] },
 
     // COMUNICAÇÃO E EVENTOS
-    { nome: 'Estagiário(a)', ramal: '9571', email: '', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Michelly Lemes', ramal: '9560', email: 'michelly.lemes@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Gabriele Pereira', ramal: '9590', email: 'gabriele.pereira@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Eduarda Santos', ramal: '9561', email: 'eduarda.santos@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Karoline Chuery', ramal: '9575', email: 'karoline.chuery@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Ygor Eckstein', ramal: '9592', email: 'ygor.eckstein@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Thalles Souza', ramal: '9510', email: 'thalles.souza@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Orivaldo Pinheiro', ramal: '9592', email: 'orivaldo.pinheiro@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Camila Castro', ramal: '9589', email: 'camila.castro@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Júlio Freitas', ramal: '9545', email: 'julio.freitas@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
-    { nome: 'Patrícia Shiozawa', ramal: '9501', email: 'patricia.shiozawa@crf-pr.org.br', setor: 'Comunicação e Eventos', ativo: true },
+    { nome: 'Michelly Lemes', ramal: '9560', email: 'michelly.lemes@crf-pr.org.br', departamento: 'Comunicação e Eventos', ativo: true, subsetores: [] },
+    { nome: 'Eduarda Santos', ramal: '9561', email: 'eduarda.santos@crf-pr.org.br', departamento: 'Comunicação e Eventos', ativo: true, subsetores: [] },
+    { nome: 'Ana Bruno', ramal: '9561', email: 'ana.bruno@crf-pr.org.br', departamento: 'Comunicação e Eventos', ativo: true, subsetores: [] },
 
     // GERÊNCIA GERAL
-    { nome: 'Tâmara Soares', ramal: '9607', email: 'tamara.soares@crf-pr.org.br', setor: 'Gerência Geral', ativo: true },
-    { nome: 'Talita Fernandes', ramal: '9504', email: 'talita.fernandes@crf-pr.org.br', setor: 'Gerência Geral', ativo: true },
-    { nome: 'Victoria Silva', ramal: '9507', email: 'victoria.silva@crf-pr.org.br', setor: 'Gerência Geral', ativo: true },
+    { nome: 'Edivar Gomes', ramal: '9512', email: 'edivar.gomes@crf-pr.org.br', departamento: 'Gerência Geral', ativo: true, subsetores: [] },
 
     // GERÊNCIA DE PLANEJAMENTO
-    { nome: 'Evanize Salomão', ramal: '9503', email: 'evanize.salomao@crf-pr.org.br', setor: 'Gerência de Planejamento', ativo: true },
-    { nome: 'Bruna Coutinho', ramal: '', email: 'bruna.coutinho@crf-pr.org.br', setor: 'Gerência de Planejamento', ativo: true },
-    { nome: 'Viviane Possamai', ramal: '9608', email: 'viviane.possamai@crf-pr.org.br', setor: 'Gerência de Planejamento', ativo: true },
-    { nome: 'Anne Lisboa', ramal: '9506', email: 'anne.lisboa@crf-pr.org.br', setor: 'Gerência de Planejamento', ativo: true },
+    { nome: 'Viviane Possamai', ramal: '9608', email: 'viviane.possamai@crf-pr.org.br', departamento: 'Gerência de Planejamento', ativo: true, subsetores: [] },
 
     // ATENDIMENTO
-    { nome: 'Thais Cezar', ramal: '9521', email: 'thais.cezar@crf-pr.org.br', setor: 'Atendimento', ativo: true },
-    { nome: 'Sílvia Nadal', ramal: '', email: 'silvia.nadal@crf-pr.org.br', setor: 'Atendimento', ativo: true },
-    { nome: 'Rafael Souza', ramal: '', email: 'rafael.souza@crf-pr.org.br', setor: 'Atendimento', ativo: true },
-    { nome: 'Celita Silva', ramal: '9604', email: 'celita.silva@crf-pr.org.br', setor: 'Atendimento', ativo: true },
-    { nome: 'Danilo França', ramal: '9600', email: 'danilo.franca@crf-pr.org.br', setor: 'Atendimento', ativo: true },
-    { nome: 'Matheus Silveira', ramal: '9582', email: 'matheus.silveira@crf-pr.org.br', setor: 'Atendimento', ativo: true },
-    { nome: 'Guilherme Pereira', ramal: '9533', email: 'guilherme.pereira@crf-pr.org.br', setor: 'Atendimento', ativo: true },
-    { nome: 'Helpdesk TI', ramal: '9511', email: 'helpdesk@crf-pr.org.br', setor: 'Atendimento', ativo: true },
+    { nome: 'Thais Cezar', ramal: '9917', email: 'thais.cezar@crf-pr.org.br', departamento: 'Atendimento', ativo: true, subsetores: [] },
+    { nome: 'Sílvia Nadal', ramal: '9916', email: 'silvia.nadal@crf-pr.org.br', departamento: 'Atendimento', ativo: true, subsetores: [] },
+    { nome: 'Rafael Souza', ramal: '9915', email: 'rafael.souza@crf-pr.org.br', departamento: 'Atendimento', ativo: true, subsetores: [] },
+    { nome: 'Celita Silva', ramal: '9918', email: 'celita.silva@crf-pr.org.br', departamento: 'Atendimento', ativo: true, subsetores: [] },
+
+    // TECNOLOGIA DA INFORMAÇÃO
+    { nome: 'Danilo França', ramal: '9600', email: 'danilo.franca@crf-pr.org.br', departamento: 'Tecnologia da Informação', ativo: true, subsetores: [] },
+    { nome: 'Matheus Silveira', ramal: '9582', email: 'matheus.silveira@crf-pr.org.br', departamento: 'Tecnologia da Informação', ativo: true, subsetores: [] },
+    { nome: 'Helpdesk TI', ramal: '9511', email: 'helpdesk@crf-pr.org.br', departamento: 'Tecnologia da Informação', ativo: true, subsetores: [] },
+    { nome: 'Sanderval Santos', ramal: '9599', email: 'sanderval.santos@crf-pr.org.br', departamento: 'Tecnologia da Informação', ativo: true, subsetores: [] },
+    { nome: 'Marcus Ribeiro', ramal: '9602', email: 'marcus.ribeiro@crf-pr.org.br', departamento: 'Tecnologia da Informação', ativo: true, subsetores: [] },
 
     // JURÍDICO
-    { nome: 'Nilze Muller', ramal: '', email: 'nilze.muller@crf-pr.org.br', setor: 'Jurídico', ativo: true },
-    { nome: 'Melissa Riboski', ramal: '', email: 'melissa.riboski@crf-pr.org.br', setor: 'Jurídico', ativo: true },
-    { nome: 'Vinícius Amorim', ramal: '', email: 'vinicius.amorim@crf-pr.org.br', setor: 'Jurídico', ativo: true },
-    { nome: 'Josiane Prado', ramal: '', email: 'josiane.prado@crf-pr.org.br', setor: 'Jurídico', ativo: true },
+    { nome: 'Melissa Riboski', ramal: '9570', email: 'melissa.riboski@crf-pr.org.br', departamento: 'Jurídico', ativo: true, subsetores: [] },
+    { nome: 'Vinícius Amorim', ramal: '9574', email: 'vinicius.amorim@crf-pr.org.br', departamento: 'Jurídico', ativo: true, subsetores: [] },
+    { nome: 'Josiane Prado', ramal: '9573', email: 'josiane.prado@crf-pr.org.br', departamento: 'Jurídico', ativo: true, subsetores: [] },
+    { nome: 'Estagiário', ramal: '9571', email: '', departamento: 'Jurídico', ativo: true, subsetores: [] },
 
     // FISCALIZAÇÃO
-    { nome: 'Ana Bruno', ramal: '', email: 'ana.bruno@crf-pr.org.br', setor: 'Fiscalização', ativo: true },
-    { nome: 'Tayná Lima', ramal: '', email: 'tayna.lima@crf-pr.org.br', setor: 'Fiscalização', ativo: true },
-    { nome: 'Eduardo Shikasho', ramal: '', email: 'eduardo.shikasho@crf-pr.org.br', setor: 'Fiscalização', ativo: true },
-    { nome: 'Douglas Viegas', ramal: '', email: 'douglas.viegas@crf-pr.org.br', setor: 'Fiscalização', ativo: true },
+    { nome: 'Gabriele Pereira', ramal: '9590', email: 'gabriele.pereira@crf-pr.org.br', departamento: 'Fiscalização', ativo: true, subsetores: [] },
+    { nome: 'Karoline Chuery', ramal: '9575', email: 'karoline.chuery@crf-pr.org.br', departamento: 'Fiscalização', ativo: true, subsetores: [] },
+    { nome: 'Ygor Eckstein', ramal: '9592', email: 'ygor.eckstein@crf-pr.org.br', departamento: 'Fiscalização', ativo: true, subsetores: [] },
+    { nome: 'Orivaldo Pinheiro', ramal: '9592', email: 'orivaldo.pinheiro@crf-pr.org.br', departamento: 'Fiscalização', ativo: true, subsetores: [] },
+    { nome: 'Eduardo Shikasho', ramal: '9548', email: 'eduardo.shikasho@crf-pr.org.br', departamento: 'Fiscalização', ativo: true, subsetores: [] },
+    { nome: 'Douglas Viegas', ramal: '9594', email: 'douglas.viegas@crf-pr.org.br', departamento: 'Fiscalização', ativo: true, subsetores: [] },
 
     // CADASTRO
-    { nome: 'Flávia Chaves', ramal: '', email: 'flavia.chaves@crf-pr.org.br', setor: 'Cadastro', ativo: true },
-    { nome: 'Luiz Moreira', ramal: '', email: 'luiz.moreira@crf-pr.org.br', setor: 'Cadastro', ativo: true },
-    { nome: 'Melany Ribeiro', ramal: '', email: 'melany.ribeiro@crf-pr.org.br', setor: 'Cadastro', ativo: true },
-    { nome: 'Lourdes Pini', ramal: '', email: 'lourdes.pini@crf-pr.org.br', setor: 'Cadastro', ativo: true },
-    { nome: 'Rejane Ciupka', ramal: '', email: 'rejane.ciupka@crf-pr.org.br', setor: 'Cadastro', ativo: true },
-    { nome: 'Lauro Urbano', ramal: '', email: 'lauro.urbano@crf-pr.org.br', setor: 'Cadastro', ativo: true },
+    { nome: 'Thalles Souza', ramal: '9909', email: 'thalles.souza@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Júlio Freitas', ramal: '9906', email: 'julio.freitas@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Patrícia Shiozawa', ramal: '9901', email: 'patricia.shiozawa@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Tâmara Soares', ramal: '9903', email: 'tamara.soares@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Talita Fernandes', ramal: '9904', email: 'talita.fernandes@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Victoria Silva', ramal: '9913', email: 'victoria.silva@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Evanize Salomão', ramal: '9905', email: 'evanize.salomao@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Bruna Coutinho', ramal: '9910', email: 'bruna.coutinho@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Anne Lisboa', ramal: '9911', email: 'anne.lisboa@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Flávia Chaves', ramal: '9900', email: 'flavia.chaves@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Luiz Moreira', ramal: '9914', email: 'luiz.moreira@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Melany Ribeiro', ramal: '9902', email: 'melany.ribeiro@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Lourdes Pini', ramal: '9912', email: 'lourdes.pini@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Rejane Ciupka', ramal: '9908', email: 'rejane.ciupka@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [] },
+    { nome: 'Lauro Urbano', ramal: '9907', email: 'lauro.urbano@crf-pr.org.br', departamento: 'Cadastro', ativo: true, subsetores: [], regiao: 'Curitiba' },
 
     // FINANCEIRO
-    { nome: 'Cristiane Bregenski', ramal: '', email: 'cristiane.bregenski@crf-pr.org.br', setor: 'Financeiro', ativo: true },
-    { nome: 'Maria Isabel Capel', ramal: '', email: 'maria.capel@crf-pr.org.br', setor: 'Financeiro', ativo: true },
-    { nome: 'Edivar Gomes', ramal: '', email: 'edivar.gomes@crf-pr.org.br', setor: 'Financeiro', ativo: true },
+    { nome: 'Cristiane Bregenski', ramal: '', email: 'cristiane.bregenski@crf-pr.org.br', departamento: 'Financeiro', ativo: true, subsetores: [] },
+    { nome: 'Maria Isabel Capel', ramal: '', email: 'maria.capel@crf-pr.org.br', departamento: 'Financeiro', ativo: true, subsetores: [] },
 
     // COBRANÇA
-    { nome: 'Sérgio Freitas', ramal: '', email: 'sergio.freitas@crf-pr.org.br', setor: 'Cobrança', ativo: true },
-    { nome: 'Nilza Severo', ramal: '', email: 'nilza.severo@crf-pr.org.br', setor: 'Cobrança', ativo: true },
-    { nome: 'Sanderval Santos', ramal: '', email: 'sanderval.santos@crf-pr.org.br', setor: 'Cobrança', ativo: true },
-    { nome: 'Marcus Ribeiro', ramal: '', email: 'marcus.ribeiro@crf-pr.org.br', setor: 'Cobrança', ativo: true },
+    { nome: 'Guilherme Pereira', ramal: '9533', email: 'guilherme.pereira@crf-pr.org.br', departamento: 'Cobrança', ativo: true, subsetores: [] },
+    { nome: 'Sérgio Freitas', ramal: '9532', email: 'sergio.freitas@crf-pr.org.br', departamento: 'Cobrança', ativo: true, subsetores: [] },
+    { nome: 'Nilza Severo', ramal: '9531', email: 'nilza.severo@crf-pr.org.br', departamento: 'Cobrança', ativo: true, subsetores: [] },
 
     // TÉCNICO-CIENTÍFICO
-    { nome: 'Jackson Rapkiewicz', ramal: '', email: 'jackson.rapkiewicz@crf-pr.org.br', setor: 'Técnico-Científico', ativo: true },
-    { nome: 'Rafaela Grobe', ramal: '', email: 'rafaela.grobe@crf-pr.org.br', setor: 'Técnico-Científico', ativo: true },
-    { nome: 'Karin Zaros', ramal: '', email: 'karin.zaros@crf-pr.org.br', setor: 'Técnico-Científico', ativo: true },
+    { nome: 'Jackson Rapkiewicz', ramal: '9581', email: 'jackson.rapkiewicz@crf-pr.org.br', departamento: 'Técnico-Científico', ativo: true, subsetores: [] },
+    { nome: 'Rafaela Grobe', ramal: '9580', email: 'rafaela.grobe@crf-pr.org.br', departamento: 'Técnico-Científico', ativo: true, subsetores: [] },
+    { nome: 'Karin Zaros', ramal: '9565', email: 'karin.zaros@crf-pr.org.br', departamento: 'Técnico-Científico', ativo: true, subsetores: [] },
 
     // LICITAÇÃO
-    { nome: 'Ana Carolina', ramal: '9569', email: '', setor: 'Licitação', ativo: true },
+    { nome: 'Ana Souza', ramal: '9569', email: 'ana.souza@crf-pr.org.br', departamento: 'Licitação', ativo: true, subsetores: [] },
 
     // COMPRAS
-    { nome: 'Dalton Lemos', ramal: '9535', email: 'dalton.lemos@crf-pr.org.br', setor: 'Compras', ativo: true },
-    { nome: 'Arindal Junior', ramal: '9603', email: 'arindal.junior@crf-pr.org.br', setor: 'Compras', ativo: true },
-    { nome: 'Hennir Condore', ramal: '', email: 'hennir.condore@crf-pr.org.br', setor: 'Compras', ativo: true },
-    { nome: 'Rodrigo Campilho', ramal: '9586', email: 'rodrigo.campilho@crf-pr.org.br', setor: 'Compras', ativo: true },
-    { nome: 'Sara Marasca', ramal: '', email: 'sara.marasca@crf-pr.org.br', setor: 'Compras', ativo: true },
+    { nome: 'Dalton Lemos', ramal: '9535', email: 'dalton.lemos@crf-pr.org.br', departamento: 'Compras', ativo: true, subsetores: [] },
+    { nome: 'Arindal Junior', ramal: '9603', email: 'arindal.junior@crf-pr.org.br', departamento: 'Compras', ativo: true, subsetores: [] },
+    { nome: 'Hennir Condore', ramal: '', email: 'hennir.condore@crf-pr.org.br', departamento: 'Compras', ativo: true, subsetores: [] },
+    { nome: 'Rodrigo Campilho', ramal: '9586', email: 'rodrigo.campilho@crf-pr.org.br', departamento: 'Compras', ativo: true, subsetores: [] },
+    { nome: 'Sara Marasca', ramal: '', email: 'sara.marasca@crf-pr.org.br', departamento: 'Compras', ativo: true, subsetores: [] },
 
     // DIRETORIA
-    { nome: 'Valquires Godoy', ramal: '', email: 'valquires.godoy@crf-pr.org.br', setor: 'Diretoria', ativo: true },
-    { nome: 'Márcio Antoniassi', ramal: '', email: 'marcio.antoniassi@crf-pr.org.br', setor: 'Diretoria', ativo: true },
-    { nome: 'Ana Sakashita', ramal: '', email: 'ana.sakashita@crf-pr.org.br', setor: 'Diretoria', ativo: true },
-    { nome: 'Graziela Guidolin', ramal: '9568', email: 'graziela.guidolin@crf-pr.org.br', setor: 'Diretoria', ativo: true },
+    { nome: 'Valquires Godoy', ramal: '', email: 'valquires.godoy@crf-pr.org.br', departamento: 'Diretoria', ativo: true, subsetores: [] },
+    { nome: 'Márcio Antoniassi', ramal: '', email: 'marcio.antoniassi@crf-pr.org.br', departamento: 'Diretoria', ativo: true, subsetores: [] },
+    { nome: 'Ana Sakashita', ramal: '', email: 'ana.sakashita@crf-pr.org.br', departamento: 'Diretoria', ativo: true, subsetores: [] },
+    { nome: 'Graziela Guidolin', ramal: '', email: 'graziela.guidolin@crf-pr.org.br', departamento: 'Diretoria', ativo: true, subsetores: [] },
 
     // ÉTICA
-    { nome: 'Fernanda Penteado', ramal: '', email: 'fernanda.penteado@crf-pr.org.br', setor: 'Ética', ativo: true },
-    { nome: 'Edneia Magri', ramal: '', email: 'edneia.magri@crf-pr.org.br', setor: 'Ética', ativo: true },
+    { nome: 'Fernanda Penteado', ramal: '', email: 'fernanda.penteado@crf-pr.org.br', departamento: 'Ética', ativo: true, subsetores: [] },
+    { nome: 'Edneia Magri', ramal: '', email: 'edneia.magri@crf-pr.org.br', departamento: 'Ética', ativo: true, subsetores: [] },
 
     // PESSOAL
-    { nome: 'Ana Cláudia Pereira', ramal: '', email: 'ana.pereira@crf-pr.org.br', setor: 'Pessoal', ativo: true },
-    { nome: 'Marcel Michalski', ramal: '9547', email: 'marcel.michalski@crf-pr.org.br', setor: 'Pessoal', ativo: true },
-    { nome: 'Ana Souza', ramal: '', email: 'ana.souza@crf-pr.org.br', setor: 'Pessoal', ativo: true },
+    { nome: 'Ana Cláudia Pereira', ramal: '9545', email: 'ana.pereira@crf-pr.org.br', departamento: 'Pessoal', ativo: true, subsetores: [] },
+    { nome: 'Marcel Michalski', ramal: '9547', email: 'marcel.michalski@crf-pr.org.br', departamento: 'Pessoal', ativo: true, subsetores: [] },
 
     // FISCAIS
-    { nome: 'Eduardo Freitas', ramal: '', email: 'eduardo.freitas@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Curitiba' },
-    { nome: 'Edson Garcia', ramal: '', email: 'edson.garcia@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Londrina' },
-    { nome: 'Daiane Perondi', ramal: '', email: 'daiane.perondi@crf-pr.org.br', setor: 'Fiscais', ativo: true },
-    { nome: 'Luciano Gonçalves', ramal: '', email: 'luciano.goncalves@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Maringá' },
-    { nome: 'Marcelo Polak', ramal: '', email: 'marcelo.polak@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Curitiba' },
-    { nome: 'Nayana Banhara', ramal: '', email: 'nayana.banhara@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Curitiba' },
-    { nome: 'Ribamar Schmitz', ramal: '', email: 'ribamar.schmitz@crf-pr.org.br', setor: 'Fiscais', ativo: true },
-    { nome: 'Paulo Marchesini', ramal: '', email: 'paulo.marchesini@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Maringá' },
-    { nome: 'Débora Yoshizawa', ramal: '', email: 'debora.yoshizawa@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Ponta Grossa' },
-    { nome: 'Edson Alves', ramal: '', email: 'edson.alves@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Cascavel' },
-    { nome: 'Welinson Silva', ramal: '', email: 'welison.silva@crf-pr.org.br', setor: 'Fiscais', ativo: true },
-    { nome: 'Elias Montin', ramal: '', email: 'elias.montin@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Curitiba' },
-    { nome: 'Eduardo Pazim', ramal: '', email: 'eduardo.pazim@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Curitiba' },
-    { nome: 'Josineia Baum', ramal: '', email: 'josineia.baum@crf-pr.org.br', setor: 'Fiscais', ativo: true, regiao: 'Norte Pioneiro' },
+    { nome: 'Tayná Lima', ramal: '', email: 'tayna.lima@crf-pr.org.br', departamento: 'Fiscais', ativo: true, subsetores: [] },
+    { nome: 'Eduardo Freitas', ramal: '', email: 'eduardo.freitas@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Curitiba', subsetores: [] },
+    { nome: 'Edson Garcia', ramal: '', email: 'edson.garcia@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Londrina', subsetores: [] },
+    { nome: 'Daiane Perondi', ramal: '', email: 'daiane.perondi@crf-pr.org.br', departamento: 'Fiscais', ativo: true, subsetores: [] },
+    { nome: 'Luciano Gonçalves', ramal: '', email: 'luciano.goncalves@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Maringá', subsetores: [] },
+    { nome: 'Marcelo Polak', ramal: '', email: 'marcelo.polak@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Curitiba', subsetores: [] },
+    { nome: 'Nayana Banhara', ramal: '', email: 'nayana.banhara@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Curitiba', subsetores: [] },
+    { nome: 'Ribamar Schmitz', ramal: '', email: 'ribamar.schmitz@crf-pr.org.br', departamento: 'Fiscais', ativo: true, subsetores: [] },
+    { nome: 'Paulo Marchesini', ramal: '', email: 'paulo.marchesini@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Maringá', subsetores: [] },
+    { nome: 'Débora Yoshizawa', ramal: '', email: 'debora.yoshizawa@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Ponta Grossa', subsetores: [] },
+    { nome: 'Edson Alves', ramal: '', email: 'edson.alves@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Cascavel', subsetores: [] },
+    { nome: 'Welinson Silva', ramal: '', email: 'welison.silva@crf-pr.org.br', departamento: 'Fiscais', ativo: true, subsetores: [] },
+    { nome: 'Elias Montin', ramal: '', email: 'elias.montin@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Curitiba', subsetores: [] },
+    { nome: 'Eduardo Pazim', ramal: '', email: 'eduardo.pazim@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Curitiba', subsetores: [] },
+    { nome: 'Josineia Baum', ramal: '', email: 'josineia.baum@crf-pr.org.br', departamento: 'Fiscais', ativo: true, regiao: 'Norte Pioneiro', subsetores: [] },
 
     // SECCIONAIS
-    { nome: 'Seccional Cascavel', ramal: '', email: 'cascavel@crf-pr.org.br', setor: 'Seccionais', ativo: true, telefone: '(41) 99838-0880' },
-    { nome: 'Seccional Londrina', ramal: '', email: 'londrina@crf-pr.org.br', setor: 'Seccionais', ativo: true, telefone: '(41) 99838-0660' },
-    { nome: 'Seccional Ponta Grossa', ramal: '', email: 'pontagrossa@crf-pr.org.br', setor: 'Seccionais', ativo: true, telefone: '(41) 99838-0550' },
-    { nome: 'Seccional Maringá', ramal: '', email: 'maringa@crf-pr.org.br', setor: 'Seccionais', ativo: true, telefone: '(41) 99838-0770' },
+    { nome: 'Seccional Cascavel', ramal: '', email: 'cascavel@crf-pr.org.br', departamento: 'Seccionais', ativo: true, telefone: '(41) 99838-0880', subsetores: [] },
+    { nome: 'Seccional Londrina', ramal: '', email: 'londrina@crf-pr.org.br', departamento: 'Seccionais', ativo: true, telefone: '(41) 99838-0660', subsetores: [] },
+    { nome: 'Seccional Ponta Grossa', ramal: '', email: 'pontagrossa@crf-pr.org.br', departamento: 'Seccionais', ativo: true, telefone: '(41) 99838-0550', subsetores: [] },
+    { nome: 'Seccional Maringá', ramal: '', email: 'maringa@crf-pr.org.br', departamento: 'Seccionais', ativo: true, telefone: '(41) 99838-0770', subsetores: [] },
 
     // COPA
-    { nome: 'Copa', ramal: '9578', email: '', setor: 'Copa', ativo: true }
+    { nome: 'Copa', ramal: '9578', email: '', departamento: 'Copa', ativo: true, subsetores: [] }
   ];
 
   /* ── Estado ────────────────────────────── */
@@ -187,6 +187,26 @@ window.MainApp = window.MainApp || {};
 
   function ensureInicial() {
     var state = getState();
+    // Migração: converte dados antigos (setor → departamento, adiciona subsetores)
+    if (state.ramais && state.ramais.length > 0) {
+      var migrou = false;
+      state.ramais.forEach(function (r) {
+        if (r.setor !== undefined && r.departamento === undefined) {
+          r.departamento = r.setor;
+          delete r.setor;
+          migrou = true;
+        }
+        if (r.subsetores === undefined) {
+          r.subsetores = [];
+          migrou = true;
+        }
+      });
+      if (migrou) {
+        // Backup automático no localStorage antes da migração
+        try { localStorage.setItem('baixa_rt_data_backup_pre_departamento', JSON.stringify(state)); } catch (e) {}
+        app._save();
+      }
+    }
     if (!state.ramais || state.ramais.length === 0) {
       state.ramais = RAMAIS_INICIAIS.map(function (r, i) {
         return Object.assign({}, r, { id: 'ramal-' + (i + 1) });
@@ -233,16 +253,35 @@ window.MainApp = window.MainApp || {};
     return ramaisComDuplicados();
   }
 
-  function getSetores() {
+  function getDepartamentos() {
     ensureInicial();
     var state = getState();
-    var setores = {};
+    var depts = {};
     state.ramais.forEach(function (r) {
-      if (r.setor) setores[r.setor] = true;
+      if (r.departamento) depts[r.departamento] = true;
     });
-    return Object.keys(setores).sort(function (a, b) {
+    return Object.keys(depts).sort(function (a, b) {
       return a.localeCompare(b, 'pt-BR');
     });
+  }
+
+  function getSubsetores() {
+    ensureInicial();
+    var state = getState();
+    var subs = {};
+    state.ramais.forEach(function (r) {
+      if (r.subsetores && r.subsetores.length) {
+        r.subsetores.forEach(function (s) { if (s) subs[s] = true; });
+      }
+    });
+    return Object.keys(subs).sort(function (a, b) {
+      return a.localeCompare(b, 'pt-BR');
+    });
+  }
+
+  // Alias para compatibilidade com código externo
+  function getSetores() {
+    return getDepartamentos();
   }
 
   function getRamalById(id) {
@@ -260,7 +299,8 @@ window.MainApp = window.MainApp || {};
       nome: dados.nome || '',
       ramal: dados.ramal || '',
       email: dados.email || '',
-      setor: dados.setor || '',
+      departamento: dados.departamento || '',
+      subsetores: dados.subsetores || [],
       regiao: dados.regiao || '',
       telefone: dados.telefone || '',
       ativo: true
@@ -277,7 +317,8 @@ window.MainApp = window.MainApp || {};
     if (dados.nome !== undefined) r.nome = dados.nome;
     if (dados.ramal !== undefined) r.ramal = dados.ramal;
     if (dados.email !== undefined) r.email = dados.email;
-    if (dados.setor !== undefined) r.setor = dados.setor;
+    if (dados.departamento !== undefined) r.departamento = dados.departamento;
+    if (dados.subsetores !== undefined) r.subsetores = dados.subsetores;
     if (dados.regiao !== undefined) r.regiao = dados.regiao;
     if (dados.telefone !== undefined) r.telefone = dados.telefone;
     app.notifyChange();
@@ -306,11 +347,11 @@ window.MainApp = window.MainApp || {};
   }
 
   /* ── Busca / Filtro ────────────────────── */
-  function filtrarRamais(termo, setor, somenteAtivos) {
+  function filtrarRamais(termo, departamento, somenteAtivos) {
     var lista = ramaisComDuplicados();
 
-    if (setor && setor !== 'todos') {
-      lista = lista.filter(function (r) { return r.setor === setor; });
+    if (departamento && departamento !== 'todos') {
+      lista = lista.filter(function (r) { return r.departamento === departamento; });
     }
 
     if (somenteAtivos) {
@@ -320,11 +361,15 @@ window.MainApp = window.MainApp || {};
     if (termo && termo.length >= 3) {
       var t = termo.toLowerCase();
       lista = lista.filter(function (r) {
+        var matchSub = r.subsetores && r.subsetores.some(function (s) {
+          return s.toLowerCase().indexOf(t) !== -1;
+        });
         return (r.nome && r.nome.toLowerCase().indexOf(t) !== -1) ||
                (r.ramal && r.ramal.indexOf(t) !== -1) ||
                (r.email && r.email.toLowerCase().indexOf(t) !== -1) ||
-               (r.setor && r.setor.toLowerCase().indexOf(t) !== -1) ||
-               (r.regiao && r.regiao.toLowerCase().indexOf(t) !== -1);
+               (r.departamento && r.departamento.toLowerCase().indexOf(t) !== -1) ||
+               (r.regiao && r.regiao.toLowerCase().indexOf(t) !== -1) ||
+               matchSub;
       });
     }
 
@@ -339,7 +384,7 @@ window.MainApp = window.MainApp || {};
 
   /* ── Render ────────────────────────────── */
   var _gruposColapsados = {};
-  var _sortColuna = 'setor';
+  var _sortColuna = 'departamento';
   var _sortDir = 'asc';
 
   function sortRamais(coluna) {
@@ -392,20 +437,20 @@ window.MainApp = window.MainApp || {};
       return;
     }
 
-    // Agrupa por setor
+    // Agrupa por departamento
     var grupos = {};
     lista.forEach(function (r) {
-      var s = r.setor || 'Sem setor';
+      var s = r.departamento || 'Sem departamento';
       if (!grupos[s]) grupos[s] = [];
       grupos[s].push(r);
     });
 
-    var nomesSetores = Object.keys(grupos).sort(function (a, b) {
+    var nomesDepts = Object.keys(grupos).sort(function (a, b) {
       return a.localeCompare(b, 'pt-BR');
     });
 
     // Ordena membros dentro de cada grupo
-    nomesSetores.forEach(function (s) {
+    nomesDepts.forEach(function (s) {
       grupos[s] = _sortLista(grupos[s]);
     });
 
@@ -418,10 +463,15 @@ window.MainApp = window.MainApp || {};
         ? ' <i class="fas fa-circle text-warning opacity-50 ms-1" title="Ramal compartilhado" style="font-size:0.4rem"></i>'
         : '';
 
-      return '<tr class="ramal-row" data-setor="' + esc(r.setor) + '" data-id="' + r.id + '">' +
-        '<td class="small ps-3">' + esc(r.nome) + '</td>' +
+      var subsetoresHtml = '';
+      if (r.subsetores && r.subsetores.length > 0) {
+        subsetoresHtml = '<br><span class="x-small text-info">' + esc(r.subsetores.join(', ')) + '</span>';
+      }
+
+      return '<tr class="ramal-row" data-departamento="' + esc(r.departamento) + '" data-id="' + r.id + '">' +
+        '<td class="small ps-3">' + esc(r.nome) + subsetoresHtml + '</td>' +
         '<td class="text-center fw-bold">' + esc(r.ramal) + dupIcon + '</td>' +
-        '<td class="small">' + esc(r.setor) + (r.regiao ? ' <span class="text-muted">(' + esc(r.regiao) + ')</span>' : '') + '</td>' +
+        '<td class="small">' + esc(r.departamento) + (r.regiao ? ' <span class="text-muted">(' + esc(r.regiao) + ')</span>' : '') + '</td>' +
         '<td class="small text-muted">' + (r.email ? '<a href="mailto:' + esc(r.email) + '" class="text-decoration-none">' + esc(r.email) + '</a>' : '') + '</td>' +
         '<td class="text-center">' + statusBadge + '</td>' +
         '<td class="text-end pe-2">' +
@@ -433,15 +483,15 @@ window.MainApp = window.MainApp || {};
     }
 
     var html = '';
-    nomesSetores.forEach(function (setor) {
-      var membros = grupos[setor];
-      var colapsado = _gruposColapsados[setor] || false;
+    nomesDepts.forEach(function (dept) {
+      var membros = grupos[dept];
+      var colapsado = _gruposColapsados[dept] || false;
       var icon = colapsado ? 'fa-chevron-right' : 'fa-chevron-down';
 
-      html += '<tr class="ramal-grupo-header" data-setor="' + esc(setor) + '" onclick="MainApp.toggleGrupoRamais(\'' + esc(setor) + '\')" style="cursor:pointer;background:rgba(255,255,255,0.03)">' +
+      html += '<tr class="ramal-grupo-header" data-departamento="' + esc(dept) + '" onclick="MainApp.toggleGrupoRamais(\'' + esc(dept) + '\')" style="cursor:pointer;background:rgba(255,255,255,0.03)">' +
         '<td colspan="6" class="small fw-bold text-info py-2 ps-3">' +
           '<i class="fas ' + icon + ' me-2" style="font-size:0.65rem"></i>' +
-          esc(setor) + ' <span class="text-muted fw-normal">(' + membros.length + ')</span>' +
+          esc(dept) + ' <span class="text-muted fw-normal">(' + membros.length + ')</span>' +
         '</td>' +
       '</tr>';
 
@@ -455,24 +505,24 @@ window.MainApp = window.MainApp || {};
     tbody.innerHTML = html;
   }
 
-  function renderSetorFilter() {
-    var select = document.getElementById('ramal-filtro-setor');
+  function renderDepartamentoFilter() {
+    var select = document.getElementById('ramal-filtro-departamento');
     if (!select) return;
-    var setores = getSetores();
+    var depts = getDepartamentos();
     var atual = select.value;
-    select.innerHTML = '<option value="todos">Todos os setores</option>' +
-      setores.map(function (s) {
+    select.innerHTML = '<option value="todos">Todos os departamentos</option>' +
+      depts.map(function (s) {
         return '<option value="' + esc(s) + '"' + (atual === s ? ' selected' : '') + '>' + esc(s) + '</option>';
       }).join('');
   }
 
   function refreshRamais() {
     var termo = document.getElementById('ramal-busca');
-    var setor = document.getElementById('ramal-filtro-setor');
+    var dept = document.getElementById('ramal-filtro-departamento');
     var ativos = document.getElementById('ramal-filtro-ativos');
 
     var t = termo ? termo.value : '';
-    var s = setor ? setor.value : 'todos';
+    var s = dept ? dept.value : 'todos';
     var a = ativos ? ativos.checked : false;
 
     var lista = filtrarRamais(t, s, a);
@@ -484,17 +534,84 @@ window.MainApp = window.MainApp || {};
     }
 
     renderTabela(lista);
-    renderSetorFilter();
+    renderDepartamentoFilter();
   }
 
-  function toggleGrupoRamais(setor) {
-    _gruposColapsados[setor] = !_gruposColapsados[setor];
+  function toggleGrupoRamais(dept) {
+    _gruposColapsados[dept] = !_gruposColapsados[dept];
     refreshRamais();
   }
 
   function esc(str) {
     if (!str) return '';
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ── Restauração de backup ─────────────── */
+  function restaurarBackup() {
+    try {
+      var raw = localStorage.getItem('baixa_rt_data_backup_pre_departamento');
+      if (!raw) { app.showToast('Nenhum backup encontrado.', 'warning'); return false; }
+      var backup = JSON.parse(raw);
+      if (!backup || !backup.ramais || !backup.ramais.length) { app.showToast('Backup vazio ou inválido.', 'warning'); return false; }
+      // Migra o backup também (setor → departamento)
+      backup.ramais.forEach(function (r) {
+        if (r.setor !== undefined && r.departamento === undefined) { r.departamento = r.setor; delete r.setor; }
+        if (r.subsetores === undefined) { r.subsetores = []; }
+      });
+      var state = getState();
+      state.ramais = backup.ramais;
+      state.orientacoes = backup.orientacoes || ORIENTACOES_DEFAULT;
+      app._save();
+      app.notifyChange();
+      refreshRamais();
+      app.showToast('Backup restaurado! ' + backup.ramais.length + ' ramais recuperados.', 'success');
+      return true;
+    } catch (e) {
+      app.showToast('Erro ao restaurar backup: ' + e.message, 'danger');
+      return false;
+    }
+  }
+
+  /* ── Sincronização com servidor ────────── */
+  function syncServer() {
+    app.showToast('Puxando dados do servidor...', 'info');
+    app.fetchData().then(function (backend) {
+      if (backend && backend._ramais && backend._ramais.ramais && backend._ramais.ramais.length) {
+        app.__state._ramais = backend._ramais;
+        app.__state._ramais.ramais.forEach(function (r) {
+          if (r.setor !== undefined && r.departamento === undefined) { r.departamento = r.setor; delete r.setor; }
+          if (r.subsetores === undefined) { r.subsetores = []; }
+        });
+        app._save();
+        app.notifyChange();
+        refreshRamais();
+        app.showToast('Sincronizado! ' + backend._ramais.ramais.length + ' ramais do servidor.', 'success');
+      } else {
+        app.showToast('Servidor sem dados de ramais.', 'warning');
+      }
+    }).catch(function () {
+      app.showToast('Erro ao conectar com o servidor.', 'danger');
+    });
+  }
+
+  /* ── Datalist helpers ──────────────────── */
+  function populaDatalistDepartamentos() {
+    var dl = document.getElementById('ramal-departamentos-list');
+    if (!dl) return;
+    var depts = getDepartamentos();
+    dl.innerHTML = depts.map(function (d) {
+      return '<option value="' + esc(d) + '">';
+    }).join('');
+  }
+
+  function populaDatalistSubsetores() {
+    var dl = document.getElementById('ramal-subsetores-list');
+    if (!dl) return;
+    var subs = getSubsetores();
+    dl.innerHTML = subs.map(function (s) {
+      return '<option value="' + esc(s) + '">';
+    }).join('');
   }
 
   /* ── Modal handlers ────────────────────── */
@@ -506,9 +623,13 @@ window.MainApp = window.MainApp || {};
     document.getElementById('ramal-nome').value = '';
     document.getElementById('ramal-numero').value = '';
     document.getElementById('ramal-email').value = '';
-    document.getElementById('ramal-setor').value = '';
+    document.getElementById('ramal-departamento').value = '';
+    document.getElementById('ramal-subsetores').value = '';
     document.getElementById('ramal-regiao').value = '';
     document.getElementById('ramal-telefone').value = '';
+    // Popula datalists
+    populaDatalistDepartamentos();
+    populaDatalistSubsetores();
     var bsModal = bootstrap.Modal.getOrCreateInstance(modal);
     bsModal.show();
   }
@@ -523,20 +644,26 @@ window.MainApp = window.MainApp || {};
     document.getElementById('ramal-nome').value = r.nome || '';
     document.getElementById('ramal-numero').value = r.ramal || '';
     document.getElementById('ramal-email').value = r.email || '';
-    document.getElementById('ramal-setor').value = r.setor || '';
+    document.getElementById('ramal-departamento').value = r.departamento || '';
+    document.getElementById('ramal-subsetores').value = (r.subsetores || []).join(', ');
     document.getElementById('ramal-regiao').value = r.regiao || '';
     document.getElementById('ramal-telefone').value = r.telefone || '';
+    populaDatalistDepartamentos();
+    populaDatalistSubsetores();
     var bsModal = bootstrap.Modal.getOrCreateInstance(modal);
     bsModal.show();
   }
 
   function saveRamal() {
     var id = document.getElementById('ramal-modal-id').value;
+    var subsetoresRaw = document.getElementById('ramal-subsetores').value.trim();
+    var subsetores = subsetoresRaw ? subsetoresRaw.split(',').map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; }) : [];
     var dados = {
       nome: document.getElementById('ramal-nome').value.trim(),
       ramal: document.getElementById('ramal-numero').value.trim(),
       email: document.getElementById('ramal-email').value.trim(),
-      setor: document.getElementById('ramal-setor').value.trim(),
+      departamento: document.getElementById('ramal-departamento').value.trim(),
+      subsetores: subsetores,
       regiao: document.getElementById('ramal-regiao').value.trim(),
       telefone: document.getElementById('ramal-telefone').value.trim()
     };
@@ -611,10 +738,10 @@ window.MainApp = window.MainApp || {};
       });
     }
 
-    // Filtro por setor
-    var setorSelect = document.getElementById('ramal-filtro-setor');
-    if (setorSelect) {
-      setorSelect.addEventListener('change', refreshRamais);
+    // Filtro por departamento
+    var deptSelect = document.getElementById('ramal-filtro-departamento');
+    if (deptSelect) {
+      deptSelect.addEventListener('change', refreshRamais);
     }
 
     // Filtro somente ativos
@@ -629,6 +756,8 @@ window.MainApp = window.MainApp || {};
   /* ── Expor API ─────────────────────────── */
   app.getRamais = getRamais;
   app.getSetores = getSetores;
+  app.getDepartamentos = getDepartamentos;
+  app.getSubsetores = getSubsetores;
   app.getRamalById = getRamalById;
   app.addRamal = addRamal;
   app.updateRamal = updateRamal;
@@ -646,5 +775,7 @@ window.MainApp = window.MainApp || {};
   app.sortRamais = sortRamais;
   app.initRamais = initRamais;
   app.refreshRamais = refreshRamais;
+  app.restaurarBackup = restaurarBackup;
+  app.syncServer = syncServer;
 
 }(window.MainApp));

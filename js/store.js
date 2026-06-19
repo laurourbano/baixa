@@ -81,6 +81,24 @@ window.MainApp = window.MainApp || {};
       state.dashSortMode = parsed.dashSortMode || 'custom';
       state.servicos = parsed.servicos || {};
       state._ramais = parsed._ramais || { ramais: [], orientacoes: null };
+      // Migração: setor → departamento + subsetores
+      if (state._ramais.ramais && state._ramais.ramais.length) {
+        var migrou = false;
+        state._ramais.ramais.forEach(function (r) {
+          if (r.setor !== undefined && r.departamento === undefined) {
+            r.departamento = r.setor;
+            delete r.setor;
+            migrou = true;
+          }
+          if (r.subsetores === undefined) {
+            r.subsetores = [];
+            migrou = true;
+          }
+        });
+        if (migrou) {
+          try { localStorage.setItem('baixa_rt_data_backup_pre_departamento', raw); } catch (e) {}
+        }
+      }
       state._lastModified = parsed._lastModified || Date.now();
       ensureDefaultDashboards(state.dashboards);
       save();

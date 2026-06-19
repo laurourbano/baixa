@@ -55,6 +55,11 @@
         // Preserva ramais locais se o backend vier sem eles
         if (backend._ramais && backend._ramais.ramais && backend._ramais.ramais.length) {
           app.__state._ramais = backend._ramais;
+          // Migração: setor → departamento + subsetores
+          app.__state._ramais.ramais.forEach(function (r) {
+            if (r.setor !== undefined && r.departamento === undefined) { r.departamento = r.setor; delete r.setor; }
+            if (r.subsetores === undefined) { r.subsetores = []; }
+          });
         } else if (!app.__state._ramais) {
           app.__state._ramais = { ramais: [], orientacoes: null };
         }
@@ -72,11 +77,29 @@
       dataSource = loaded ? 'localStorage' : 'default';
     }
 
-    // 3. Se carregou do localStorage, tenta enviar para o backend
+    // 3. Se carregou do localStorage, tenta sincronizar com o backend
     if (dataSource === 'localStorage') {
       app.pushData().then(function (ok) {
-        if (ok) dataSource = 'api';
-        app._updateStatusIndicator(dataSource);
+        if (ok) {
+          // Puxa ramais do servidor para sobrescrever os locais (servidor é fonte da verdade)
+          app.fetchData().then(function (backend) {
+            if (backend && backend._ramais && backend._ramais.ramais && backend._ramais.ramais.length) {
+              app.__state._ramais = backend._ramais;
+              // Migração
+              app.__state._ramais.ramais.forEach(function (r) {
+                if (r.setor !== undefined && r.departamento === undefined) { r.departamento = r.setor; delete r.setor; }
+                if (r.subsetores === undefined) { r.subsetores = []; }
+              });
+              app._save();
+              if (app.refreshRamais) app.refreshRamais();
+            }
+            dataSource = 'api';
+            app._updateStatusIndicator(dataSource);
+          }).catch(function () {
+            dataSource = 'api';
+            app._updateStatusIndicator(dataSource);
+          });
+        }
       });
     }
 

@@ -477,6 +477,12 @@
                         <button class="btn btn-sm btn-info" onclick="MainApp.openAddModal()">
                             <i class="fas fa-plus me-1"></i> Novo Ramal
                         </button>
+                        <button class="btn btn-sm btn-outline-warning" onclick="MainApp.restaurarBackup()" title="Restaura os dados anteriores à migração (backup automático)">
+                            <i class="fas fa-undo me-1"></i> Restaurar
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" onclick="MainApp.syncServer()" title="Puxa os dados do servidor">
+                            <i class="fas fa-cloud-download-alt me-1"></i> Puxar Servidor
+                        </button>
                     </div>
                     <ul class="nav nav-tabs ramais-tabs mb-3">
                         <li class="nav-item">
@@ -492,8 +498,8 @@
                                 <span class="input-group-text bg-dark text-muted border-secondary"><i class="fas fa-search"></i></span>
                                 <input type="text" id="ramal-busca" class="form-control bg-dark text-light border-secondary" placeholder="Buscar (mín. 3 letras)...">
                             </div>
-                            <select id="ramal-filtro-setor" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">
-                                <option value="todos">Todos os setores</option>
+                            <select id="ramal-filtro-departamento" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">
+                                <option value="todos">Todos os departamentos</option>
                             </select>
                             <div class="form-check form-switch ms-1">
                                 <input class="form-check-input" type="checkbox" id="ramal-filtro-ativos">
@@ -507,7 +513,7 @@
                                     <tr>
                                         <th class="x-small text-muted ps-3 sortable" data-sort="nome" onclick="MainApp.sortRamais('nome')" style="cursor:pointer">Nome <i class="fas fa-sort ms-1 opacity-25"></i></th>
                                         <th class="x-small text-muted text-center sortable" data-sort="ramal" onclick="MainApp.sortRamais('ramal')" style="cursor:pointer;width:80px">Ramal <i class="fas fa-sort ms-1 opacity-25"></i></th>
-                                        <th class="x-small text-muted sortable" data-sort="setor" onclick="MainApp.sortRamais('setor')" style="cursor:pointer">Setor <i class="fas fa-sort ms-1 opacity-25"></i></th>
+                                        <th class="x-small text-muted sortable" data-sort="departamento" onclick="MainApp.sortRamais('departamento')" style="cursor:pointer">Departamento <i class="fas fa-sort ms-1 opacity-25"></i></th>
                                         <th class="x-small text-muted sortable" data-sort="email" onclick="MainApp.sortRamais('email')" style="cursor:pointer">E-mail <i class="fas fa-sort ms-1 opacity-25"></i></th>
                                         <th class="x-small text-muted text-center" style="width:65px">Status</th>
                                         <th class="x-small text-muted text-end pe-2" style="width:140px">Ações</th>
@@ -928,10 +934,15 @@
                             <input type="text" id="ramal-numero" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Nº do ramal">
                         </div>
                         <div class="col-6">
-                            <label class="x-small text-muted mb-1">Setor</label>
-                            <input type="text" id="ramal-setor" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Setor" list="ramal-setores-list">
-                            <datalist id="ramal-setores-list"></datalist>
+                            <label class="x-small text-muted mb-1">Departamento</label>
+                            <input type="text" id="ramal-departamento" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Departamento" list="ramal-departamentos-list">
+                            <datalist id="ramal-departamentos-list"></datalist>
                         </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="x-small text-muted mb-1">Subsetores <span class="text-muted opacity-50">(separados por vírgula)</span></label>
+                        <input type="text" id="ramal-subsetores" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: Licitação, Ética, Ouvidoria" list="ramal-subsetores-list">
+                        <datalist id="ramal-subsetores-list"></datalist>
                     </div>
                     <div class="mb-2">
                         <label class="x-small text-muted mb-1">E-mail</label>
