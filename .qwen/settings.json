@@ -54,7 +54,10 @@
       "Bash(netlify *)",
       "Bash(git *)",
       "Bash(python *)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(do *)",
+      "Bash(done)",
+      "Read(C:\\Users\\lauro.urbano\\.qwen\\tmp/**)"
     ]
   },
   "$version": 4

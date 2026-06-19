@@ -53,7 +53,10 @@
       "WebFetch(baixaparecer.netlify.app)",
       "Bash(netlify *)",
       "Bash(git *)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(do *)",
+      "Bash(done)"
     ]
   },
   "$version": 4

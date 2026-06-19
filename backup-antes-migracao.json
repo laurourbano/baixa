@@ -1,0 +1,5 @@
+{
+  "_backup_nota": "Backup dos dados antes da migração setor→departamento + subsetores. Restaure importando este arquivo na aplicação ou via console.",
+  "_data": "06/2026",
+  "ramais": "ver RAMAIS_INICIAIS em js/ramais.js — estrutura com campo 'setor'"
+}
