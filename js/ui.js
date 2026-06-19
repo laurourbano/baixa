@@ -94,8 +94,14 @@ function switchView(viewName) {
     var badges = {
         'ferramentas': 'Ferramentas',
         'consultas': 'Consultas',
+        'ramais': 'Ramais',
         'instrucoes': 'Instruções'
     };
+
+    // Init ramais ao trocar para a view
+    if (viewName === 'ramais' && window.MainApp && window.MainApp.initRamais) {
+        window.MainApp.initRamais();
+    }
 
     // Para dashboard, usa o nome do dashboard ativo
     if (viewName === 'dashboard' && window.MainApp && window.MainApp.getActiveDash) {

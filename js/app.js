@@ -52,6 +52,7 @@
         app.__state.activeDashboard = backend.activeDashboard || 'default';
         app.__state.dashSortMode = backend.dashSortMode || 'custom';
         app.__state.servicos = backend.servicos || {};
+        app.__state._ramais = backend._ramais || { ramais: [], orientacoes: null };
         app.__state._lastModified = backend._lastModified || Date.now();
         app.ensureDefaultDashboards();
         app._save();

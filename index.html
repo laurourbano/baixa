@@ -111,6 +111,8 @@
                         class="fas fa-tools"></i> <span>Ferramentas</span></a>
                 <a href="#" id="nav-consultas" class="nav-item" onclick="switchView('consultas')"><i
                         class="fas fa-book"></i> <span>Consultas</span></a>
+                <a href="#" id="nav-ramais" class="nav-item" onclick="switchView('ramais')"><i
+                        class="fas fa-phone-alt"></i> <span>Ramais</span></a>
                 <div class="sidebar-divider"></div>
                 <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#settingsModal"><i
                         class="fas fa-cog"></i> <span>Configurações</span></a>
@@ -467,6 +469,128 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- VIEW: RAMAIS -->
+                <div id="view-ramais" class="app-view d-none">
+                    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                        <h5 class="fw-bold mb-0"><i class="fas fa-phone-alt text-info me-2"></i>Ramais de Telefonia</h5>
+                        <button class="btn btn-sm btn-info" onclick="MainApp.openAddModal()">
+                            <i class="fas fa-plus me-1"></i> Novo Ramal
+                        </button>
+                    </div>
+                    <ul class="nav nav-tabs ramais-tabs mb-3">
+                        <li class="nav-item">
+                            <button id="ramais-tab-ramais" class="nav-link ramais-tab-btn active" onclick="MainApp.switchRamaisTab('ramais')"><i class="fas fa-list me-1"></i> Ramais</button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="ramais-tab-orientacoes" class="nav-link ramais-tab-btn" onclick="MainApp.switchRamaisTab('orientacoes')"><i class="fas fa-book me-1"></i> Orientações</button>
+                        </li>
+                    </ul>
+                    <div id="ramais-pane-ramais" class="ramais-tab-pane">
+                        <div class="d-flex flex-wrap gap-2 mb-3 align-items-center p-2 rounded-3" style="background:rgba(255,255,255,0.02)">
+                            <div class="input-group input-group-sm" style="max-width:300px">
+                                <span class="input-group-text bg-dark text-muted border-secondary"><i class="fas fa-search"></i></span>
+                                <input type="text" id="ramal-busca" class="form-control bg-dark text-light border-secondary" placeholder="Buscar (mín. 3 letras)...">
+                            </div>
+                            <select id="ramal-filtro-setor" class="form-select form-select-sm bg-dark text-light border-secondary" style="max-width:220px">
+                                <option value="todos">Todos os setores</option>
+                            </select>
+                            <div class="form-check form-switch ms-1">
+                                <input class="form-check-input" type="checkbox" id="ramal-filtro-ativos">
+                                <label class="form-check-label x-small text-muted" for="ramal-filtro-ativos">Ativos</label>
+                            </div>
+                            <span id="ramais-counter" class="x-small text-muted ms-auto"></span>
+                        </div>
+                        <div class="table-responsive rounded-3 border border-secondary border-opacity-25" style="max-height:55vh;overflow-y:auto">
+                            <table class="table table-sm table-dark table-hover align-middle mb-0">
+                                <thead class="table-dark sticky-top">
+                                    <tr>
+                                        <th class="x-small text-muted ps-3">Nome</th>
+                                        <th class="x-small text-muted text-center" style="width:80px">Ramal</th>
+                                        <th class="x-small text-muted">Setor</th>
+                                        <th class="x-small text-muted">E-mail</th>
+                                        <th class="x-small text-muted text-center" style="width:65px">Status</th>
+                                        <th class="x-small text-muted text-end pe-2" style="width:140px">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ramais-tbody">
+                                    <tr><td colspan="6" class="text-center text-muted py-5">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="ramais-pane-orientacoes" class="ramais-tab-pane d-none">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header py-2 border-secondary"><h6 class="mb-0 small fw-bold"><i class="fas fa-phone text-success me-2"></i>Ligação p/ Fixo e Celular (mesmo DDD)</h6></div>
+                                    <div class="card-body py-2 x-small">
+                                        <ol class="mb-0 ps-3">
+                                            <li>Digite: <b>0 + Senha pessoal</b></li>
+                                            <li>Aguarde o tom de linha disponível</li>
+                                            <li>Digite: número local desejado</li>
+                                        </ol>
+                                        <p class="text-muted mt-2 mb-0"><b>Ex fixo:</b> 0 + XXXXX + 3333-3333<br><b>Ex móvel:</b> 0 + XXXXX + 91234-5678</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header py-2 border-secondary"><h6 class="mb-0 small fw-bold"><i class="fas fa-phone-alt text-warning me-2"></i>Ligação p/ outro DDD</h6></div>
+                                    <div class="card-body py-2 x-small">
+                                        <ol class="mb-0 ps-3">
+                                            <li>Digite: <b>0 + Senha pessoal</b></li>
+                                            <li>Aguarde o tom</li>
+                                            <li>Digite: <b>0 + Cód. de Área (DDD)</b></li>
+                                            <li>Digite: número desejado</li>
+                                        </ol>
+                                        <p class="text-muted mt-2 mb-0"><b>Ex fixo:</b> 0 + XXXXX + 0 77 + 3333-3333<br><b>Ex móvel:</b> 0 + XXXXX + 0 77 + 91234-5678</p>
+                                        <p class="text-danger mb-0 mt-1"><i class="fas fa-exclamation-circle me-1"></i>NÃO usar código de prestadora</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header py-2 border-secondary"><h6 class="mb-0 small fw-bold"><i class="fas fa-hand-paper text-info me-2"></i>Capturar Ligações</h6></div>
+                                    <div class="card-body py-2 x-small">
+                                        <p class="mb-0"><b>Mesmo grupo:</b> digite <b>55</b></p>
+                                        <p class="mb-0"><b>Outro grupo:</b> digite <b>54 + ramal</b></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header py-2 border-secondary"><h6 class="mb-0 small fw-bold"><i class="fas fa-pause-circle text-warning me-2"></i>Chamada em Espera</h6></div>
+                                    <div class="card-body py-2 x-small">
+                                        <p class="mb-0"><b>Colocar em espera:</b> Flash + 6 + posição (0-9)</p>
+                                        <p class="mb-0"><b>Recuperar:</b> 56 + posição (0-9)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header py-2 border-secondary"><h6 class="mb-0 small fw-bold"><i class="fas fa-bell text-primary me-2"></i>Identificar Chamadas</h6></div>
+                                    <div class="card-body py-2 x-small">
+                                        <p class="mb-0"><b>Externa:</b> 2 toques breves</p>
+                                        <p class="mb-0"><b>Interna:</b> toque longo</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card bg-dark border-secondary">
+                                    <div class="card-header py-2 border-secondary"><h6 class="mb-0 small fw-bold"><i class="fas fa-headset text-success me-2"></i>Roteiro de Atendimento</h6></div>
+                                    <div class="card-body py-2 x-small">
+                                        <ul class="mb-0 ps-3">
+                                            <li class="mb-1">Ao atender: <b>"Conselho Regional de Farmácia, SEU NOME, bom dia/tarde"</b></li>
+                                            <li class="mb-1">Se colega ausente: capture a ligação (55 ou 54+ramal), anote nome, assunto e contato</li>
+                                            <li>Entregue a anotação ao colega</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     </div>
     </section>
     </main>
@@ -630,6 +754,7 @@
     <script defer src="js/fiscal.js"></script>
     <script defer src="js/calculator.js"></script>
     <script defer src="js/consultas.js"></script>
+    <script defer src="js/ramais.js"></script>
     <script defer src="js/dashboards.js"></script>
     <script defer src="js/gh-backup.js"></script>
     <script defer src="js/servicos.js"></script>
@@ -778,6 +903,54 @@
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" id="prompt-btn-ok" class="btn btn-sm btn-success px-3">OK</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ramal (Adicionar/Editar) -->
+    <div class="modal fade" id="ramalModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header py-2 border-secondary">
+                    <h6 class="modal-title small fw-bold" id="ramal-modal-title">Novo Ramal</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <input type="hidden" id="ramal-modal-id">
+                    <div class="mb-2">
+                        <label class="x-small text-muted mb-1">Nome *</label>
+                        <input type="text" id="ramal-nome" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Nome completo">
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-1">Ramal</label>
+                            <input type="text" id="ramal-numero" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Nº do ramal">
+                        </div>
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-1">Setor</label>
+                            <input type="text" id="ramal-setor" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Setor" list="ramal-setores-list">
+                            <datalist id="ramal-setores-list"></datalist>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="x-small text-muted mb-1">E-mail</label>
+                        <input type="email" id="ramal-email" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="email@crf-pr.org.br">
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-1">Região</label>
+                            <input type="text" id="ramal-regiao" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Ex: Curitiba">
+                        </div>
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-1">Telefone</label>
+                            <input type="text" id="ramal-telefone" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="(41) 99999-9999">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-2 border-secondary">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-sm btn-info" onclick="MainApp.saveRamal()"><i class="fas fa-save me-1"></i> Salvar</button>
                 </div>
             </div>
         </div>

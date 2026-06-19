@@ -79,6 +79,7 @@ window.MainApp = window.MainApp || {};
       state.activeDashboard = parsed.activeDashboard || 'default';
       state.dashSortMode = parsed.dashSortMode || 'custom';
       state.servicos = parsed.servicos || {};
+      state._ramais = parsed._ramais || { ramais: [], orientacoes: null };
       state._lastModified = parsed._lastModified || Date.now();
       ensureDefaultDashboards(state.dashboards);
       save();
@@ -92,6 +93,7 @@ window.MainApp = window.MainApp || {};
     state.dashboards = DEFAULT_DASHBOARDS.map(createDashFromTemplate);
     state.activeDashboard = 'default';
     state.servicos = {};
+    state._ramais = { ramais: [], orientacoes: null };
     state._lastModified = Date.now();
     save();
   }
