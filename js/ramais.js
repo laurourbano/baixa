@@ -468,9 +468,11 @@ window.MainApp = window.MainApp || {};
         subsetoresHtml = '<br><span class="x-small text-info">' + esc(r.subsetores.join(', ')) + '</span>';
       }
 
+      var telNum = (r.telefone || r.ramal || '').replace(/\D/g, '');
+
       return '<tr class="ramal-row" data-departamento="' + esc(r.departamento) + '" data-id="' + r.id + '">' +
         '<td class="small ps-3">' + esc(r.nome) + subsetoresHtml + '</td>' +
-        '<td class="text-center fw-bold">' + esc(r.ramal) + dupIcon + '</td>' +
+        '<td class="text-center fw-bold"><a href="ramal://' + telNum + '" class="text-decoration-none text-reset" style="cursor:pointer" title="Abrir no SmartCORE">' + esc(r.ramal) + '</a>' + dupIcon + '</td>' +
         '<td class="small">' + esc(r.departamento) + (r.regiao ? ' <span class="text-muted">(' + esc(r.regiao) + ')</span>' : '') + '</td>' +
         '<td class="small text-muted">' + (r.email ? '<a href="mailto:' + esc(r.email) + '" class="text-decoration-none">' + esc(r.email) + '</a>' : '') + '</td>' +
         '<td class="text-center">' + statusBadge + '</td>' +
@@ -540,6 +542,29 @@ window.MainApp = window.MainApp || {};
   function toggleGrupoRamais(dept) {
     _gruposColapsados[dept] = !_gruposColapsados[dept];
     refreshRamais();
+  }
+
+  function copiarRamal(el, num) {
+    var done = function () {
+      el.style.color = 'var(--color-success)';
+      setTimeout(function () { el.style.color = ''; }, 800);
+      if (typeof app !== 'undefined' && app.showToast) {
+        app.showToast('Ramal ' + num + ' copiado! Alterne para o SmartCore e cole (Ctrl+V)', 'info');
+      }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(num).then(done);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = num;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      done();
+    }
   }
 
   function esc(str) {
@@ -777,5 +802,6 @@ window.MainApp = window.MainApp || {};
   app.refreshRamais = refreshRamais;
   app.restaurarBackup = restaurarBackup;
   app.syncServer = syncServer;
+  app.copiarRamal = copiarRamal;
 
 }(window.MainApp));

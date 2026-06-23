@@ -56,7 +56,12 @@
       "Bash(python *)",
       "Bash(python3 *)",
       "Bash(do *)",
-      "Bash(done)"
+      "Bash(done)",
+      "Read(C:\\Users\\lauro.urbano\\.qwen\\tmp/**)",
+      "Bash(reg *)",
+      "Bash(tasklist *)",
+      "Bash(netstat *)",
+      "Bash(\"\"c:\\users\\lauro.urbano\\appdata\\local\\br.com.sigmatelecom.winx\\smartcore *)"
     ]
   },
   "$version": 4
