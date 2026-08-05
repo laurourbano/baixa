@@ -733,7 +733,6 @@ h6,
   padding: 12px 14px 45px 14px !important;
   display: flex;
   flex-direction: column;
-  cursor: grab;
   transition: transform var(--transition-base),
     box-shadow var(--transition-base), border-color var(--transition-base);
   border: 1px solid var(--color-glass-border) !important;
@@ -763,11 +762,6 @@ h6,
 
 .card:hover::before {
   opacity: 1;
-}
-
-.card:active {
-  cursor: grabbing;
-  transform: translateY(0);
 }
 
 /* Animação de entrada dos cards */
@@ -1185,16 +1179,76 @@ h6,
   transform: scale(0.9);
 }
 
+/* ── Drag Handle ─────────────────────── */
 .handle {
   cursor: grab;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.card.dragging {
-  opacity: 0.5;
-  transform: scale(0.98);
-  border-style: dashed !important;
+.handle:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.handle:active {
   cursor: grabbing;
+}
+
+/* ── Card Drag State ────────────────── */
+.card.dragging {
+  opacity: 0.35;
+  background: transparent !important;
+  border-style: dashed !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: none !important;
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+  pointer-events: none;
+}
+
+.card.dragging > * {
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+/* Contorno leve que segue o cursor durante o arrasto */
+.drag-outline {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  background: rgba(13, 110, 253, 0.05);
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.12), 0 8px 32px rgba(0, 0, 0, 0.2);
+  will-change: transform;
+  transition: none;
+}
+
+/* ── Drop Placeholder (espaço vago do tamanho do card) ── */
+.drop-placeholder {
+  border: 2px dashed var(--color-primary);
+  border-radius: var(--radius-lg);
+  min-height: 180px;
+  background: rgba(13, 110, 253, 0.06);
+  animation: dropPulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes dropPulse {
+  from {
+    opacity: 0.5;
+    border-color: rgba(13, 110, 253, 0.4);
+  }
+  to {
+    opacity: 1;
+    border-color: var(--color-primary);
+  }
 }
 
 .actions i {

@@ -177,9 +177,9 @@ window.MainApp = window.MainApp || {};
     var inactiveClass = isInactive ? ' card-inactive' : '';
 
     return '<div class="col-12 col-md-6 col-lg-3 mb-3">' +
-      '<div class="card h-100 border-' + color + (isInfo ? ' card-info-type' : '') + inactiveClass + '" data-id="' + card.id + '" data-color="' + color + '" draggable="true"' + clickHandler + '>' +
+      '<div class="card h-100 border-' + color + (isInfo ? ' card-info-type' : '') + inactiveClass + '" data-id="' + card.id + '" data-color="' + color + '"' + clickHandler + '>' +
       '<div class="card-head" onclick="event.stopPropagation()">' +
-      '<span class="handle">⠿</span>' +
+      '<span class="handle" title="Arrastar para reordenar">⠿</span>' +
       '<span class="card-title-header">' + card.title + '</span>' +
       '<div class="actions">' +
       '<i class="fa fa-pen" onclick="MainApp.edit(\'' + card.id + '\')"></i>' +
@@ -412,36 +412,184 @@ window.MainApp = window.MainApp || {};
     });
   }
 
-  /* ── Drag & Drop ───────────────────────── */
+  /* ── Drag & Drop (pointer events + rAF) ── */
   function setupDragAndDrop() {
     var grid = document.getElementById('dynamic-cards');
     if (!grid) return;
-    grid.ondragover = function (e) { e.preventDefault(); };
-    grid.ondrop = function (e) {
+
+    if (grid._dragSetupDone) return;
+    grid._dragSetupDone = true;
+
+    var state = null;
+    var rafId = null;
+
+    function createPlaceholder() {
+      var w = document.createElement('div');
+      w.className = 'col-12 col-md-6 col-lg-3 mb-3';
+      w.innerHTML = '<div class="drop-placeholder"></div>';
+      return w;
+    }
+
+    // ── pointerdown: inicia ──────────────
+    grid.addEventListener('pointerdown', function (e) {
+      var card = (e.target.closest('.handle') || {}).closest
+        ? e.target.closest('.handle').closest('.card')
+        : null;
+      if (!card) return;
+      if (card.classList.contains('card-inactive') || card.classList.contains('card-info-type')) return;
+
       e.preventDefault();
-      var draggedId = e.dataTransfer.getData('id');
-      var target = e.target.closest('.card');
-      if (target && target.dataset.id !== draggedId) {
-        var cards = Array.from(grid.querySelectorAll('.card'));
-        var currentIds = cards.map(function (f) { return f.dataset.id; });
-        var fromIdx = currentIds.indexOf(draggedId);
-        var toIdx = currentIds.indexOf(target.dataset.id);
-        currentIds.splice(toIdx, 0, currentIds.splice(fromIdx, 1)[0]);
-        dash().order = currentIds;
+
+      var rect = card.getBoundingClientRect();
+
+      var outline = document.createElement('div');
+      outline.className = 'drag-outline';
+      outline.style.width  = rect.width  + 'px';
+      outline.style.height = rect.height + 'px';
+      outline.style.transform = 'translate(' + rect.left + 'px, ' + rect.top + 'px)';
+      document.body.appendChild(outline);
+
+      state = {
+        card: card,
+        outline: outline,
+        placeholder: createPlaceholder(),
+        ox: e.clientX - rect.left,
+        oy: e.clientY - rect.top,
+        px: e.clientX,
+        py: e.clientY,
+        lastTarget: null,
+        lastPosition: null,
+        tick: 0
+      };
+
+      card.classList.add('dragging');
+
+      // Loop de animação
+      rafId = requestAnimationFrame(dragTick);
+    });
+
+    // ── pointermove: só armazena posição ──
+    document.addEventListener('pointermove', function (e) {
+      if (!state) return;
+      state.px = e.clientX;
+      state.py = e.clientY;
+    });
+
+    // ── rAF tick: move contorno + hit-test ─
+    function dragTick() {
+      if (!state) { rafId = null; return; }
+
+      var x = state.px - state.ox;
+      var y = state.py - state.oy;
+
+      // GPU: translate é compositor-only, sem reflow
+      state.outline.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+      // Hit-test só a cada 4 frames (~16ms * 4 ≈ 64ms)
+      state.tick++;
+      if (state.tick % 4 === 0) {
+        updateTarget(state.px, state.py);
+      }
+
+      rafId = requestAnimationFrame(dragTick);
+    }
+
+    function updateTarget(cx, cy) {
+      var target = hitTest(cx, cy);
+
+      // Só age se achou um card válido diferente do arrastado
+      if (!target || target === state.card) return;
+
+      var rect = target.getBoundingClientRect();
+      var midY = rect.top + rect.height / 2;
+      var pos = cy < midY ? 'before' : 'after';
+
+      // Só atualiza se o alvo ou a posição mudou
+      if (state.lastTarget === target && state.lastPosition === pos) return;
+
+      state.lastTarget = target;
+      state.lastPosition = pos;
+
+      var wrapper = target.closest('.col-12');
+      if (!wrapper) return;
+      removePlaceholder();
+      if (pos === 'before') {
+        wrapper.parentNode.insertBefore(state.placeholder, wrapper);
+      } else {
+        wrapper.parentNode.insertBefore(state.placeholder, wrapper.nextSibling);
+      }
+    }
+
+    // ── pointerup: finaliza ──────────────
+    document.addEventListener('pointerup', function () {
+      if (!state) return;
+      cleanupDrag();
+    });
+
+    // ── pointercancel ─────────────────────
+    document.addEventListener('pointercancel', function () {
+      if (!state) return;
+      cleanupDrag();
+    });
+
+    function cleanupDrag() {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+
+      var s = state;
+      state = null;
+
+      // Remove contorno
+      s.outline.style.transition = 'opacity 0.1s';
+      s.outline.style.opacity = '0';
+      setTimeout(function () {
+        if (s.outline.parentNode) s.outline.parentNode.removeChild(s.outline);
+      }, 110);
+
+      // Remove placeholder
+      if (s.placeholder && s.placeholder.parentNode) {
+        s.placeholder.parentNode.removeChild(s.placeholder);
+      }
+
+      s.card.classList.remove('dragging');
+
+      // Reordena se necessário
+      if (!s.lastTarget) return;
+
+      var draggedId = s.card.dataset.id;
+      var targetId = s.lastTarget.dataset.id;
+      if (draggedId === targetId) return;
+
+      var cards = Array.from(grid.querySelectorAll('.card'));
+      var ids = cards.map(function (c) { return c.dataset.id; });
+      var from = ids.indexOf(draggedId);
+      var to   = ids.indexOf(targetId);
+
+      if (s.lastPosition === 'after') to++;
+      if (from < to) to--;
+
+      if (from !== to && from >= 0 && to >= 0) {
+        ids.splice(to, 0, ids.splice(from, 1)[0]);
+        dash().order = ids;
         render();
         app.notifyChange();
       }
-    };
-    grid.ondragstart = function (e) {
-      var card = e.target.closest('.card');
-      if (!card) return e.preventDefault();
-      e.dataTransfer.setData('id', card.dataset.id);
-      setTimeout(function () { card.classList.add('dragging'); }, 0);
-    };
-    grid.ondragend = function (e) {
-      var card = e.target.closest('.card');
-      if (card) card.classList.remove('dragging');
-    };
+    }
+
+    // ── helpers ──────────────────────────
+    function hitTest(cx, cy) {
+      var el = document.elementFromPoint(cx, cy);
+      if (!el) return null;
+      var c = el.closest('.card');
+      if (!c || (state && state.card === c)) return null;
+      return c;
+    }
+
+    function removePlaceholder() {
+      if (state && state.placeholder && state.placeholder.parentNode) {
+        state.placeholder.parentNode.removeChild(state.placeholder);
+      }
+    }
   }
 
   app.render = render;
